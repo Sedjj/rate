@@ -24,10 +24,12 @@
 	"dependencies": {
 		"config": "^2.0.1",
 		"cron": "^1.4.1",
+		"mongodb": "^3.1.6",
+		"node-fetch": "^2.2.0",
+		"npm": "^6.4.1",
+		"osmosis": "^1.1.8",
 		"socks5-https-client": "^1.2.1",
 		"telegraf": "^3.24.0",
-		"winston": "^3.1.0",
-		"osmosis": "^1.1.8",
-		"mongodb": "^3.1.6"
+		"winston": "^3.1.0"
 	}
 }

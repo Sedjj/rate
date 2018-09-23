@@ -2,7 +2,7 @@
 	"ip": "localhost",
 	"port": 8081,
 	"db": {
-		"name": "wavesBot",
+		"name": "rateBot",
 		"uri": "mongodb://localhost:27017/telegramBot"
 	},
 	"proxy": {
@@ -15,13 +15,17 @@
 	"bot": {
 		"token": "520539397:AAEAqrQ9x92rUpMs8De0VPXa3Ly4BwFNLyY"
 	},
-	"bruteforce":{
-		/* количество итераций до очистки памяти */
-		"iterations": 1000000,
-		/* спит минут */
-		"sleep": 60000
+	"parser": {
+		"live":{
+			"football":"https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true",
+			"tennis":"https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true"
+		},
+		"result":{
+			"mens_fashion":"mens-fashion"
+		}
 	},
 	"cron": {
-		"clearingCronTime": "0 0 */23 * * *"
+		"lifetime": 86400,
+		"clearingCronTime": "* /5 * * * *"
 	}
 }
