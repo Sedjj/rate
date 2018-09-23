@@ -1,6 +1,6 @@
 const {CronJob} = require('cron');
 const config = require('config');
-const log = require('./src/utils/logger')(module);
+const log = require('./src/utils/logger');
 
 const clearingTempFilesTime = process.env.NODE_ENV === 'development'
 	? '*/05 * * * * *'

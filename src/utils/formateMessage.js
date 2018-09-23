@@ -1,4 +1,4 @@
-const log = require('../utils/logger')(module);
+const log = require('./../utils/logger');
 
 function escapeRegExp(str) {
 	return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');

@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf');
 const SocksAgent = require('socks5-https-client/lib/Agent');
-const log = require('./../utils/logger')(module);
+const log = require('./../utils/logger');
 const config = require('config');
 
 const token = config.get('bot.token');

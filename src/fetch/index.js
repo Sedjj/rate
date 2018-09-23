@@ -1,4 +1,5 @@
 const config = require('config');
+const log = require('./../utils/logger');
 const fetch = require('node-fetch');
 
 const url = config.get('parser.live.football');
