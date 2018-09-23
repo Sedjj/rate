@@ -1,0 +1,33 @@
+{
+	"name": "rate",
+	"version": "1.0.0",
+	"description": "Simple bot for rates",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"start_parser": "set CHANNEL=development&&node src/parser/parserPinterest.js",
+		"dev": "set CHANNEL=development&&node index.js",
+		"prod": "set CHANNEL=production&&node index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@gitlab.com:developmentKit/projects/bot/rate.git"
+	},
+	"keywords": [
+		"telegram",
+		"bot",
+		"men_fashion"
+	],
+	"author": "Eldar Salimzebarov",
+	"license": "MTI",
+	"homepage": "https://gitlab.com:developmentKit/projects/bot/rate.git#readme",
+	"dependencies": {
+		"config": "^2.0.1",
+		"cron": "^1.4.1",
+		"socks5-https-client": "^1.2.1",
+		"telegraf": "^3.24.0",
+		"winston": "^3.1.0",
+		"osmosis": "^1.1.8",
+		"mongodb": "^3.1.6"
+	}
+}

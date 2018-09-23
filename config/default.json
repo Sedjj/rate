@@ -1,0 +1,27 @@
+{
+	"ip": "localhost",
+	"port": 8081,
+	"db": {
+		"name": "wavesBot",
+		"uri": "mongodb://localhost:27017/telegramBot"
+	},
+	"proxy": {
+		"host": "bot.avinfo17.info",
+		"port": "38157",
+		"login": "",
+		"psswd": ""
+	},
+	"channel": "-211275376",
+	"bot": {
+		"token": "520539397:AAEAqrQ9x92rUpMs8De0VPXa3Ly4BwFNLyY"
+	},
+	"bruteforce":{
+		/* количество итераций до очистки памяти */
+		"iterations": 1000000,
+		/* спит минут */
+		"sleep": 60000
+	},
+	"cron": {
+		"clearingCronTime": "0 0 */23 * * *"
+	}
+}
