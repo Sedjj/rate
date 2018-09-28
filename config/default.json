@@ -16,16 +16,29 @@
 		"token": "520539397:AAEAqrQ9x92rUpMs8De0VPXa3Ly4BwFNLyY"
 	},
 	"parser": {
-		"live":{
-			"football":"https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true",
-			"tennis":"https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true"
+		"live": {
+			"football": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true",
+			"tennis": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true"
 		},
-		"result":{
-			"mens_fashion":"mens-fashion"
+		"result": {
+			"live": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=0&count=500&getEmpty=true&altFlag=true",
+			"all": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup"
+		}
+	},
+	"choice": {
+		"live": {
+			"football": {
+				"time": {
+					"before": 1800,
+					"after": 3000
+				},
+				"rate": 0.5,
+				"score": 1
+			}
 		}
 	},
 	"cron": {
 		"lifetime": 86400,
-		"clearingCronTime": "* /5 * * * *"
+		"clearingCronTime": "* /05 * * * *"
 	}
 }
