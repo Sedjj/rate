@@ -5,8 +5,7 @@ const config = require('config');
 const dbUri = config.get('db.uri');
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUri, {
-	useMongoClient: true
-	//autoIndex: process.env.NODE_ENV !== 'production'
+	useNewUrlParser: true
 });
 const db = mongoose.connection;
 

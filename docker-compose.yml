@@ -1,12 +1,5 @@
 version: "2"
 services:
-  bot_rate_app:
-    container_name: bot_rate_app
-    build: .
-    ports:
-      - "3000:3000"
-    links:
-      - bot_rate_mongo
   bot_rate_mongo:
     container_name: bot_rate_mongo
     image: mongo

@@ -3,71 +3,36 @@ const Schema = mongoose.Schema;
 
 const StatisticSchema = new Schema({
 	id: {
+		type: Number,
+		required: true,
+		default: 0
+	},
+	matchId: {
 		type: String,
 		required: true,
 		default: ''
 	},
-	name: {
+	commandOne: {
 		type: String,
 		required: true,
 		default: ''
 	},
-	scoringBefore: {
+	commandTwo: {
 		type: String,
 		required: true,
 		default: ''
 	},
-	scoringafter: {
+	strategy: { /* 1 - гол лузера; 2 - гол после ничьи*/
 		type: String,
 		required: true,
 		default: ''
 	},
-	one: {
+	rate: {
 		type: String,
 		required: true,
 		default: ''
 	},
-	X: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	two: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	OneX: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	OneTwo: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	TwoX: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	TotalTwo: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	TotalTwoHalf: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	legUpOne: {
-		type: String,
-		required: true,
-		default: ''
-	},
-	legUpTwo: {
+	index: {
 		type: String,
 		required: true,
 		default: ''
