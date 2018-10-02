@@ -22,20 +22,16 @@ const StatisticSchema = new Schema({
 		required: true,
 		default: ''
 	},
-	strategy: { /* 1 - гол лузера; 2 - гол после ничьи*/
-		type: String,
-		required: true,
-		default: ''
-	},
-	rate: {
+	strategy: {
+		/* 1 - гол лузера; 2 - гол после ничьи*/
 		type: String,
 		required: true,
 		default: ''
 	},
 	index: {
-		type: String,
+		type: Number,
 		required: true,
-		default: ''
+		default: 0
 	},
 	created: {
 		type: Date,

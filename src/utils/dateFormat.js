@@ -1,10 +1,4 @@
-const dateFormatUser = {
-	day: 'numeric',
-	month: 'numeric',
-	timezone: 'UTC'
-};
-
-const dateFormatArchive = {
+const dateFormat = {
 	day: 'numeric',
 	month: 'numeric',
 	timezone: 'UTC',
@@ -17,23 +11,13 @@ const timeFormat = {
 };
 
 /**
- * Пребразование даты в строку вида dd.mm
+ * Пребразование даты в строку вида yyyy-mm-dd
  *
  * @param {Date} date - дата.
  * @returns {String} дата в формате строки
  */
-export function getFormattedDate(date: Date) {
-	return new Intl.DateTimeFormat('ru-RU', dateFormatUser).format(date);
-}
-
-/**
- * Пребразование даты в строку вида dd.mm.yyyy
- *
- * @param {Date} date - дата.
- * @returns {String} дата в формате строки
- */
-export function getFormattedMaxDate(date: Date) {
-	return new Intl.DateTimeFormat('ru-RU', dateFormatArchive).format(date);
+function getFormattedDate(date) {
+	return new Intl.DateTimeFormat('ru-RU', dateFormat).format(date);
 }
 
 /**
@@ -42,7 +26,7 @@ export function getFormattedMaxDate(date: Date) {
  * @param {Date} date - дата.
  * @returns {String} дата в формате строки
  */
-export function getFormattedTime(date: Date) {
+function getFormattedTime(date) {
 	return new Intl.DateTimeFormat('ru-RU', timeFormat).format(date);
 }
 
@@ -52,6 +36,10 @@ export function getFormattedTime(date: Date) {
  * @param {Date} date - дата.
  * @returns {String} дата в формате строки
  */
-export function getTime(date: Date) {
+function getTime(date) {
 	return new Date(getFormattedDate(date)).getTime();
 }
+
+module.exports = {
+	getFormattedDate
+};
