@@ -6,10 +6,11 @@ const {mapProps} = require('../utils/statisticHelpers');
 /**
  * Получить записи из таблицы.
  *
- * @param {Object} param для таблицы
+ * @param {Object} param для таблицы.
+ * @returns {Promise<any>}
  */
 function getField(param) {
-	StatisticModel.find({})
+	return StatisticModel.find({})
 		.exec()
 		.then(statistics => {
 			if (!statistics) {
@@ -34,9 +35,10 @@ function getField(param) {
  * Создание новой записи в таблице.
  *
  * @param {Object} param для таблицы
+ * @returns {Promise<any>}
  */
 function newField(param) {
-	StatisticModel.find({})
+	return StatisticModel.find({})
 		.exec()
 		.then(statistics => {
 			param.id = statistics.length + 1;
@@ -52,9 +54,10 @@ function newField(param) {
  * Создание новой записи в таблице.
  *
  * @param {Object} param для таблицы
+ * @returns {Promise<any>}
  */
 function setField(param) {
-	StatisticModel.findOne({matchId: param.matchId})
+	return StatisticModel.findOne({matchId: param.matchId})
 		.exec()
 		.then(statistic => {
 			if (param.index) {

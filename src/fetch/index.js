@@ -85,7 +85,7 @@ function postResult() {
 				log.info('error:' + error);
 				return reject(error);
 			}
-			resolve(body);
+			resolve(body.Data);
 		});
 	});
 }
