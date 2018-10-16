@@ -2,7 +2,6 @@ const config = require('config');
 const request = require('request');
 const log = require('./../utils/logger');
 const {getFormattedDate} = require('./../utils/dateFormat');
-const fetch = require('node-fetch');
 
 const urlFootballRate = config.get('parser.live.football.rate');
 const urlFootballExpandedRate = config.get('parser.live.football.expandedRate');
@@ -16,20 +15,18 @@ const urlAll = config.get('parser.result.all');
 function getFootball() {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballRate, (error, res, body) => {
-				if (error && res.statusCode !== 200) {
-					log.info('error:' + error);
-					return reject(error);
-				}
-				let value = [];
-				try {
-					value = JSON.parse(body).Value
-				} catch (e) {
-					log.info('error JSON.parse:' + e);
-					console.error(e);
-				}
-				resolve(value);
+			if (error && res.statusCode !== 200) {
+				log.info('error:' + error);
+				return reject(error);
 			}
-		);
+			let value = [];
+			try {
+				value = JSON.parse(body).Value;
+			} catch (e) {
+				log.info('error Football JSON.parse:' + e);
+			}
+			resolve(value);
+		});
 	});
 }
 
@@ -41,21 +38,19 @@ function getFootball() {
  */
 function getFootballExpanded(id) {
 	return new Promise((resolve, reject) => {
-		request.get(urlFootballExpandedRate.replace('${id}','170651163'), (error, res, body) => {
-				if (error && res.statusCode !== 200) {
-					log.info('error:' + error);
-					return reject(error);
-				}
-				let value = [];
-				try {
-					value = JSON.parse(body).Value
-				} catch (e) {
-					log.info('error JSON.parse:' + e);
-					console.error(e);
-				}
-				resolve(value);
+		request.get(urlFootballExpandedRate.replace('${id}', id), (error, res, body) => {
+			if (error && res.statusCode !== 200) {
+				log.info('error:' + error);
+				return reject(error);
 			}
-		);
+			let value = [];
+			try {
+				value = JSON.parse(body).Value;
+			} catch (e) {
+				log.info('error Expanded JSON.parse:' + e);
+			}
+			resolve(value);
+		});
 	});
 }
 
@@ -82,7 +77,7 @@ function postResult() {
 			json: param
 		}, (error, res, body) => {
 			if (error) {
-				log.info('error:' + error);
+				log.info('postResult error:' + error);
 				return reject(error);
 			}
 			resolve(body.Data);

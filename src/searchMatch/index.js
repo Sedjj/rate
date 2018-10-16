@@ -3,13 +3,14 @@ const {CronJob} = require('cron');
 const {newField, setField} = require('./../storage');
 const {getFootball, getFootballExpanded, postResult} = require('./../fetch');
 const config = require('config');
+const {sendMessage} = require('./src/telegramApi');
 
 const before = config.get('choice.live.football.time.before');
 const after = config.get('choice.live.football.time.after');
 const rateStrategyOne = config.get('choice.live.football.strategyOne.rate');
 const rateStrategyTwo = config.get('choice.live.football.strategyTwo.rate');
 const totalStrategy = config.get('choice.live.football.total');
-const score = config.get('choice.live.football.score');
+/*const score = config.get('choice.live.football.score');*/
 const numericalDesignation = config.get('choice.live.football.numericalDesignation');
 const waitingInterval = process.env.NODE_ENV === 'development'
 	? '* /02 * * * *'
@@ -26,6 +27,9 @@ function search() {
 			item.map((item) => {
 				footballLiveStrategy(item);
 			});
+		})
+		.catch(error => {
+			log.info('error search: ', error);
 		});
 }
 
@@ -37,8 +41,8 @@ function search() {
 function footballLiveStrategy(item) {
 	if (item.SC && item.SC.FS && item.E && item.SC.TS) {
 		const score = scoreGame(item);
-		const tm = item.SC.TS ? Math.floor(item.SC.TS / 60) : 0; // проверяем время матча
-		if (item.E.length > 2) {
+		const tm = timeGame(item);// проверяем время матча
+		if (Array.isArray(item.E)) {
 			const index = indexGame(item);
 			if ((item.O1.indexOf('(') === -1) && (item.O2.indexOf('(') === -1) && (item.O1.indexOf('II') === -1) && (item.O2.indexOf('II') === -1)) {
 				if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
@@ -63,8 +67,21 @@ function footballLiveStrategy(item) {
  */
 async function footballLiveStrategyOne(item, index) {
 	if ((Math.abs(index.p1 - index.p2) <= rateStrategyOne)) {
-		await saveRate(item, '1');
-		await waiting(item, '1');
+		try {
+			const oldScore = scoreGame(item);
+			await saveRate(item, '1');
+			const total = await waiting(item, '1', oldScore);
+			if (total !== -1) { // -1 - это время истекло или поменялся счет
+				const endTotal = await waitingEndMatch(item, '1');
+				// "4:0 (2:0,2:0)"
+				const result = equalsTotal(oldScore, endTotal);
+				if(result === 0 || result === 1){
+					setRate(item.I, result);
+				}
+			}
+		} catch (ex) {
+			log.info('footballLiveStrategyOne error: ', ex);
+		}
 	}
 }
 
@@ -75,10 +92,23 @@ async function footballLiveStrategyOne(item, index) {
  * @param {Number} index ставки
  */
 async function footballLiveStrategyTwo(item, index) {
-	if ((Math.abs(p1 - p2) <= rateStrategyTwo)) {
+	if ((Math.abs(index.p1 - index.p2) <= rateStrategyTwo)) {
 		if (index.x > Math.min(index.p1, index.p2)) {
-			await saveRate(item, '2');
-			await waiting(item, '2');
+			try {
+				const oldScore = scoreGame(item);
+				await saveRate(item, '2');
+				const total = await waiting(item, '2', oldScore);
+				if (total !== -1) { // -1 - это время истекло или поменялся счет
+					const endTotal = await waitingEndMatch(item, '2');
+					// "4:0 (2:0,2:0)"
+					const result = equalsTotal(oldScore, endTotal);
+					if(result === 0 || result === 1){
+						setRate(item.I, result);
+					}
+				}
+			} catch (ex) {
+				log.info('footballLiveStrategyTwo error: ', ex);
+			}
 		}
 	}
 }
@@ -86,16 +116,17 @@ async function footballLiveStrategyTwo(item, index) {
 /**
  * Метод для мониторинга Total.
  *
- * @param item
- * @param strategy
- * @returns {Promise<any>}
+ * @param {Array} item массив ставок
+ * @param {string} strategy стратегия
+ * @param {Object} oldScore старый счет матча
+ * @returns {Promise<Number>}
  */
-function waiting(item, strategy) {
+function waiting(item, strategy, oldScore) {
 	let waitingIntervalJob;
 	return new Promise((resolve, reject) => {
 		try {
 			waitingIntervalJob = new CronJob(waitingInterval, async () => {
-				const indexMatch = await searchIndex(item.I, strategy);
+				const indexMatch = await searchIndex(item.I, strategy, oldScore);
 				if (indexMatch !== null) {
 					waitingIntervalJob.stop();
 					resolve(indexMatch);
@@ -103,60 +134,10 @@ function waiting(item, strategy) {
 			}, null, true);
 		} catch (ex) {
 			waitingIntervalJob.stop();
-			console.log('cron waiting error ', ex);
+			log.info('cron waiting error: ', ex);
 			reject(ex);
 		}
 	});
-}
-
-/**
- * Метод для ожидания окончания матча.
- *
- * @param item
- * @param strategy
- * @returns {Promise<any>}
- */
-function waitingEndMatch(item, strategy) {
-	let waitingEndMatch;
-	return new Promise((resolve, reject) => {
-		try {
-			waitingEndMatch = new CronJob('* /02 * * * *', async () => {
-				const result = await serchResult(numericalDesignation, item.I);
-				if (result !== null) {
-					waitingEndMatch.stop();
-					resolve(result);
-				}
-			}, null, true);
-		} catch (ex) {
-			waitingEndMatch.stop();
-			console.log('cron waiting error ', ex);
-			reject(ex);
-		}
-	});
-}
-
-/**
- * Метод для поиска результата матча.
- *
- * @param {number} type соревнования
- * @param {number} id матча
- * @returns {Promise<void>}
- */
-async function serchResult(type, id) {
-	const data = await postResult();
-	let score = null;
-	data.forEach((item) => {
-		if (item.ID === type) {
-			item.Elems.map((object) => {
-				if (object.Elems.length > 0) {
-					if (object.Elems[0].Head[0] === id) {
-						score = object.Elems[0].Head[6];
-					}
-				}
-			});
-		}
-	});
-	return score;
 }
 
 /**
@@ -169,50 +150,96 @@ async function serchResult(type, id) {
  *
  * если счет изменился то выходим и в бд пишем 1 и не отслеживаем конец матча
  *
- * если нашли нужный то ждем окончания матча 120 мин и сравниваем Total 2-x таймов не изменился ли
- * если изменился то меняем даные в таблице {
- * 		x = исходного -> 1
- * 		x < исходного -> 0
- * 		x > исходного -> ставка
- * }
- *
  * @param {number} id матча
- * @param {string} strategy cnhfntubz
+ * @param {string} strategy стратегия
+ * @param {Object} oldScore старый счет матча
  */
-function searchIndex(id, strategy) {
+function searchIndex(id, strategy, oldScore) {
 	return getFootballExpanded(id)
 		.then((item) => {
 			let index = null;
-			if (item.GE && item.GE.length > 2) {
-				item.GE.map((rate) => {
-					if (rate.G === '17') { // 17 - тотал
-						const score = scoreGame();
-						// const tm = item.SC.TS ? Math.floor(item.SC.TS / 60) : 0; // проверяем время матча
-						const total = score.sc1 + score.sc2 + 1;
-						rate.E[0].map((item) => { // 0 - так как столбец "больше"
-							if (item.P === total) {
-								if (item.C > totalStrategy[strategy]) {
-									debugger;
-									setRate(id, index = item.C);
-								} else {
-									// ждать 2 мин
-								}
-							} else {
-								// ждать 2 мин
+			const score = scoreGame(item); // счета матча
+			const tm = timeGame(item); // проверяем время матча
+			if (Object.is(JSON.stringify(oldScore), JSON.stringify(score)) && tm <= 4320) {
+				if (item.GE && Array.isArray(item.GE)) {
+					item.GE.map((rate) => {
+						if (rate.G === '17') { // 17 - тотал
+							const total = score.sc1 + score.sc2 + 1;
+							if (item.E && Array.isArray(item.E[0])) {
+								rate.E[0].map((item) => { // 0 - так как столбец "больше"
+									if (item.P === total) {
+										if (item.C > totalStrategy[strategy]) {
+											setRate(id, index = item.C);
+										}
+									}
+								}).catch(error => {
+									log.info('error searchIndex E: ', error);
+								});
 							}
-						})
-					} else {
-						// ждать 2 мин
-					}
-				})
+						}
+					}).catch(error => {
+						log.info('error searchIndex GE: ', error);
+					});
+				}
 			} else {
-				// ждать 2 мин
+				return -1;
 			}
 			return index;
 		})
 		.catch(error => {
-			log.info('error getFootballExpanded ', error);
+			log.info('error getFootballExpanded: ', error);
 		});
+}
+
+/**
+ * Метод для ожидания окончания матча.
+ *
+ * если нашли нужный то ждем окончания матча 120 мин
+ *
+ * @param {Array} item массив ставок
+ * @returns {Promise<Number>}
+ */
+function waitingEndMatch(item) {
+	const endGame = (7200 - timeGame(item)) * 1000;
+	return new Promise((resolve, reject) => {
+		try {
+			setTimeout(async () => {
+				resolve(await serchResult(numericalDesignation, item.I));
+			}, endGame);
+		} catch (ex) {
+			log.info('waitingEndMatch error: ', ex);
+			reject(ex);
+		}
+	});
+}
+
+/**
+ * Метод для поиска результата матча.
+ *
+ * @param {number} type соревнования(1 - футбол)
+ * @param {number} id матча
+ * @returns {Promise<void>}
+ */
+async function serchResult(type, id) {
+	let score = null;
+	try {
+		const data = await postResult();
+		data.forEach((item) => {
+			if (item.ID === type) {
+				item.Elems.map((object) => {
+					if (Array.isArray(object.Elems)) {
+						if (object.Elems[0].Head[0] === id) {
+							score = object.Elems[0].Head[6];
+						}
+					}
+				});
+			}
+		});
+		
+	} catch (ex) {
+		log.info('serchResult error: ', ex);
+	}
+	return score;
 }
 
 /**
@@ -225,7 +252,7 @@ function scoreGame(item) {
 	return {
 		sc1: item.SC.FS.S1 ? item.SC.FS.S1 : 0, // проверяем счет матча
 		sc2: item.SC.FS.S2 ? item.SC.FS.S2 : 0 // проверяем счет матча
-	}
+	};
 }
 
 /**
@@ -239,6 +266,37 @@ function indexGame(item) {
 		p1: item.E[0] ? item.E[0].C : '', // попеда первой
 		x: item.E[1] ? item.E[1].C : '', // ничья
 		p2: item.E[2] ? item.E[2].C : '' // поведа второй
+	};
+}
+
+/**
+ * Метод для определения времени матча.
+ *
+ * @param {Object} item объект матча
+ * @returns {{sc1: number, sc2: number}}
+ */
+function timeGame(item) {
+	return item.SC.TS ? Math.floor(item.SC.TS / 60) : 0;
+}
+
+/**
+ * Cравниваем Total 2-x таймов не изменился ли.
+ * Eсли изменился то меняем даные в таблице .
+ * {
+ * 		x = исходного -> 1
+ * 		x < исходного -> 0
+ * 		x > исходного -> ставка
+ * }
+ * @param {Object} oldScore исходные данные Total
+ * @param {Object} endTotal результирующие данные Total
+ */
+function equalsTotal(oldScore, endTotal) {
+	const start = oldScore.sc1 + oldScore.sc2;
+	const end = endTotal.sc1 + endTotal.sc2;
+	if(start === end){
+		return 1;
+	}else if(start > end){
+		return 0;
 	}
 }
 
@@ -249,7 +307,6 @@ function indexGame(item) {
  * @param {Number} index коэфф
  */
 function setRate(id = 0, index = 1) {
-	debugger;
 	return setField({
 		matchId: id,
 		index: index
@@ -263,6 +320,7 @@ function setRate(id = 0, index = 1) {
  * @param {String} strategy стратегия ставок
  */
 function saveRate(item = {}, strategy) {
+	sendMessage('id:' + item.I + ' ' + 'O1:' + item.O1 + ' ' + 'O2:' + item.O2 + ' ' + 'strategy:' + strategy);
 	return newField({
 		matchId: item.I, // id матча
 		commandOne: item.O1, // название команды 1
@@ -273,6 +331,5 @@ function saveRate(item = {}, strategy) {
 }
 
 module.exports = {
-	search,
-	serchResult
+	search
 };

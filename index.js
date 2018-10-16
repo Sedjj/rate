@@ -1,9 +1,7 @@
 const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
-const {search, saveRate, serchResult} = require('./src/searchMatch');
-const {postResult} = require('./src/fetch');
-const {sendMessage} = require('./src/telegramApi');
+const {search} = require('./src/searchMatch');
 
 const clearingTempFilesTime = process.env.NODE_ENV === 'development'
 	? '*/05 * * * * *'
@@ -13,14 +11,11 @@ if (clearingTempFilesTime) {
 	let clearingTempFilesJob;
 	try {
 		clearingTempFilesJob = new CronJob(clearingTempFilesTime, () => {
-			/*search();*/
-			serchResult();
-			/*sendMessage('hi');*/
-			console.log('clearingTempFilesTime', clearingTempFilesTime);
-			log.info(`Deleted temporary  file(s)`)
+			search();
+			log.info('clearingTempFilesTime', clearingTempFilesTime);
 		}, null, true);
 	} catch (ex) {
 		clearingTempFilesJob.stop();
-		console.log('cron pattern not valid');
+		log.info('cron pattern not valid');
 	}
 }

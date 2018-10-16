@@ -9,22 +9,21 @@ const {mapProps} = require('../utils/statisticHelpers');
  * @param {Object} param для таблицы.
  * @returns {Promise<any>}
  */
-function getField(param) {
-	return StatisticModel.find({})
+function getFields(param = {}) {
+	return StatisticModel.find(param)
 		.exec()
 		.then(statistics => {
 			if (!statistics) {
 				log.info('StatisticNotFound', 'Statistic with  not found');
 			}
 			return statistics.map(statistic => {
-					let props = mapProps(statistic);
-					props['rate'] = 500;
-					props['total'] = 750;
-					props['bank'] = 10000;
-					props['percent'] = 5;
-					return props
-				}
-			);
+				let props = mapProps(statistic);
+				props['rate'] = 500;
+				props['total'] = 750;
+				props['bank'] = 10000;
+				props['percent'] = 5;
+				return props;
+			});
 		})
 		.catch(error => {
 			log.info('error newField ', error);
@@ -71,7 +70,7 @@ function setField(param) {
 }
 
 module.exports = {
-	getField,
+	getFields,
 	newField,
 	setField
 };
