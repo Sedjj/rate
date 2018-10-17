@@ -1,4 +1,32 @@
-const log = require('./../utils/logger');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: searchMatch/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: searchMatch/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const log = require('./../utils/logger');
 const {CronJob} = require('cron');
 const {newField, setField} = require('./../storage');
 const {getFootball, getFootballExpanded, postResult} = require('./../fetch');
@@ -17,7 +45,7 @@ const waitingInterval = process.env.NODE_ENV === 'development'
 	: config.get('cron.waitingInterval');
 
 /**
- * Метод поиска совпадений по данным стратегиям.
+ * метод поиска совпадений по данным стратегиям.
  *
  * @returns {*}
  */
@@ -39,14 +67,14 @@ function search() {
  * @param {Array} item массив ставок
  */
 function footballLiveStrategy(item) {
-	if (item.SC && item.SC.FS && item.E && item.SC.TS) {
+	if (item.SC &amp;&amp; item.SC.FS &amp;&amp; item.E &amp;&amp; item.SC.TS) {
 		const score = scoreGame(item);
 		const tm = timeGame(item);// проверяем время матча
 		if (Array.isArray(item.E)) {
 			const index = indexGame(item);
-			if ((item.O1.indexOf('(') === -1) && (item.O2.indexOf('(') === -1) && (item.O1.indexOf('II') === -1) && (item.O2.indexOf('II') === -1)) {
-				if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
-					if ((tm >= before) && (tm >= after)) {
+			if ((item.O1.indexOf('(') === -1) &amp;&amp; (item.O2.indexOf('(') === -1) &amp;&amp; (item.O1.indexOf('II') === -1) &amp;&amp; (item.O2.indexOf('II') === -1)) {
+				if ((index.p1 !== '') &amp;&amp; (index.p2 !== '') &amp;&amp; (index.x !== '')) {
+					if ((tm >= before) &amp;&amp; (tm >= after)) {
 						if (score.sc1 === score.sc2) {
 							footballLiveStrategyOne(item, index);
 						} else if (score.sc1 + score.sc2 === score) {
@@ -66,7 +94,7 @@ function footballLiveStrategy(item) {
  * @param {Number} index ставки
  */
 async function footballLiveStrategyOne(item, index) {
-	if ((Math.abs(index.p1 - index.p2) <= rateStrategyOne)) {
+	if ((Math.abs(index.p1 - index.p2) &lt;= rateStrategyOne)) {
 		try {
 			const oldScore = scoreGame(item);
 			await saveRate(item, '1');
@@ -91,7 +119,7 @@ async function footballLiveStrategyOne(item, index) {
  * @param {Number} index ставки
  */
 async function footballLiveStrategyTwo(item, index) {
-	if ((Math.abs(index.p1 - index.p2) <= rateStrategyTwo)) {
+	if ((Math.abs(index.p1 - index.p2) &lt;= rateStrategyTwo)) {
 		if (index.x > Math.min(index.p1, index.p2)) {
 			try {
 				const oldScore = scoreGame(item);
@@ -117,7 +145,7 @@ async function footballLiveStrategyTwo(item, index) {
  * @param {Array} item массив ставок
  * @param {string} strategy стратегия
  * @param {Object} oldScore старый счет матча
- * @returns {Promise<Number>}
+ * @returns {Promise&lt;Number>}
  */
 function waiting(item, strategy, oldScore) {
 	let waitingIntervalJob;
@@ -158,12 +186,12 @@ function searchIndex(id, strategy, oldScore) {
 			let index = null;
 			const score = scoreGame(item); // счета матча
 			const tm = timeGame(item); // проверяем время матча
-			if (Object.is(JSON.stringify(oldScore), JSON.stringify(score)) && tm <= 4320) {
-				if (item.GE && Array.isArray(item.GE)) {
+			if (Object.is(JSON.stringify(oldScore), JSON.stringify(score)) &amp;&amp; tm &lt;= 4320) {
+				if (item.GE &amp;&amp; Array.isArray(item.GE)) {
 					item.GE.map((rate) => {
 						if (rate.G === '17') { // 17 - тотал
 							const total = score.sc1 + score.sc2 + 1;
-							if (item.E && Array.isArray(item.E[0])) {
+							if (item.E &amp;&amp; Array.isArray(item.E[0])) {
 								rate.E[0].map((item) => { // 0 - так как столбец "больше"
 									if (item.P === total) {
 										if (item.C > totalStrategy[strategy]) {
@@ -195,7 +223,7 @@ function searchIndex(id, strategy, oldScore) {
  * если нашли нужный то ждем окончания матча 120 мин
  *
  * @param {Array} item массив ставок
- * @returns {Promise<Number>}
+ * @returns {Promise&lt;Number>}
  */
 function waitingEndMatch(item) {
 	const endGame = (7200 - timeGame(item)) * 1000;
@@ -216,7 +244,7 @@ function waitingEndMatch(item) {
  *
  * @param {number} type соревнования(1 - футбол)
  * @param {number} id матча
- * @returns {Promise<void>}
+ * @returns {Promise&lt;void>}
  */
 async function serchResult(type, id) {
 	let score = null;
@@ -282,7 +310,7 @@ function timeGame(item) {
  * Eсли изменился то меняем даные в таблице .
  * {
  * 		x = исходного -> 1
- * 		x < исходного -> 0
+ * 		x &lt; исходного -> 0
  * 		x > исходного -> ставка
  * }
  * @param {Object} oldScore исходные данные Total
@@ -346,4 +374,26 @@ function saveRate(item = {}, strategy) {
 
 module.exports = {
 	search
-};
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#decorateMessage">decorateMessage</a></li><li><a href="global.html#equalsTotal">equalsTotal</a></li><li><a href="global.html#footballLiveStrategy">footballLiveStrategy</a></li><li><a href="global.html#footballLiveStrategyOne">footballLiveStrategyOne</a></li><li><a href="global.html#footballLiveStrategyTwo">footballLiveStrategyTwo</a></li><li><a href="global.html#getFields">getFields</a></li><li><a href="global.html#getFootball">getFootball</a></li><li><a href="global.html#getFootballExpanded">getFootballExpanded</a></li><li><a href="global.html#getFormattedDate">getFormattedDate</a></li><li><a href="global.html#getFormattedTime">getFormattedTime</a></li><li><a href="global.html#getTime">getTime</a></li><li><a href="global.html#indexGame">indexGame</a></li><li><a href="global.html#logger">logger</a></li><li><a href="global.html#mapProps">mapProps</a></li><li><a href="global.html#newField">newField</a></li><li><a href="global.html#parserScore">parserScore</a></li><li><a href="global.html#postResult">postResult</a></li><li><a href="global.html#replaceAll">replaceAll</a></li><li><a href="global.html#saveRate">saveRate</a></li><li><a href="global.html#scoreGame">scoreGame</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#searchIndex">searchIndex</a></li><li><a href="global.html#sendMessage">sendMessage</a></li><li><a href="global.html#serchResult">serchResult</a></li><li><a href="global.html#setField">setField</a></li><li><a href="global.html#setRate">setRate</a></li><li><a href="global.html#timeGame">timeGame</a></li><li><a href="global.html#waiting">waiting</a></li><li><a href="global.html#waitingEndMatch">waitingEndMatch</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Oct 17 2018 22:59:15 GMT+0500 (GMT+05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
