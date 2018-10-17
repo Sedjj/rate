@@ -55,14 +55,21 @@ const config = {
 	],
 	exceptionHandlers: [
 		new transports.File(options.exceptions)
-	]
+	],
+	format: format.combine(
+		format.label({label: '[my-label]'}),
+		format.timestamp({
+			format: 'YYYY-MM-DD HH:mm:ss'
+		}),
+		format.json(),
+		//
+		// Alternatively you could use this custom printf format if you
+		// want to control where the timestamp comes in your final message.
+		// Try replacing `format.simple()` above with this:
+		//
+		format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+	)
 };
-
-if (process.env.NODE_ENV !== 'production') {
-	config.format = format.json();
-} else {
-	config.format = format.simple();
-}
 
 /**
  * Обертка над логером.
