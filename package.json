@@ -5,7 +5,6 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
-		"start_parser": "set CHANNEL=development&&node src/parser/parserPinterest.js",
 		"dev": "set CHANNEL=development&&node index.js",
 		"prod": "set CHANNEL=production&&node index.js"
 	},

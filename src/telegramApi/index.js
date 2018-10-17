@@ -18,8 +18,8 @@ const app = new Telegraf(token, {
 	telegram: {agent: socksAgent}
 });
 
-app.catch((err) => {
-	log.info(err);
+app.catch((error) => {
+	log.error(error);
 });
 
 /**

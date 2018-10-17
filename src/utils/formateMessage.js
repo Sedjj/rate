@@ -29,8 +29,8 @@ function decorateMessage(seed, balances) {
 		let balance = -1;
 		try {
 			balance = parseInt(item.balance) / 100000000;
-		} catch (e) {
-			log.info('Error in parsing: ' + e.messages);
+		} catch (error) {
+			log.error('Error in parsing: ' + error.messages);
 		}
 		return previousValue += ' -name: ' + item.name + '\n' + ' -balance: ' + balance + '\n\n';
 	}, message);

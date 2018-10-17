@@ -9,8 +9,8 @@ mongoose.connect(dbUri, {
 });
 const db = mongoose.connection;
 
-db.on('error', function (err) {
-	log.error('Connection error:', err.message);
+db.on('error', function (error) {
+	log.error('Connection error:', error.message);
 });
 
 db.once('open', function callback() {

@@ -3,7 +3,7 @@ const {CronJob} = require('cron');
 const {newField, setField} = require('./../storage');
 const {getFootball, getFootballExpanded, postResult} = require('./../fetch');
 const config = require('config');
-const {sendMessage} = require('./src/telegramApi');
+const {sendMessage} = require('./../telegramApi');
 
 const before = config.get('choice.live.football.time.before');
 const after = config.get('choice.live.football.time.after');
@@ -29,7 +29,7 @@ function search() {
 			});
 		})
 		.catch(error => {
-			log.info('error search: ', error);
+			log.error('error search: ', error);
 		});
 }
 
@@ -72,15 +72,14 @@ async function footballLiveStrategyOne(item, index) {
 			await saveRate(item, '1');
 			const total = await waiting(item, '1', oldScore);
 			if (total !== -1) { // -1 - это время истекло или поменялся счет
-				const endTotal = await waitingEndMatch(item, '1');
-				// "4:0 (2:0,2:0)"
-				const result = equalsTotal(oldScore, endTotal);
-				if(result === 0 || result === 1){
+				const endScore = await waitingEndMatch(item, '1');
+				const result = equalsTotal(oldScore, parserScore(endScore));
+				if (result === 0 || result === 1) {
 					setRate(item.I, result);
 				}
 			}
-		} catch (ex) {
-			log.info('footballLiveStrategyOne error: ', ex);
+		} catch (error) {
+			log.error('footballLiveStrategyOne error: ', error);
 		}
 	}
 }
@@ -99,15 +98,14 @@ async function footballLiveStrategyTwo(item, index) {
 				await saveRate(item, '2');
 				const total = await waiting(item, '2', oldScore);
 				if (total !== -1) { // -1 - это время истекло или поменялся счет
-					const endTotal = await waitingEndMatch(item, '2');
-					// "4:0 (2:0,2:0)"
-					const result = equalsTotal(oldScore, endTotal);
-					if(result === 0 || result === 1){
+					const endScore = await waitingEndMatch(item, '2');
+					const result = equalsTotal(oldScore, parserScore(endScore));
+					if (result === 0 || result === 1) {
 						setRate(item.I, result);
 					}
 				}
-			} catch (ex) {
-				log.info('footballLiveStrategyTwo error: ', ex);
+			} catch (error) {
+				log.error('footballLiveStrategyTwo error: ', error);
 			}
 		}
 	}
@@ -132,9 +130,9 @@ function waiting(item, strategy, oldScore) {
 					resolve(indexMatch);
 				}
 			}, null, true);
-		} catch (ex) {
+		} catch (error) {
 			waitingIntervalJob.stop();
-			log.info('cron waiting error: ', ex);
+			log.error('cron waiting error: ', error);
 			reject(ex);
 		}
 	});
@@ -173,12 +171,12 @@ function searchIndex(id, strategy, oldScore) {
 										}
 									}
 								}).catch(error => {
-									log.info('error searchIndex E: ', error);
+									log.error('error searchIndex E: ', error);
 								});
 							}
 						}
 					}).catch(error => {
-						log.info('error searchIndex GE: ', error);
+						log.error('error searchIndex GE: ', error);
 					});
 				}
 			} else {
@@ -187,7 +185,7 @@ function searchIndex(id, strategy, oldScore) {
 			return index;
 		})
 		.catch(error => {
-			log.info('error getFootballExpanded: ', error);
+			log.error('error getFootballExpanded: ', error);
 		});
 }
 
@@ -206,8 +204,8 @@ function waitingEndMatch(item) {
 			setTimeout(async () => {
 				resolve(await serchResult(numericalDesignation, item.I));
 			}, endGame);
-		} catch (ex) {
-			log.info('waitingEndMatch error: ', ex);
+		} catch (error) {
+			log.error('waitingEndMatch error: ', error);
 			reject(ex);
 		}
 	});
@@ -236,8 +234,8 @@ async function serchResult(type, id) {
 			}
 		});
 		
-	} catch (ex) {
-		log.info('serchResult error: ', ex);
+	} catch (error) {
+		log.error('serchResult error: ', error);
 	}
 	return score;
 }
@@ -290,14 +288,30 @@ function timeGame(item) {
  * @param {Object} oldScore исходные данные Total
  * @param {Object} endTotal результирующие данные Total
  */
-function equalsTotal(oldScore, endTotal) {
+function equalsTotal(oldScore, endScore) {
 	const start = oldScore.sc1 + oldScore.sc2;
-	const end = endTotal.sc1 + endTotal.sc2;
-	if(start === end){
+	const end = endScore.sc1 + endScore.sc2;
+	if (start === end) {
 		return 1;
-	}else if(start > end){
+	} else if (start > end) {
 		return 0;
 	}
+}
+
+/**
+ * Метод для нахождения общего счета за 2 тайма
+ *
+ * @param {String} value строка для парсинга
+ * @returns {Object}
+ */
+function parserScore(value) {
+	const score = value.match('/\\d\\:\\d(?=,|\\))/g');
+	const scoreOne = score[0].match('/\\d/g');
+	const scoreTwo = score[1].match('/\\d/g');
+	return {
+		sc1: scoreOne[0] + scoreOne[1],
+		sc2: scoreTwo[0] + scoreTwo[1]
+	};
 }
 
 /**

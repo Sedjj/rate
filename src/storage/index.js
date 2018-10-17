@@ -14,7 +14,7 @@ function getFields(param = {}) {
 		.exec()
 		.then(statistics => {
 			if (!statistics) {
-				log.info('StatisticNotFound', 'Statistic with  not found');
+				log.error('StatisticNotFound', 'Statistic with  not found');
 			}
 			return statistics.map(statistic => {
 				let props = mapProps(statistic);
@@ -26,7 +26,7 @@ function getFields(param = {}) {
 			});
 		})
 		.catch(error => {
-			log.info('error newField ', error);
+			log.error('error newField ', error);
 		});
 }
 
@@ -45,7 +45,7 @@ function newField(param) {
 			return statistic.save();
 		})
 		.catch(error => {
-			log.info('error newField ', error);
+			log.error('error newField ', error);
 		});
 }
 
@@ -65,7 +65,7 @@ function setField(param) {
 			return statistic.save();
 		})
 		.catch(error => {
-			log.info('error newField ', error);
+			log.error('error newField ', error);
 		});
 }
 

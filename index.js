@@ -8,14 +8,15 @@ const clearingTempFilesTime = process.env.NODE_ENV === 'development'
 	: config.get('cron.clearingCronTime');
 
 if (clearingTempFilesTime) {
+	log.info('****start****');
 	let clearingTempFilesJob;
 	try {
 		clearingTempFilesJob = new CronJob(clearingTempFilesTime, () => {
+			log.info('Start: ', clearingTempFilesTime);
 			search();
-			log.info('clearingTempFilesTime', clearingTempFilesTime);
 		}, null, true);
 	} catch (ex) {
 		clearingTempFilesJob.stop();
-		log.info('cron pattern not valid');
+		log.error('cron pattern not valid');
 	}
 }
