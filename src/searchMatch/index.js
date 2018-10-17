@@ -1,19 +1,25 @@
-const log = require('./../utils/logger');
+const log = require('../utils/logger');
 const {CronJob} = require('cron');
-const {newField, setField} = require('./../storage');
-const {getFootball, getFootballExpanded, postResult} = require('./../fetch');
+const {newField, setField} = require('../storage');
+const {getFootball, getFootballExpanded, postResult} = require('../fetch');
 const config = require('config');
-const {sendMessage} = require('./../telegramApi');
+const {sendMessage} = require('../telegramApi');
+const {
+	scoreGame,
+	indexGame,
+	timeGame,
+	equalsTotal,
+	parserScore
+} = require('../utils/searchHelper');
 
 const before = config.get('choice.live.football.time.before');
 const after = config.get('choice.live.football.time.after');
 const rateStrategyOne = config.get('choice.live.football.strategyOne.rate');
 const rateStrategyTwo = config.get('choice.live.football.strategyTwo.rate');
 const totalStrategy = config.get('choice.live.football.total');
-/*const score = config.get('choice.live.football.score');*/
 const numericalDesignation = config.get('choice.live.football.numericalDesignation');
 const waitingInterval = process.env.NODE_ENV === 'development'
-	? '* /02 * * * *'
+	? '* 02 * * * *'
 	: config.get('cron.waitingInterval');
 
 /**
@@ -44,6 +50,7 @@ function footballLiveStrategy(item) {
 		const tm = timeGame(item);// проверяем время матча
 		if (Array.isArray(item.E)) {
 			const index = indexGame(item);
+			// TODO Сделать реализацию со скобочками
 			if ((item.O1.indexOf('(') === -1) && (item.O2.indexOf('(') === -1) && (item.O1.indexOf('II') === -1) && (item.O2.indexOf('II') === -1)) {
 				if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
 					if ((tm >= before) && (tm >= after)) {
@@ -68,13 +75,17 @@ function footballLiveStrategy(item) {
 async function footballLiveStrategyOne(item, index) {
 	if ((Math.abs(index.p1 - index.p2) <= rateStrategyOne)) {
 		try {
+			log.debug(`Найден ${item.I}: Стратегия гол лузера`);
 			const oldScore = scoreGame(item);
 			await saveRate(item, '1');
 			const total = await waiting(item, '1', oldScore);
 			if (total !== -1) { // -1 - это время истекло или поменялся счет
 				const endScore = await waitingEndMatch(item, '1');
+				log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Результат матча ${endScore}`);
 				const result = equalsTotal(oldScore, parserScore(endScore));
+				log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Коэффициента ставки ${result}`);
 				if (result === 0 || result === 1) {
+					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Корректировка коэффициента ставки ${result}`);
 					setRate(item.I, result);
 				}
 			}
@@ -94,13 +105,17 @@ async function footballLiveStrategyTwo(item, index) {
 	if ((Math.abs(index.p1 - index.p2) <= rateStrategyTwo)) {
 		if (index.x > Math.min(index.p1, index.p2)) {
 			try {
+				log.debug(`Найден ${item.I}: Стратегия ничья с явным фаворитом`);
 				const oldScore = scoreGame(item);
 				await saveRate(item, '2');
 				const total = await waiting(item, '2', oldScore);
 				if (total !== -1) { // -1 - это время истекло или поменялся счет
 					const endScore = await waitingEndMatch(item, '2');
+					log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${endScore}`);
 					const result = equalsTotal(oldScore, parserScore(endScore));
+					log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${result}`);
 					if (result === 0 || result === 1) {
+						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
 						setRate(item.I, result);
 					}
 				}
@@ -126,6 +141,7 @@ function waiting(item, strategy, oldScore) {
 			waitingIntervalJob = new CronJob(waitingInterval, async () => {
 				const indexMatch = await searchIndex(item.I, strategy, oldScore);
 				if (indexMatch !== null) {
+					log.debug(`Матч ${item.I}: total=${indexMatch.I}`);
 					waitingIntervalJob.stop();
 					resolve(indexMatch);
 				}
@@ -133,7 +149,7 @@ function waiting(item, strategy, oldScore) {
 		} catch (error) {
 			waitingIntervalJob.stop();
 			log.error('cron waiting error: ', error);
-			reject(ex);
+			reject(error);
 		}
 	});
 }
@@ -206,7 +222,7 @@ function waitingEndMatch(item) {
 			}, endGame);
 		} catch (error) {
 			log.error('waitingEndMatch error: ', error);
-			reject(ex);
+			reject(error);
 		}
 	});
 }
@@ -240,79 +256,6 @@ async function serchResult(type, id) {
 	return score;
 }
 
-/**
- * Метод для определения счета матча.
- *
- * @param {Object} item объект матча
- * @returns {{sc1: number, sc2: number}}
- */
-function scoreGame(item) {
-	return {
-		sc1: item.SC.FS.S1 ? item.SC.FS.S1 : 0, // проверяем счет матча
-		sc2: item.SC.FS.S2 ? item.SC.FS.S2 : 0 // проверяем счет матча
-	};
-}
-
-/**
- * Метод для определения ставок матча.
- *
- * @param {Object} item объект матча
- * @returns {{sc1: number, sc2: number}}
- */
-function indexGame(item) {
-	return {
-		p1: item.E[0] ? item.E[0].C : '', // попеда первой
-		x: item.E[1] ? item.E[1].C : '', // ничья
-		p2: item.E[2] ? item.E[2].C : '' // поведа второй
-	};
-}
-
-/**
- * Метод для определения времени матча.
- *
- * @param {Object} item объект матча
- * @returns {{sc1: number, sc2: number}}
- */
-function timeGame(item) {
-	return item.SC.TS ? Math.floor(item.SC.TS / 60) : 0;
-}
-
-/**
- * Cравниваем Total 2-x таймов не изменился ли.
- * Eсли изменился то меняем даные в таблице .
- * {
- * 		x = исходного -> 1
- * 		x < исходного -> 0
- * 		x > исходного -> ставка
- * }
- * @param {Object} oldScore исходные данные Total
- * @param {Object} endTotal результирующие данные Total
- */
-function equalsTotal(oldScore, endScore) {
-	const start = oldScore.sc1 + oldScore.sc2;
-	const end = endScore.sc1 + endScore.sc2;
-	if (start === end) {
-		return 1;
-	} else if (start > end) {
-		return 0;
-	}
-}
-
-/**
- * Метод для нахождения общего счета за 2 тайма
- *
- * @param {String} value строка для парсинга
- * @returns {Object}
- */
-function parserScore(value) {
-	const score = value.match('/\\d\\:\\d(?=,|\\))/g');
-	const scoreOne = score[0].match('/\\d/g');
-	const scoreTwo = score[1].match('/\\d/g');
-	return {
-		sc1: scoreOne[0] + scoreOne[1],
-		sc2: scoreTwo[0] + scoreTwo[1]
-	};
-}
 
 /**
  * Метод для изменения ставки.

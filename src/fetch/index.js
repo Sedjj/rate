@@ -25,6 +25,7 @@ function getFootball() {
 			} catch (error) {
 				log.error('error Football JSON.parse:' + error);
 			}
+			log.debug('Отработал: Метод для получения ставок');
 			resolve(value);
 		});
 	});
@@ -49,6 +50,7 @@ function getFootballExpanded(id) {
 			} catch (error) {
 				log.error('error Expanded JSON.parse:' + error);
 			}
+			log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);
 		});
 	});
@@ -80,6 +82,7 @@ function postResult() {
 				log.error('postResult error:' + error);
 				return reject(error);
 			}
+			log.debug('Отработал: Метод для получения всех результатов');
 			resolve(body.Data);
 		});
 	});
