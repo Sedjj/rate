@@ -45,9 +45,8 @@ const options = {
 };
 
 const config = {
-	level: 'info',
+	level: 'debug',
 	transports: [
-		new transports.File({filename: 'error.log', level: 'error'}),
 		new transports.File(options.fileInfo),
 		new transports.File(options.fileError),
 		new transports.File(options.fileDebug),
