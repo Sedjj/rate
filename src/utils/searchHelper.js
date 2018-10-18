@@ -19,9 +19,9 @@ function scoreGame(item) {
  */
 function indexGame(item) {
 	return {
-		p1: item.E[0] ? item.E[0].C : '', // попеда первой
-		x: item.E[1] ? item.E[1].C : '', // ничья
-		p2: item.E[2] ? item.E[2].C : '' // поведа второй
+		p1: item.E[0] && item.E[0].T == 1 ? item.E[0].C : '', // попеда первой
+		x: item.E[1] && item.E[1].T == 2 ? item.E[1].C : '', // ничья
+		p2: item.E[2] && item.E[2].T == 3 ? item.E[2].C : '' // поведа второй
 	};
 }
 
