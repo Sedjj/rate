@@ -102,7 +102,7 @@ async function footballLiveStrategyOne(item, index) {
  * @param {Number} index ставки
  */
 async function footballLiveStrategyTwo(item, index) {
-	if ((Math.abs(index.p1 - index.p2) <= rateStrategyTwo)) {
+	if ((Math.abs(index.p1 - index.p2) > rateStrategyTwo)) {
 		if (index.x > Math.min(index.p1, index.p2)) {
 			try {
 				log.debug(`Найден ${item.I}: Стратегия ничья с явным фаворитом`);

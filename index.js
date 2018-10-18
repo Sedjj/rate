@@ -12,6 +12,7 @@ if (clearingTempFilesTime) {
 	let clearingTempFilesJob;
 	try {
 		clearingTempFilesJob = new CronJob(clearingTempFilesTime, () => {
+			log.info('clearingTempFilesTime '+clearingTempFilesTime);
 			search();
 		}, null, true);
 	} catch (ex) {

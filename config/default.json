@@ -55,7 +55,7 @@
 	},
 	"cron": {
 		"lifetime": 86400,
-		"clearingCronTime": "* 05 * * * *",
-		"waitingInterval": "* 02 * * * *"
+		"clearingCronTime": "*/05 * * * *",
+		"waitingInterval": "*/02 * * * *"
 	}
 }
