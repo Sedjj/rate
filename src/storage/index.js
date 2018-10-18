@@ -60,7 +60,7 @@ function setField(param) {
 		.exec()
 		.then(statistic => {
 			if (param.index) {
-				statistic.index = param.ndex;
+				statistic.index = param.index;
 			}
 			return statistic.save();
 		})

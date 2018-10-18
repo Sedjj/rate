@@ -26,13 +26,13 @@ function indexGame(item) {
 }
 
 /**
- * Метод для определения времени матча.
+ * Метод для определения времени матча(в секундах).
  *
  * @param {Object} item объект матча
  * @returns {{sc1: number, sc2: number}}
  */
 function timeGame(item) {
-	return item.SC.TS ? Math.floor(item.SC.TS / 60) : 0;
+	return item.SC.TS ? Math.floor(item.SC.TS) : 0;
 }
 
 /**
