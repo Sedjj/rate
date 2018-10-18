@@ -53,11 +53,11 @@ function footballLiveStrategy(item) {
 			// TODO Сделать реализацию со скобочками
 			if ((item.O1.indexOf('(') === -1) && (item.O2.indexOf('(') === -1) && (item.O1.indexOf('II') === -1) && (item.O2.indexOf('II') === -1)) {
 				if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
-					if ((tm >= before) && (tm >= after)) {
+					if ((tm >= before) && (tm <= after)) {
 						if (score.sc1 === score.sc2) {
-							footballLiveStrategyOne(item, index);
-						} else if (score.sc1 + score.sc2 === score) {
 							footballLiveStrategyTwo(item, index);
+						} else if (score.sc1 + score.sc2 === score) {
+							footballLiveStrategyOne(item, index);
 						}
 					}
 				}
@@ -174,25 +174,21 @@ function searchIndex(id, strategy, oldScore) {
 			let index = null;
 			const score = scoreGame(item); // счета матча
 			const tm = timeGame(item); // проверяем время матча
-			if (Object.is(JSON.stringify(oldScore), JSON.stringify(score)) && tm <= 4320) {
+			if (Object.is(JSON.stringify(oldScore), JSON.stringify(score)) && tm <= 4320) { //не изменился ли счет
 				if (item.GE && Array.isArray(item.GE)) {
 					item.GE.map((rate) => {
-						if (rate.G === '17') { // 17 - тотал
+						if (rate.G === 17) { // 17 - тотал
 							const total = score.sc1 + score.sc2 + 1;
-							if (item.E && Array.isArray(item.E[0])) {
-								rate.E[0].map((item) => { // 0 - так как столбец "больше"
-									if (item.P === total) {
-										if (item.C > totalStrategy[strategy]) {
-											setRate(id, index = item.C);
+							if (rate.E && Array.isArray(rate.E[0])) {
+								rate.E[0].map((itemTotal) => { // 0 - так как столбец "больше"
+									if (itemTotal.P === total) {
+										if (itemTotal.C > totalStrategy[parseInt(strategy)]) {
+											setRate(id, index = itemTotal.C);
 										}
 									}
-								}).catch(error => {
-									log.error('error searchIndex E: ', error);
 								});
 							}
 						}
-					}).catch(error => {
-						log.error('error searchIndex GE: ', error);
 					});
 				}
 			} else {
@@ -201,7 +197,8 @@ function searchIndex(id, strategy, oldScore) {
 			return index;
 		})
 		.catch(error => {
-			log.error('error getFootballExpanded: ', error);
+			log.error('error getFootballExpanded: ', error.message);
+			return null;
 		});
 }
 
@@ -277,7 +274,7 @@ function setRate(id = 0, index = 1) {
  * @param {String} strategy стратегия ставок
  */
 function saveRate(item = {}, strategy) {
-	sendMessage('id:' + item.I + ' ' + 'O1:' + item.O1 + ' ' + 'O2:' + item.O2 + ' ' + 'strategy:' + strategy);
+	sendMessage('id: ' + item.I + ' ' + 'O1: ' + item.O1 + ' ' + 'O2: ' + item.O2 + ' ' + ' strategy:' + strategy);
 	return newField({
 		matchId: item.I, // id матча
 		commandOne: item.O1, // название команды 1
