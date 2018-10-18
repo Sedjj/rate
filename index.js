@@ -4,7 +4,7 @@ const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
 
 const clearingTempFilesTime = process.env.NODE_ENV === 'development'
-	? '* 01 * * * *'
+	? '*/20 * * * * *'
 	: config.get('cron.clearingCronTime');
 
 if (clearingTempFilesTime) {
