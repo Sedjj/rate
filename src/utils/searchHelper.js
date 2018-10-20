@@ -36,6 +36,17 @@ function timeGame(item) {
 }
 
 /**
+ * Метод для отсеивание по названию матча
+ *
+ * @param {Object} itemOne первая команда
+ * @param {Object} itemTwo вторая команда
+ * @returns {boolean}
+ */
+function filterGame(itemOne, itemTwo) {
+	return (itemOne.indexOf('(') === -1) && (itemTwo.indexOf('(') === -1) && (itemOne.indexOf('II') === -1) && (itemTwo.indexOf('II') === -1) ? true : false;
+}
+
+/**
  * Cравниваем Total 2-x таймов не изменился ли.
  * Eсли изменился то меняем даные в таблице .
  * {
@@ -79,6 +90,7 @@ module.exports = {
 	scoreGame,
 	indexGame,
 	timeGame,
+	filterGame,
 	equalsTotal,
 	parserScore
 };
