@@ -1,9 +1,17 @@
 {
 	"ip": "localhost",
 	"port": 8081,
-	"db": {
+	"dbDev": {
 		"name": "rateBot",
-		"uri": "mongodb://localhost:27017/rateBot"
+		"hostString": "localhost:27017/",
+		"user": "",
+		"pass": ""
+	},
+	"dbProd": {
+		"name": "db_name",
+		"hostString": "mongodb:27017/",
+		"user": "username",
+		"pass": ""
 	},
 	"proxy": {
 		"host": "bot.avinfo17.info",
