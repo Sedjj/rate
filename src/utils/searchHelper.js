@@ -50,9 +50,9 @@ function filterGame(itemOne, itemTwo) {
  * Cравниваем Total 2-x таймов не изменился ли.
  * Eсли изменился то меняем даные в таблице .
  * {
- * 		x = исходного -> 1
- * 		x < исходного -> 0
- * 		x > исходного -> ставка
+ * 		конечный = исходный счет -> 1
+ * 		конечный < исходный счет -> 0
+ * 		конечный > исходный счет -> ставка(1.666)
  * }
  * @param {Object} oldScore исходные данные Total
  * @param {Object} endScore результирующие данные Total
@@ -76,12 +76,12 @@ function equalsTotal(oldScore, endScore) {
  * @returns {Object}
  */
 function parserScore(value) {
-	const score = value.match('/\\d\\:\\d(?=,|\\))/g');
-	const scoreOne = score[0].match('/\\d/g');
-	const scoreTwo = score[1].match('/\\d/g');
+	const score = value.match(/\d\:\d(?=,|\))/ig);
+	const scoreOne = score[0] ? score[0].match(/\d/ig) : [0, 0];
+	const scoreTwo = score[1] ? score[1].match(/\d/ig) : [0, 0];
 	return {
-		sc1: scoreOne[0] + scoreOne[1],
-		sc2: scoreTwo[0] + scoreTwo[1]
+		sc1: parseInt(scoreOne[0]) + parseInt(scoreOne[1]),
+		sc2: parseInt(scoreTwo[0]) + parseInt(scoreTwo[1])
 	};
 }
 

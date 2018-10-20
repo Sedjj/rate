@@ -112,7 +112,7 @@ async function footballLiveStrategyTwo(item, index) {
 						const endScore = await waitingEndMatch(item, '2');
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${endScore}`);
 						const result = equalsTotal(oldScore, parserScore(endScore));
-						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${result}`);
+						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 						if (result === 0 || result === 1) {
 							log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
 							setRate(item.I, result);
