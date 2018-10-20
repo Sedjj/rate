@@ -1,4 +1,5 @@
 const log = require('../utils/logger');
+const {decorateMessage} = require('../utils/formateMessage');
 const {CronJob} = require('cron');
 const {newField, setField} = require('../storage');
 const {getFootball, getFootballExpanded, postResult} = require('../fetch');
@@ -19,7 +20,7 @@ const rateStrategyTwo = config.get('choice.live.football.strategyTwo.rate');
 const totalStrategy = config.get('choice.live.football.total');
 const numericalDesignation = config.get('choice.live.football.numericalDesignation');
 const waitingInterval = process.env.NODE_ENV === 'development'
-	? '* 02 * * * *'
+	? '*/20 * * * * *'
 	: config.get('cron.waitingInterval');
 
 /**
@@ -50,15 +51,12 @@ function footballLiveStrategy(item) {
 		const tm = timeGame(item);// проверяем время матча
 		if (Array.isArray(item.E)) {
 			const index = indexGame(item);
-			// TODO Сделать реализацию со скобочками
-			if ((item.O1.indexOf('(') === -1) && (item.O2.indexOf('(') === -1) && (item.O1.indexOf('II') === -1) && (item.O2.indexOf('II') === -1)) {
-				if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
-					if ((tm >= before) && (tm <= after)) {
-						if (score.sc1 === score.sc2) {
-							footballLiveStrategyTwo(item, index);
-						} else if (score.sc1 + score.sc2 === score) {
-							footballLiveStrategyOne(item, index);
-						}
+			if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
+				if ((tm >= before) && (tm <= after)) {
+					if (score.sc1 === score.sc2) {
+						footballLiveStrategyTwo(item, index);
+					} else if (score.sc1 + score.sc2 === score) {
+						footballLiveStrategyOne(item, index);
 					}
 				}
 			}
@@ -77,16 +75,17 @@ async function footballLiveStrategyOne(item, index) {
 		try {
 			log.debug(`Найден ${item.I}: Стратегия гол лузера`);
 			const oldScore = scoreGame(item);
-			await saveRate(item, '1');
-			const total = await waiting(item, '1', oldScore);
-			if (total !== -1) { // -1 - это время истекло или поменялся счет
-				const endScore = await waitingEndMatch(item, '1');
-				log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Результат матча ${endScore}`);
-				const result = equalsTotal(oldScore, parserScore(endScore));
-				log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Коэффициента ставки ${result}`);
-				if (result === 0 || result === 1) {
-					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Корректировка коэффициента ставки ${result}`);
-					setRate(item.I, result);
+			if (await saveRate(item, oldScore, '1')) {
+				const total = await waiting(item, '1', oldScore);
+				if (total !== -1) { // -1 - это время истекло или поменялся счет
+					const endScore = await waitingEndMatch(item, '1');
+					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Результат матча ${endScore}`);
+					const result = equalsTotal(oldScore, parserScore(endScore));
+					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Коэффициента ставки ${result}`);
+					if (result === 0 || result === 1) {
+						log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Корректировка коэффициента ставки ${result}`);
+						setRate(item.I, result);
+					}
 				}
 			}
 		} catch (error) {
@@ -105,18 +104,19 @@ async function footballLiveStrategyTwo(item, index) {
 	if ((Math.abs(index.p1 - index.p2) > rateStrategyTwo)) {
 		if (index.x > Math.min(index.p1, index.p2)) {
 			try {
-				log.debug(`Найден ${item.I}: Стратегия ничья с явным фаворитом`);
 				const oldScore = scoreGame(item);
-				await saveRate(item, '2');
-				const total = await waiting(item, '2', oldScore);
-				if (total !== -1) { // -1 - это время истекло или поменялся счет
-					const endScore = await waitingEndMatch(item, '2');
-					log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${endScore}`);
-					const result = equalsTotal(oldScore, parserScore(endScore));
-					log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${result}`);
-					if (result === 0 || result === 1) {
-						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
-						setRate(item.I, result);
+				if (await saveRate(item, oldScore, '2')) { // пропускает дальше если запись ушла в БД
+					log.debug(`Найден ${item.I}: Стратегия ничья с явным фаворитом`);
+					const total = await waiting(item, '2', oldScore);
+					if (total !== -1) { // -1 - это время истекло или поменялся счет
+						const endScore = await waitingEndMatch(item, '2');
+						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${endScore}`);
+						const result = equalsTotal(oldScore, parserScore(endScore));
+						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${result}`);
+						if (result === 0 || result === 1) {
+							log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
+							setRate(item.I, result);
+						}
 					}
 				}
 			} catch (error) {
