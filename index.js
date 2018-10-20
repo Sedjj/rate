@@ -2,20 +2,44 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
+const {exportStatistic} = require('./src/export');
 
-const clearingTempFilesTime = process.env.NODE_ENV === 'development'
+const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
-	: config.get('cron.clearingCronTime');
+	: config.get('cron.schedulerSearch');
 
-if (clearingTempFilesTime) {
-	log.info('****start****');
-	let clearingTempFilesJob;
+const schedulerExport = process.env.NODE_ENV === 'development'
+	? '*/40 * * * * *'
+	: config.get('cron.schedulerExport');
+
+/**
+ * Поиск матчей
+ */
+if (schedulerSearch) {
+	log.info('****start scheduler search****');
+	let schedulerSearchJob;
 	try {
-		clearingTempFilesJob = new CronJob(clearingTempFilesTime, () => {
-			search();
+		schedulerSearchJob = new CronJob(schedulerSearch, () => {
+			//search();
 		}, null, true);
 	} catch (ex) {
-		clearingTempFilesJob.stop();
+		schedulerSearchJob.stop();
+		log.error('cron pattern not valid');
+	}
+}
+
+/**
+ * Экспорт отчета
+ */
+if (schedulerExport) {
+	log.info('****start scheduler export****');
+	let schedulerExportJob;
+	try {
+		schedulerExportJob = new CronJob(schedulerExport, () => {
+			exportStatistic();
+		}, null, true);
+	} catch (ex) {
+		schedulerExportJob.stop();
 		log.error('cron pattern not valid');
 	}
 }
