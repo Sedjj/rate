@@ -141,7 +141,7 @@ function waiting(item, strategy, oldScore) {
 			waitingIntervalJob = new CronJob(waitingInterval, async () => {
 				const indexMatch = await searchIndex(item.I, strategy, oldScore);
 				if (indexMatch !== null) {
-					log.debug(`Матч ${item.I}: total=${indexMatch.I}`);
+					log.debug(`Матч ${item.I}: total= ${indexMatch}`);
 					waitingIntervalJob.stop();
 					resolve(indexMatch);
 				}
@@ -253,7 +253,6 @@ async function serchResult(type, id) {
 	return score;
 }
 
-
 /**
  * Метод для изменения ставки.
  *
@@ -271,16 +270,27 @@ function setRate(id = 0, index = 1) {
  * Метод для создании записи в бд.
  *
  * @param {Object} item объект матча
+ * @param {Object} score счет матча
  * @param {String} strategy стратегия ставок
+ * @returns {Promise<boolean | never>}
  */
-function saveRate(item = {}, strategy) {
-	sendMessage('id: ' + item.I + ' ' + 'O1: ' + item.O1 + ' ' + 'O2: ' + item.O2 + ' ' + ' strategy:' + strategy);
+function saveRate(item = {}, score, strategy) {
 	return newField({
 		matchId: item.I, // id матча
+		score: `${score.sc1}:${score.sc1}`, // счет матча
 		commandOne: item.O1, // название команды 1
 		commandTwo: item.O2, // название команды 2
 		strategy: strategy, // стратегия
 		index: '1' // коэфф.
+	}).then((statistic) => {
+		let status = false;
+		if (statistic !== null) {
+			sendMessage(decorateMessage(statistic));
+			status = true;
+		}
+		return status;
+	}).catch(() => {
+		return false;
 	});
 }
 

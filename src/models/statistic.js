@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const StatisticSchema = new Schema({
-	id: {
-		type: Number,
-		required: true,
-		default: 0
-	},
 	matchId: {
+		type: String,
+		required: true,
+		default: ''
+	},
+	score: {
 		type: String,
 		required: true,
 		default: ''

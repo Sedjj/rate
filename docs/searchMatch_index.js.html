@@ -169,7 +169,7 @@ function waiting(item, strategy, oldScore) {
 			waitingIntervalJob = new CronJob(waitingInterval, async () => {
 				const indexMatch = await searchIndex(item.I, strategy, oldScore);
 				if (indexMatch !== null) {
-					log.debug(`Матч ${item.I}: total=${indexMatch.I}`);
+					log.debug(`Матч ${item.I}: total= ${indexMatch.I}`);
 					waitingIntervalJob.stop();
 					resolve(indexMatch);
 				}
