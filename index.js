@@ -20,7 +20,7 @@ if (schedulerSearch) {
 	let schedulerSearchJob;
 	try {
 		schedulerSearchJob = new CronJob(schedulerSearch, () => {
-			//search();
+			search();
 		}, null, true);
 	} catch (ex) {
 		schedulerSearchJob.stop();
