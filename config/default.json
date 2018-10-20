@@ -63,7 +63,13 @@
 	},
 	"cron": {
 		"lifetime": 86400,
-		"clearingCronTime": "*/05 * * * *",
-		"waitingInterval": "*/2 * * * *"
+		"schedulerSearch": "*/05 * * * *",
+		"waitingInterval": "*/2 * * * *",
+		"schedulerExport": "*/2 * * * *"
+	},
+	"filesStorage": {
+		"storagePath": "",
+		"exportTemplatesDirectory": "exportTemplates",
+		"fileName": "statistics-list-default.xlsx"
 	}
 }

@@ -15,9 +15,10 @@ function getFields(param = {}) {
 		.then(statistics => {
 			if (!statistics) {
 				log.error('StatisticNotFound', 'Statistic with  not found');
+				return [];
 			}
-			return statistics.map(statistic => {
-				let props = mapProps(statistic);
+			return statistics.map((statistic, index) => {
+				let props = mapProps(statistic, index);
 				props['rate'] = 500;
 				props['total'] = 750;
 				props['bank'] = 10000;
