@@ -36,7 +36,7 @@ function search() {
 			});
 		})
 		.catch(error => {
-			log.error('error search: ', error);
+			log.error(`Error search: ${error.message}`);
 		});
 }
 
@@ -89,7 +89,7 @@ async function footballLiveStrategyOne(item, index) {
 				}
 			}
 		} catch (error) {
-			log.error('footballLiveStrategyOne error: ', error);
+			log.error(`Error footballLiveStrategyOne: ${error.message}`);
 		}
 	}
 }
@@ -120,7 +120,7 @@ async function footballLiveStrategyTwo(item, index) {
 					}
 				}
 			} catch (error) {
-				log.error('footballLiveStrategyTwo error: ', error);
+				log.error(`Error footballLiveStrategyTwo: ${error.message}`);
 			}
 		}
 	}
@@ -148,7 +148,7 @@ function waiting(item, strategy, oldScore) {
 			}, null, true);
 		} catch (error) {
 			waitingIntervalJob.stop();
-			log.error('cron waiting error: ', error.message);
+			log.error(`Error cron waiting: ${error.message}`);
 			reject(error);
 		}
 	});
@@ -197,7 +197,7 @@ function searchIndex(id, strategy, oldScore) {
 			return index;
 		})
 		.catch(error => {
-			log.error('error getFootballExpanded: ', error.message);
+			log.error(`Error searchIndex: ${error.message}`);
 			return null;
 		});
 }
@@ -218,7 +218,7 @@ function waitingEndMatch(item) {
 				resolve(await serchResult(numericalDesignation, item.I));
 			}, endGame);
 		} catch (error) {
-			log.error('waitingEndMatch error: ', error.message);
+			log.error(`Error waitingEndMatch: ${error.message}`);
 			reject(error);
 		}
 	});
@@ -248,7 +248,7 @@ async function serchResult(type, id) {
 		});
 		
 	} catch (error) {
-		log.error('serchResult error: ', error.message);
+		log.error(`Error serchResult: ${error.message}`);
 	}
 	return score;
 }
@@ -290,7 +290,8 @@ function saveRate(item = {}, score, strategy) {
 			status = true;
 		}
 		return status;
-	}).catch(() => {
+	}).catch((error) => {
+		log.error(`Error saveRate: ${error.message}`);
 		return false;
 	});
 }

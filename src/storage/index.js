@@ -27,7 +27,7 @@ function getFields(param = {}) {
 			});
 		})
 		.catch(error => {
-			log.error('error newField ', error);
+			log.error(`Error getFields param=${param}: ${error.message}`);
 		});
 }
 
@@ -47,7 +47,7 @@ function isFields(param = {}) {
 			return Promise.resolve(true);
 		})
 		.catch(error => {
-			log.error('error isFields ', error);
+			log.error(`Error isFields param=${param}: ${error.message}`);
 		});
 }
 
@@ -68,7 +68,7 @@ function newField(param) {
 			return statistic.save();
 		})
 		.catch(error => {
-			log.error('error newField ', error);
+			log.error(`Error newField param=${param}: ${error.message}`);
 		});
 	
 }
@@ -92,7 +92,7 @@ function setField(param) {
 			return statistic.save();
 		})
 		.catch(error => {
-			log.error('error newField ', error);
+			log.error(`Error setField param=${param}: ${error.message}`);
 		});
 }
 

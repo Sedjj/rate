@@ -16,14 +16,14 @@ function getFootball() {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballRate, (error, res, body) => {
 			if (error && res.statusCode !== 200) {
-				log.error('error:' + error);
+				log.error(`error: ${error}`);
 				return reject(error);
 			}
 			let value = [];
 			try {
 				value = JSON.parse(body).Value;
 			} catch (error) {
-				log.error('error Football JSON.parse:' + error);
+				log.error(`Error getFootball JSON.parse: ${error}`);
 			}
 			log.debug('Отработал: Метод для получения ставок');
 			resolve(value);
@@ -41,14 +41,14 @@ function getFootballExpanded(id) {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballExpandedRate.replace('${id}', id), (error, res, body) => {
 			if (error && res.statusCode !== 200) {
-				log.error('error:' + error);
+				log.error(`error: ${error}`);
 				return reject(error);
 			}
 			let value = [];
 			try {
 				value = JSON.parse(body).Value;
 			} catch (error) {
-				log.error('error Expanded JSON.parse:' + error);
+				log.error(`Error getFootballExpanded JSON.parse: ${error}`);
 			}
 			log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);
@@ -79,7 +79,7 @@ function postResult() {
 			json: param
 		}, (error, res, body) => {
 			if (error) {
-				log.error('postResult error:' + error);
+				log.error(`Error postResult JSON.parse: ${error}`);
 				return reject(error);
 			}
 			log.debug('Отработал: Метод для получения всех результатов');

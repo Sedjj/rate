@@ -13,7 +13,7 @@ const schedulerExport = process.env.NODE_ENV === 'development'
 	: config.get('cron.schedulerExport');
 
 /**
- * Поиск матчей
+ * Планировшик поиска матчей
  */
 if (schedulerSearch) {
 	log.info('****start scheduler search****');
@@ -29,7 +29,7 @@ if (schedulerSearch) {
 }
 
 /**
- * Экспорт отчета
+ * Планировщик бэкапа статистики
  */
 if (schedulerExport) {
 	log.info('****start scheduler export****');

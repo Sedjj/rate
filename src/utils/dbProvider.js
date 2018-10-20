@@ -15,7 +15,7 @@ mongoose.connect(dbUri, {
 const db = mongoose.connection;
 
 db.on('error', (error) => {
-	log.error('Connection error:', error);
+	log.error(`Connection error: ${error}`);
 });
 
 db.once('open', () => {

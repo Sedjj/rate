@@ -27,16 +27,17 @@ async function exportStatistic() {
  * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
  */
 function returnStatisticListTemplate() {
+	log.debug('Начало экспорта Statistics');
 	let props = {
 		statistic: [],
 		currentDate: new Date()
 	};
-	
 	return getFields()
 		.then((items) => {
 			props.currentDate = new Date();
 			props.objectName = 'statistics';
 			props.statistics = items;
+			log.debug('Данные подготовлены');
 			return props;
 		})
 		.then((props) => {
@@ -47,11 +48,11 @@ function returnStatisticListTemplate() {
 						// Replacements take place on first sheet
 						const sheetNumber = 1;
 						template.substitute(sheetNumber, props);
-						
+						log.debug(`Генерация файла ${file}`);
 						return template.generate({type: 'nodebuffer'});
 					});
 			} catch (error) {
-				log.error('ExportError ', error.message);
+				log.error(`ExportError statisticList: ${error.message}`);
 			}
 		});
 }

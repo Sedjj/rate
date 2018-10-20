@@ -41,5 +41,7 @@ function getTime(date) {
 }
 
 module.exports = {
-	getFormattedDate
+	getFormattedDate,
+	getFormattedTime,
+	getTime
 };
