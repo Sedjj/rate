@@ -1,42 +1,46 @@
 {
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-debugger": 0,
-        "no-console": 0,
-        "new-cap": 0,
-        "strict": 0,
-        "no-mixed-spaces-and-tabs": 0,
-        "no-underscore-dangle": 0,
-        "no-use-before-define": 0,
-        "eol-last": 0,
-        "jsx-quotes": [1, "prefer-double"],
-        "react/jsx-no-undef": 1,
-        "react/jsx-uses-react": 1,
-        "react/jsx-uses-vars": 1
-    }
+	"env": {
+		"browser": true,
+		"node": true,
+		"es6": true
+	},
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": 2018,
+		"sourceType": "module"
+	},
+	"rules": {
+		"indent": [
+			"error",
+			"tab"
+		],
+		"linebreak-style": [
+			"error",
+			"windows"
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		],
+		"no-debugger": 0,
+		"no-console": 0,
+		"new-cap": 0,
+		"strict": 0,
+		"no-mixed-spaces-and-tabs": 0,
+		"no-underscore-dangle": 0,
+		"no-use-before-define": 0,
+		"no-useless-escape": 0,
+		"eol-last": 0,
+		"jsx-quotes": [
+			1,
+			"prefer-double"
+		],
+		"react/jsx-no-undef": 1,
+		"react/jsx-uses-react": 1,
+		"react/jsx-uses-vars": 1
+	}
 }
