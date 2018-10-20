@@ -148,7 +148,7 @@ function waiting(item, strategy, oldScore) {
 			}, null, true);
 		} catch (error) {
 			waitingIntervalJob.stop();
-			log.error('cron waiting error: ', error);
+			log.error('cron waiting error: ', error.message);
 			reject(error);
 		}
 	});
@@ -218,7 +218,7 @@ function waitingEndMatch(item) {
 				resolve(await serchResult(numericalDesignation, item.I));
 			}, endGame);
 		} catch (error) {
-			log.error('waitingEndMatch error: ', error);
+			log.error('waitingEndMatch error: ', error.message);
 			reject(error);
 		}
 	});
@@ -248,7 +248,7 @@ async function serchResult(type, id) {
 		});
 		
 	} catch (error) {
-		log.error('serchResult error: ', error);
+		log.error('serchResult error: ', error.message);
 	}
 	return score;
 }

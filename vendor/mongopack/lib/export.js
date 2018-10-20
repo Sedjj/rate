@@ -79,7 +79,7 @@ function exportData(exec) {
 				if (error) {
 					reject(error);
 				}
-				resolve(stdout)
+				resolve(stdout);
 			});
 		});
 	}

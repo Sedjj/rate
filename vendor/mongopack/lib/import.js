@@ -73,7 +73,7 @@ function importData(exec) {
 				if (error) {
 					reject(error);
 				}
-				resolve(stdout)
+				resolve(stdout);
 			});
 		});
 	}
