@@ -5,9 +5,9 @@ const {readFile} = require('../utils/fsHelpers');
 const {getFields} = require('../storage');
 const XlsxTemplate = require('../vendor/xlsx-template');
 
-const storagePath = config.get('filesStorage.storagePath') || process.cwd();
-const exportTemplatesDirectory = config.get('filesStorage.exportTemplatesDirectory') || 'exportTemplates';
-const fileName = config.get('filesStorage.fileName') || 'reports-list-default.xlsx';
+const storagePath = config.get('path.storagePath') || process.cwd();
+const exportTemplatesDirectory = config.get('path.storage.exportTemplatesDirectory') || 'exportTemplates';
+const fileName = config.get('path.storage.fileName') || 'reports-list-default.xlsx';
 
 const filePath = path.join(storagePath, exportTemplatesDirectory, fileName);
 
