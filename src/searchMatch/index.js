@@ -262,7 +262,8 @@ async function serchResult(type, id) {
 function setRate(id = 0, index = 1) {
 	return setField({
 		matchId: id,
-		index: index
+		index: index,
+		modified: new Date()
 	});
 }
 

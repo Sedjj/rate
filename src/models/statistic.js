@@ -23,7 +23,6 @@ const StatisticSchema = new Schema({
 		default: ''
 	},
 	strategy: {
-		/* 1 - гол лузера; 2 - гол после ничьи*/
 		type: String,
 		required: true,
 		default: ''
@@ -36,7 +35,11 @@ const StatisticSchema = new Schema({
 	created: {
 		type: Date,
 		default: Date.now
-	}
+	},
+	modified: {
+		type: Date,
+		default: Date.now
+	},
 });
 
 module.exports = mongoose.model('Statistic', StatisticSchema);

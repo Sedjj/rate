@@ -85,6 +85,9 @@ function setField(param) {
 			if (param.index) {
 				statistic.index = param.index;
 			}
+			if (param.modified) {
+				statistic.modified = param.modified;
+			}
 			return statistic.save();
 		})
 		.catch(error => {
