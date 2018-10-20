@@ -8,10 +8,10 @@
 		"pass": ""
 	},
 	"dbProd": {
-		"name": "db_name",
+		"name": "a7b7643aff7906fc1baa783f4648f753",
 		"hostString": "mongodb:27017/",
-		"user": "username",
-		"pass": ""
+		"user": "a7b7643aff7906fc1baa783f4648f753",
+		"pass": "a7b7643aff7906fc1baa783f4648f753"
 	},
 	"proxy": {
 		"host": "bot.avinfo17.info",
