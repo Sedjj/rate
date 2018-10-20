@@ -9,7 +9,7 @@
 	},
 	"dbProd": {
 		"name": "a7b7643aff7906fc1baa783f4648f753",
-		"hostString": "mongodb:27017/",
+		"hostString": "9a.mongo.evennode.com:27017/",
 		"user": "a7b7643aff7906fc1baa783f4648f753",
 		"pass": "a7b7643aff7906fc1baa783f4648f753"
 	},
