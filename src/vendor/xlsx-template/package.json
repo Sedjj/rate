@@ -1,0 +1,71 @@
+{
+  "_from": "xlsx-template",
+  "_id": "xlsx-template@0.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-yArx6CPueN7tC/sRSNQzH3JHz88AkgICZuaO6Z0nD8dM9rMygf7jDSfOGMy9PMq5NxBcNkYD0x/qsLPCm+/TFg==",
+  "_location": "/xlsx-template",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "xlsx-template",
+    "name": "xlsx-template",
+    "escapedName": "xlsx-template",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/xlsx-template/-/xlsx-template-0.2.0.tgz",
+  "_shasum": "b3ea75b731024e9dceaadadb0c1e659a424366ae",
+  "_spec": "xlsx-template",
+  "_where": "C:\\GIT\\Tehnadzor\\backend",
+  "author": {
+    "name": "Martin Aspeli"
+  },
+  "bugs": {
+    "url": "http://github.com/optilude/xlsx-template/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Martin Aspeli",
+      "email": "optilude@gmail.com"
+    },
+    {
+      "name": "Andrey Kurdyumov",
+      "email": "kant2002@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "elementtree": "0.1.6",
+    "jszip": "^2.6.1"
+  },
+  "deprecated": false,
+  "description": "Generate .xlsx (Excel) files from templates built in Excel",
+  "devDependencies": {
+    "buster": "0.7.18",
+    "grunt": "~1.0.1",
+    "grunt-buster": "~0.4.2"
+  },
+  "homepage": "https://github.com/optilude/xlsx-template#readme",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/optilude/xlsx-template/raw/master/LICENSE"
+    }
+  ],
+  "main": "./lib/index",
+  "name": "xlsx-template",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/optilude/xlsx-template.git"
+  },
+  "scripts": {
+    "test": "buster-test"
+  },
+  "version": "0.2.0"
+}
