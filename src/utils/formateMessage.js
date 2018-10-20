@@ -1,5 +1,9 @@
-const log = require('./../utils/logger');
-
+/**
+ * Сбрасывает все зарезервированные символы для регулярных выражений.
+ *
+ * @param str
+ * @returns {void | string | *}
+ */
 function escapeRegExp(str) {
 	return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
 }
@@ -19,23 +23,17 @@ function replaceAll(str, find, replace) {
 /**
  * Форматирование строки вывода.
  *
- * @param {String} seed сид пользователя
- * @param {Array} balances массив валют где есть баланс
+ * @param {String} item объект матча
  * @returns {*}
  */
-function decorateMessage(seed, balances) {
-	let message = 'seed:\n -' + seed + '\n\n\n' + 'balances: \n';
-	return balances.reduce((previousValue, item) => {
-		let balance = -1;
-		try {
-			balance = parseInt(item.balance) / 100000000;
-		} catch (error) {
-			log.error('Error in parsing: ' + error.messages);
-		}
-		return previousValue += ' -name: ' + item.name + '\n' + ' -balance: ' + balance + '\n\n';
-	}, message);
+function decorateMessage(item) {
+	return `Матч: ${item.matchId}; Стр: ${item.strategy}; Счет: ${item.score}
+	  Команда 1:  ${item.commandOne}
+	  Команда 2:  ${item.commandTwo}`;
 }
 
 module.exports = {
-	decorateMessage
+	escapeRegExp,
+	decorateMessage,
+	replaceAll
 };
