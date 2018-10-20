@@ -4,7 +4,7 @@
 	"description": "Simple bot for rates",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js",
+		"start": "set CHANNEL=production&&node index.js",
 		"dev": "set CHANNEL=development&&node index.js",
 		"prod": "set CHANNEL=production&&node index.js",
 		"docs": "jsdoc -c jsdoc.json README.md"
