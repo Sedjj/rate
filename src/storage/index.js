@@ -31,22 +31,45 @@ function getFields(param = {}) {
 }
 
 /**
+ * Метод для проверки, есть ли данное поле в таблице.
+ *
+ * @param {Object} param для таблицы
+ * @returns {Promise<boolean | never>}
+ */
+function isFields(param = {}) {
+	return StatisticModel.find(param)
+		.exec()
+		.then(statistics => {
+			if (statistics.length) {
+				return Promise.resolve(false);
+			}
+			return Promise.resolve(true);
+		})
+		.catch(error => {
+			log.error('error isFields ', error);
+		});
+}
+
+/**
  * Создание новой записи в таблице.
  *
  * @param {Object} param для таблицы
  * @returns {Promise<any>}
  */
 function newField(param) {
-	return StatisticModel.find({})
+	return StatisticModel.find({matchId: param.matchId})
 		.exec()
 		.then(statistics => {
-			param.id = statistics.length + 1;
+			if (statistics.length) {
+				return Promise.resolve(null);
+			}
 			const statistic = new StatisticModel(param);
 			return statistic.save();
 		})
 		.catch(error => {
 			log.error('error newField ', error);
 		});
+	
 }
 
 /**
@@ -71,6 +94,7 @@ function setField(param) {
 
 module.exports = {
 	getFields,
+	isFields,
 	newField,
 	setField
 };
