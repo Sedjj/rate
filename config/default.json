@@ -34,7 +34,8 @@
 		},
 		"result": {
 			"live": "",
-			"all": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup"
+			"allZone": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup",
+			"all": "https://1xstavka.ru/getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=ru&adult=false&showAll=true"
 		}
 	},
 	"choice": {

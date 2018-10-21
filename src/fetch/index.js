@@ -5,6 +5,7 @@ const {getFormattedDate} = require('./../utils/dateFormat');
 
 const urlFootballRate = config.get('parser.live.football.rate');
 const urlFootballExpandedRate = config.get('parser.live.football.expandedRate');
+const urlAllZone = config.get('parser.result.allZone');
 const urlAll = config.get('parser.result.all');
 
 /**
@@ -57,11 +58,11 @@ function getFootballExpanded(id) {
 }
 
 /**
- * Метод для получения всех результатов
+ * Метод для получения всех результатов из зоны
  *
  * @returns {Promise<JSON | void>}
  */
-function postResult() {
+function postResultZone() {
 	return new Promise((resolve, reject) => {
 		const param = {
 			'Language': 'ru',
@@ -71,7 +72,7 @@ function postResult() {
 			'partner': 51
 		};
 		request({
-			url: urlAll,
+			url: urlAllZone,
 			method: 'POST',
 			headers: {
 				'content-type': 'application/json'
@@ -79,11 +80,35 @@ function postResult() {
 			json: param
 		}, (error, res, body) => {
 			if (error) {
-				log.error(`Error postResult JSON.parse: ${error}`);
+				log.error(`Error postResultZone JSON.parse: ${error}`);
 				return reject(error);
 			}
-			log.debug('Отработал: Метод для получения всех результатов');
+			log.debug('Отработал: Метод для получения всех результатов в zone');
 			resolve(body.Data);
+		});
+	});
+}
+
+/**
+ * Метод для получения всех результатов.
+ *
+ * @returns {Promise<any>}
+ */
+function postResult() {
+	return new Promise((resolve, reject) => {
+		request.get(urlAll.replace('${date}', getFormattedDate(new Date())), (error, res, body) => {
+			if (error && res.statusCode !== 200) {
+				log.error(`error: ${error}`);
+				return reject(error);
+			}
+			let value = [];
+			try {
+				value = JSON.parse(body).Data;
+			} catch (error) {
+				log.error(`Error postResult JSON.parse: ${error}`);
+			}
+			log.debug('Отработал: Метод для получения расширеных ставок');
+			resolve(value);
 		});
 	});
 }
@@ -91,5 +116,6 @@ function postResult() {
 module.exports = {
 	getFootball,
 	getFootballExpanded,
+	postResultZone,
 	postResult
 };
