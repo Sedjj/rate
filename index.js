@@ -36,7 +36,7 @@ if (schedulerExport) {
 	let schedulerExportJob;
 	try {
 		schedulerExportJob = new CronJob(schedulerExport, () => {
-			exportStatistic();
+			// exportStatistic();
 		}, null, true);
 	} catch (ex) {
 		schedulerExportJob.stop();

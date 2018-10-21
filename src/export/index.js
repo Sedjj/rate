@@ -3,7 +3,9 @@ const config = require('config');
 const log = require('../utils/logger');
 const {readFile} = require('../utils/fsHelpers');
 const {getFields} = require('../storage');
-const XlsxTemplate = require('../vendor/xlsx-template');
+const XlsxTemplate = require('xlsx-template');
+const {sendFile} = require('../telegramApi');
+const {setFileApiTelegram} = require('../fetch');
 
 const storagePath = config.get('path.storagePath') || process.cwd();
 const exportTemplatesDirectory = config.get('path.storage.exportTemplatesDirectory') || 'exportTemplates';
@@ -18,7 +20,9 @@ const filePath = path.join(storagePath, exportTemplatesDirectory, fileName);
  */
 async function exportStatistic() {
 	const file = await returnStatisticListTemplate();
-	console.log(file);
+	setFileApiTelegram(file);
+	//sendFile(filePath);
+	//console.log(file);
 }
 
 /**
@@ -29,7 +33,7 @@ async function exportStatistic() {
 function returnStatisticListTemplate() {
 	log.debug('Начало экспорта Statistics');
 	let props = {
-		statistic: [],
+		statistics: [],
 		currentDate: new Date()
 	};
 	return getFields()
@@ -48,7 +52,7 @@ function returnStatisticListTemplate() {
 						// Replacements take place on first sheet
 						const sheetNumber = 1;
 						template.substitute(sheetNumber, props);
-						log.debug(`Генерация файла ${file}`);
+						// log.debug(`Генерация файла ${file}`);
 						return template.generate({type: 'nodebuffer'});
 					});
 			} catch (error) {
