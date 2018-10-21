@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf');
 const SocksAgent = require('socks5-https-client/lib/Agent');
-const log = require('./../utils/logger');
+const log = require('../utils/logger');
 const config = require('config');
 
 const token = config.get('bot.token');
@@ -23,14 +23,32 @@ app.catch((error) => {
 });
 
 /**
- * Отправка сообщений в телеграмм бот.
+ * Метод отправки сообщений в телеграмм бот.
  *
  * @param {String} text строка для отправки в чат
  */
 function sendMessage(text) {
-	app.telegram.sendMessage(channel, text);
+	try {
+		app.telegram.sendMessage(channel, text);
+	} catch (error) {
+		log.error(`Error sendMessage: ${error.message}`);
+	}
+}
+
+/**
+ * Метод отправки файла в телеграмм бот.
+ *
+ * @param {String} file для отправки в чат
+ */
+function sendFile(file) {
+	try {
+		app.telegram.sendDocument(channel, {file_id: file});
+	} catch (error) {
+		log.error(`Error sendFile: ${error.message}`);
+	}
 }
 
 module.exports = {
-	sendMessage
+	sendMessage,
+	sendFile
 };

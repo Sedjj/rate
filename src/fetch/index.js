@@ -7,6 +7,7 @@ const urlFootballRate = config.get('parser.live.football.rate');
 const urlFootballExpandedRate = config.get('parser.live.football.expandedRate');
 const urlAllZone = config.get('parser.result.allZone');
 const urlAll = config.get('parser.result.all');
+const token = config.get('bot.token');
 
 /**
  * Метод для получения ставок.
@@ -80,7 +81,7 @@ function postResultZone() {
 			json: param
 		}, (error, res, body) => {
 			if (error) {
-				log.error(`Error postResultZone JSON.parse: ${error}`);
+				log.error(`Error postResultZone: ${error}`);
 				return reject(error);
 			}
 			log.debug('Отработал: Метод для получения всех результатов в zone');
@@ -105,10 +106,43 @@ function postResult() {
 			try {
 				value = JSON.parse(body).Data;
 			} catch (error) {
-				log.error(`Error postResult JSON.parse: ${error}`);
+				log.error(`Error postResult: ${error}`);
 			}
 			log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);
+		});
+	});
+}
+
+/**
+ * Отправляет файл на API Telegram
+ *
+ * @param {Object} data данные для отправки
+ * @returns {Promise}
+ */
+function setFileApiTelegram(data) {
+	return new Promise((resolve, reject) => {
+		/*const param = {
+			'Language': 'ru',
+			'Params': [getFormattedDate(new Date()), null, null, null, null, 300],
+			'Vers': 6,
+			'Adult': false,
+			'partner': 51
+		};*/
+		request({
+			url: `https://api.telegram.org/bot${token}/sendDocument`,
+			method: 'POST',
+			headers: {
+				'content-type': 'multipart/form-data'
+			},
+			json: data
+		}, (error, res, body) => {
+			if (error) {
+				log.error(`Error setFileApiTelegram JSON.parse: ${error}`);
+				return reject(error);
+			}
+			log.debug('Отработал: Метод для получения id файла');
+			resolve(body);
 		});
 	});
 }
@@ -117,5 +151,6 @@ module.exports = {
 	getFootball,
 	getFootballExpanded,
 	postResultZone,
-	postResult
+	postResult,
+	setFileApiTelegram
 };
