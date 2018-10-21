@@ -76,13 +76,20 @@ function equalsTotal(oldScore, endScore) {
  * @returns {Object}
  */
 function parserScore(value) {
-	const score = value.match(/\d\:\d(?=,|\))/ig);
-	const scoreOne = score[0] ? score[0].match(/\d/ig) : [0, 0];
-	const scoreTwo = score[1] ? score[1].match(/\d/ig) : [0, 0];
-	return {
-		sc1: parseInt(scoreOne[0]) + parseInt(scoreOne[1]),
-		sc2: parseInt(scoreTwo[0]) + parseInt(scoreTwo[1])
-	};
+	if (value.length > 12) {
+		const score = value.match(/\d\:\d(?=,|\))/ig);
+		const scoreOne = score[0] ? score[0].match(/\d/ig) : [0, 0];
+		const scoreTwo = score[1] ? score[1].match(/\d/ig) : [0, 0];
+		return {
+			sc1: parseInt(scoreOne[0]) + parseInt(scoreOne[1]),
+			sc2: parseInt(scoreTwo[0]) + parseInt(scoreTwo[1])
+		};
+	} else {
+		return {
+			sc1: 0,
+			sc2: 0
+		};
+	}
 }
 
 
