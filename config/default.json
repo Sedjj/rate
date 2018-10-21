@@ -66,7 +66,7 @@
 		"lifetime": 86400,
 		"schedulerSearch": "*/05 * * * *",
 		"waitingInterval": "*/2 * * * *",
-		"schedulerExport": "*/2 * * * *"
+		"schedulerExport": "00 00 08 * * 0-5"
 	},
 	"path": {
 		"storagePath": "",

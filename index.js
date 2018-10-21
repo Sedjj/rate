@@ -2,7 +2,7 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
-const {exportStatistic} = require('./src/export');
+/*const {exportStatistic} = require('./src/export');*/
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
