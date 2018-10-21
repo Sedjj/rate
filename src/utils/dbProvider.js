@@ -6,7 +6,7 @@ const dbUri = process.env.NODE_ENV === 'development'
 	? `mongodb://${config.get('dbDev.user')}:${encodeURIComponent(config.get('dbDev.pass'))}@${config.get('dbDev.hostString')}${config.get('dbDev.name')}`
 	: `mongodb://${config.get('dbProd.user')}:${encodeURIComponent(config.get('dbProd.pass'))}@${config.get('dbProd.hostString')}${config.get('dbProd.name')}`;
 
-log.info(`db :${dbUri}`);
+log.info(`dbUri :${dbUri}`);
 
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUri, {

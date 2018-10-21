@@ -232,16 +232,18 @@ function waitingEndMatch(item) {
  * @returns {Promise<void>}
  */
 async function serchResult(type, id) {
-	let score = null;
+	let score = '';
 	try {
 		const data = await postResult();
 		data.forEach((item) => {
 			if (item.ID === type) {
 				item.Elems.map((object) => {
 					if (Array.isArray(object.Elems)) {
-						if (object.Elems[0].Head[0] === id) {
-							score = object.Elems[0].Head[6];
-						}
+						object.Elems.map((Elems) => {
+							if (Elems.Head[0] === id) {
+								score = Elems.Head[6];
+							}
+						});
 					}
 				});
 			}
