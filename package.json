@@ -6,7 +6,8 @@
 	"scripts": {
 		"start": "set NODE_ENV=production&&node index.js",
 		"dev": "set NODE_ENV=development&&node index.js",
-		"docs": "jsdoc -c jsdoc.json README.md"
+		"docs": "jsdoc -c jsdoc.json README.md",
+		"help-api": "apidoc -i routes -o help/api"
 	},
 	"repository": {
 		"type": "git",
@@ -21,14 +22,15 @@
 	"license": "MIT",
 	"homepage": "https://gitlab.com:developmentKit/projects/bot/rate.git#readme",
 	"dependencies": {
+		"apidoc": "^0.17.6",
 		"config": "^2.0.1",
 		"cron": "^1.4.1",
-		"mongodb": "^3.1.6",
-		"mongoose": "^5.3.0",
+		"mongodb": "^3.1.8",
+		"mongoose": "^5.3.4",
 		"osmosis": "^1.1.8",
 		"request": "^2.88.0",
 		"socks5-https-client": "^1.2.1",
-		"telegraf": "^3.24.0",
+		"telegraf": "^3.24.1",
 		"winston": "^3.1.0",
 		"zip-local": "^0.3.4"
 	},
