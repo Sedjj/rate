@@ -22,7 +22,7 @@ function getFields(param = {}) {
 				props['rate'] = 500;
 				props['total'] = 750;
 				props['bank'] = 10000;
-				props['percent'] = 5;
+				props['percent'] = '5%';
 				return props;
 			});
 		})

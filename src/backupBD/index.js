@@ -9,7 +9,7 @@ const database = process.env.NODE_ENV === 'development'
 	: config.get('dbProd.name');
 
 const archivesPath = config.get('path.storagePath') || process.cwd();
-const archivesDirectory = config.get('path.archives.archivesDirectory') || 'archives';
+const archivesDirectory = config.get('path.directory.archives') || 'archives';
 const objectPath = path.join(archivesPath, archivesDirectory);
 
 async function exportBackup() {

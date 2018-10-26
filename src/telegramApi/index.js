@@ -1,26 +1,32 @@
-const Telegraf = require('telegraf');
+const Telegram = require('telegraf/telegram');
 const SocksAgent = require('socks5-https-client/lib/Agent');
 const log = require('../utils/logger');
 const config = require('config');
+const {setFileApiTelegram} = require('../fetch');
 
-const token = config.get('bot.token');
-const proxy = config.get('proxy');
-const channel = config.get('channel');
+const token = process.env.NODE_ENV === 'development'
+	? config.get('bots.token.dev')
+	: config.get('bots.token.prod');
+const socket = config.get('socket');
+const chatId = config.get('chatId');
+// const ngrok = 'https://0981648c.ngrok.io';
 
 const socksAgent = new SocksAgent({
-	socksHost: proxy.host,
-	socksPort: proxy.port,
-	socksUsername: proxy.login,
-	socksPassword: proxy.psswd
+	socksHost: socket.host,
+	socksPort: socket.port,
+	socksUsername: socket.login,
+	socksPassword: socket.psswd
 });
 
-const app = new Telegraf(token, {
-	telegram: {agent: socksAgent}
+const bot = new Telegram(token, {
+	agent: socksAgent,
+	webhookReply: true,
+	webHook: {
+		port: '3000'
+	}
 });
 
-app.catch((error) => {
-	log.error(error);
-});
+//bot.setWebhook(`${ngrok}/t${token}`);
 
 /**
  * Метод отправки сообщений в телеграмм бот.
@@ -28,11 +34,14 @@ app.catch((error) => {
  * @param {String} text строка для отправки в чат
  */
 function sendMessage(text) {
-	try {
-		app.telegram.sendMessage(channel, text);
-	} catch (error) {
-		log.error(`Error sendMessage: ${error.message}`);
-	}
+	return new Promise((resolve, reject) => {
+		try {
+			resolve(bot.sendMessage(chatId, text));
+		} catch (error) {
+			log.error(`Error sendMessage: ${error.message}`);
+			reject(error);
+		}
+	});
 }
 
 /**
@@ -41,11 +50,14 @@ function sendMessage(text) {
  * @param {String} file для отправки в чат
  */
 function sendFile(file) {
-	try {
-		app.telegram.sendDocument(channel, {file_id: file});
-	} catch (error) {
-		log.error(`Error sendFile: ${error.message}`);
-	}
+	return new Promise((resolve, reject) => {
+		try {
+			resolve(setFileApiTelegram(chatId, file));
+		} catch (error) {
+			log.error(`Error sendFile: ${error.message}`);
+			reject(error);
+		}
+	});
 }
 
 module.exports = {

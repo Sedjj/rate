@@ -1,28 +1,41 @@
 const path = require('path');
 const config = require('config');
 const log = require('../utils/logger');
-const {readFile} = require('../utils/fsHelpers');
+const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
 const {getFields} = require('../storage');
 const XlsxTemplate = require('xlsx-template');
-const {sendFile} = require('../telegramApi');
-const {setFileApiTelegram} = require('../fetch');
+const {getFormattedDate} = require('../utils/dateFormat');
+const {sendFile, sendMessage} = require('../telegramApi');
 
 const storagePath = config.get('path.storagePath') || process.cwd();
-const exportTemplatesDirectory = config.get('path.storage.exportTemplatesDirectory') || 'exportTemplates';
-const fileName = config.get('path.storage.fileName') || 'reports-list-default.xlsx';
+const exportTemplatesDirectory = config.get('path.directory.exportTemplates') || 'exportTemplates';
+const uploadDirectory = config.get('path.directory.upload') || 'upload';
+const fileNameInput = config.get('path.storage.fileName.input') || 'reports-list-default.xlsx';
+const fileNameOutput = config.get('path.storage.fileName.output') || 'statistics-report.xlsx';
 
-const filePath = path.join(storagePath, exportTemplatesDirectory, fileName);
+const filePathInput = path.join(storagePath, exportTemplatesDirectory, fileNameInput);
+const filePathOutput = path.join(storagePath, uploadDirectory, fileNameOutput);
 
 /**
- * Метод
+ * Метод для отправки отчета
  *
  * @returns {Promise<void>}
  */
 async function exportStatistic() {
 	const file = await returnStatisticListTemplate();
-	setFileApiTelegram(file);
-	//sendFile(filePath);
-	//console.log(file);
+	saveBufferToFile(filePathOutput, file)
+		.then((filePath) => {
+			return readFileToStream(filePath);
+		})
+		.then((stream) => {
+			return sendFile(stream);
+		})
+		.then(() => {
+			log.debug('Файл отправлен');
+		})
+		.catch((error) => {
+			log.error(`Send error: ${error.message}`);
+		});
 }
 
 /**
@@ -38,7 +51,7 @@ function returnStatisticListTemplate() {
 	};
 	return getFields()
 		.then((items) => {
-			props.currentDate = new Date();
+			props.currentDate = getFormattedDate(new Date());
 			props.objectName = 'statistics';
 			props.statistics = items;
 			log.debug('Данные подготовлены');
@@ -46,13 +59,13 @@ function returnStatisticListTemplate() {
 		})
 		.then((props) => {
 			try {
-				return readFile(filePath)
+				return readFile(filePathInput)
 					.then(file => {
 						const template = new XlsxTemplate(file);
 						// Replacements take place on first sheet
 						const sheetNumber = 1;
 						template.substitute(sheetNumber, props);
-						// log.debug(`Генерация файла ${file}`);
+						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});
 					});
 			} catch (error) {
@@ -62,5 +75,6 @@ function returnStatisticListTemplate() {
 }
 
 module.exports = {
-	exportStatistic
+	exportStatistic,
+	returnStatisticListTemplate
 };

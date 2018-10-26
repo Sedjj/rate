@@ -9,7 +9,7 @@ const schedulerSearch = process.env.NODE_ENV === 'development'
 	: config.get('cron.schedulerSearch');
 
 const schedulerExport = process.env.NODE_ENV === 'development'
-	? '*/40 * * * * *'
+	? '*/02 * * * * *'
 	: config.get('cron.schedulerExport');
 
 /**
@@ -37,6 +37,7 @@ if (schedulerExport) {
 	try {
 		schedulerExportJob = new CronJob(schedulerExport, () => {
 			// exportStatistic();
+			// schedulerExportJob.stop();
 		}, null, true);
 	} catch (ex) {
 		schedulerExportJob.stop();

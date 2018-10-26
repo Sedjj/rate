@@ -7,7 +7,11 @@ const urlFootballRate = config.get('parser.live.football.rate');
 const urlFootballExpandedRate = config.get('parser.live.football.expandedRate');
 const urlAllZone = config.get('parser.result.allZone');
 const urlAll = config.get('parser.result.all');
-const token = config.get('bot.token');
+
+const token = process.env.NODE_ENV === 'development'
+	? config.get('bots.token.dev')
+	: config.get('bots.token.prod');
+const proxy = config.get('proxy');
 
 /**
  * Метод для получения ставок.
@@ -116,32 +120,33 @@ function postResult() {
 
 /**
  * Отправляет файл на API Telegram
+ * https://api.telegram.org/bot741639693:AAHcc9e7pIYSWlAti95Idwejn0iZcwSUqmg/getupdates
  *
- * @param {Object} data данные для отправки
+ * @param {String} chatId id чата
+ * @param {Object} document данные для отправки
  * @returns {Promise}
  */
-function setFileApiTelegram(data) {
+function setFileApiTelegram(chatId, document) {
+	let props = {
+		url: `https://api.telegram.org/bot${token}/sendDocument`,
+		headers: {
+			'content-type': 'multipart/form-data'
+		},
+		formData: {
+			chat_id: chatId,
+			document: document
+		},
+	};
+	if (process.env.NODE_ENV === 'development') {
+		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
+	}
 	return new Promise((resolve, reject) => {
-		/*const param = {
-			'Language': 'ru',
-			'Params': [getFormattedDate(new Date()), null, null, null, null, 300],
-			'Vers': 6,
-			'Adult': false,
-			'partner': 51
-		};*/
-		request({
-			url: `https://api.telegram.org/bot${token}/sendDocument`,
-			method: 'POST',
-			headers: {
-				'content-type': 'multipart/form-data'
-			},
-			json: data
-		}, (error, res, body) => {
+		request.post(props, (error, response, body) => {
 			if (error) {
-				log.error(`Error setFileApiTelegram JSON.parse: ${error}`);
-				return reject(error);
+				log.error(`Error setFileApiTelegram: ${error}`);
+				reject(error);
 			}
-			log.debug('Отработал: Метод для получения id файла');
+			log.debug(`Отработал: Метод для отправки файла ${body}`);
 			resolve(body);
 		});
 	});

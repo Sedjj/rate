@@ -13,15 +13,25 @@
 		"user": "a7b7643aff7906fc1baa783f4648f753",
 		"pass": "a7b7643aff7906fc1baa783f4648f753"
 	},
-	"proxy": {
+	"socket": {
 		"host": "bot.avinfo17.info",
 		"port": "38157",
 		"login": "",
 		"psswd": ""
 	},
-	"channel": "43166705",
-	"bot": {
-		"token": "651764664:AAG3UYrXooiJWCTEWQimNTpuq08cqUEJIV0"
+	"proxy": {
+		"host": "45.250.226.11",
+		"port": "8080",
+		"user": "",
+		"password": ""
+	},
+	"chatId": "-276223662",
+	"myId": "43166705",
+	"bots": {
+		"token": {
+			"dev": "741639693:AAEttznjxSM0PikZIrWtkCRpF9y68vQzFP0",
+			"prod": "651764664:AAG3UYrXooiJWCTEWQimNTpuq08cqUEJIV0"
+		}
 	},
 	"parser": {
 		"live": {
@@ -71,11 +81,15 @@
 	"path": {
 		"storagePath": "",
 		"storage": {
-			"exportTemplatesDirectory": "exportTemplates",
-			"fileName": "statistics-list-default.xlsx"
+			"fileName": {
+				"input": "statistics-list-default.xlsx",
+				"output": "statistics-report.xlsx"
+			}
 		},
-		"archives": {
-			"archivesDirectory": "archives"
+		"directory":{
+			"exportTemplates": "exportTemplates",
+			"archives": "archives",
+			"upload": "upload"
 		}
 	}
 }
