@@ -52,7 +52,10 @@ function returnStatisticListTemplate() {
 	return getFields()
 		.then((items) => {
 			const profit = items && items.reduce((current, item) => {
-				return current + (item.index * 500 - 500);
+				const lof = current + (item.index * 500 - 500);
+				log.debug(`Текущая прибыль: ${lof}`);
+				return lof;
+
 			}, 0);
 			props.currentDate = getFormattedDate(new Date());
 			props.objectName = 'statistics';
