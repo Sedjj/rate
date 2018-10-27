@@ -86,10 +86,13 @@
 				"output": "statistics-report.xlsx"
 			}
 		},
-		"directory":{
+		"directory": {
 			"exportTemplates": "exportTemplates",
 			"archives": "archives",
 			"upload": "upload"
 		}
+	},
+	"outpit": {
+		"rate": 500
 	}
 }

@@ -12,7 +12,6 @@ function mapProps(statistic, index) {
 		score: statistic.score,
 		commandOne: statistic.commandOne,
 		commandTwo: statistic.commandTwo,
-		strategy: statistic.strategy,
 		index: statistic.index,
 		created: statistic.created,
 		modified: statistic.modified

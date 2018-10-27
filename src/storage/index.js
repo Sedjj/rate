@@ -2,6 +2,9 @@ require('../utils/dbProvider');
 const log = require('../utils/logger');
 const StatisticModel = require('../models/statistic');
 const {mapProps} = require('../utils/statisticHelpers');
+const config = require('config');
+
+const rate = config.get('outpit.rate') || 500;
 
 /**
  * Получить записи из таблицы.
@@ -20,10 +23,8 @@ function getFields(param = {}) {
 			}
 			return statistics.map((statistic, index) => {
 				let props = mapProps(statistic, index);
-				props['rate'] = 500;
-				props['total'] = 750;
-				props['bank'] = 10000;
-				props['percent'] = '5%';
+				props['rate'] = rate;
+				props['profit'] = props.index * rate - rate;
 				return props;
 			});
 		})
@@ -43,9 +44,9 @@ function isFields(param = {}) {
 		.exec()
 		.then(statistics => {
 			if (statistics.length) {
-				return Promise.resolve(false);
+				return Promise.resolve(true);
 			}
-			return Promise.resolve(true);
+			return Promise.resolve(false);
 		})
 		.catch(error => {
 			log.error(`Error isFields param=${param}: ${error.message}`);
