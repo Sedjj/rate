@@ -70,7 +70,7 @@ function newField(param) {
 		.catch(error => {
 			log.error(`Error newField param=${param}: ${error.message}`);
 		});
-	
+
 }
 
 /**

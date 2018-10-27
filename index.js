@@ -2,7 +2,7 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
-/*const {exportStatistic} = require('./src/export');*/
+const {exportStatistic} = require('./src/export');
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
@@ -20,7 +20,7 @@ if (schedulerSearch) {
 	let schedulerSearchJob;
 	try {
 		schedulerSearchJob = new CronJob(schedulerSearch, () => {
-			search();
+			// search();
 		}, null, true);
 	} catch (ex) {
 		schedulerSearchJob.stop();
@@ -31,16 +31,17 @@ if (schedulerSearch) {
 /**
  * Планировщик бэкапа статистики
  */
-if (schedulerExport) {
+exportStatistic();
+/*if (schedulerExport) {
 	log.info('****start scheduler export****');
 	let schedulerExportJob;
 	try {
 		schedulerExportJob = new CronJob(schedulerExport, () => {
-			// exportStatistic();
-			// schedulerExportJob.stop();
+			 exportStatistic();
+			 schedulerExportJob.stop();
 		}, null, true);
 	} catch (ex) {
 		schedulerExportJob.stop();
 		log.error('cron pattern not valid');
 	}
-}
+}*/
