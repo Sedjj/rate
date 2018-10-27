@@ -211,7 +211,7 @@ function searchIndex(id, strategy, oldScore) {
  * @returns {Promise<Number>}
  */
 function waitingEndMatch(item) {
-	const endGame = (7200 - timeGame(item)) * 1000;
+	const endGame = 7200 * 1000;
 	return new Promise((resolve, reject) => {
 		try {
 			setTimeout(async () => {

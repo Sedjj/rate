@@ -82,14 +82,11 @@ function newField(param) {
  */
 function setField(param) {
 	return StatisticModel.findOne({matchId: param.matchId})
+		.read('secondary')
 		.exec()
 		.then(statistic => {
-			if (param.index) {
-				statistic.index = param.index;
-			}
-			if (param.modified) {
-				statistic.modified = param.modified;
-			}
+			statistic.index = param.index;
+			statistic.modified = param.modified;
 			return statistic.save();
 		})
 		.catch(error => {
