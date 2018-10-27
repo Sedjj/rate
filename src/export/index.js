@@ -51,7 +51,7 @@ function returnStatisticListTemplate() {
 	};
 	return getFields()
 		.then((items) => {
-			const profit = items.reduce((current, item) => {
+			const profit = items && items.reduce((current, item) => {
 				return current + (item.index * 500 - 500);
 			}, 0);
 			props.currentDate = getFormattedDate(new Date());
