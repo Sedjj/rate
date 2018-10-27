@@ -11,6 +11,7 @@ const {mapProps} = require('../utils/statisticHelpers');
  */
 function getFields(param = {}) {
 	return StatisticModel.find(param)
+		.read('secondary')
 		.exec()
 		.then(statistics => {
 			if (!statistics) {

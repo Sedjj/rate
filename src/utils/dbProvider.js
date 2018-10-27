@@ -9,11 +9,10 @@ const dbUri = process.env.NODE_ENV === 'development'
 log.info(`dbUri :${dbUri}`);
 
 mongoose.Promise = global.Promise;
-mongoose.connect(dbUri + '?slaveOk=true', {
+mongoose.connect(dbUri, {
 	useNewUrlParser: true
 });
 const db = mongoose.connection;
-
 db.on('error', (error) => {
 	log.error(`Connection error: ${error}`);
 });
