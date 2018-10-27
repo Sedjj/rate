@@ -58,6 +58,7 @@ function returnStatisticListTemplate() {
 			props.objectName = 'statistics';
 			props.statistics = items;
 			props.profit = profit;
+			sendMessage(profit);
 			log.debug('Данные подготовлены');
 			return props;
 		})
