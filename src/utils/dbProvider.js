@@ -11,7 +11,7 @@ log.info(`dbUri :${dbUri}`);
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUri, {
 	useNewUrlParser: true,
-	slave_ok: true
+	slave_ok: false
 });
 const db = mongoose.connection;
 
