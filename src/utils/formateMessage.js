@@ -26,14 +26,36 @@ function replaceAll(str, find, replace) {
  * @param {String} item объект матча
  * @returns {*}
  */
-function decorateMessage(item) {
+function decorateMessageMatch(item) {
 	return `Матч: ${item.matchId}; Стр: ${item.strategy}; Счет: ${item.score}
 	  Команда 1:  ${item.commandOne}
 	  Команда 2:  ${item.commandTwo}`;
 }
 
+/**
+ * Форматирование строки вывода.
+ *
+ * @param {String} item объект матча
+ * @returns {*}
+ */
+function decorateMessageEveryReport(item) {
+	return `Ежедневный отчет:
+	   _all:   ${item.allMatch}
+	  str1:   ${item.strategyOne}
+	   0:0:   ${item.strategyTwo_zero}
+	   1:1:   ${item.strategyTwo_one}
+	   2:2:   ${item.strategyTwo_two}
+	  Без ()
+	   _all:   ${item.allMatch_withoutLeagues}
+	  str1:   ${item.strategyOne_withoutLeagues}
+	   0:0:   ${item.strategyTwo_zero_withoutLeagues}
+	   1:1:   ${item.strategyTwo_one_withoutLeagues}
+	   2:2:   ${item.strategyTwo_two_withoutLeagues}`;
+}
+
 module.exports = {
 	escapeRegExp,
-	decorateMessage,
+	decorateMessageMatch,
+	decorateMessageEveryReport,
 	replaceAll
 };

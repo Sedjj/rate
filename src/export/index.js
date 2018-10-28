@@ -2,8 +2,10 @@ const path = require('path');
 const config = require('config');
 const log = require('../utils/logger');
 const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
-const {getStatistic, getReport, newReport} = require('../storage');
+const {getStatistic} = require('../storage/statistic');
+const {getReport, newReport} = require('../storage/report');
 const XlsxTemplate = require('xlsx-template');
+const {decorateMessageEveryReport} = require('../utils/formateMessage');
 const {getFormattedDate} = require('../utils/dateFormat');
 const {sendFile, sendMessage} = require('../telegramApi');
 
@@ -43,7 +45,7 @@ async function exportEveryDayReport() {
 	try {
 		const param = await returnParamForReport();
 		const report = await newReport(param);
-		await sendMessage(report);
+		await sendMessage(decorateMessageEveryReport(report));
 		log.debug('Отчет отправлен');
 	} catch (error) {
 		log.error(`Send every day error: ${error.message}`);

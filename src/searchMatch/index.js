@@ -1,5 +1,5 @@
 const log = require('../utils/logger');
-const {decorateMessage} = require('../utils/formateMessage');
+const {decorateMessageMatch} = require('../utils/formateMessage');
 const {CronJob} = require('cron');
 const {newStatistic, setStatistic} = require('../storage');
 const {getFootball, getFootballExpanded, postResult} = require('../fetch');
@@ -288,7 +288,7 @@ function saveRate(item = {}, score, strategy) {
 	}).then((statistic) => {
 		let status = false;
 		if (statistic !== null) {
-			sendMessage(decorateMessage(statistic));
+			sendMessage(decorateMessageMatch(statistic));
 			sendMessage(statistic.matchId);
 			status = true;
 		}
