@@ -38,12 +38,17 @@ function timeGame(item) {
 /**
  * Метод для отсеивание по названию матча
  *
- * @param {Object} itemOne первая команда
- * @param {Object} itemTwo вторая команда
+ * @param {Object} item матч
+ * @param {Array} excludeName масив элементов которые нужно исключить из названий команд.
  * @returns {boolean}
  */
-function filterGame(itemOne, itemTwo) {
-	return (itemOne.indexOf('(') === -1) && (itemTwo.indexOf('(') === -1) && (itemOne.indexOf('II') === -1) && (itemTwo.indexOf('II') === -1) ? true : false;
+function filterGame(item, excludeName) {
+	return excludeName.reduce((current, exclude) => {
+		if ((item.commandOne.indexOf(exclude) === -1) && (item.commandTwo.indexOf(exclude) === -1)) {
+			current = false;
+		}
+		return current;
+	}, true);
 }
 
 /**

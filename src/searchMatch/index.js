@@ -1,7 +1,7 @@
 const log = require('../utils/logger');
 const {decorateMessage} = require('../utils/formateMessage');
 const {CronJob} = require('cron');
-const {newField, setField} = require('../storage');
+const {newStatistic, setStatistic} = require('../storage');
 const {getFootball, getFootballExpanded, postResult} = require('../fetch');
 const config = require('config');
 const {sendMessage} = require('../telegramApi');
@@ -262,7 +262,7 @@ async function serchResult(type, id) {
  * @param {Number} index коэфф
  */
 function setRate(id = 0, index = 1) {
-	return setField({
+	return setStatistic({
 		matchId: id,
 		index: index,
 		modified: new Date()
@@ -278,7 +278,7 @@ function setRate(id = 0, index = 1) {
  * @returns {Promise<boolean | never>}
  */
 function saveRate(item = {}, score, strategy) {
-	return newField({
+	return newStatistic({
 		matchId: item.I, // id матча
 		score: `${score.sc1}:${score.sc1}`, // счет матча
 		commandOne: item.O1, // название команды 1
@@ -289,6 +289,7 @@ function saveRate(item = {}, score, strategy) {
 		let status = false;
 		if (statistic !== null) {
 			sendMessage(decorateMessage(statistic));
+			sendMessage(statistic.matchId);
 			status = true;
 		}
 		return status;

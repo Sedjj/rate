@@ -1,3 +1,5 @@
+const {getDateTime} = require('../utils/dateFormat');
+
 /**
  * Преобразовывает статистику в необходимый формат
  *
@@ -13,8 +15,8 @@ function mapProps(statistic, index) {
 		commandOne: statistic.commandOne,
 		commandTwo: statistic.commandTwo,
 		index: statistic.index,
-		created: statistic.created,
-		modified: statistic.modified
+		created: getDateTime(statistic.created),
+		modified: getDateTime(statistic.modified)
 	};
 }
 

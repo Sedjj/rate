@@ -2,7 +2,7 @@ const path = require('path');
 const config = require('config');
 const log = require('../utils/logger');
 const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
-const {getFields} = require('../storage');
+const {getStatistic, getReport, newReport} = require('../storage');
 const XlsxTemplate = require('xlsx-template');
 const {getFormattedDate} = require('../utils/dateFormat');
 const {sendFile, sendMessage} = require('../telegramApi');
@@ -10,32 +10,94 @@ const {sendFile, sendMessage} = require('../telegramApi');
 const storagePath = config.get('path.storagePath') || process.cwd();
 const exportTemplatesDirectory = config.get('path.directory.exportTemplates') || 'exportTemplates';
 const uploadDirectory = config.get('path.directory.upload') || 'upload';
-const fileNameInput = config.get('path.storage.fileName.input') || 'reports-list-default.xlsx';
-const fileNameOutput = config.get('path.storage.fileName.output') || 'statistics-report.xlsx';
 
-const filePathInput = path.join(storagePath, exportTemplatesDirectory, fileNameInput);
-const filePathOutput = path.join(storagePath, uploadDirectory, fileNameOutput);
+const reportsInput = config.get('path.storage.fileName.reports.input') || 'Reports-list-default.xlsx';
+const reportsOutput = config.get('path.storage.fileName.reports.output') || 'Reports.xlsx';
+
+const reportsPathInput = path.join(storagePath, exportTemplatesDirectory, reportsInput);
+const reportsPathOutput = path.join(storagePath, uploadDirectory, reportsOutput);
 
 /**
- * Метод для отправки отчета
+ * Метод для отправки бэкапа таблицы статистики
  *
  * @returns {Promise<void>}
  */
-async function exportStatistic() {
-	const file = await returnStatisticListTemplate();
-	saveBufferToFile(filePathOutput, file)
-		.then((filePath) => {
-			return readFileToStream(filePath);
-		})
-		.then((stream) => {
-			return sendFile(stream);
-		})
-		.then(() => {
-			log.debug('Файл отправлен');
-		})
-		.catch((error) => {
-			log.error(`Send error: ${error.message}`);
-		});
+async function exportBackupStatistic() {
+	try {
+		const file = await returnStatisticListTemplate();
+		const filePath = await saveBufferToFile(reportsPathOutput, file);
+		const stream = await readFileToStream(filePath);
+		await sendFile(stream);
+		log.debug('Файл отправлен');
+	} catch (error) {
+		log.error(`Send error: ${error.message}`);
+	}
+}
+
+/**
+ * Метод для отправки ежедневного отчета о ставках
+ *
+ * @returns {Promise<void>}
+ */
+async function exportEveryDayReport() {
+	try {
+		const param = await returnParamForReport();
+		const report = await newReport(param);
+		await sendMessage(report);
+		log.debug('Отчет отправлен');
+	} catch (error) {
+		log.error(`Send every day error: ${error.message}`);
+	}
+}
+
+/**
+ * Метод для отправки отчета недельной работы бота
+ *
+ * @returns {Promise<void>}
+ */
+async function exportEveryWeekReport() {
+	try {
+		const file = await returnReportListTemplate();
+		const filePath = await saveBufferToFile(reportsPathOutput, file);
+		const stream = await readFileToStream(filePath);
+		await sendFile(stream);
+		log.debug('Файл отправлен');
+	} catch (error) {
+		log.error(`Send  every week error: ${error.message}`);
+	}
+}
+
+/**
+ * Возвращает заполненый шаблон списка статистики.
+ *
+ * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
+ */
+async function returnParamForReport() {
+	log.debug('Начало сбора параметров для отчета');
+	return {
+		allMatch: getAllProfit(await getStatistic()),
+		strategyOne: getAllProfit(await getStatistic({strategy: 1})),
+		strategyTwo_zero: getAllProfit(await getStatistic({score: '0:0'})),
+		strategyTwo_one: getAllProfit(await getStatistic({score: '1:1'})),
+		strategyTwo_two: getAllProfit(await getStatistic({score: '2:2'})),
+		allMatch_withoutLeagues: getAllProfit(await getStatistic({}, ['(', ')'])),
+		strategyOne_withoutLeagues: getAllProfit(await getStatistic({strategy: 1}, ['(', ')'])),
+		strategyTwo_zero_withoutLeagues: getAllProfit(await getStatistic({score: '0:0'}, ['(', ')'])),
+		strategyTwo_one_withoutLeagues: getAllProfit(await getStatistic({score: '1:1'}, ['(', ')'])),
+		strategyTwo_two_withoutLeagues: getAllProfit(await getStatistic({score: '2:2'}, ['(', ')'])),
+	};
+}
+
+/**
+ * Метод для суммирования прибыли.
+ *
+ * @param {Array} items массив записей
+ * @returns {*}
+ */
+function getAllProfit(items) {
+	return items && items.reduce((current, item) => {
+		return current + item.profit;
+	}, 0);
 }
 
 /**
@@ -47,27 +109,22 @@ function returnStatisticListTemplate() {
 	log.debug('Начало экспорта Statistics');
 	let props = {
 		statistics: [],
-		currentDate: new Date()
+		objectName: 'statistics',
+		currentDate: getFormattedDate(new Date()),
+		profit: 0
 	};
-	return getFields()
+	return getStatistic()
 		.then((items) => {
-			const profit = items && items.reduce((current, item) => {
-				const lof = current + (item.index * 500 - 500);
-				log.debug(`Текущая прибыль: ${lof}`);
-				return lof;
-
-			}, 0);
-			props.currentDate = getFormattedDate(new Date());
-			props.objectName = 'statistics';
 			props.statistics = items;
-			props.profit = profit;
-			sendMessage(profit);
+			props.profit = items && items.reduce((current, item) => {
+				return current + item.profit;
+			}, 0);
 			log.debug('Данные подготовлены');
 			return props;
 		})
 		.then((props) => {
 			try {
-				return readFile(filePathInput)
+				return readFile(reportsPathInput)
 					.then(file => {
 						const template = new XlsxTemplate(file);
 						// Replacements take place on first sheet
@@ -82,7 +139,51 @@ function returnStatisticListTemplate() {
 		});
 }
 
+/**
+ * Возвращает заполненый шаблон списка отчетов.
+ *
+ * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
+ */
+function returnReportListTemplate() {
+	log.debug('Начало экспорта Report');
+	const beforeDate = new Date();
+	beforeDate.setDate(beforeDate.getDate() - 7);
+	let props = {
+		reports: [],
+		objectName: 'reports',
+		beforeDate: beforeDate,
+		afterDate: getFormattedDate(new Date())
+	};
+	let query = {};
+	query['$or'] = [];
+	query['$or'].push({createdBy: {$gte: props.beforeDate}});
+	query['$or'].push({createdBy: {$lte: props.afterDate}});
+
+	return getReport(query)
+		.then((items) => {
+			props.reports = items;
+			log.debug('Данные подготовлены');
+			return props;
+		})
+		.then((props) => {
+			try {
+				return readFile(reportsPathInput)
+					.then(file => {
+						const template = new XlsxTemplate(file);
+						// Replacements take place on first sheet
+						const sheetNumber = 2;
+						template.substitute(sheetNumber, props);
+						log.debug('Генерация файла');
+						return template.generate({type: 'nodebuffer'});
+					});
+			} catch (error) {
+				log.error(`ExportError reportList: ${error.message}`);
+			}
+		});
+}
+
 module.exports = {
-	exportStatistic,
-	returnStatisticListTemplate
+	exportBackupStatistic,
+	exportEveryDayReport,
+	exportEveryWeekReport,
 };

@@ -73,17 +73,20 @@
 		}
 	},
 	"cron": {
-		"lifetime": 86400,
 		"schedulerSearch": "*/05 * * * *",
 		"waitingInterval": "*/2 * * * *",
-		"schedulerExport": "00 00 08 * * 0-5"
+		"schedulerBackupExport": "00 00 08 * * 0-5",
+		"schedulerEveryDayExport": "00 00 12 * * 0-7",
+		"schedulerEveryWeekExport": "00 05 12 * * 7"
 	},
 	"path": {
 		"storagePath": "",
 		"storage": {
 			"fileName": {
-				"input": "statistics-list-default.xlsx",
-				"output": "statistics-report.xlsx"
+				"reports":{
+					"input": "Reports-list-default.xlsx",
+					"output": "Reports.xlsx"
+				}
 			}
 		},
 		"directory": {
