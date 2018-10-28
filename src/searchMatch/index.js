@@ -265,7 +265,7 @@ function setRate(id = 0, index = 1) {
 	return setStatistic({
 		matchId: id,
 		index: index,
-		modified: new Date()
+		modifiedBy: new Date().toISOString()
 	});
 }
 

@@ -15,8 +15,8 @@ function mapProps(statistic, index) {
 		commandOne: statistic.commandOne,
 		commandTwo: statistic.commandTwo,
 		index: statistic.index,
-		created: getDateTime(statistic.created),
-		modified: getDateTime(statistic.modified)
+		createdBy: getDateTime(statistic.createdBy),
+		modifiedBy: getDateTime(statistic.modifiedBy)
 	};
 }
 

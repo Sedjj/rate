@@ -26,7 +26,7 @@ function getStatistic(param = {}, excludeName = []) {
 			return statistics
 				.filter((statistic) => filterGame(statistic, excludeName))
 				.map((statistic, index) => {
-					let props = mapProps(statistic, index);
+					let props = mapProps(statistic, index + 1);
 					props['rate'] = rate;
 					props['profit'] = props.index * rate - rate;
 					return props;
@@ -91,7 +91,7 @@ function setStatistic(param) {
 		.exec()
 		.then(statistic => {
 			statistic.index = param.index;
-			statistic.modified = param.modified;
+			statistic.modifiedBy = param.modifiedBy;
 			return statistic.save();
 		})
 		.catch(error => {

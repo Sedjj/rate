@@ -54,7 +54,7 @@ const ReportSchema = new Schema({
 	},
 	createdBy: {
 		type: Date,
-		default: Date.now
+		default: new Date()
 	}
 });
 

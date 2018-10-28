@@ -153,14 +153,13 @@ function returnReportListTemplate() {
 	let props = {
 		reports: [],
 		objectName: 'reports',
-		beforeDate: beforeDate,
+		beforeDate: getFormattedDate(beforeDate),
 		afterDate: getFormattedDate(new Date())
 	};
 	let query = {};
-	query['$or'] = [];
-	query['$or'].push({createdBy: {$gte: props.beforeDate}});
-	query['$or'].push({createdBy: {$lte: props.afterDate}});
-
+	query['$and'] = [];
+	query['$and'].push({createdBy: {$gte: beforeDate.toISOString()}});
+	query['$and'].push({createdBy: {$lte: (new Date()).toISOString()}});
 	return getReport(query)
 		.then((items) => {
 			props.reports = items;

@@ -32,14 +32,14 @@ const StatisticSchema = new Schema({
 		required: true,
 		default: 0
 	},
-	created: {
+	createdBy: {
 		type: Date,
-		default: Date.now
+		default: new Date()
 	},
-	modified: {
+	modifiedBy: {
 		type: Date,
-		default: Date.now
-	},
+		default: new Date()
+	}
 });
 
 module.exports = mongoose.model('Statistic', StatisticSchema);

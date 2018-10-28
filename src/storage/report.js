@@ -19,7 +19,7 @@ function getReport(param = {}) {
 				return [];
 			}
 			return reports.map((report, index) => {
-				return mapProps(report, index);
+				return mapProps(report, index + 1);
 			});
 		})
 		.catch(error => {

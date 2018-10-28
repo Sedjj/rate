@@ -1,6 +1,7 @@
 const {CronJob} = require('cron');
 const config = require('config');
-const log = require('./src/utils/logger');/*
+const log = require('./src/utils/logger');
+/*
 const {search} = require('./src/searchMatch');*/
 const {exportBackupStatistic, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');
 
@@ -44,8 +45,8 @@ if (schedulerBackupExport) {
 	let schedulerBackupExportJob;
 	try {
 		schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
-			 // exportBackupStatistic();
-			 schedulerBackupExportJob.stop();
+			// exportBackupStatistic();
+			schedulerBackupExportJob.stop();
 		}, null, true);
 	} catch (ex) {
 		schedulerBackupExportJob.stop();
@@ -61,7 +62,7 @@ if (schedulerEveryDayExport) {
 	let schedulerEveryDayExportJob;
 	try {
 		schedulerEveryDayExportJob = new CronJob(schedulerEveryDayExport, () => {
-			exportEveryDayReport();
+			// exportEveryDayReport();
 			schedulerEveryDayExportJob.stop();
 		}, null, true);
 	} catch (ex) {
@@ -79,7 +80,7 @@ if (schedulerEveryWeekExport) {
 	let schedulerEveryWeekExportJob;
 	try {
 		schedulerEveryWeekExportJob = new CronJob(schedulerEveryWeekExport, () => {
-			// exportEveryWeekReport();
+			exportEveryWeekReport();
 			schedulerEveryWeekExportJob.stop();
 		}, null, true);
 	} catch (ex) {

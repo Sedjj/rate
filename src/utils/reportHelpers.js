@@ -20,7 +20,7 @@ function mapProps(statistic, index) {
 		strategyTwo_zero_withoutLeagues: statistic.strategyTwo_zero_withoutLeagues,
 		strategyTwo_one_withoutLeagues: statistic.strategyTwo_one_withoutLeagues,
 		strategyTwo_two_withoutLeagues: statistic.strategyTwo_two_withoutLeagues,
-		created: getDateTime(statistic.created)
+		createdBy: getDateTime(statistic.createdBy)
 	};
 }
 
