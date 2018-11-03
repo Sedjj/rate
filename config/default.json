@@ -14,10 +14,10 @@
 		"pass": ""
 	},
 	"socket": {
-		"host": "bot.avinfo17.info",
-		"port": "38157",
-		"login": "",
-		"psswd": ""
+		"host": "dart.vivalaresistance.info",
+		"port": "3306",
+		"login": "swcbbabh",
+		"psswd": "aYEbh6q5gQ"
 	},
 	"proxy": {
 		"host": "45.250.226.11",
