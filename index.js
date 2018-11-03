@@ -2,22 +2,22 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
-/*const {exportBackupStatistic, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');*/
+const {exportBackupStatistic, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
-	? '*/20 * * * * *'
+	? '*/10 * * * * *'
 	: config.get('cron.schedulerSearch');
 
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
-	? '*/02 * * * * *'
+	? '*/50 * * * * *'
 	: config.get('cron.schedulerBackupExport');
 
 const schedulerEveryDayExport = process.env.NODE_ENV === 'development'
-	? '*/02 * * * * *'
+	? '*/60 * * * * *'
 	: config.get('cron.schedulerEveryDayExport');
 
 const schedulerEveryWeekExport = process.env.NODE_ENV === 'development'
-	? '*/02 * * * * *'
+	? '*/60 * * * * *'
 	: config.get('cron.schedulerEveryWeekExport');
 
 /**
@@ -44,8 +44,7 @@ if (schedulerBackupExport) {
 	let schedulerBackupExportJob;
 	try {
 		schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
-			// exportBackupStatistic();
-			schedulerBackupExportJob.stop();
+			 // exportBackupStatistic();
 		}, null, true);
 	} catch (ex) {
 		schedulerBackupExportJob.stop();
@@ -61,8 +60,7 @@ if (schedulerEveryDayExport) {
 	let schedulerEveryDayExportJob;
 	try {
 		schedulerEveryDayExportJob = new CronJob(schedulerEveryDayExport, () => {
-			// exportEveryDayReport();
-			schedulerEveryDayExportJob.stop();
+			 exportEveryDayReport();
 		}, null, true);
 	} catch (ex) {
 		schedulerEveryDayExportJob.stop();
@@ -79,8 +77,8 @@ if (schedulerEveryWeekExport) {
 	let schedulerEveryWeekExportJob;
 	try {
 		schedulerEveryWeekExportJob = new CronJob(schedulerEveryWeekExport, () => {
-			// exportEveryWeekReport();
-			schedulerEveryWeekExportJob.stop();
+			exportEveryWeekReport();
+			// schedulerEveryWeekExportJob.stop();
 		}, null, true);
 	} catch (ex) {
 		schedulerEveryWeekExportJob.stop();

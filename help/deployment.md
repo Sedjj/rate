@@ -168,7 +168,7 @@ sudo npm install pm2@latest -g
 
 Запуск бота
 ```bash
-pm2 start npm -- start
+pm2 start npm -- start --watch
 ```
 
 ```

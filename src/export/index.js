@@ -19,7 +19,7 @@ const reportsOutput = config.get('path.storage.fileName.reports.output') || 'Rep
 
 const reportsPathInput = path.join(storagePath, exportTemplatesDirectory, reportsInput);
 const reportsPathOutput = path.join(storagePath, uploadDirectory, reportsOutput);
-const chartPath = path.join(storagePath, uploadDirectory, 'stackedBarChart.png');
+// const chartPath = path.join(storagePath, uploadDirectory, 'stackedBarChart.png');
 
 /**
  * Метод для отправки бэкапа таблицы статистики
@@ -61,12 +61,12 @@ async function exportEveryDayReport() {
  */
 async function exportEveryWeekReport() {
 	try {
-		// const file = await returnReportListTemplate();
-		// const filePath = await saveBufferToFile(reportsPathOutput, file);
-		// const stream = await readFileToStream(reportsPathOutput);
+		 const file = await returnReportListTemplate();
+		 const filePath = await saveBufferToFile(reportsPathOutput, file);
+		 const stream = await readFileToStream(filePath);
 		// const streamChart = await multiChartReport(chartPath);
 		// await sendFile(streamChart);
-		// await sendFile(stream);
+		 await sendFile(stream);
 		log.debug('Файл отправлен');
 	} catch (error) {
 		log.error(`Send  every week error: ${error.message}`);
