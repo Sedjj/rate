@@ -5,10 +5,12 @@ const config = require('config');
 const {setFileApiTelegram} = require('../fetch');
 
 const token = process.env.NODE_ENV === 'development'
-	? config.get('bots.token.dev')
-	: config.get('bots.token.prod');
+	? config.get('bots.dev.token')
+	: config.get('bots.prod.token');
 const socket = config.get('socket');
-const chatId = config.get('chatId');
+const chatId = process.env.NODE_ENV === 'development'
+	? config.get('bots.dev.chatId')
+	: config.get('bots.prod.chatId');
 // const ngrok = 'https://0981648c.ngrok.io';
 
 const socksAgent = new SocksAgent({

@@ -1,7 +1,7 @@
 const log = require('../utils/logger');
 const {decorateMessageMatch} = require('../utils/formateMessage');
 const {CronJob} = require('cron');
-const {newStatistic, setStatistic} = require('../storage');
+const {newStatistic, setStatistic} = require('../storage/statistic');
 const {getFootball, getFootballExpanded, postResult} = require('../fetch');
 const config = require('config');
 const {sendMessage} = require('../telegramApi');

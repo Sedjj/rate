@@ -28,9 +28,13 @@
 	"chatId": "-276223662",
 	"myId": "43166705",
 	"bots": {
-		"token": {
-			"dev": "741639693:AAEttznjxSM0PikZIrWtkCRpF9y68vQzFP0",
-			"prod": "651764664:AAG3UYrXooiJWCTEWQimNTpuq08cqUEJIV0"
+		"dev": {
+			"chatId": "-299200164",
+			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
+		},
+		"prod": {
+			"chatId": "-276223662",
+			"token": "741538630:AAH3OtLgnLUeXDKZ6cXYe7GBI2uSBSHeOQk"
 		}
 	},
 	"parser": {
@@ -83,7 +87,7 @@
 		"storagePath": "",
 		"storage": {
 			"fileName": {
-				"reports":{
+				"reports": {
 					"input": "Reports-list-default.xlsx",
 					"output": "Reports.xlsx"
 				}

@@ -9,8 +9,8 @@ const urlAllZone = config.get('parser.result.allZone');
 const urlAll = config.get('parser.result.all');
 
 const token = process.env.NODE_ENV === 'development'
-	? config.get('bots.token.dev')
-	: config.get('bots.token.prod');
+	? config.get('bots.dev.token')
+	: config.get('bots.prod.token');
 const proxy = config.get('proxy');
 
 /**

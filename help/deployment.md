@@ -124,7 +124,7 @@ sudo ufw allow ssh
 
 Включение mongo:
 ```bash
-sudo ufw allow from 176.57.215.147/32 to any port 27017  
+sudo ufw allow from 31.162.18.6/32 to any port 27017  
 ```
 
 Несмотря на то, что порт открыт, MongoDB в настоящее время только прослушивает локальный адрес 127.0.0.1. Чтобы разрешить удаленные подключения, добавьте публично маршрутизируемый IP-адрес вашего сервера в mongod.confфайл.
@@ -151,7 +151,77 @@ sudo systemctl restart mongodb
 ```
 
 Установим дополнительное ПО
-```
+```bash
 sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 npm install node-gyp
 ```
+
+[Настроить pm2](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-18-04).
+
+http://pm2.keymetrics.io/docs/usage/quick-start/
+
+Установим pm2, чтоб бы можно было запустить бота как службу
+```bash
+sudo npm install pm2@latest -g
+```
+
+
+Запуск бота
+```bash
+pm2 start npm -- start
+```
+
+```
+ pm2 list
+
+pm2 show npm
+```
+
+Stop an application with this command (specify the PM2 App name or id):
+
+pm2 stop app_name_or_id
+Restart an application:
+
+pm2 restart app_name_or_id
+List the applications currently managed by PM2:
+
+pm2 list
+Get information about a specific application using its App name:
+
+pm2 info app_name
+The PM2 process monitor can be pulled up with the monit subcommand. This displays the application status, CPU, and memory usage:
+
+pm2 monit
+Note that running pm2 without any arguments will also display a help page with example usage.
+
+Now that your Node.js application is running and managed by PM2, let's set up the reverse proxy.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
