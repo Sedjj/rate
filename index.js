@@ -1,9 +1,8 @@
 const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
-/*
-const {search} = require('./src/searchMatch');*/
-const {exportBackupStatistic, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');
+const {search} = require('./src/searchMatch');
+/*const {exportBackupStatistic, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');*/
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
@@ -29,7 +28,7 @@ if (schedulerSearch) {
 	let schedulerSearchJob;
 	try {
 		schedulerSearchJob = new CronJob(schedulerSearch, () => {
-			// search();
+			  search();
 		}, null, true);
 	} catch (ex) {
 		schedulerSearchJob.stop();
@@ -80,7 +79,7 @@ if (schedulerEveryWeekExport) {
 	let schedulerEveryWeekExportJob;
 	try {
 		schedulerEveryWeekExportJob = new CronJob(schedulerEveryWeekExport, () => {
-			exportEveryWeekReport();
+			// exportEveryWeekReport();
 			schedulerEveryWeekExportJob.stop();
 		}, null, true);
 	} catch (ex) {
