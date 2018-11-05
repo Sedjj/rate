@@ -55,15 +55,15 @@ function filterGame(item, excludeName) {
  * Cравниваем Total 2-x таймов не изменился ли.
  * Eсли изменился то меняем даные в таблице .
  * {
- * 		конечный = исходный счет -> 1
- * 		конечный < исходный счет -> 0
- * 		конечный > исходный счет -> ставка(1.666)
+ * 		конечный = (исходный счет + 1) -> 1
+ * 		конечный < (исходный счет + 1) -> 0
+ * 		конечный > (исходный счет  + 1) -> ставка(1.666)
  * }
  * @param {Object} oldScore исходные данные Total
  * @param {Object} endScore результирующие данные Total
  */
 function equalsTotal(oldScore, endScore) {
-	const start = oldScore.sc1 + oldScore.sc2;
+	const start = oldScore.sc1 + oldScore.sc2 + 1;
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;

@@ -60,7 +60,7 @@
 					"after": 4200
 				},
 				"strategyOne": {
-					"rate": 1,
+					"rate": 0.7,
 					"total": 1.3
 				},
 				"strategyTwo": {

@@ -55,7 +55,7 @@ function footballLiveStrategy(item) {
 				if ((tm >= before) && (tm <= after)) {
 					if (score.sc1 === score.sc2) {
 						footballLiveStrategyTwo(item, index);
-					} else if (score.sc1 + score.sc2 === score) {
+					} else if (score.sc1 + score.sc2 === 1) {
 						footballLiveStrategyOne(item, index);
 					}
 				}
