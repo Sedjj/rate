@@ -28,7 +28,7 @@ if (schedulerSearch) {
 	let schedulerSearchJob;
 	try {
 		schedulerSearchJob = new CronJob(schedulerSearch, () => {
-			  search();
+			search();
 		}, null, true);
 	} catch (ex) {
 		schedulerSearchJob.stop();
@@ -44,7 +44,7 @@ if (schedulerBackupExport) {
 	let schedulerBackupExportJob;
 	try {
 		schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
-			 // exportBackupStatistic();
+			// exportBackupStatistic();
 		}, null, true);
 	} catch (ex) {
 		schedulerBackupExportJob.stop();
@@ -60,7 +60,7 @@ if (schedulerEveryDayExport) {
 	let schedulerEveryDayExportJob;
 	try {
 		schedulerEveryDayExportJob = new CronJob(schedulerEveryDayExport, () => {
-			 exportEveryDayReport();
+			exportEveryDayReport();
 		}, null, true);
 	} catch (ex) {
 		schedulerEveryDayExportJob.stop();
