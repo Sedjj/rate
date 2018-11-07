@@ -2,15 +2,19 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
-const {exportBackupStatistic, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');
+const {exportBackupStatistic, exportLogs, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/10 * * * * *'
 	: config.get('cron.schedulerSearch');
 
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
-	? '*/50 * * * * *'
+	? '*/40 * * * * *'
 	: config.get('cron.schedulerBackupExport');
+
+const schedulerLogs = process.env.NODE_ENV === 'development'
+	? '*/20 * * * * *'
+	: config.get('cron.schedulerLogs');
 
 const schedulerEveryDayExport = process.env.NODE_ENV === 'development'
 	? '*/60 * * * * *'
@@ -44,10 +48,26 @@ if (schedulerBackupExport) {
 	let schedulerBackupExportJob;
 	try {
 		schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
-			// exportBackupStatistic();
+			exportBackupStatistic();
 		}, null, true);
 	} catch (ex) {
 		schedulerBackupExportJob.stop();
+		log.error('cron pattern not valid');
+	}
+}
+
+/**
+ * Планировщик отправки лога
+ */
+if (schedulerLogs) {
+	log.info('****start scheduler logs****');
+	let schedulerLogsJob;
+	try {
+		schedulerLogsJob = new CronJob(schedulerLogs, () => {
+			exportLogs();
+		}, null, true);
+	} catch (ex) {
+		schedulerLogsJob.stop();
 		log.error('cron pattern not valid');
 	}
 }

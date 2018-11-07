@@ -79,9 +79,10 @@
 	"cron": {
 		"schedulerSearch": "*/05 * * * *",
 		"waitingInterval": "*/2 * * * *",
-		"schedulerBackupExport": "00 00 08 * * 0-5",
-		"schedulerEveryDayExport": "00 00 12 * * 0-7",
-		"schedulerEveryWeekExport": "00 05 12 * * 0-7"
+		"schedulerLogs": "00 00 10 * * 0-7",
+		"schedulerBackupExport": "00 05 10 * * 0-7",
+		"schedulerEveryDayExport": "00 10 10 * * 0-7",
+		"schedulerEveryWeekExport": "00 15 10 * * 0-7"
 	},
 	"path": {
 		"storagePath": "",
@@ -90,13 +91,20 @@
 				"reports": {
 					"input": "Reports-list-default.xlsx",
 					"output": "Reports.xlsx"
+				},
+				"logs": {
+					"all": "all.log",
+					"error":"error.log",
+					"debug": "debug.log",
+					"exceptions": "exceptions.log"
 				}
 			}
 		},
 		"directory": {
 			"exportTemplates": "exportTemplates",
 			"archives": "archives",
-			"upload": "upload"
+			"upload": "upload",
+			"logs": "logs"
 		}
 	},
 	"outpit": {

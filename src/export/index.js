@@ -13,12 +13,16 @@ const {sendFile, sendMessage} = require('../telegramApi');
 const storagePath = config.get('path.storagePath') || process.cwd();
 const exportTemplatesDirectory = config.get('path.directory.exportTemplates') || 'exportTemplates';
 const uploadDirectory = config.get('path.directory.upload') || 'upload';
+const logsDirectory = config.get('path.directory.logs') || 'logs';
 
 const reportsInput = config.get('path.storage.fileName.reports.input') || 'Reports-list-default.xlsx';
 const reportsOutput = config.get('path.storage.fileName.reports.output') || 'Reports.xlsx';
+const debugOutput = config.get('path.storage.fileName.logs.debug') || 'debug.log';
 
 const reportsPathInput = path.join(storagePath, exportTemplatesDirectory, reportsInput);
 const reportsPathOutput = path.join(storagePath, uploadDirectory, reportsOutput);
+const debugPathOutput = path.join(storagePath, logsDirectory, debugOutput);
+
 // const chartPath = path.join(storagePath, uploadDirectory, 'stackedBarChart.png');
 
 /**
@@ -32,7 +36,22 @@ async function exportBackupStatistic() {
 		const filePath = await saveBufferToFile(reportsPathOutput, file);
 		const stream = await readFileToStream(filePath);
 		await sendFile(stream);
-		log.debug('Файл отправлен');
+		log.debug('Файл statistic отправлен');
+	} catch (error) {
+		log.error(`Send error: ${error.message}`);
+	}
+}
+
+/**
+ * Метод для отправки лога.
+ *
+ * @returns {Promise<void>}
+ */
+async function exportLogs() {
+	try {
+		const logs = await readFileToStream(debugPathOutput);
+		await sendFile(logs);
+		log.debug('Файл лога отправлен');
 	} catch (error) {
 		log.error(`Send error: ${error.message}`);
 	}
@@ -61,13 +80,13 @@ async function exportEveryDayReport() {
  */
 async function exportEveryWeekReport() {
 	try {
-		 const file = await returnReportListTemplate();
-		 const filePath = await saveBufferToFile(reportsPathOutput, file);
-		 const stream = await readFileToStream(filePath);
+		const file = await returnReportListTemplate();
+		const filePath = await saveBufferToFile(reportsPathOutput, file);
+		const stream = await readFileToStream(filePath);
 		// const streamChart = await multiChartReport(chartPath);
 		// await sendFile(streamChart);
-		 await sendFile(stream);
-		log.debug('Файл отправлен');
+		await sendFile(stream);
+		log.debug('Файл report отправлен');
 	} catch (error) {
 		log.error(`Send  every week error: ${error.message}`);
 	}
@@ -188,6 +207,7 @@ function returnReportListTemplate() {
 }
 
 module.exports = {
+	exportLogs,
 	exportBackupStatistic,
 	exportEveryDayReport,
 	exportEveryWeekReport,
