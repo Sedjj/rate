@@ -78,7 +78,7 @@ async function footballLiveStrategyOne(item, index) {
 			if (await saveRate(item, oldScore, '1')) {
 				const total = await waiting(item, '1', oldScore);
 				if (total !== -1) { // -1 - это время истекло или поменялся счет
-					const endScore = await waitingEndMatch(item, '1');
+					const endScore = await waitingEndMatch(item);
 					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Результат матча ${endScore}`);
 					const result = equalsTotal(oldScore, parserScore(endScore));
 					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Коэффициента ставки ${result}`);
@@ -109,9 +109,10 @@ async function footballLiveStrategyTwo(item, index) {
 					log.debug(`Найден ${item.I}: Стратегия ничья с явным фаворитом`);
 					const total = await waiting(item, '2', oldScore);
 					if (total !== -1) { // -1 - это время истекло или поменялся счет
-						const endScore = await waitingEndMatch(item, '2');
-						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${endScore}`);
-						const result = equalsTotal(oldScore, parserScore(endScore));
+						const endScore = await waitingEndMatch(item);
+						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
+						const newScore = parserScore(endScore);
+						const result = (newScore !== '') ? equalsTotal(oldScore, newScore) : 1;
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 						if (result === 0 || result === 1) {
 							log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
@@ -215,7 +216,13 @@ function waitingEndMatch(item) {
 	return new Promise((resolve, reject) => {
 		try {
 			setTimeout(async () => {
-				resolve(await serchResult(numericalDesignation, item.I));
+				let score = '';
+				const currentDate = new Date();
+				score = await serchResult(numericalDesignation, item.I, currentDate);
+				if (score === '') { // если на текущую дату не нашли матча то ищем на день назад
+					score = await serchResult(numericalDesignation, item.I, new Date(currentDate.setDate(currentDate.getDate() - 1)));
+				}
+				resolve(score);
 			}, endGame);
 		} catch (error) {
 			log.error(`Error waitingEndMatch: ${error.message}`);
@@ -229,12 +236,13 @@ function waitingEndMatch(item) {
  *
  * @param {number} type соревнования(1 - футбол)
  * @param {number} id матча
+ * @param {Date} date - дата
  * @returns {Promise<void>}
  */
-async function serchResult(type, id) {
+async function serchResult(type, id, date) {
 	let score = '';
 	try {
-		const data = await postResult();
+		const data = await postResult(date);
 		data.forEach((item) => {
 			if (item.ID === type) {
 				item.Elems.map((object) => {
@@ -248,7 +256,6 @@ async function serchResult(type, id) {
 				});
 			}
 		});
-		
 	} catch (error) {
 		log.error(`Error serchResult: ${error.message}`);
 	}
@@ -280,7 +287,7 @@ function setRate(id = 0, index = 1) {
 function saveRate(item = {}, score, strategy) {
 	return newStatistic({
 		matchId: item.I, // id матча
-		score: `${score.sc1}:${score.sc1}`, // счет матча
+		score: `${score.sc1}:${score.sc2}`, // счет матча
 		commandOne: item.O1, // название команды 1
 		commandTwo: item.O2, // название команды 2
 		strategy: strategy, // стратегия

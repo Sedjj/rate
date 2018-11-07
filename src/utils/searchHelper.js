@@ -90,10 +90,7 @@ function parserScore(value) {
 			sc2: parseInt(scoreTwo[0]) + parseInt(scoreTwo[1])
 		};
 	} else {
-		return {
-			sc1: 0,
-			sc2: 0
-		};
+		return value;
 	}
 }
 

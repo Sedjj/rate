@@ -65,13 +65,14 @@ function getFootballExpanded(id) {
 /**
  * Метод для получения всех результатов из зоны
  *
+ * @param {Date} date - дата
  * @returns {Promise<JSON | void>}
  */
-function postResultZone() {
+function postResultZone(date) {
 	return new Promise((resolve, reject) => {
 		const param = {
 			'Language': 'ru',
-			'Params': [getFormattedDate(new Date()), null, null, null, null, 300],
+			'Params': [getFormattedDate(date), null, null, null, null, 300],
 			'Vers': 6,
 			'Adult': false,
 			'partner': 51
@@ -97,11 +98,12 @@ function postResultZone() {
 /**
  * Метод для получения всех результатов.
  *
+ * @param {Date} date - дата
  * @returns {Promise<any>}
  */
-function postResult() {
+function postResult(date) {
 	return new Promise((resolve, reject) => {
-		request.get(urlAll.replace('${date}', getFormattedDate(new Date())), (error, res, body) => {
+		request.get(urlAll.replace('${date}', getFormattedDate(date)), (error, res, body) => {
 			if (error && res.statusCode !== 200) {
 				log.error(`error: ${error}`);
 				return reject(error);

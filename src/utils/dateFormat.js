@@ -22,7 +22,7 @@ const dateTimeFormat = {
 /**
  * Пребразование даты в строку вида yyyy-mm-dd hh:mm
  *
- * @param {Date} date - дата.
+ * @param {Date} date - дата
  * @returns {String} дата в формате строки
  */
 function getFormattedDateTime(date) {
@@ -32,7 +32,7 @@ function getFormattedDateTime(date) {
 /**
  * Пребразование даты в строку вида yyyy-mm-dd
  *
- * @param {Date} date - дата.
+ * @param {Date} date - дата
  * @returns {String} дата в формате строки
  */
 function getFormattedDate(date) {
@@ -52,7 +52,7 @@ function getFormattedTime(date) {
 /**
  * Пребразование даты в число для сравнения
  *
- * @param {Date} date - дата.
+ * @param {Date} date - дата
  * @returns {String} дата в формате строки
  */
 function getTime(date) {
@@ -62,8 +62,8 @@ function getTime(date) {
 /**
  * Преобразует строку даты в формата вида yyyy-mm-dd hh:mm
  *
- * @param date
- * @returns {String}
+ * @param {Date} date - дата
+ * @returns {String} дата в формате строки
  */
 function getDateTime(date) {
 	return getFormattedDateTime(new Date(date));
