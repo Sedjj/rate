@@ -23,6 +23,8 @@ const waitingInterval = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
 	: config.get('cron.waitingInterval');
 
+let waitingEndCount = 0;
+
 /**
  * Метод поиска совпадений по данным стратегиям.
  *
@@ -114,6 +116,7 @@ async function footballLiveStrategyTwo(item, index) {
 						const newScore = parserScore(endScore);
 						const result = (newScore !== '') ? equalsTotal(oldScore, newScore) : 1;
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
+						log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 						if (result === 0 || result === 1) {
 							log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
 							setRate(item.I, result);
@@ -215,13 +218,17 @@ function waitingEndMatch(item) {
 	const endGame = 7200 * 1000;
 	return new Promise((resolve, reject) => {
 		try {
+			waitingEndCount++;
+			log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
 			setTimeout(async () => {
 				let score = '';
 				const currentDate = new Date();
 				score = await serchResult(numericalDesignation, item.I, currentDate);
 				if (score === '') { // если на текущую дату не нашли матча то ищем на день назад
+					log.debug(`Матч ${item.I}: доп. запрос на результат`);
 					score = await serchResult(numericalDesignation, item.I, new Date(currentDate.setDate(currentDate.getDate() - 1)));
 				}
+				waitingEndCount--;
 				resolve(score);
 			}, endGame);
 		} catch (error) {
