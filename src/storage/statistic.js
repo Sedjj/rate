@@ -24,10 +24,11 @@ function getStatistic(param = {}, excludeName = []) {
 				return [];
 			}
 			return statistics
-				.filter((statistic) => filterGame(statistic, excludeName))
+			/*.filter((statistic) => filterGame(statistic, excludeName))*/
 				.map((statistic, index) => {
 					let props = mapProps(statistic, index + 1);
 					props['rate'] = rate;
+					props['typeMatch'] = filterGame(statistic, excludeName);
 					props['profit'] = props.index * rate - rate;
 					return props;
 				});
@@ -90,7 +91,12 @@ function setStatistic(param) {
 		.read('secondary')
 		.exec()
 		.then(statistic => {
-			statistic.index = param.index;
+			if (param.index !== undefined) {
+				statistic.index = param.index;
+			}
+			if (param.total !== undefined) {
+				statistic.total = param.total;
+			}
 			statistic.modifiedBy = param.modifiedBy;
 			return statistic.save();
 		})

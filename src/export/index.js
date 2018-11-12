@@ -3,27 +3,18 @@ const config = require('config');
 const log = require('../utils/logger');
 const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
 const {getStatistic} = require('../storage/statistic');
-const {getReport, newReport} = require('../storage/report');
 const XlsxTemplate = require('xlsx-template');
-const {multiChartReport} = require('../chart');
-const {decorateMessageEveryReport} = require('../utils/formateMessage');
-const {getFormattedDate} = require('../utils/dateFormat');
-const {sendFile, sendMessage} = require('../telegramApi');
+const {sendFile} = require('../telegramApi');
 
 const storagePath = config.get('path.storagePath') || process.cwd();
 const exportTemplatesDirectory = config.get('path.directory.exportTemplates') || 'exportTemplates';
 const uploadDirectory = config.get('path.directory.upload') || 'upload';
-const logsDirectory = config.get('path.directory.logs') || 'logs';
 
 const reportsInput = config.get('path.storage.fileName.reports.input') || 'Reports-list-default.xlsx';
 const reportsOutput = config.get('path.storage.fileName.reports.output') || 'Reports.xlsx';
-const debugOutput = config.get('path.storage.fileName.logs.debug') || 'debug.log';
 
 const reportsPathInput = path.join(storagePath, exportTemplatesDirectory, reportsInput);
 const reportsPathOutput = path.join(storagePath, uploadDirectory, reportsOutput);
-const debugPathOutput = path.join(storagePath, logsDirectory, debugOutput);
-
-// const chartPath = path.join(storagePath, uploadDirectory, 'stackedBarChart.png');
 
 /**
  * Метод для отправки бэкапа таблицы статистики
@@ -43,61 +34,11 @@ async function exportBackupStatistic() {
 }
 
 /**
- * Метод для отправки лога.
- *
- * @returns {Promise<void>}
- */
-async function exportLogs() {
-	try {
-		const logs = await readFileToStream(debugPathOutput);
-		await sendFile(logs);
-		log.debug('Файл лога отправлен');
-	} catch (error) {
-		log.error(`Send error: ${error.message}`);
-	}
-}
-
-/**
- * Метод для отправки ежедневного отчета о ставках
- *
- * @returns {Promise<void>}
- */
-async function exportEveryDayReport() {
-	try {
-		const param = await returnParamForReport();
-		const report = await newReport(param);
-		await sendMessage(decorateMessageEveryReport(report));
-		log.debug('Отчет отправлен');
-	} catch (error) {
-		log.error(`Send every day error: ${error.message}`);
-	}
-}
-
-/**
- * Метод для отправки отчета недельной работы бота
- *
- * @returns {Promise<void>}
- */
-async function exportEveryWeekReport() {
-	try {
-		const file = await returnReportListTemplate();
-		const filePath = await saveBufferToFile(reportsPathOutput, file);
-		const stream = await readFileToStream(filePath);
-		// const streamChart = await multiChartReport(chartPath);
-		// await sendFile(streamChart);
-		await sendFile(stream);
-		log.debug('Файл report отправлен');
-	} catch (error) {
-		log.error(`Send  every week error: ${error.message}`);
-	}
-}
-
-/**
  * Возвращает заполненый шаблон списка статистики.
  *
  * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
  */
-async function returnParamForReport() {
+/*async function returnParamForReport() {
 	log.debug('Начало сбора параметров для отчета');
 	return {
 		allMatch: getAllProfit(await getStatistic()),
@@ -111,19 +52,7 @@ async function returnParamForReport() {
 		strategyTwo_one_withoutLeagues: getAllProfit(await getStatistic({score: '1:1'}, ['(', ')'])),
 		strategyTwo_two_withoutLeagues: getAllProfit(await getStatistic({score: '2:2'}, ['(', ')'])),
 	};
-}
-
-/**
- * Метод для суммирования прибыли.
- *
- * @param {Array} items массив записей
- * @returns {*}
- */
-function getAllProfit(items) {
-	return items && items.reduce((current, item) => {
-		return current + item.profit;
-	}, 0);
-}
+}*/
 
 /**
  * Возвращает заполненый шаблон списка статистики.
@@ -132,18 +61,18 @@ function getAllProfit(items) {
  */
 function returnStatisticListTemplate() {
 	log.debug('Начало экспорта Statistics');
+	const beforeDate = new Date();
+	beforeDate.setDate(beforeDate.getDate() - 2);
 	let props = {
 		statistics: [],
-		objectName: 'statistics',
-		currentDate: getFormattedDate(new Date()),
-		profit: 0
 	};
-	return getStatistic()
+	let query = {};
+	query['$and'] = [];
+	query['$and'].push({createdBy: {$gte: beforeDate.toISOString()}});
+	query['$and'].push({createdBy: {$lte: (new Date()).toISOString()}});
+	return getStatistic(query, ['(', ')'])
 		.then((items) => {
 			props.statistics = items;
-			props.profit = items && items.reduce((current, item) => {
-				return current + item.profit;
-			}, 0);
 			log.debug('Данные подготовлены');
 			return props;
 		})
@@ -169,7 +98,7 @@ function returnStatisticListTemplate() {
  *
  * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
  */
-function returnReportListTemplate() {
+/*function returnReportListTemplate() {
 	log.debug('Начало экспорта Report');
 	const beforeDate = new Date();
 	beforeDate.setDate(beforeDate.getDate() - 7);
@@ -204,11 +133,8 @@ function returnReportListTemplate() {
 				log.error(`ExportError reportList: ${error.message}`);
 			}
 		});
-}
+}*/
 
 module.exports = {
-	exportLogs,
-	exportBackupStatistic,
-	exportEveryDayReport,
-	exportEveryWeekReport,
+	exportBackupStatistic
 };

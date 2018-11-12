@@ -61,9 +61,10 @@ function filterGame(item, excludeName) {
  * }
  * @param {Object} oldScore исходные данные Total
  * @param {Object} endScore результирующие данные Total
+ * @param {Object} typeRate тип ставки
  */
-function equalsTotal(oldScore, endScore) {
-	const start = oldScore.sc1 + oldScore.sc2 + 1;
+function equalsTotal(oldScore, endScore, typeRate) {
+	const start = oldScore.sc1 + oldScore.sc2 + typeRate;
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;

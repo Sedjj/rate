@@ -1,4 +1,4 @@
-const {getDateTime} = require('../utils/dateFormat');
+const {getFormattedDate} = require('../utils/dateFormat');
 
 /**
  * Преобразовывает статистику в необходимый формат
@@ -15,8 +15,8 @@ function mapProps(statistic, index) {
 		commandOne: statistic.commandOne,
 		commandTwo: statistic.commandTwo,
 		index: statistic.index,
-		createdBy: getDateTime(statistic.createdBy),
-		modifiedBy: getDateTime(statistic.modifiedBy)
+		total: statistic.total,
+		createdBy: getFormattedDate(statistic.createdBy)
 	};
 }
 

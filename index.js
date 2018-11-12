@@ -2,7 +2,7 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
-const {exportBackupStatistic, exportLogs, exportEveryDayReport, exportEveryWeekReport} = require('./src/export');
+const {exportBackupStatistic} = require('./src/export');
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/10 * * * * *'
@@ -11,18 +11,6 @@ const schedulerSearch = process.env.NODE_ENV === 'development'
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
 	? '*/40 * * * * *'
 	: config.get('cron.schedulerBackupExport');
-
-const schedulerLogs = process.env.NODE_ENV === 'development'
-	? '*/20 * * * * *'
-	: config.get('cron.schedulerLogs');
-
-const schedulerEveryDayExport = process.env.NODE_ENV === 'development'
-	? '*/60 * * * * *'
-	: config.get('cron.schedulerEveryDayExport');
-
-const schedulerEveryWeekExport = process.env.NODE_ENV === 'development'
-	? '*/60 * * * * *'
-	: config.get('cron.schedulerEveryWeekExport');
 
 /**
  * Планировшик поиска матчей
@@ -52,56 +40,6 @@ if (schedulerBackupExport) {
 		}, null, true);
 	} catch (ex) {
 		schedulerBackupExportJob.stop();
-		log.error('cron pattern not valid');
-	}
-}
-
-/**
- * Планировщик отправки лога
- */
-if (schedulerLogs) {
-	log.info('****start scheduler logs****');
-	let schedulerLogsJob;
-	try {
-		schedulerLogsJob = new CronJob(schedulerLogs, () => {
-			exportLogs();
-		}, null, true);
-	} catch (ex) {
-		schedulerLogsJob.stop();
-		log.error('cron pattern not valid');
-	}
-}
-
-/**
- * Планировщик ежедневной отчетности
- */
-if (schedulerEveryDayExport) {
-	log.info('****start scheduler every day export****');
-	let schedulerEveryDayExportJob;
-	try {
-		schedulerEveryDayExportJob = new CronJob(schedulerEveryDayExport, () => {
-			exportEveryDayReport();
-		}, null, true);
-	} catch (ex) {
-		schedulerEveryDayExportJob.stop();
-		log.error('cron pattern not valid');
-	}
-}
-
-
-/**
- * Планировщик еженедельной отчетности
- */
-if (schedulerEveryWeekExport) {
-	log.info('****start scheduler every week export****');
-	let schedulerEveryWeekExportJob;
-	try {
-		schedulerEveryWeekExportJob = new CronJob(schedulerEveryWeekExport, () => {
-			exportEveryWeekReport();
-			// schedulerEveryWeekExportJob.stop();
-		}, null, true);
-	} catch (ex) {
-		schedulerEveryWeekExportJob.stop();
 		log.error('cron pattern not valid');
 	}
 }

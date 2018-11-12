@@ -182,6 +182,8 @@ Stop an application with this command (specify the PM2 App name or id):
 pm2 stop app_name_or_id
 Restart an application:
 
+pm2 delete 0
+
 pm2 restart app_name_or_id
 List the applications currently managed by PM2:
 

@@ -18,6 +18,7 @@ const after = config.get('choice.live.football.time.after');
 const rateStrategyOne = config.get('choice.live.football.strategyOne.rate');
 const rateStrategyTwo = config.get('choice.live.football.strategyTwo.rate');
 const totalStrategy = config.get('choice.live.football.total');
+const typeRate = config.get('choice.live.football.typeRate');
 const numericalDesignation = config.get('choice.live.football.numericalDesignation');
 const waitingInterval = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
@@ -55,7 +56,7 @@ function footballLiveStrategy(item) {
 			const index = indexGame(item);
 			if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
 				if ((tm >= before) && (tm <= after)) {
-					if (score.sc1 === score.sc2) {
+					if (score.sc1 === score.sc2 && score.sc1 < 2) {
 						footballLiveStrategyTwo(item, index);
 					} else if (score.sc1 + score.sc2 === 1) {
 						footballLiveStrategyOne(item, index);
@@ -82,11 +83,11 @@ async function footballLiveStrategyOne(item, index) {
 				if (total !== -1) { // -1 - это время истекло или поменялся счет
 					const endScore = await waitingEndMatch(item);
 					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Результат матча ${endScore}`);
-					const result = equalsTotal(oldScore, parserScore(endScore));
+					const result = equalsTotal(oldScore, parserScore(endScore), typeRate[1]);
 					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Коэффициента ставки ${result}`);
 					if (result === 0 || result === 1) {
 						log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Корректировка коэффициента ставки ${result}`);
-						setRate(item.I, result);
+						setIndexRate(item.I, result);
 					}
 				}
 			}
@@ -114,12 +115,12 @@ async function footballLiveStrategyTwo(item, index) {
 						const endScore = await waitingEndMatch(item);
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
 						const newScore = parserScore(endScore);
-						const result = (newScore !== '') ? equalsTotal(oldScore, newScore) : 1;
+						const result = (newScore !== '') ? equalsTotal(oldScore, newScore, typeRate[2]) : 1;
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 						log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 						if (result === 0 || result === 1) {
 							log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
-							setRate(item.I, result);
+							setIndexRate(item.I, result);
 						}
 					}
 				}
@@ -182,12 +183,13 @@ function searchIndex(id, strategy, oldScore) {
 				if (item.GE && Array.isArray(item.GE)) {
 					item.GE.map((rate) => {
 						if (rate.G === 17) { // 17 - тотал
-							const total = score.sc1 + score.sc2 + 1;
+							const total = score.sc1 + score.sc2 + typeRate[parseInt(strategy)];
 							if (rate.E && Array.isArray(rate.E[0])) {
 								rate.E[0].map((itemTotal) => { // 0 - так как столбец "больше"
 									if (itemTotal.P === total) {
 										if (itemTotal.C > totalStrategy[parseInt(strategy)]) {
-											setRate(id, index = itemTotal.C);
+											setIndexRate(id, index = itemTotal.C);
+											setTotalRate(id, index = itemTotal.C);
 										}
 									}
 								});
@@ -196,6 +198,7 @@ function searchIndex(id, strategy, oldScore) {
 					});
 				}
 			} else {
+				setTotalRate(id, -1);
 				return -1;
 			}
 			return index;
@@ -273,12 +276,26 @@ async function serchResult(type, id, date) {
  * Метод для изменения ставки.
  *
  * @param {Number} id матча
- * @param {Number} index коэфф
+ * @param {Number} index результат ставки
  */
-function setRate(id = 0, index = 1) {
+function setIndexRate(id = 0, index = 1) {
 	return setStatistic({
 		matchId: id,
-		index: index,
+		index: index, // тип ставки.
+		modifiedBy: new Date().toISOString()
+	});
+}
+
+/**
+ * Метод для изменения ставки.
+ *
+ * @param {Number} id матча
+ * @param {Number} total коэфф ставки
+ */
+function setTotalRate(id = 0, total = -2) {
+	return setStatistic({
+		matchId: id,
+		total: total,
 		modifiedBy: new Date().toISOString()
 	});
 }
@@ -298,7 +315,8 @@ function saveRate(item = {}, score, strategy) {
 		commandOne: item.O1, // название команды 1
 		commandTwo: item.O2, // название команды 2
 		strategy: strategy, // стратегия
-		index: '1' // коэфф.
+		index: '1', // результат ставки.
+		total: '-2'
 	}).then((statistic) => {
 		let status = false;
 		if (statistic !== null) {
