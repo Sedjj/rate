@@ -40,7 +40,6 @@ function sendMessage(text) {
 		try {
 			resolve(bot.sendMessage(chatId, text));
 		} catch (error) {
-			log.error(`Error sendMessage: ${error.message}`);
 			reject(error);
 		}
 	});
@@ -56,7 +55,6 @@ function sendFile(file) {
 		try {
 			resolve(setFileApiTelegram(chatId, file));
 		} catch (error) {
-			log.error(`Error sendFile: ${error.message}`);
 			reject(error);
 		}
 	});

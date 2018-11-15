@@ -29,7 +29,7 @@ function getFootball() {
 			try {
 				value = JSON.parse(body).Value;
 			} catch (error) {
-				log.error(`Error getFootball JSON.parse: ${error}`);
+				log.error(`getFootball JSON.parse: ${error}`);
 			}
 			log.debug('Отработал: Метод для получения ставок');
 			resolve(value);
@@ -54,7 +54,7 @@ function getFootballExpanded(id) {
 			try {
 				value = JSON.parse(body).Value;
 			} catch (error) {
-				log.error(`Error getFootballExpanded JSON.parse: ${error}`);
+				log.error(`getFootballExpanded JSON.parse: ${error}`);
 			}
 			log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);
@@ -86,7 +86,7 @@ function postResultZone(date) {
 			json: param
 		}, (error, res, body) => {
 			if (error) {
-				log.error(`Error postResultZone: ${error}`);
+				log.error(`postResultZone: ${error}`);
 				return reject(error);
 			}
 			log.debug('Отработал: Метод для получения всех результатов в zone');
@@ -112,7 +112,7 @@ function postResult(date) {
 			try {
 				value = JSON.parse(body).Data;
 			} catch (error) {
-				log.error(`Error postResult: ${error}`);
+				log.error(`postResult: ${error}`);
 			}
 			log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);

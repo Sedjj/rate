@@ -29,7 +29,7 @@ async function exportBackupStatistic() {
 		await sendFile(stream);
 		log.debug('Файл statistic отправлен');
 	} catch (error) {
-		log.error(`Send error: ${error.message}`);
+		log.error(`Send statistic: ${error.message}`);
 	}
 }
 

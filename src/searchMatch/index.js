@@ -39,7 +39,7 @@ function search() {
 			});
 		})
 		.catch(error => {
-			log.error(`Error search: ${error.message}`);
+			log.error(`search: ${error.message}`);
 		});
 }
 
@@ -92,7 +92,7 @@ async function footballLiveStrategyOne(item, index) {
 				}
 			}
 		} catch (error) {
-			log.error(`Error footballLiveStrategyOne: ${error.message}`);
+			log.error(`footballLiveStrategyOne: ${error.message}`);
 		}
 	}
 }
@@ -115,17 +115,17 @@ async function footballLiveStrategyTwo(item, index) {
 						const endScore = await waitingEndMatch(item);
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
 						const newScore = parserScore(endScore);
-						const result = (newScore !== '') ? equalsTotal(oldScore, newScore, typeRate[2]) : 1;
+						const result = (newScore !== '') ? equalsTotal(oldScore, newScore, typeRate[2]) : -1;
 						log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 						log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
-						if (result === 0 || result === 1) {
+						if (result === 0 || result === 1 || result === -1) {
 							log.debug(`Матч ${item.I}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
 							setIndexRate(item.I, result);
 						}
 					}
 				}
 			} catch (error) {
-				log.error(`Error footballLiveStrategyTwo: ${error.message}`);
+				log.error(`footballLiveStrategyTwo: ${error.message}`);
 			}
 		}
 	}
@@ -204,8 +204,8 @@ function searchIndex(id, strategy, oldScore) {
 			return index;
 		})
 		.catch(error => {
-			log.error(`Error searchIndex: ${error.message}`);
-			return null;
+			log.error(`searchIndex id: ${id}`);
+			throw new Error(error);
 		});
 }
 
@@ -266,7 +266,7 @@ async function serchResult(type, id, date) {
 			}
 		});
 	} catch (error) {
-		log.error(`Error serchResult: ${error.message}`);
+		throw new Error(error);
 	}
 	return score;
 }
@@ -325,7 +325,7 @@ function saveRate(item = {}, score, strategy) {
 		}
 		return status;
 	}).catch((error) => {
-		log.error(`Error saveRate: ${error.message}`);
+		log.error(`saveRate: ${error.message}`);
 		return false;
 	});
 }
