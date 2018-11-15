@@ -33,9 +33,9 @@ const StatisticSchema = new Schema({
 		default: 0
 	},
 	total: {
-		type: String,
+		type: Number,
 		required: true,
-		default: ''
+		default: 0
 	},
 	createdBy: {
 		type: Date,

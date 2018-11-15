@@ -315,7 +315,8 @@ function saveRate(item = {}, score, strategy) {
 		commandTwo: item.O2, // название команды 2
 		strategy: strategy, // стратегия
 		index: '1', // результат ставки.
-		total: '-2'
+		total: '-2',
+		createdBy: new Date().toISOString()
 	}).then((statistic) => {
 		let status = false;
 		if (statistic !== null) {
