@@ -38,29 +38,7 @@ async function exportBackupStatistic() {
  *
  * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
  */
-/*async function returnParamForReport() {
-	log.debug('Начало сбора параметров для отчета');
-	return {
-		allMatch: getAllProfit(await getStatistic()),
-		strategyOne: getAllProfit(await getStatistic({strategy: 1})),
-		strategyTwo_zero: getAllProfit(await getStatistic({score: '0:0'})),
-		strategyTwo_one: getAllProfit(await getStatistic({score: '1:1'})),
-		strategyTwo_two: getAllProfit(await getStatistic({score: '2:2'})),
-		allMatch_withoutLeagues: getAllProfit(await getStatistic({}, ['(', ')'])),
-		strategyOne_withoutLeagues: getAllProfit(await getStatistic({strategy: 1}, ['(', ')'])),
-		strategyTwo_zero_withoutLeagues: getAllProfit(await getStatistic({score: '0:0'}, ['(', ')'])),
-		strategyTwo_one_withoutLeagues: getAllProfit(await getStatistic({score: '1:1'}, ['(', ')'])),
-		strategyTwo_two_withoutLeagues: getAllProfit(await getStatistic({score: '2:2'}, ['(', ')'])),
-	};
-}*/
-
-/**
- * Возвращает заполненый шаблон списка статистики.
- *
- * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
- */
 function returnStatisticListTemplate() {
-	log.debug('Начало экспорта Statistics');
 	const beforeDate = new Date();
 	beforeDate.setDate(beforeDate.getDate() - 2);
 	let props = {
@@ -68,12 +46,13 @@ function returnStatisticListTemplate() {
 	};
 	let query = {};
 	query['$and'] = [];
-	query['$and'].push({createdBy: {$gte: beforeDate.toISOString()}});
-	query['$and'].push({createdBy: {$lte: (new Date()).toISOString()}});
+	query['$and'].push({modifiedBy: {$gte: beforeDate.toISOString()}});
+	query['$and'].push({modifiedBy: {$lte: (new Date()).toISOString()}});
+	log.debug(`Начало экспорта Statistics с ${beforeDate.toISOString()} по ${(new Date()).toISOString()}`);
 	return getStatistic(query, ['(', ')'])
 		.then((items) => {
 			props.statistics = items;
-			log.debug('Данные подготовлены');
+			log.debug(`Подготовлено данных ${items.length}`);
 			return props;
 		})
 		.then((props) => {
@@ -92,48 +71,6 @@ function returnStatisticListTemplate() {
 			}
 		});
 }
-
-/**
- * Возвращает заполненый шаблон списка отчетов.
- *
- * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
- */
-/*function returnReportListTemplate() {
-	log.debug('Начало экспорта Report');
-	const beforeDate = new Date();
-	beforeDate.setDate(beforeDate.getDate() - 7);
-	let props = {
-		reports: [],
-		objectName: 'reports',
-		beforeDate: getFormattedDate(beforeDate),
-		afterDate: getFormattedDate(new Date())
-	};
-	let query = {};
-	query['$and'] = [];
-	query['$and'].push({createdBy: {$gte: beforeDate.toISOString()}});
-	query['$and'].push({createdBy: {$lte: (new Date()).toISOString()}});
-	return getReport(query)
-		.then((items) => {
-			props.reports = items;
-			log.debug('Данные подготовлены');
-			return props;
-		})
-		.then((props) => {
-			try {
-				return readFile(reportsPathInput)
-					.then(file => {
-						const template = new XlsxTemplate(file);
-						// Replacements take place on first sheet
-						const sheetNumber = 2;
-						template.substitute(sheetNumber, props);
-						log.debug('Генерация файла');
-						return template.generate({type: 'nodebuffer'});
-					});
-			} catch (error) {
-				log.error(`ExportError reportList: ${error.message}`);
-			}
-		});
-}*/
 
 module.exports = {
 	exportBackupStatistic
