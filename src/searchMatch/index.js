@@ -142,20 +142,20 @@ async function footballLiveStrategyTwo(item, index) {
 function waiting(item, strategy, oldScore) {
 	let waitingIntervalJob;
 	return new Promise((resolve, reject) => {
-		try {
-			waitingIntervalJob = new CronJob(waitingInterval, async () => {
+		waitingIntervalJob = new CronJob(waitingInterval, async () => {
+			try {
 				const indexMatch = await searchIndex(item.I, strategy, oldScore);
 				if (indexMatch !== null) {
 					log.debug(`Матч ${item.I}: total= ${indexMatch}`);
 					waitingIntervalJob.stop();
 					resolve(indexMatch);
 				}
-			}, null, true);
-		} catch (error) {
-			waitingIntervalJob.stop();
-			log.error(`Error cron waiting: ${error.message}`);
-			reject(error);
-		}
+			} catch (error) {
+				log.error(`waiting id:${JSON.stringify(item)}, strategy:${strategy}, oldScore:${JSON.stringify(oldScore)}`);
+				waitingIntervalJob.stop();
+				reject(error);
+			}
+		}, null, true);
 	});
 }
 
@@ -220,10 +220,10 @@ function searchIndex(id, strategy, oldScore) {
 function waitingEndMatch(item) {
 	const endGame = 7200 * 1000;
 	return new Promise((resolve, reject) => {
-		try {
-			waitingEndCount++;
-			log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
-			setTimeout(async () => {
+		waitingEndCount++;
+		log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
+		setTimeout(async () => {
+			try {
 				let score = '';
 				const currentDate = new Date();
 				score = await serchResult(numericalDesignation, item.I, currentDate);
@@ -233,11 +233,10 @@ function waitingEndMatch(item) {
 				}
 				waitingEndCount--;
 				resolve(score);
-			}, endGame);
-		} catch (error) {
-			log.error(`Error waitingEndMatch: ${error.message}`);
-			reject(error);
-		}
+			} catch (error) {
+				reject(error);
+			}
+		}, endGame);
 	});
 }
 

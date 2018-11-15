@@ -18,14 +18,14 @@ const schedulerBackupExport = process.env.NODE_ENV === 'development'
 if (schedulerSearch) {
 	log.info('****start scheduler search****');
 	let schedulerSearchJob;
-	try {
-		schedulerSearchJob = new CronJob(schedulerSearch, () => {
+	schedulerSearchJob = new CronJob(schedulerSearch, () => {
+		try {
 			search();
-		}, null, true);
-	} catch (ex) {
-		schedulerSearchJob.stop();
-		log.error('cron pattern not valid');
-	}
+		} catch (ex) {
+			schedulerSearchJob.stop();
+			log.error('cron pattern not valid');
+		}
+	}, null, true);
 }
 
 /**
@@ -34,12 +34,13 @@ if (schedulerSearch) {
 if (schedulerBackupExport) {
 	log.info('****start scheduler backup export****');
 	let schedulerBackupExportJob;
-	try {
-		schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
+	schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
+		try {
 			exportBackupStatistic();
-		}, null, true);
-	} catch (ex) {
-		schedulerBackupExportJob.stop();
-		log.error('cron pattern not valid');
-	}
+		} catch (ex) {
+			schedulerBackupExportJob.stop();
+			log.error('cron pattern not valid');
+		}
+	}, null, true);
+
 }
