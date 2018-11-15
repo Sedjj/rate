@@ -5,7 +5,7 @@ const {mapProps} = require('../utils/statisticHelpers');
 const {filterGame} = require('../utils/searchHelper');
 const config = require('config');
 
-const rate = config.get('outpit.rate') || 500;
+const rate = config.get('outpit.rate') || 2000;
 
 /**
  * Получить записи из таблицы статистика.

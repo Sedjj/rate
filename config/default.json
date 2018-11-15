@@ -60,15 +60,15 @@
 					"after": 4200
 				},
 				"strategyOne": {
-					"rate": 0.7
+					"rate": 1
 				},
 				"strategyTwo": {
-					"rate": 4
+					"rate": 8
 				},
 				"total": [
 					0,
 					1.4,
-					1.3
+					1.4
 				],
 				"typeRate": [
 					0,
@@ -111,6 +111,6 @@
 		}
 	},
 	"outpit": {
-		"rate": 500
+		"rate": 2000
 	}
 }
