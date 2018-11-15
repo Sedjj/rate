@@ -21,8 +21,8 @@ const proxy = config.get('proxy');
 function getFootball() {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballRate, (error, res, body) => {
-			if (error && res.statusCode !== 200) {
-				log.error(`error: ${error}`);
+			if (res.statusCode !== 200) {
+				log.error(`getFootball: ${res.statusMessage}`);
 				return reject(error);
 			}
 			let value = [];
@@ -31,7 +31,10 @@ function getFootball() {
 			} catch (error) {
 				log.error(`getFootball JSON.parse: ${error}`);
 			}
-			log.debug('Отработал: Метод для получения ставок');
+			if (value === null) {
+				return reject(body);
+			}
+			// log.debug('Отработал: Метод для получения ставок');
 			resolve(value);
 		});
 	});
@@ -46,8 +49,8 @@ function getFootball() {
 function getFootballExpanded(id) {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballExpandedRate.replace('${id}', id), (error, res, body) => {
-			if (error && res.statusCode !== 200) {
-				log.error(`error: ${error}`);
+			if (res.statusCode !== 200) {
+				log.error(`getFootballExpanded: ${res.statusMessage}`);
 				return reject(error);
 			}
 			let value = [];
@@ -56,7 +59,10 @@ function getFootballExpanded(id) {
 			} catch (error) {
 				log.error(`getFootballExpanded JSON.parse: ${error}`);
 			}
-			log.debug('Отработал: Метод для получения расширеных ставок');
+			if (value === null) {
+				return reject(body);
+			}
+			// log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);
 		});
 	});
@@ -104,8 +110,8 @@ function postResultZone(date) {
 function postResult(date) {
 	return new Promise((resolve, reject) => {
 		request.get(urlAll.replace('${date}', getFormattedDate(date)), (error, res, body) => {
-			if (error && res.statusCode !== 200) {
-				log.error(`error: ${error}`);
+			if (res.statusCode !== 200) {
+				log.error(`postResult: ${res.statusMessage}`);
 				return reject(error);
 			}
 			let value = [];
@@ -113,6 +119,9 @@ function postResult(date) {
 				value = JSON.parse(body).Data;
 			} catch (error) {
 				log.error(`postResult: ${error}`);
+			}
+			if (value === null) {
+				return reject(body);
 			}
 			log.debug('Отработал: Метод для получения расширеных ставок');
 			resolve(value);
@@ -143,10 +152,10 @@ function setFileApiTelegram(chatId, document) {
 		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
 	}
 	return new Promise((resolve, reject) => {
-		request.post(props, (error, response, body) => {
-			if (error) {
-				log.error(`Error setFileApiTelegram: ${error}`);
-				reject(error);
+		request.post(props, (error, res, body) => {
+			if (res.statusCode !== 200) {
+				log.error(`setFileApiTelegram: ${res.statusMessage}`);
+				return reject(error);
 			}
 			log.debug(`Отработал: Метод для отправки файла ${body}`);
 			resolve(body);
