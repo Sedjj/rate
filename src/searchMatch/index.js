@@ -56,10 +56,10 @@ function footballLiveStrategy(item) {
 			const index = indexGame(item);
 			if ((index.p1 !== '') && (index.p2 !== '') && (index.x !== '')) {
 				if ((tm >= before) && (tm <= after)) {
-					if (score.sc1 === score.sc2 && score.sc1 < 2) {
-						footballLiveStrategyTwo(item, index);
-					} else if (score.sc1 + score.sc2 === 1) {
+					if (score.sc1 + score.sc2 === 1) {
 						footballLiveStrategyOne(item, index);
+					} else if (score.sc1 === score.sc2 && score.sc1 < 2) {
+						footballLiveStrategyTwo(item, index);
 					}
 				}
 			}
@@ -76,16 +76,18 @@ function footballLiveStrategy(item) {
 async function footballLiveStrategyOne(item, index) {
 	if ((Math.abs(index.p1 - index.p2) <= rateStrategyOne)) {
 		try {
-			log.debug(`Найден ${item.I}: Стратегия гол лузера`);
 			const oldScore = scoreGame(item);
-			if (await saveRate(item, oldScore, '1')) {
+			if (await saveRate(item, oldScore, '1')) { // пропускает дальше если запись ушла в БД
+				log.debug(`Найден ${item.I}: Стратегия гол лузера`);
 				const total = await waiting(item, '1', oldScore);
 				if (total !== -1) { // -1 - это время истекло или поменялся счет
 					const endScore = await waitingEndMatch(item);
 					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Результат матча ${endScore}`);
-					const result = equalsTotal(oldScore, parserScore(endScore), typeRate[1]);
+					const newScore = parserScore(endScore);
+					const result = (newScore !== '') ? equalsTotal(oldScore, newScore, typeRate[1]) : -1;
 					log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Коэффициента ставки ${result}`);
-					if (result === 0 || result === 1) {
+					log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+					if (result === 0 || result === 1 || result === -1) {
 						log.debug(`Матч ${item.I}: 'Стратегия гол лузера' - Корректировка коэффициента ставки ${result}`);
 						setIndexRate(item.I, result);
 					}
