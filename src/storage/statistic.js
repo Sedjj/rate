@@ -34,7 +34,7 @@ function getStatistic(param = {}, excludeName = []) {
 				});
 		})
 		.catch(error => {
-			log.error(`Error getStatistic param=${param}: ${error.message}`);
+			log.error(`getStatistic param=${param}: ${error.message}`);
 		});
 }
 
@@ -54,7 +54,21 @@ function isStatistic(param = {}) {
 			return Promise.resolve(false);
 		})
 		.catch(error => {
-			log.error(`Error isStatistic param=${param}: ${error.message}`);
+			log.error(`isStatistic param=${param}: ${error.message}`);
+		});
+}
+
+/**
+ * Метод для удаления записи в таблице.
+ *
+ * @param {Object} param для таблицы
+ * @returns {Promise<boolean | never>}
+ */
+function deleteStatistic(param) {
+	return StatisticModel.findOneAndRemove({matchId: param.matchId})
+		.exec()
+		.catch(error => {
+			log.error(`deleteStatistic param=${param}: ${error.message}`);
 		});
 }
 
@@ -75,7 +89,7 @@ function newStatistic(param) {
 			return statistic.save();
 		})
 		.catch(error => {
-			log.error(`Error newStatistic param=${param}: ${error.message}`);
+			log.error(`newStatistic param=${param}: ${error.message}`);
 		});
 
 }
@@ -108,6 +122,7 @@ function setStatistic(param) {
 module.exports = {
 	getStatistic,
 	isStatistic,
+	deleteStatistic,
 	newStatistic,
 	setStatistic
 };

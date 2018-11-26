@@ -1,7 +1,7 @@
 const log = require('../utils/logger');
 const {decorateMessageMatch} = require('../utils/formateMessage');
 const {CronJob} = require('cron');
-const {newStatistic, setStatistic} = require('../storage/statistic');
+const {newStatistic, setStatistic, deleteStatistic} = require('../storage/statistic');
 const {getFootball, getFootballExpanded, postResult} = require('../fetch');
 const config = require('config');
 const {sendMessage} = require('../telegramApi');
@@ -207,6 +207,13 @@ function searchIndex(id, strategy, oldScore) {
 		})
 		.catch(error => {
 			log.error(`searchIndex id: ${id}`);
+			deleteStatistic({
+				matchId: id
+			}).then(() => {
+				log.debug(`Матч ${id} удален`);
+			}).catch((error) => {
+				log.error(`deleteStatistic: ${error.message}`);
+			});
 			throw new Error(error);
 		});
 }
@@ -298,6 +305,13 @@ function setTotalRate(id = 0, total = -2) {
 		matchId: id,
 		total: total,
 		modifiedBy: new Date().toISOString()
+	}).then((statistic) => {
+		if (statistic !== null) {
+			sendMessage(decorateMessageMatch(statistic));
+			sendMessage(statistic.matchId);
+		}
+	}).catch((error) => {
+		log.error(`saveRate: ${error.message}`);
 	});
 }
 
@@ -322,8 +336,6 @@ function saveRate(item = {}, score, strategy) {
 	}).then((statistic) => {
 		let status = false;
 		if (statistic !== null) {
-			sendMessage(decorateMessageMatch(statistic));
-			sendMessage(statistic.matchId);
 			status = true;
 		}
 		return status;
