@@ -13,7 +13,7 @@ const schedulerBackupExport = process.env.NODE_ENV === 'development'
 	: config.get('cron.schedulerBackupExport');
 
 /**
- * Планировшик поиска матчей
+ * Планировшик поиска матчей.
  */
 if (schedulerSearch) {
 	log.info('****start scheduler search****');
@@ -29,7 +29,7 @@ if (schedulerSearch) {
 }
 
 /**
- * Планировщик бэкапа статистики
+ * Планировщик бэкапа статистики.
  */
 if (schedulerBackupExport) {
 	log.info('****start scheduler backup export****');
@@ -42,5 +42,4 @@ if (schedulerBackupExport) {
 			log.error('cron pattern not valid');
 		}
 	}, null, true);
-
 }
