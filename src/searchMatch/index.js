@@ -1,10 +1,9 @@
 const log = require('../utils/logger');
-const {decorateMessageMatch} = require('../utils/formateMessage');
 const {CronJob} = require('cron');
 const {newStatistic, setStatistic, deleteStatistic} = require('../storage/statistic');
 const {getFootball, getFootballExpanded} = require('../fetch');
 const config = require('config');
-const {sendMessage} = require('../telegramApi');
+const {matchRate} = require('../ramatchRatete');
 const {
 	scoreGame,
 	indexGame,
@@ -218,10 +217,9 @@ function setTotalRate(id = 0, total = -2) {
 		matchId: id,
 		total: total,
 		modifiedBy: new Date().toISOString()
-	}).then((statistic) => {
+	}).then(async (statistic) => {
 		if (statistic !== null) {
-			sendMessage(decorateMessageMatch(statistic));
-			sendMessage(statistic.matchId);
+			await matchRate(statistic);
 		}
 	}).catch((error) => {
 		log.error(`setTotalRate: ${error.message}`);
