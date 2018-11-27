@@ -35,6 +35,7 @@ function getStatistic(param = {}, excludeName = []) {
 		})
 		.catch(error => {
 			log.error(`getStatistic param=${param}: ${error.message}`);
+			throw new Error(error);
 		});
 }
 
@@ -55,6 +56,7 @@ function isStatistic(param = {}) {
 		})
 		.catch(error => {
 			log.error(`isStatistic param=${param}: ${error.message}`);
+			throw new Error(error);
 		});
 }
 
@@ -69,6 +71,7 @@ function deleteStatistic(param) {
 		.exec()
 		.catch(error => {
 			log.error(`deleteStatistic param=${param}: ${error.message}`);
+			throw new Error(error);
 		});
 }
 
@@ -90,6 +93,7 @@ function newStatistic(param) {
 		})
 		.catch(error => {
 			log.error(`newStatistic param=${param}: ${error.message}`);
+			throw new Error(error);
 		});
 
 }
@@ -116,6 +120,7 @@ function setStatistic(param) {
 		})
 		.catch(error => {
 			log.error(`Error setStatistic param=${param}: ${error.message}`);
+			throw new Error(error);
 		});
 }
 
