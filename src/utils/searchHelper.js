@@ -64,7 +64,8 @@ function filterGame(item, excludeName) {
  * @param {Object} typeRate тип ставки
  */
 function equalsTotal(oldScore, endScore, typeRate) {
-	const start = oldScore.sc1 + oldScore.sc2 + typeRate;
+	oldScore = oldScore.split(',');
+	const start = oldScore[0] + oldScore[1] + typeRate;
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;

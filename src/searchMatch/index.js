@@ -224,7 +224,7 @@ function searchIndex(id, strategy, oldScore) {
  * если нашли нужный то ждем окончания матча 120 мин
  *
  * @param {Array} item массив ставок
- * @returns {Promise<Number>}
+ * @returns {Promise<String>}
  */
 function waitingEndMatch(item) {
 	const endGame = 7200 * 1000;
@@ -332,7 +332,8 @@ function saveRate(item = {}, score, strategy) {
 		strategy: strategy, // стратегия
 		index: '1', // результат ставки.
 		total: '-2',
-		createdBy: new Date().toISOString()
+		createdBy: new Date().toISOString(),
+		modifiedBy: new Date().toISOString()
 	}).then((statistic) => {
 		let status = false;
 		if (statistic !== null) {

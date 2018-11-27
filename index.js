@@ -2,6 +2,7 @@ const {CronJob} = require('cron');
 const config = require('config');
 const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
+const {checkingResults} = require('./src/checkingResults');
 const {exportBackupStatistic} = require('./src/export');
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
@@ -36,7 +37,10 @@ if (schedulerBackupExport) {
 	let schedulerBackupExportJob;
 	schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
 		try {
-			exportBackupStatistic();
+			checkingResults()
+				.then(() => {
+					exportBackupStatistic();
+				});
 		} catch (ex) {
 			schedulerBackupExportJob.stop();
 			log.error('cron pattern not valid');
