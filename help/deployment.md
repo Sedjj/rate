@@ -11,6 +11,14 @@ IP сервера: 176.57.215.147
 apt install net-tools
 ```
 
+Установка часового пояса
+```bash
+sudo dpkg-reconfigure tzdata
+sudo /etc/init.d/cron stop
+sudo /etc/init.d/cron start
+timedatectl
+```
+
 Создать пользователя `tn-app`:
 ```bash
 sudo adduser mongo
