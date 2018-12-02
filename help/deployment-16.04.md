@@ -1,6 +1,20 @@
-# Развёртывание приложения на Ubuntu 18.04
+# Развёртывание приложения на Ubuntu 16.04
 
-#Настройка безопасности
+##Настройка безопасности
+
+###Создать пользователя `rb-app`:
+```bash
+sudo adduser rb-app
+sudo adduser rb-app sudo
+sudo gpasswd -a rb-app sudo
+```
+Войти в систему под пользователем `rb-app`.
+
+Смена пароля
+```bash
+sudo bash
+passwd имя_пользователя
+```
 
 ###Отключение доступа по паролю
 Для того, чтобы доступ к серверу мог осуществляться только по ключу, необходимо запретить авторизацию по паролю. Для этого требуется внести правки в файл /etc/ssh/sshd_config.
@@ -18,37 +32,37 @@ sudo nano /etc/ssh/sshd_config
 sudo service ssh restart
 ```
 
-Создать пользователя `rb-app`:
+###Обновить список пакетов:
 ```bash
-sudo adduser rb-app
-sudo adduser rb-app sudo
-sudo gpasswd -a rb-app sudo
-```
-Войти в систему под пользователем `rb-app`.
-
-Смена пароля
-```bash
-sudo bash
-passwd имя_пользователя
+sudo apt-get update 
+sudo apt-get upgrade
 ```
 
-Обновить список пакетов:
-```bash
-sudo apt-get update && apt-get upgrade
-```
-
-Настройка Fail2Ban 
+###Настройка Fail2Ban 
 
 ```bash
-apt-get install fail2ban
+sudo apt-get install fail2ban
 ```
 
-Конфиги находятся в каталоге /etc/fail2ban. После изменения конфигурации следует перезапускать fail2ban командой:
+Конфиги находятся в каталоге /etc/fail2ban.
+```
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo nano /etc/fail2ban/jail.local
+```
+ignoreip — значения этого параметра говорят о том, какие IP-адреса блокироваться не будут вовсе. Если вы хотите, чтобы Fail2ban игнорировал при проверке несколько IP-адресов, их необходимо указать в значении ignoreip через пробел.
+
+bantime — данный параметр означает время в секундах, в течение которого подозрительный IP будет заблокирован. Изначально его значение составляет 10 минут.
+
+findtime — определяет промежуток времени в секундах, в течение которого программой будет определяться наличие подозрительной активности.
+
+maxretry — допустимое число неуспешных попыток получения доступа к серверу. При превышении указанного значения IP попадает в бан.
+
+После изменения конфигурации следует перезапускать fail2ban командой:
 ```bash
-/etc/init.d/fail2ban restart
+sudo systemctl restart fail2ban.service
 ```
 
-Угроза извне. Конфигурируем брандмауэр ipkungfu
+###Угроза извне. Конфигурируем брандмауэр ipkungfu
 ```bash
 sudo apt-get install ipkungfu
 ```
@@ -89,7 +103,7 @@ sudo nano /etc/default/ipkungfu
 sudo ipkungfu
 ```
 
-Дополнительно внесем правки в /etc/sysctl.conf
+###Дополнительно внесем правки в /etc/sysctl.conf
 ```bash
 sudo nano /etc/sysctl.conf
 
@@ -160,7 +174,7 @@ sudo debsums -ac
 
 
 
-#Базовые настройка сервера
+##Базовые настройка сервера
 
 ###Установка часового пояса
 ```bash
@@ -175,25 +189,25 @@ timedatectl
 sudo apt-get install htop
 ```
 
+##Настройка ПО
 
-
-Установить curl (если отсутствует):
+###Установить curl (если отсутствует):
 ```bash
 sudo apt-get install curl
 ```
 
-Установить Git:
+###Установить Git:
 ```bash
 sudo apt-get install git
 ```
 
-[Установить Node.js](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/):
+###[Установить Node.js](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/):
 ```bash
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 nvm install node
 ```
 
-[Установить MongoDB](https://docs.mongodb.com/master/tutorial/install-mongodb-on-ubuntu/):
+###[Установить MongoDB](https://docs.mongodb.com/master/tutorial/install-mongodb-on-ubuntu/):
 ```bash
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 
@@ -204,7 +218,7 @@ or
 sudo apt-get install -y mongodb
 ```
 
-Команды работы с mongoDB
+#####Команды работы с mongoDB
 ```bash
 sudo systemctl status mongodb
 sudo systemctl stop mongodb
@@ -212,18 +226,18 @@ sudo systemctl start mongodb
 sudo systemctl restart mongodb
 ```
 
-Удалиь и добвить в автозапуск mongodb
+#####Удалиь и добвить в автозапуск mongodb
 ```bash
 sudo systemctl disable mongodb
 sudo systemctl enable mongodb
 ```
 
-Тест работы
+#####Тест работы
 ```bash
 mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 ```
 
-Создать директорию для статический файлов:
+###Создать директорию для статический файлов:
 ```bash
 sudo mkdir rate_bot
 sudo chown mongo:mongo rate_bot
@@ -236,17 +250,15 @@ sudo mkdir mongodb/db
 sudo mkdir mongodb/log
 ```
 
-Установить NPM 
+###Установить NPM 
 
 ```
 sudo apt install npm 
 ```
 
-####TODO проверить на практике
-
 ## Ручное развёртывание
 
-Склонировать файлы проекта:
+####Склонировать файлы проекта:
 ```bash
 cd ~
 git clone git@gitlab.com:developmentKit/projects/bot/rate.git
@@ -256,9 +268,9 @@ npm install --only=production
 
 Статические файлы сайта копировать в `/var/www/rate_bot`.
 
-[Развернуть БД](http://o7planning.org/en/10279/importing-and-exporting-mongodb-database).
+### [Развернуть БД](http://o7planning.org/en/10279/importing-and-exporting-mongodb-database).
 
-## [Настройка брандмауэра UFW](https://www.8host.com/blog/nastrojka-brandmauera-ufw-na-servere-ubuntu-18-04/)
+### [Настройка брандмауэра UFW](https://www.8host.com/blog/nastrojka-brandmauera-ufw-na-servere-ubuntu-18-04/)
 
 Включение UFW:
 ```bash
@@ -308,13 +320,13 @@ Oбязательно поместите запятую между сущест�
 sudo systemctl restart mongodb
 ```
 
-Установим дополнительное ПО
+###Установим дополнительное ПО
 ```bash
 sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 npm install node-gyp
 ```
 
-[Настроить pm2](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-18-04).
+### [Настроить pm2](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-18-04).
 
 http://pm2.keymetrics.io/docs/usage/quick-start/
 
@@ -323,65 +335,37 @@ http://pm2.keymetrics.io/docs/usage/quick-start/
 sudo npm install pm2@latest -g
 ```
 
-
-Запуск бота
+##Запуск бота
 ```bash
 pm2 start npm -- start
 ```
 
+Для просмотра списока задач используется `pm2 list`
+```bash
+pm2 list
+ ```
+ 
+Для просмотра работы задачи используется `pm2 monit`. Это отображает состояние приложения, CPU и использование памяти
+```bash
+pm2 monit
 ```
- pm2 list
 
+Для просмотра детальной информации о задаче используется `pm2 show app_name_or_id`
+```bash
 pm2 show npm
 ```
 
-Stop an application with this command (specify the PM2 App name or id):
+Для остановки задачи используется `pm2 stop app_name_or_id`
+```bash
+pm2 stop npm
+```
 
-pm2 stop app_name_or_id
-Restart an application:
+Для удаление задачи используется `pm2 delete app_name_or_id`
+```bash
+pm2 delete npm
+```
 
-pm2 delete 0
-
-pm2 restart app_name_or_id
-List the applications currently managed by PM2:
-
-pm2 list
-Get information about a specific application using its App name:
-
-pm2 info app_name
-The PM2 process monitor can be pulled up with the monit subcommand. This displays the application status, CPU, and memory usage:
-
-pm2 monit
-Note that running pm2 without any arguments will also display a help page with example usage.
-
-Now that your Node.js application is running and managed by PM2, let's set up the reverse proxy.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Для перезапуск задачи используется `pm2 restart app_name_or_id`
+```bash
+pm2 restart npm
+```
