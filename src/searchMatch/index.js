@@ -3,7 +3,7 @@ const {CronJob} = require('cron');
 const {newStatistic, setStatistic, deleteStatistic} = require('../storage/statistic');
 const {getFootball, getFootballExpanded} = require('../fetch');
 const config = require('config');
-const {matchRate} = require('../ramatchRatete');
+const {matchRate} = require('../matchRate');
 const {
 	scoreGame,
 	indexGame,
@@ -19,6 +19,8 @@ const typeRate = config.get('choice.live.football.typeRate');
 const waitingInterval = process.env.NODE_ENV === 'development'
 	? '*/20 * * * * *'
 	: config.get('cron.waitingInterval');
+
+let waitingEndCount = 0;
 
 /**
  * Метод поиска совпадений по данным стратегиям.
@@ -118,17 +120,23 @@ function footballLiveStrategyTwo(item, index) {
 function waiting(item, strategy, oldScore) {
 	let waitingIntervalJob;
 	return new Promise((resolve, reject) => {
+		waitingEndCount++;
+		log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
 		waitingIntervalJob = new CronJob(waitingInterval, async () => {
 			try {
 				const indexMatch = await searchIndex(item.I, strategy, oldScore);
 				if (indexMatch !== null) {
 					log.debug(`Матч ${item.I}: total= ${indexMatch}`);
 					waitingIntervalJob.stop();
+					waitingEndCount--;
+					log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 					resolve(indexMatch);
 				}
 			} catch (error) {
 				log.error(`waiting id:${JSON.stringify(item)}, strategy:${strategy}, oldScore:${JSON.stringify(oldScore)}`);
 				waitingIntervalJob.stop();
+				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+				waitingEndCount--;
 				reject(error);
 			}
 		}, null, true);
@@ -203,6 +211,13 @@ function setIndexRate(id = 0, index = 1) {
 		matchId: id,
 		index: index, // тип ставки.
 		modifiedBy: new Date().toISOString()
+	}).then(async (statistic) => {
+		if (statistic !== null) {
+			await matchRate(statistic);
+		}
+	}).catch((error) => {
+		log.error(`setTotalRate: ${error.message}`);
+		throw new Error(error);
 	});
 }
 
@@ -217,13 +232,6 @@ function setTotalRate(id = 0, total = -2) {
 		matchId: id,
 		total: total,
 		modifiedBy: new Date().toISOString()
-	}).then(async (statistic) => {
-		if (statistic !== null) {
-			await matchRate(statistic);
-		}
-	}).catch((error) => {
-		log.error(`setTotalRate: ${error.message}`);
-		throw new Error(error);
 	});
 }
 
