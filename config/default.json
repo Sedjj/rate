@@ -20,7 +20,7 @@
 		"psswd": "aYEbh6q5gQ"
 	},
 	"proxy": {
-		"host": "45.250.226.11",
+		"host": "58.156.228.124",
 		"port": "8080",
 		"user": "",
 		"password": ""
@@ -63,16 +63,16 @@
 					"rate": 1
 				},
 				"strategyTwo": {
-					"rate": 8
+					"rate": 6
 				},
 				"total": [
 					0,
-					1.4,
+					2.2,
 					1.4
 				],
 				"typeRate": [
 					0,
-					1,
+					1.5,
 					0.5
 				],
 				"numericalDesignation": 1

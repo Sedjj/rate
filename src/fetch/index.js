@@ -153,8 +153,8 @@ function setFileApiTelegram(chatId, document) {
 	}
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
-			if (res.statusCode !== 200) {
-				log.error(`setFileApiTelegram: ${res.statusMessage}`);
+			if (error || (res && res.statusCode !== 200)) {
+				log.error(`setFileApiTelegram: ${res ? res.statusMessage : error && error.message}`);
 				return reject(error);
 			}
 			log.debug(`Отработал: Метод для отправки файла ${body}`);

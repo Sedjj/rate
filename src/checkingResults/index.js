@@ -40,8 +40,7 @@ async function checkingResults() {
 function serchResultEndMatch(statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let endScore = '';
-			endScore = await serchResult(numericalDesignation, statistic.matchId, statistic.modifiedBy);
+			let	endScore = await serchResult(numericalDesignation, statistic.matchId, statistic.modifiedBy);
 			if (endScore === '') { // если на дату модификаций не нашли матча то ищем на дату создания
 				log.debug(`Матч ${statistic.matchId}: доп. запрос на результат`);
 				endScore = await serchResult(numericalDesignation, statistic.matchId, new Date(statistic.createdBy));
