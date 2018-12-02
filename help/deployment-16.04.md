@@ -196,11 +196,6 @@ sudo apt-get install htop
 sudo apt-get install curl
 ```
 
-###Установить Git:
-```bash
-sudo apt-get install git
-```
-
 ###[Установить Node.js](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/):
 ```bash
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -209,18 +204,41 @@ nvm install node
 
 ###[Установить MongoDB](https://docs.mongodb.com/master/tutorial/install-mongodb-on-ubuntu/):
 ```bash
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 &&
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" |
+sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list &&
+sudo apt-get update &&
+sudo apt-get install -y mongodb-org
+```
+[Добавить MongoDB в автозагрузку](https://www.8host.com/blog/ustanovka-mongodb-v-ubuntu-16-04/):
 
-echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.1 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
-sudo apt-get update
-sudo apt-get install -y --allow-unauthenticated mongodb-org
-or
-sudo apt-get install -y mongodb
+Создать файл:
+```bash
+sudo nano /etc/systemd/system/mongodb.service
+```
+
+С содержимым:
+```bash
+[Unit]
+Description=High-performance, schema-free document-oriented database
+After=network.target
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
+[Install]
+WantedBy=multi-user.target
+```
+
+Запустить MongoDB сервис:
+```bash
+sudo systemctl unmask mongodb &&
+sudo systemctl start mongodb.service &&
+sudo systemctl enable mongodb
 ```
 
 #####Команды работы с mongoDB
 ```bash
-sudo systemctl status mongodb
+sudo systemctl status mongodb.service
 sudo systemctl stop mongodb
 sudo systemctl start mongodb
 sudo systemctl restart mongodb
@@ -232,6 +250,14 @@ sudo systemctl disable mongodb
 sudo systemctl enable mongodb
 ```
 
+#####Удалиь  mongodb
+```bash
+sudo service mongod stop &&
+sudo apt-get purge mongodb-org* &&
+sudo rm -r /var/log/mongodb &&
+sudo rm -r /var/lib/mongodb
+```
+
 #####Тест работы
 ```bash
 mongo --eval 'db.runCommand({ connectionStatus: 1 })'
@@ -239,15 +265,12 @@ mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 
 ###Создать директорию для статический файлов:
 ```bash
-sudo mkdir rate_bot
-sudo chown mongo:mongo rate_bot
-
-sudo mkdir /var/www/rate_bot
-sudo chown mongo:mongo /var/www/rate_bot
-
-sudo mkdir mongodb
-sudo mkdir mongodb/db
+sudo mkdir rate_bot &&
+sudo chown rb-app:rb-app rate_bot &&
+sudo mkdir mongodb &&
+sudo mkdir mongodb/db &&
 sudo mkdir mongodb/log
+sudo chown rb-app:rb-app mongodb
 ```
 
 ###Установить NPM 
@@ -256,25 +279,12 @@ sudo mkdir mongodb/log
 sudo apt install npm 
 ```
 
-## Ручное развёртывание
-
-####Склонировать файлы проекта:
-```bash
-cd ~
-git clone git@gitlab.com:developmentKit/projects/bot/rate.git
-cd rate_bot
-npm install --only=production
-```
-
-Статические файлы сайта копировать в `/var/www/rate_bot`.
-
-### [Развернуть БД](http://o7planning.org/en/10279/importing-and-exporting-mongodb-database).
-
 ### [Настройка брандмауэра UFW](https://www.8host.com/blog/nastrojka-brandmauera-ufw-na-servere-ubuntu-18-04/)
 
 Включение UFW:
 ```bash
 sudo ufw enable
+sudo ufw disable
 ```
 
 Проверка настроек:
@@ -322,7 +332,7 @@ sudo systemctl restart mongodb
 
 ###Установим дополнительное ПО
 ```bash
-sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ &&
 npm install node-gyp
 ```
 
