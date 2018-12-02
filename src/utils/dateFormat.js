@@ -69,10 +69,21 @@ function getDateTime(date) {
 	return getFormattedDateTime(new Date(date));
 }
 
+/**
+ * Преобразует строку даты в формата вида yyyy-mm-dd
+ *
+ * @param {Date} date - дата
+ * @returns {String} дата в формате строки
+ */
+function getStringToDateTime(date) {
+	return getFormattedDate(new Date(date));
+}
+
 module.exports = {
 	getFormattedDateTime,
 	getFormattedDate,
 	getFormattedTime,
 	getDateTime,
-	getTime
+	getTime,
+	getStringToDateTime
 };

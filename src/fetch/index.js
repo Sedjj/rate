@@ -1,7 +1,7 @@
 const config = require('config');
 const request = require('request');
 const log = require('./../utils/logger');
-const {getFormattedDate} = require('./../utils/dateFormat');
+const {getStringToDateTime} = require('./../utils/dateFormat');
 
 const urlFootballRate = config.get('parser.live.football.rate');
 const urlFootballExpandedRate = config.get('parser.live.football.expandedRate');
@@ -78,7 +78,7 @@ function postResultZone(date) {
 	return new Promise((resolve, reject) => {
 		const param = {
 			'Language': 'ru',
-			'Params': [getFormattedDate(date), null, null, null, null, 300],
+			'Params': [getStringToDateTime(date), null, null, null, null, 300],
 			'Vers': 6,
 			'Adult': false,
 			'partner': 51
@@ -109,7 +109,7 @@ function postResultZone(date) {
  */
 function postResult(date) {
 	return new Promise((resolve, reject) => {
-		request.get(urlAll.replace('${date}', getFormattedDate(date)), (error, res, body) => {
+		request.get(urlAll.replace('${date}', getStringToDateTime(date)), (error, res, body) => {
 			if (res.statusCode !== 200) {
 				log.error(`postResult: ${res.statusMessage}`);
 				return reject(error);
