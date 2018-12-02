@@ -44,7 +44,10 @@ function timeGame(item) {
  */
 function filterGame(item, excludeName) {
 	return excludeName.reduce((current, exclude) => {
-		if ((item.commandOne.indexOf(exclude) === -1) && (item.commandTwo.indexOf(exclude) === -1)) {
+		if ((item.command.ru.one.indexOf(exclude) === -1) && (item.command.ru.two.indexOf(exclude) === -1)) {
+			current = false;
+		}
+		if ((item.command.en.one.indexOf(exclude) === -1) && (item.command.en.two.indexOf(exclude) === -1)) {
 			current = false;
 		}
 		return current;

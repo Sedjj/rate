@@ -239,8 +239,20 @@ function saveRate(item = {}, score, strategy) {
 	return newStatistic({
 		matchId: item.I, // id матча
 		score: `${score.sc1}:${score.sc2}`, // счет матча
-		commandOne: item.O1, // название команды 1
-		commandTwo: item.O2, // название команды 2
+		command: {
+			ru: {
+				one: item.O1, // название команды 1
+				two: item.O2  // название команды 2
+			},
+			en: {
+				one: item.O1E, // название команды 1 на en
+				two: item.O2E  // название команды 2 на en
+			}
+		},
+		group: {
+			ru: item.L,
+			en: item.LE
+		},
 		strategy: strategy, // стратегия
 		index: '1', // результат ставки.
 		total: '-2',

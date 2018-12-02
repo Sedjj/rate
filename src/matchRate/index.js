@@ -9,7 +9,7 @@ const {decorateMessageMatch} = require('../utils/formateMessage');
  */
 async function matchRate(statistic) {
 	await sendMessage(decorateMessageMatch(statistic));
-	await sendMessage(statistic.matchId);
+	await sendMessage(statistic.command.en.one);
 }
 
 module.exports = {

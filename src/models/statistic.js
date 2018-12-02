@@ -12,15 +12,43 @@ const StatisticSchema = new Schema({
 		required: true,
 		default: ''
 	},
-	commandOne: {
-		type: String,
-		required: true,
-		default: ''
+	command: {
+		ru: {
+			one: {
+				type: String,
+				required: true,
+				default: ''
+			},
+			two: {
+				type: String,
+				required: true,
+				default: ''
+			}
+		},
+		en: {
+			one: {
+				type: String,
+				required: true,
+				default: ''
+			},
+			two: {
+				type: String,
+				required: true,
+				default: ''
+			}
+		}
 	},
-	commandTwo: {
-		type: String,
-		required: true,
-		default: ''
+	group: {
+		ru: {
+			type: String,
+			required: true,
+			default: ''
+		},
+		en: {
+			type: String,
+			required: true,
+			default: ''
+		}
 	},
 	strategy: {
 		type: String,

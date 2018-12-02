@@ -28,8 +28,9 @@ function replaceAll(str, find, replace) {
  */
 function decorateMessageMatch(item) {
 	return `Матч: ${item.matchId}; Стр: ${item.strategy}; Счет: ${item.score}
-	  Команда 1:  ${item.commandOne}
-	  Команда 2:  ${item.commandTwo}`;
+	Группа: ${item.group.ru}
+	  Команда 1:  ${item.command.ru.one}
+	  Команда 2:  ${item.command.ru.two}`;
 }
 
 /**
