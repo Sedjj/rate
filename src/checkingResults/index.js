@@ -20,12 +20,12 @@ async function checkingResults() {
 	query['$and'].push({modifiedBy: {$gte: beforeDate.toISOString()}});
 	query['$and'].push({modifiedBy: {$lte: (new Date()).toISOString()}});
 	log.debug(`Начало проверки результатов с ${beforeDate.toISOString()} по ${(new Date()).toISOString()}`);
-	return getStatistic(query, ['(', ')'])
+	return getStatistic(query)
 		.then((statistics) => {
-			statistics && statistics.map(async (statistic) => {
+			return Promise.all(statistics.map(async (statistic) => {
 				const endScore = await serchResultEndMatch(statistic);
 				await baseRecordCorrection(statistic, endScore);
-			});
+			}));
 		}).catch((error) => {
 			log.error(`checkingResults: ${error.message}`);
 		});
@@ -41,10 +41,10 @@ function serchResultEndMatch(statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let endScore = '';
-			endScore = await serchResult(numericalDesignation, statistic.id, statistic.modifiedBy);
+			endScore = await serchResult(numericalDesignation, statistic.matchId, statistic.modifiedBy);
 			if (endScore === '') { // если на дату модификаций не нашли матча то ищем на дату создания
-				log.debug(`Матч ${statistic.id}: доп. запрос на результат`);
-				endScore = await serchResult(numericalDesignation, statistic.id, new Date(statistic.createdBy));
+				log.debug(`Матч ${statistic.matchId}: доп. запрос на результат`);
+				endScore = await serchResult(numericalDesignation, statistic.matchId, new Date(statistic.createdBy));
 			}
 			resolve(endScore);
 		} catch (error) {
@@ -92,13 +92,13 @@ async function serchResult(type, id, date) {
  * @returns {Promise<void>}
  */
 async function baseRecordCorrection(statistic, endScore) {
-	log.debug(`Матч ${statistic.id}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
+	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
 	const newScore = parserScore(endScore);
 	const result = (newScore !== '') ? equalsTotal(statistic.score, newScore, typeRate[2]) : -1;
-	log.debug(`Матч ${statistic.id}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
+	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 	if (result === 0 || result === 1 || result === -1) {
-		log.debug(`Матч ${statistic.id}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
-		setIndexRate(statistic.id, result);
+		log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
+		setIndexRate(statistic.matchId, result);
 	}
 }
 
