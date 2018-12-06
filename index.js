@@ -4,6 +4,9 @@ const log = require('./src/utils/logger');
 const {search} = require('./src/searchMatch');
 const {checkingResults} = require('./src/checkingResults');
 const {exportBackupStatistic} = require('./src/export');
+const {throttle} = require('./src/utils/throttle');
+
+const exportBackupStatisticDebounce = throttle(exportBackupStatistic, 20000);
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? '*/10 * * * * *'
@@ -39,7 +42,7 @@ if (schedulerBackupExport) {
 		try {
 			checkingResults()
 				.then(() => {
-					exportBackupStatistic();
+					exportBackupStatisticDebounce();
 				});
 		} catch (ex) {
 			schedulerBackupExportJob.stop();
