@@ -2,8 +2,14 @@ version: "2"
 services:
   bot_rate_mongo:
     container_name: bot_rate_mongo
-    image: mongo
+    # image: mongo
+    build:
+      context: .
+      dockerfile: docker/mongo/Dockerfile
+    # build: ./docker/mongo
     volumes:
-      - ./data:/data/db
+      - ./mongoDB/log:/data/log
+      - ./mongoDB/dump:/data/dump
+      - ./mongoDB/scripts:/data/scripts
     ports:
       - "27017:27017"

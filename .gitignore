@@ -58,9 +58,15 @@ typings/
 # dotenv environment variables file
 .env
 
+# mongoDB dump
+mongoDB/log/*
+mongoDB/db/*
+mongoDB/dump/*
+
 .idea/
 docs/
 upload/
 logs/
+
 
 connection.*

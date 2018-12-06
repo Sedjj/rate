@@ -1,0 +1,1 @@
+load('statistics.js');
