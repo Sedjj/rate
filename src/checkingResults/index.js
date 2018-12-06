@@ -119,6 +119,7 @@ async function baseRecordCorrection(statistic, endScore) {
 		log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
 		await setIndexRate(statistic.matchId, result);
 	}
+	return Promise.resolve([]);
 }
 
 /**
@@ -131,7 +132,6 @@ function setIndexRate(id = 0, index = 1) {
 	return setStatistic({
 		matchId: id,
 		index: index, // тип ставки.
-		modifiedBy: new Date().toISOString()
 	});
 }
 

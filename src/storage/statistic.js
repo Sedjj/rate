@@ -115,7 +115,9 @@ function setStatistic(param) {
 			if (param.total !== undefined) {
 				statistic.total = param.total;
 			}
-			statistic.modifiedBy = param.modifiedBy;
+			if (param.modifiedBy !== undefined) {
+				statistic.modifiedBy = param.modifiedBy;
+			}
 			return statistic.save();
 		})
 		.catch(error => {
