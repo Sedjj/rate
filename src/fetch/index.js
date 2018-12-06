@@ -21,8 +21,8 @@ const proxy = config.get('proxy');
 function getFootball() {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballRate, (error, res, body) => {
-			if (res.statusCode !== 200) {
-				log.error(`getFootball: ${res.statusMessage}`);
+			if (error || (res && res.statusCode !== 200)) {
+				log.error(`getFootball: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			let value = [];
@@ -30,6 +30,7 @@ function getFootball() {
 				value = JSON.parse(body).Value;
 			} catch (error) {
 				log.error(`getFootball JSON.parse: ${error}`);
+				return reject(error);
 			}
 			if (value === null) {
 				return reject(body);
@@ -49,8 +50,8 @@ function getFootball() {
 function getFootballExpanded(id) {
 	return new Promise((resolve, reject) => {
 		request.get(urlFootballExpandedRate.replace('${id}', id), (error, res, body) => {
-			if (res.statusCode !== 200) {
-				log.error(`getFootballExpanded: ${res.statusMessage}`);
+			if (error || (res && res.statusCode !== 200)) {
+				log.error(`getFootballExpanded: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			let value = [];
@@ -58,6 +59,7 @@ function getFootballExpanded(id) {
 				value = JSON.parse(body).Value;
 			} catch (error) {
 				log.error(`getFootballExpanded JSON.parse: ${error}`);
+				return	reject(error);
 			}
 			if (value === null) {
 				return reject(body);
@@ -109,9 +111,10 @@ function postResultZone(date) {
  */
 function postResult(date) {
 	return new Promise((resolve, reject) => {
+		log.info(`postResult: ${urlAll.replace('${date}', getStringToDateTime(date))}`);
 		request.get(urlAll.replace('${date}', getStringToDateTime(date)), (error, res, body) => {
-			if (res.statusCode !== 200) {
-				log.error(`postResult: ${res.statusMessage}`);
+			if (error || (res && res.statusCode !== 200)) {
+				log.error(`postResult: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			let value = [];
@@ -119,6 +122,7 @@ function postResult(date) {
 				value = JSON.parse(body).Data;
 			} catch (error) {
 				log.error(`postResult: ${error}`);
+				return reject(error);
 			}
 			if (value === null) {
 				return reject(body);
@@ -154,7 +158,7 @@ function setFileApiTelegram(chatId, document) {
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`setFileApiTelegram: ${res ? res.statusMessage : error && error.message}`);
+				log.error(`setFileApiTelegram: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			log.debug(`Отработал: Метод для отправки файла ${body}`);
