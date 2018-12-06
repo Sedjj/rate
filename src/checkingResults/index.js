@@ -1,9 +1,11 @@
 const log = require('../utils/logger');
 const {getStatistic, setStatistic} = require('../storage/statistic');
 const config = require('config');
+const {throttle} = require('../utils/throttle');
 const {equalsTotal, parserScore} = require('../utils/searchHelper');
 const {postResult} = require('../fetch');
 
+const postResultDebounce = throttle(postResult, 20000);
 const typeRate = config.get('choice.live.football.typeRate');
 const numericalDesignation = config.get('choice.live.football.numericalDesignation');
 
@@ -13,37 +15,57 @@ const numericalDesignation = config.get('choice.live.football.numericalDesignati
  * @returns {Promise<any | never>}
  */
 async function checkingResults() {
-	const beforeDate = new Date();
-	beforeDate.setDate(beforeDate.getDate() - 2);
+	const currentDate = new Date(new Date().setHours(23, 59, 0, 0));
+	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 0));
+	beforeDate.setDate(beforeDate.getDate() - 1);
 	let query = {};
 	query['$and'] = [];
-	query['$and'].push({modifiedBy: {$gte: beforeDate.toISOString()}});
-	query['$and'].push({modifiedBy: {$lte: (new Date()).toISOString()}});
-	log.debug(`Начало проверки результатов с ${beforeDate.toISOString()} по ${(new Date()).toISOString()}`);
-	return getStatistic(query)
+	query['$and'].push({createdBy: {$gte: beforeDate.toISOString()}});
+	query['$and'].push({createdBy: {$lte: currentDate.toISOString()}});
+	log.debug(`Начало проверки результатов с ${beforeDate.toISOString()} по ${currentDate.toISOString()}`);
+	return getStatistic(query, ['(', ')'])
 		.then((statistics) => {
-			return Promise.all(statistics.map(async (statistic) => {
-				const endScore = await serchResultEndMatch(statistic);
-				await baseRecordCorrection(statistic, endScore);
-			}));
+			return result(statistics, beforeDate.toISOString(), currentDate.toISOString());
 		}).catch((error) => {
 			log.error(`checkingResults: ${error.message}`);
 		});
 }
 
 /**
+ * Получение данных матчей по 2 датам.
+ *
+ * @param {Object} statistics объекты матчей
+ * @param {Date} beforeDate дата предыдущего дня
+ * @param {Date} currentDate дата текущего дня
+ * @returns {Promise<void>}
+ */
+async function result(statistics, beforeDate, currentDate) {
+	try {
+		const beforeData = await postResultDebounce(beforeDate);
+		const currentData = await postResultDebounce(currentDate);
+		statistics.forEach(async (statistic) => {
+			const endScore = await serchResultEndMatch(beforeData, currentData, statistic);
+			await baseRecordCorrection(statistic, endScore);
+		});
+	} catch (error) {
+		log.error(`serchResult: ${error}`);
+	}
+}
+
+/**
  * Метод нахождения конча матча из базы.
  *
- * @param {Object} statistic объект матча
+ * @param {Array} beforeData все матчи предыдущего дня
+ * @param {Array} currentData все матчи текущего дня
+ * @param {Object} statistic объекты матча
  * @returns {Promise<String>}
  */
-function serchResultEndMatch(statistic) {
+function serchResultEndMatch(beforeData, currentData, statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let	endScore = await serchResult(numericalDesignation, statistic.matchId, statistic.modifiedBy);
-			if (endScore === '') { // если на дату модификаций не нашли матча то ищем на дату создания
-				log.debug(`Матч ${statistic.matchId}: доп. запрос на результат`);
-				endScore = await serchResult(numericalDesignation, statistic.matchId, new Date(statistic.createdBy));
+			let endScore = await serchResult(beforeData, statistic.matchId);
+			if (endScore === '') {
+				endScore = await serchResult(currentData, statistic.matchId);
 			}
 			resolve(endScore);
 		} catch (error) {
@@ -55,21 +77,19 @@ function serchResultEndMatch(statistic) {
 /**
  * Метод для поиска результата матча.
  *
- * @param {number} type соревнования(1 - футбол)
+ * @param {Array} data все матчи на определенный день
  * @param {number} id матча
- * @param {Date} date - дата
  * @returns {Promise<void>}
  */
-async function serchResult(type, id, date) {
+async function serchResult(data, id) {
 	let score = '';
 	try {
-		const data = await postResult(date);
 		data.forEach((item) => {
-			if (item.ID === type) {
+			if (item.ID === numericalDesignation) {
 				item.Elems.map((object) => {
 					if (Array.isArray(object.Elems)) {
 						object.Elems.map((Elems) => {
-							if (Elems.Head[0] === id) {
+							if (Elems.Head[0] === parseInt(id)) {
 								score = Elems.Head[6];
 							}
 						});
@@ -78,7 +98,7 @@ async function serchResult(type, id, date) {
 			}
 		});
 	} catch (error) {
-		throw new Error(error);
+		log.error(`serchResult: ${error}`);
 	}
 	return score;
 }
@@ -97,7 +117,7 @@ async function baseRecordCorrection(statistic, endScore) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 	if (result === 0 || result === 1 || result === -1) {
 		log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
-		setIndexRate(statistic.matchId, result);
+		await setIndexRate(statistic.matchId, result);
 	}
 }
 

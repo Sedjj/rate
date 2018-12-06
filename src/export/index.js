@@ -39,17 +39,18 @@ async function exportBackupStatistic() {
  * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
  */
 function returnStatisticListTemplate() {
-	const beforeDate = new Date();
-	beforeDate.setDate(beforeDate.getDate() - 2);
+	const currentDate = new Date(new Date().setHours(23, 59, 0, 0));
+	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 0));
+	beforeDate.setDate(beforeDate.getDate() - 1);
 	let props = {
 		statistics: [],
 	};
 	let query = {};
 	query['$and'] = [];
 	query['$and'].push({modifiedBy: {$gte: beforeDate.toISOString()}});
-	query['$and'].push({modifiedBy: {$lte: (new Date()).toISOString()}});
-	log.debug(`Начало экспорта Statistics с ${beforeDate.toISOString()} по ${(new Date()).toISOString()}`);
-	return getStatistic(query, ['(', ')'])
+	query['$and'].push({modifiedBy: {$lte: currentDate.toISOString()}});
+	log.debug(`Начало экспорта Statistics с ${beforeDate.toISOString()} по ${currentDate.toISOString()}`);
+	return getStatistic(query, ['(', ')'])// , 'U19', 'women'
 		.then((items) => {
 			props.statistics = items;
 			log.debug(`Подготовлено данных ${items.length}`);
