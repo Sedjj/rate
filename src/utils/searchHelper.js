@@ -46,10 +46,10 @@ function filterGame(item, excludeName) {
 	return excludeName.reduce((current, exclude) => {
 		if ((item.command.ru.one.indexOf(exclude) === -1) && (item.command.ru.two.indexOf(exclude) === -1)) {
 			current = false;
-		}
-		if ((item.command.en.one.indexOf(exclude) === -1) && (item.command.en.two.indexOf(exclude) === -1)) {
+		}// FIXME Посмотреть как парсятся английские имена
+		/*if ((item.command.en.one.indexOf(exclude) === -1) && (item.command.en.two.indexOf(exclude) === -1)) {
 			current = false;
-		}
+		}*/
 		return current;
 	}, true);
 }
@@ -67,8 +67,8 @@ function filterGame(item, excludeName) {
  * @param {Object} typeRate тип ставки
  */
 function equalsTotal(oldScore, endScore, typeRate) {
-	oldScore = oldScore.split(',');
-	const start = oldScore[0] + oldScore[1] + typeRate;
+	oldScore = oldScore.split(':');
+	const start = +oldScore[0] + +oldScore[1] + +typeRate;
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;
