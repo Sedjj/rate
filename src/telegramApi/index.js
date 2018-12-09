@@ -1,6 +1,5 @@
 const Telegram = require('telegraf/telegram');
 const SocksAgent = require('socks5-https-client/lib/Agent');
-const log = require('../utils/logger');
 const config = require('config');
 const {setFileApiTelegram} = require('../fetch');
 
@@ -11,7 +10,6 @@ const socket = config.get('socket');
 const chatId = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.chatId')
 	: config.get('bots.prod.chatId');
-// const ngrok = 'https://0981648c.ngrok.io';
 
 const socksAgent = new SocksAgent({
 	socksHost: socket.host,
@@ -27,8 +25,6 @@ const bot = new Telegram(token, {
 		port: '3000'
 	}
 });
-
-//bot.setWebhook(`${ngrok}/t${token}`);
 
 /**
  * Метод отправки сообщений в телеграмм бот.
@@ -53,7 +49,7 @@ function sendMessage(text) {
 function sendFile(file) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setFileApiTelegram(chatId, file));
+			resolve(setFileApiTelegram(token, chatId, file));
 		} catch (error) {
 			reject(error);
 		}

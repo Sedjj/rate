@@ -1,41 +1,4 @@
 /**
- * Метод для определения счета матча.
- *
- * @param {Object} item объект матча
- * @returns {{sc1: number, sc2: number}}
- */
-function scoreGame(item) {
-	return {
-		sc1: item.SC.FS.S1 ? item.SC.FS.S1 : 0, // проверяем счет матча
-		sc2: item.SC.FS.S2 ? item.SC.FS.S2 : 0 // проверяем счет матча
-	};
-}
-
-/**
- * Метод для определения ставок матча.
- *
- * @param {Object} item объект матча
- * @returns {{sc1: number, sc2: number}}
- */
-function indexGame(item) {
-	return {
-		p1: item.E[0] && item.E[0].T === 1 ? item.E[0].C : '', // попеда первой
-		x: item.E[1] && item.E[1].T === 2 ? item.E[1].C : '', // ничья
-		p2: item.E[2] && item.E[2].T === 3 ? item.E[2].C : '' // поведа второй
-	};
-}
-
-/**
- * Метод для определения времени матча(в секундах).
- *
- * @param {Object} item объект матча
- * @returns {{sc1: number, sc2: number}}
- */
-function timeGame(item) {
-	return item.SC.TS ? Math.floor(item.SC.TS) : 0;
-}
-
-/**
  * Метод для отсеивание по названию матча
  *
  * @param {Object} item матч
@@ -58,17 +21,16 @@ function filterGame(item, excludeName) {
  * Cравниваем Total 2-x таймов не изменился ли.
  * Eсли изменился то меняем даные в таблице .
  * {
- * 		конечный = (исходный счет + 1) -> 1
- * 		конечный < (исходный счет + 1) -> 0
- * 		конечный > (исходный счет  + 1) -> ставка(1.666)
+ * 		конечный = (исходный счет + typeRate) -> 1
+ * 		конечный < (исходный счет + typeRate) -> 0
+ * 		конечный > (исходный счет  + typeRate) -> ставка(1.666)
  * }
  * @param {Object} oldScore исходные данные Total
  * @param {Object} endScore результирующие данные Total
- * @param {Object} typeRate тип ставки
+ * @param {Number} typeRate тип ставки
  */
 function equalsTotal(oldScore, endScore, typeRate) {
-	oldScore = oldScore.split(':');
-	const start = +oldScore[0] + +oldScore[1] + +typeRate;
+	const start = oldScore.sc1 + oldScore.sc1 + typeRate; // FIXME привести к одному виду
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;
@@ -80,31 +42,18 @@ function equalsTotal(oldScore, endScore, typeRate) {
 }
 
 /**
- * Метод для нахождения общего счета за 2 тайма
+ * Метод для сравниея счета матча.
  *
- * @param {String} value строка для парсинга
- * @returns {Object}
+ * @param {Object} oldScore исходный счет матча
+ * @param {Object} endScore текущий счет матча
+ * @returns {boolean}
  */
-function parserScore(value) {
-	if (value.length > 12) {
-		const score = value.match(/\d\:\d(?=,|\))/ig);
-		const scoreOne = score[0] ? score[0].match(/\d/ig) : [0, 0];
-		const scoreTwo = score[1] ? score[1].match(/\d/ig) : [0, 0];
-		return {
-			sc1: parseInt(scoreOne[0]) + parseInt(scoreOne[1]),
-			sc2: parseInt(scoreTwo[0]) + parseInt(scoreTwo[1])
-		};
-	} else {
-		return value;
-	}
+function equalsScore(oldScore, endScore) {
+	return (oldScore.sc1 === oldScore.sc2) && (endScore.sc1 === endScore.sc2);
 }
 
-
 module.exports = {
-	scoreGame,
-	indexGame,
-	timeGame,
+	equalsScore,
 	filterGame,
-	equalsTotal,
-	parserScore
+	equalsTotal
 };

@@ -11,7 +11,10 @@ function mapProps(statistic, index) {
 	return {
 		id: index,
 		matchId: statistic.matchId,
-		score: statistic.score,
+		score: {
+			ru: statistic.score.sc1,
+			en: statistic.score.sc2,
+		},
 		command: {
 			ru: {
 				one: statistic.command.ru.one, // название команды 1

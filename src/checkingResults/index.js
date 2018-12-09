@@ -3,11 +3,15 @@ const {getStatistic, setStatistic} = require('../storage/statistic');
 const config = require('config');
 const {throttle} = require('../utils/throttle');
 const {equalsTotal, parserScore} = require('../utils/searchHelper');
-const {postResult} = require('../fetch');
+const {getResultList} = require('../fetch');
+const {searchHelper} = require('../modifiableFile');
 
-const postResultDebounce = throttle(postResult, 20000);
+const active = config.get('parser.active');
+const urlAll = config.get(`parser.${active[0]}.result.all`);
+
+const postResultDebounce = throttle(getResultList, 20000);
 const typeRate = config.get('choice.live.football.typeRate');
-const numericalDesignation = config.get('choice.live.football.numericalDesignation');
+
 
 /**
  *  Метод проверки результатов матчей.
@@ -15,8 +19,8 @@ const numericalDesignation = config.get('choice.live.football.numericalDesignati
  * @returns {Promise<any | never>}
  */
 async function checkingResults() {
-	const currentDate = new Date(new Date().setHours(23, 59, 0, 0));
-	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 0));
+	const currentDate = new Date(new Date().setHours(23, 0, 0, 59));
+	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	beforeDate.setDate(beforeDate.getDate() - 1);
 	let query = {};
 	query['$and'] = [];
@@ -41,8 +45,8 @@ async function checkingResults() {
  */
 async function result(statistics, beforeDate, currentDate) {
 	try {
-		const beforeData = await postResultDebounce(beforeDate);
-		const currentData = await postResultDebounce(currentDate);
+		const beforeData = await postResultDebounce(searchHelper.replaceUrl(urlAll, beforeDate));
+		const currentData = await postResultDebounce(searchHelper.replaceUrl(urlAll, currentDate));
 		statistics.forEach(async (statistic) => {
 			const endScore = await serchResultEndMatch(beforeData, currentData, statistic);
 			await baseRecordCorrection(statistic, endScore);
@@ -63,9 +67,9 @@ async function result(statistics, beforeDate, currentDate) {
 function serchResultEndMatch(beforeData, currentData, statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let endScore = await serchResult(beforeData, statistic.matchId);
+			let endScore = await searchHelper.serchResult(beforeData, statistic.matchId);
 			if (endScore === '') {
-				endScore = await serchResult(currentData, statistic.matchId);
+				endScore = await searchHelper.serchResult(currentData, statistic.matchId);
 			}
 			resolve(endScore);
 		} catch (error) {
@@ -74,34 +78,6 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
 	});
 }
 
-/**
- * Метод для поиска результата матча.
- *
- * @param {Array} data все матчи на определенный день
- * @param {number} id матча
- * @returns {Promise<void>}
- */
-async function serchResult(data, id) {
-	let score = '';
-	try {
-		data.forEach((item) => {
-			if (item.ID === numericalDesignation) {
-				item.Elems.map((object) => {
-					if (Array.isArray(object.Elems)) {
-						object.Elems.map((Elems) => {
-							if (Elems.Head[0] === parseInt(id)) {
-								score = Elems.Head[6];
-							}
-						});
-					}
-				});
-			}
-		});
-	} catch (error) {
-		log.error(`serchResult: ${error}`);
-	}
-	return score;
-}
 
 /**
  * Метод для сравнения результатов.
@@ -113,7 +89,7 @@ async function serchResult(data, id) {
 async function baseRecordCorrection(statistic, endScore) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
 	const newScore = parserScore(endScore);
-	const result = (newScore !== '') ? equalsTotal(statistic.score, newScore, typeRate[2]) : -1;
+	const result = (newScore !== '') ? equalsTotal(statistic.score, newScore, typeRate[statistic.strategy]) : -1;
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 	if (result === 0 || result === 1 || result === -1) {
 		log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);

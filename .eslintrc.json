@@ -10,10 +10,6 @@
 		"sourceType": "module"
 	},
 	"rules": {
-		"indent": [
-			"error",
-			"tab"
-		],
 		"linebreak-style": [
 			"error",
 			"windows"
@@ -39,8 +35,8 @@
 			1,
 			"prefer-double"
 		],
-		"react/jsx-no-undef": 1,
-		"react/jsx-uses-react": 1,
-		"react/jsx-uses-vars": 1
+		"react/jsx-no-undef": 0,
+		"react/jsx-uses-react": 0,
+		"react/jsx-uses-vars": 0
 	}
 }

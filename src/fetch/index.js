@@ -3,33 +3,26 @@ const request = require('request');
 const log = require('./../utils/logger');
 const {getStringToDateTime} = require('./../utils/dateFormat');
 
-const urlFootballRate = config.get('parser.live.football.rate');
-const urlFootballExpandedRate = config.get('parser.live.football.expandedRate');
-const urlAllZone = config.get('parser.result.allZone');
-const urlAll = config.get('parser.result.all');
-
-const token = process.env.NODE_ENV === 'development'
-	? config.get('bots.dev.token')
-	: config.get('bots.prod.token');
 const proxy = config.get('proxy');
 
 /**
  * Метод для получения ставок.
  *
+ * @param {String} url адрес запроса
  * @returns {Promise<JSON | void>}
  */
-function getFootball() {
+function getAllMatches(url) {
 	return new Promise((resolve, reject) => {
-		request.get(urlFootballRate, (error, res, body) => {
+		request.get(url, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`getFootball: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`getAllMatches: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			let value = [];
 			try {
 				value = JSON.parse(body).Value;
 			} catch (error) {
-				log.error(`getFootball JSON.parse: ${error}`);
+				log.error(`getAllMatches JSON.parse: ${error}`);
 				return reject(error);
 			}
 			if (value === null) {
@@ -44,22 +37,22 @@ function getFootball() {
 /**
  * Метод для получения расширеных ставок.
  *
- * @param {Array} id матча
+ * @param {String} url адрес запроса
  * @returns {Promise<JSON | void>}
  */
-function getFootballExpanded(id) {
+function getExpandedMatch(url) {
 	return new Promise((resolve, reject) => {
-		request.get(urlFootballExpandedRate.replace('${id}', id), (error, res, body) => {
+		request.get(url, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`getFootballExpanded: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`getExpandedMatch: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			let value = [];
 			try {
 				value = JSON.parse(body).Value;
 			} catch (error) {
-				log.error(`getFootballExpanded JSON.parse: ${error}`);
-				return	reject(error);
+				log.error(`getExpandedMatch JSON.parse: ${error}`);
+				return reject(error);
 			}
 			if (value === null) {
 				return reject(body);
@@ -73,10 +66,11 @@ function getFootballExpanded(id) {
 /**
  * Метод для получения всех результатов из зоны
  *
+ * @param {String} url адрес запроса
  * @param {Date} date - дата
  * @returns {Promise<JSON | void>}
  */
-function postResultZone(date) {
+function postResultZone(url, date) {
 	return new Promise((resolve, reject) => {
 		const param = {
 			'Language': 'ru',
@@ -86,7 +80,7 @@ function postResultZone(date) {
 			'partner': 51
 		};
 		request({
-			url: urlAllZone,
+			url: url,
 			method: 'POST',
 			headers: {
 				'content-type': 'application/json'
@@ -106,22 +100,22 @@ function postResultZone(date) {
 /**
  * Метод для получения всех результатов.
  *
- * @param {Date} date - дата
+ * @param {String} url адрес запроса
  * @returns {Promise<any>}
  */
-function postResult(date) {
+function getResultList(url) {
 	return new Promise((resolve, reject) => {
-		log.info(`postResult: ${urlAll.replace('${date}', getStringToDateTime(date))}`);
-		request.get(urlAll.replace('${date}', getStringToDateTime(date)), (error, res, body) => {
+		log.info(`getResultList: ${url}`);
+		request.get(url, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`postResult: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`getResultList: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			let value = [];
 			try {
 				value = JSON.parse(body).Data;
 			} catch (error) {
-				log.error(`postResult: ${error}`);
+				log.error(`getResultList: ${error}`);
 				return reject(error);
 			}
 			if (value === null) {
@@ -137,11 +131,12 @@ function postResult(date) {
  * Отправляет файл на API Telegram
  * https://api.telegram.org/bot741639693:AAHcc9e7pIYSWlAti95Idwejn0iZcwSUqmg/getupdates
  *
+ * @param {String} token идентификатор бота
  * @param {String} chatId id чата
  * @param {Object} document данные для отправки
  * @returns {Promise}
  */
-function setFileApiTelegram(chatId, document) {
+function setFileApiTelegram(token, chatId, document) {
 	let props = {
 		url: `https://api.telegram.org/bot${token}/sendDocument`,
 		headers: {
@@ -168,9 +163,9 @@ function setFileApiTelegram(chatId, document) {
 }
 
 module.exports = {
-	getFootball,
-	getFootballExpanded,
+	getAllMatches,
+	getExpandedMatch,
 	postResultZone,
-	postResult,
+	getResultList,
 	setFileApiTelegram
 };

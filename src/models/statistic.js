@@ -8,9 +8,16 @@ const StatisticSchema = new Schema({
 		default: ''
 	},
 	score: {
-		type: String,
-		required: true,
-		default: ''
+		sc1: {
+			type: String,
+			required: true,
+			default: ''
+		},
+		sc2: {
+			type: String,
+			required: true,
+			default: ''
+		}
 	},
 	command: {
 		ru: {
@@ -51,7 +58,7 @@ const StatisticSchema = new Schema({
 		}
 	},
 	strategy: {
-		type: String,
+		type: Number,
 		required: true,
 		default: ''
 	},

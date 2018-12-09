@@ -23,40 +23,17 @@ function replaceAll(str, find, replace) {
 /**
  * Форматирование строки вывода.
  *
- * @param {String} item объект матча
+ * @param {Object} param объект матча
  * @returns {*}
  */
-function decorateMessageMatch(item) {
-	return `Матч: ${item.matchId}; Стр: ${item.strategy}; Счет: ${item.score}
-	Группа: ${item.group.ru}
-	  Команда 1:  ${item.command.ru.one}
-	  Команда 2:  ${item.command.ru.two}`;
-}
-
-/**
- * Форматирование строки вывода.
- *
- * @param {String} item объект матча
- * @returns {*}
- */
-function decorateMessageEveryReport(item) {
-	return `Ежедневный отчет:
-	   _all:   ${item.allMatch}
-	  str1:   ${item.strategyOne}
-	   0:0:   ${item.strategyTwo_zero}
-	   1:1:   ${item.strategyTwo_one}
-	   2:2:   ${item.strategyTwo_two}
-	  Без ()
-	   _all:   ${item.allMatch_withoutLeagues}
-	  str1:   ${item.strategyOne_withoutLeagues}
-	   0:0:   ${item.strategyTwo_zero_withoutLeagues}
-	   1:1:   ${item.strategyTwo_one_withoutLeagues}
-	   2:2:   ${item.strategyTwo_two_withoutLeagues}`;
+function decorateMessageMatch(param) {
+	return `Матч: ${param.matchId}; Стр: ${param.strategy}; Счет: ${param.score.sc1}:${param.score.sc2}
+	Группа: ${param.group.ru}
+	  Команда 1:  ${param.command.ru.one}
+	  Команда 2:  ${param.command.ru.two}`;
 }
 
 module.exports = {
-	escapeRegExp,
 	decorateMessageMatch,
-	decorateMessageEveryReport,
 	replaceAll
 };

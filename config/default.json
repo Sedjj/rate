@@ -25,31 +25,101 @@
 		"user": "",
 		"password": ""
 	},
-	"chatId": "-276223662",
 	"myId": "43166705",
 	"bots": {
 		"dev": {
 			"chatId": "-299200164",
 			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
 		},
+		"errorDev": {
+			"chatId": "-376344669",
+			"token": "633227407:AAFReZaI0D6UPZPKt5TT8PR1e_PDPAGA9IQ"
+		},
 		"prod": {
 			"chatId": "-276223662",
 			"token": "741538630:AAH3OtLgnLUeXDKZ6cXYe7GBI2uSBSHeOQk"
+		},
+		"errorProd": {
+			"chatId": "-327795203",
+			"token": "749722999:AAHdN926BxFWiO4Z7v4-b4yppz0pZen5j90"
 		}
 	},
 	"parser": {
-		"live": {
-			"football": {
-				"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true",
-				"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=ru&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
-				"card": "https://1xstavka.ru/SubService/api/GetEventTypesByGameId?gameId=${id}&lng=ru&Source=0"
+		"active": ["1xstavka"],
+		"1xstavka": {
+			"live": {
+				"football": {
+					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=ru&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
+					"card": "https://1xstavka.ru/SubService/api/GetEventTypesByGameId?gameId=${id}&lng=ru&Source=0"
+				},
+				"tennis": ""
 			},
-			"tennis": ""
+			"result": {
+				"live": "",
+				"allZone": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup",
+				"all": "https://1xstavka.ru/getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=ru&adult=false&showAll=true"
+			}
 		},
-		"result": {
-			"live": "",
-			"allZone": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup",
-			"all": "https://1xstavka.ru/getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=ru&adult=false&showAll=true"
+		"lds": {
+			"live": {
+				"football": {
+					"rate": "https://lds-api.ligastavok.ru/rest/events/v2/eventsList",
+					"expandedRate": "https://lds-api.ligastavok.ru/rest/events/v1/actionLines",
+					"card": ""
+				},
+				"tennis": ""
+			},
+			"result": {
+				"live": "",
+				"allZone": "",
+				"all": ""
+			}
+		},
+		"fonbet": {
+			"live": {
+				"football": {
+					"rate": "",
+					"expandedRate": "",
+					"card": ""
+				},
+				"tennis": ""
+			},
+			"result": {
+				"live": "",
+				"allZone": "",
+				"all": ""
+			}
+		},
+		"1xbet": {
+			"live": {
+				"football": {
+					"rate": "",
+					"expandedRate": "",
+					"card": ""
+				},
+				"tennis": ""
+			},
+			"result": {
+				"live": "",
+				"allZone": "",
+				"all": ""
+			}
+		},
+		"marathonbet": {
+			"live": {
+				"football": {
+					"rate": "",
+					"expandedRate": "",
+					"card": ""
+				},
+				"tennis": ""
+			},
+			"result": {
+				"live": "",
+				"allZone": "",
+				"all": ""
+			}
 		}
 	},
 	"choice": {
@@ -65,16 +135,21 @@
 				"strategyTwo": {
 					"rate": 6
 				},
+				"titleTotal": "ожидаемый коэффициент: '0'- заглушка, '1'- первая стратегия, '2'- вторая стратегия, '3'- третья стратегия",
 				"total": [
 					0,
 					1.4,
+					1.4,
 					1.4
 				],
+				"titleTypeRate": "прибавляем к сумме результата матчей",
 				"typeRate": [
 					0,
 					1,
+					0.5,
 					0.5
 				],
+				"titleNumericalDesignation": "Числовое обозначение футбола",
 				"numericalDesignation": 1
 			}
 		}
@@ -82,10 +157,7 @@
 	"cron": {
 		"schedulerSearch": "*/05 * * * *",
 		"waitingInterval": "*/2 * * * *",
-		"schedulerLogs": "00 00 10 * * 0-7",
-		"schedulerBackupExport": "00 05 10 * * 0-7",
-		"schedulerEveryDayExport": "00 10 10 * * 0-7",
-		"schedulerEveryWeekExport": "00 15 10 * * 0-7"
+		"schedulerBackupExport": "00 05 10 * * 0-7"
 	},
 	"path": {
 		"storagePath": "",
@@ -97,7 +169,7 @@
 				},
 				"logs": {
 					"all": "all.log",
-					"error":"error.log",
+					"error": "error.log",
 					"debug": "debug.log",
 					"exceptions": "exceptions.log"
 				}
@@ -110,7 +182,7 @@
 			"logs": "logs"
 		}
 	},
-	"outpit": {
+	"output": {
 		"rate": 2000
 	}
 }
