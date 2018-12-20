@@ -5,6 +5,7 @@ const {getAllMatches, getExpandedMatch} = require('../fetch');
 const config = require('config');
 const {matchRate} = require('../matchRate');
 const {searchHelper} = require('../modifiableFile');
+const {equalsScore} = require('../utils/searchHelper');
 
 const active = config.get('parser.active');
 const urlFootballRate = config.get(`parser.${active[0]}.live.football.rate`);
@@ -180,7 +181,7 @@ function searchIndex(matchId, strategy, oldScore) {
 		.then((item) => {
 			let index = null;
 			const param = searchHelper.getParams(item);
-			if (searchHelper.equalsScore(oldScore, param.score && param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
+			if (equalsScore(oldScore, param.score && param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
 				const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
 				searchHelper.searchTotal(item, total, totalStrategy[strategy])
 					.then((index) => {
