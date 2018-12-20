@@ -9,12 +9,10 @@ const numericalDesignation = config.get('choice.live.football.numericalDesignati
  * @param {Object} item объект матча
  */
 function getParams(item) {
+	const index = indexGame(item);
 	return {
 		successfully: true,
 		matchId: item.I,
-		score: scoreGame(item),
-		time: timeGame(item),
-		index: indexGame(item),
 		command: {
 			ru: {
 				one: item.O1, // название команды 1
@@ -23,12 +21,31 @@ function getParams(item) {
 			en: {
 				one: item.O1E, // название команды 1 на en
 				two: item.O2E  // название команды 2 на en
-			}
+			},
+			women: 0, // TODO
+			youth: 0 // TODO
 		},
 		group: {
 			ru: item.L,
 			en: item.LE
 		},
+		p1: index.p1,
+		x: index.x,
+		p2: index.p2,
+		score: scoreGame(item),
+		time: timeGame(item),
+		cards: {
+			one: {
+				red: 0,
+				attacks: 0,
+				danAttacks: 0
+			},
+			two: {
+				red: 0,
+				attacks: 0,
+				danAttacks: 0
+			}
+		}
 	};
 }
 

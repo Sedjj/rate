@@ -43,6 +43,16 @@ const StatisticSchema = new Schema({
 				required: true,
 				default: ''
 			}
+		},
+		women: {
+			type: Number,
+			required: true,
+			default: 0
+		},
+		youth: {
+			type: Number,
+			required: true,
+			default: 0
 		}
 	},
 	group: {
@@ -71,6 +81,98 @@ const StatisticSchema = new Schema({
 		type: Number,
 		required: true,
 		default: 0
+	},
+	snapshot: {
+		start: {
+			time: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			p1: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			x: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			p2: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			mod: {
+				type: Number,
+				required: true,
+				default: 0
+			}
+		},
+		end: {
+			time: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			p1: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			x: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			p2: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			mod: {
+				type: Number,
+				required: true,
+				default: 0
+			}
+		}
+	},
+	cards: {
+		one: {
+			red: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			attacks: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			danAttacks: {
+				type: Number,
+				required: true,
+				default: 0
+			}
+		},
+		two: {
+			red: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			attacks: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			danAttacks: {
+				type: Number,
+				required: true,
+				default: 0
+			}
+		}
 	},
 	createdBy: {
 		type: Date,

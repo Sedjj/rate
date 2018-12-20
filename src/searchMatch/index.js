@@ -49,7 +49,7 @@ function search() {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategy(param) {
-	if ((param.index.p1 !== '') && (param.index.p2 !== '') && (param.index.x !== '')) {
+	if ((param.p1 !== '') && (param.p2 !== '') && (param.x !== '')) {
 		if ((param.time >= before) && (param.time <= after)) {
 			if ((param.score.sc1 + param.score.sc2) === 1) {
 				footballLiveStrategyOne(param);
@@ -70,7 +70,7 @@ function footballLiveStrategy(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyOne(param) {
-	if ((Math.abs(param.index.p1 - param.index.p2) <= rateStrategyOne)) {
+	if ((Math.abs(param.p1 - param.p2) <= rateStrategyOne)) {
 		saveRate(param, 1)// пропускает дальше если запись ушла в БД
 			.then((statistic) => {
 				if (statistic !== null) {
@@ -90,8 +90,8 @@ function footballLiveStrategyOne(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyTwo(param) {
-	if ((Math.abs(param.index.p1 - param.index.p2) > rateStrategyTwo)) {
-		if (param.index.x > Math.min(param.index.p1, param.index.p2)) {
+	if ((Math.abs(param.p1 - param.p2) > rateStrategyTwo)) {
+		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, 2)// пропускает дальше если запись ушла в БД
 				.then((statistic) => {
 					if (statistic !== null) {
@@ -112,8 +112,8 @@ function footballLiveStrategyTwo(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyTree(param) {
-	if ((Math.abs(param.index.p1 - param.index.p2) > rateStrategyTwo)) {
-		if (param.index.x > Math.min(param.index.p1, param.index.p2)) {
+	if ((Math.abs(param.p1 - param.p2) > rateStrategyTwo)) {
+		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, 3)// пропускает дальше если запись ушла в БД
 				.then((statistic) => {
 					if (statistic !== null) {
@@ -185,12 +185,12 @@ function searchIndex(matchId, strategy, oldScore) {
 				searchHelper.searchTotal(item, total, totalStrategy[strategy])
 					.then((index) => {
 						if (index !== null) {
-							setIndexRate(matchId, index);
-							setTotalRate(matchId, index);
+							setIndexRate(matchId, index, param);
+							setTotalRate(matchId, index, param);
 						}
 					});
 			} else {
-				setTotalRate(matchId, -1);
+				setTotalRate(matchId, -1, param);
 				return -1;
 			}
 			return index;
@@ -213,11 +213,32 @@ function searchIndex(matchId, strategy, oldScore) {
  *
  * @param {Number} id матча
  * @param {Number} index результат ставки
+ * @param {Object} param объект с параметрами матча
  */
-function setIndexRate(id = 0, index = 1) {
+function setIndexRate(id = 0, index = 1, param) {
 	return setStatistic({
 		matchId: id,
 		index: index, // тип ставки.
+		snapshot: {
+			end: {
+				p1: param.p1,
+				x: param.x,
+				p2: param.p2,
+				mod: Math.abs(param.p1 - param.p2),
+			}
+		},
+		cards: {
+			one: {
+				red: param.cards.one.red,
+				attacks: param.cards.one.attacks,
+				danAttacks: param.cards.one.danAttacks,
+			},
+			two: {
+				red: param.cards.two.red,
+				attacks: param.cards.two.attacks,
+				danAttacks: param.cards.two.danAttacks,
+			}
+		},
 		modifiedBy: new Date().toISOString()
 	}).then(async (statistic) => {
 		if (statistic !== null) {
@@ -234,11 +255,17 @@ function setIndexRate(id = 0, index = 1) {
  *
  * @param {Number} id матча
  * @param {Number} total коэфф ставки
+ * @param {Object} param объект с параметрами матча
  */
-function setTotalRate(id = 0, total = -2) {
+function setTotalRate(id = 0, total = -2, param) {
 	return setStatistic({
 		matchId: id,
 		total: total,
+		snapshot: {
+			end: {
+				time: param.time
+			}
+		},
 		modifiedBy: new Date().toISOString()
 	});
 }
@@ -253,13 +280,22 @@ function setTotalRate(id = 0, total = -2) {
 function saveRate(param, strategy) {
 	return newStatistic({
 		matchId: param.matchId, // id матча
-		// score: `${param.score.sc1}:${param.score.sc2}`, // счет матча
 		score: param.score, // счет матча
 		command: param.command,
 		group: param.group,
 		strategy: strategy, // стратегия
 		index: '1', // результат ставки.
 		total: '-2',
+		snapshot: {
+			start: {
+				time: param.time,
+				p1: param.p1,
+				x: param.x,
+				p2: param.p2,
+				mod: Math.abs(param.p1 - param.p2),
+			}
+		},
+		// TODO  красны1, красн2, дефолтные значения для остальных
 		createdBy: new Date().toISOString(),
 		modifiedBy: new Date().toISOString()
 	}).catch((error) => {
