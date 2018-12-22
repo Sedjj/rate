@@ -7,45 +7,37 @@ const numericalDesignation = config.get('choice.live.football.numericalDesignati
  * Метод для вытаскивания нужных данных из JSON ответа
  *
  * @param {Object} item объект матча
+ * @param {Boolean} extended тип парсинга
+ * @returns {Object}
  */
-function getParams(item) {
-	const index = indexGame(item);
+function getParams(item, extended = false) {
+	const index = extended ? indexGameExtended(item) : indexGame(item);
+	const cards = searchCards(item['SC']['S']);
 	return {
 		successfully: true,
-		matchId: item.I,
+		matchId: item['I'],
 		command: {
 			ru: {
-				one: item.O1, // название команды 1
-				two: item.O2  // название команды 2
+				one: item['O1'], // название команды 1
+				two: item['O2']  // название команды 2
 			},
 			en: {
-				one: item.O1E, // название команды 1 на en
-				two: item.O2E  // название команды 2 на en
+				one: item['O1E'], // название команды 1 на en
+				two: item['O2E']  // название команды 2 на en
 			},
-			women: 0, // TODO
-			youth: 0 // TODO
+			women: parserScoreWomen(item['LE']),
+			youth: parserScoreYouth(item['LE'])
 		},
 		group: {
-			ru: item.L,
-			en: item.LE
+			ru: item['L'],
+			en: item['LE']
 		},
 		p1: index.p1,
 		x: index.x,
 		p2: index.p2,
 		score: scoreGame(item),
 		time: timeGame(item),
-		cards: {
-			one: {
-				red: 0,
-				attacks: 0,
-				danAttacks: 0
-			},
-			two: {
-				red: 0,
-				attacks: 0,
-				danAttacks: 0
-			}
-		}
+		cards: cards
 	};
 }
 
@@ -57,22 +49,45 @@ function getParams(item) {
  */
 function scoreGame(item) {
 	return {
-		sc1: item.SC.FS.S1 ? item.SC.FS.S1 : 0, // проверяем счет матча
-		sc2: item.SC.FS.S2 ? item.SC.FS.S2 : 0 // проверяем счет матча
+		sc1: item['SC']['FS']['S1'] ? item['SC']['FS']['S1'] : 0, // проверяем счет матча
+		sc2: item['SC']['FS']['S2'] ? item['SC']['FS']['S2'] : 0 // проверяем счет матча
 	};
 }
 
 /**
  * Метод для определения ставок матча.
+ *
  * @param {Object} item объект матча
  * @returns {{p1: number, x: number, p2: number}}
  */
 function indexGame(item) {
 	return {
-		p1: item.E[0] && item.E[0].T === 1 ? item.E[0].C : '', // победа первой
-		x: item.E[1] && item.E[1].T === 2 ? item.E[1].C : '', // ничья
-		p2: item.E[2] && item.E[2].T === 3 ? item.E[2].C : '' // победа второй
+		p1: item.E[0] && item.E[0]['T'] === 1 ? item.E[0].C : '', // победа первой
+		x: item.E[1] && item.E[1]['T'] === 2 ? item.E[1].C : '', // ничья
+		p2: item.E[2] && item.E[2]['T'] === 3 ? item.E[2].C : '' // победа второй
 	};
+}
+
+/**
+ * Метод для определения ставок матча.
+ *
+ * @param {Object} item объект матча
+ * @returns {{p1: number, x: number, p2: number}}
+ */
+function indexGameExtended(item) {
+	let p1 = 0, x = 0, p2 = 0;
+	if (item['GE'] && Array.isArray(item['GE'])) {
+		item['GE'].forEach((rate) => {
+			if (rate['G'] === 1) { // 1 - p1 x p2
+				if (rate.E && Array.isArray(rate.E[0])) {
+					p1 = rate.E[0][0].C;
+					x = rate.E[1][0].C;
+					p2 = rate.E[2][0].C;
+				}
+			}
+		});
+	}
+	return {p1, x, p2};
 }
 
 /**
@@ -82,7 +97,7 @@ function indexGame(item) {
  * @returns {number}
  */
 function timeGame(item) {
-	return item.SC.TS ? Math.floor(item.SC.TS) : 0;
+	return item['SC']['TS'] ? Math.floor(item['SC']['TS']) : 0;
 }
 
 /**
@@ -106,6 +121,28 @@ function parserScore(value) {
 }
 
 /**
+ * Метод для нахождения женских команд.
+ *
+ * @param {String} value строка для парсинга
+ * @returns {Object | string}
+ */
+function parserScoreWomen(value) {
+	const parserReturn = value.match(/(?!=\s)\(Women\)/ig);
+	return parserReturn ? 1 : 0;
+}
+
+/**
+ * Метод для нахождения молодежных команд.
+ *
+ * @param {String} value строка для парсинга
+ * @returns {number}
+ */
+function parserScoreYouth(value) {
+	const parserReturn = value.match(/(?!=\s)U\d{2}/ig);
+	return parserReturn ? 1 : 0;
+}
+
+/**
  * Метод для нахождения ставки в ответе.
  *
  * @param {Object} item объект матча
@@ -116,12 +153,12 @@ function parserScore(value) {
 function searchTotal(item, desiredTotal, minimumIndex) {
 	return new Promise((resolve, reject) => {
 		try {
-			if (item.GE && Array.isArray(item.GE)) {
-				item.GE.map((rate) => {
-					if (rate.G === 17) { // 17 - тотал
+			if (item['GE'] && Array.isArray(item['GE'])) {
+				item['GE'].forEach((rate) => {
+					if (rate['G'] === 17) { // 17 - тотал
 						if (rate.E && Array.isArray(rate.E[0])) {
-							rate.E[0].map((itemTotal) => { // 0 - так как столбец "Тотал больше"
-								if (itemTotal.P === desiredTotal) {
+							rate.E[0].forEach((itemTotal) => { // 0 - так как столбец "Тотал больше"
+								if (itemTotal['P'] === desiredTotal) {
 									if (itemTotal.C > minimumIndex) {
 										resolve(itemTotal.C);
 									}
@@ -139,6 +176,50 @@ function searchTotal(item, desiredTotal, minimumIndex) {
 }
 
 /**
+ * Метод для определения карточек матча.
+ *
+ * @param {Object} item объект матча
+ * @returns {Object}
+ */
+function searchCards(item = []) {
+	let cards = {
+		one: {
+			red: 0,
+			attacks: 0,
+			danAttacks: 0
+		},
+		two: {
+			red: 0,
+			attacks: 0,
+			danAttacks: 0
+		}
+	};
+	item.forEach((item) => {
+		switch (item.key) {
+			case 'IRedCard1':
+				cards.one.red = item.value;
+				break;
+			case 'IRedCard2':
+				cards.two.red = item.value;
+				break;
+			case 'Attacks1':
+				cards.one.attacks = item.value;
+				break;
+			case 'Attacks2':
+				cards.two.attacks = item.value;
+				break;
+			case 'DanAttacks1':
+				cards.one.danAttacks = item.value;
+				break;
+			case 'DanAttacks2':
+				cards.two.danAttacks = item.value;
+				break;
+		}
+	});
+	return cards;
+}
+
+/**
  * Метод для поиска результата матча.
  *
  * @param {Array} data все матчи на определенный день
@@ -150,11 +231,11 @@ async function serchResult(data, id) {
 		try {
 			data.forEach((item) => {
 				if (item.ID === numericalDesignation) {
-					item.Elems.map((object) => {
-						if (Array.isArray(object.Elems)) {
-							object.Elems.map((Elems) => {
-								if (Elems.Head[0] === parseInt(id)) {
-									resolve(Elems.Head[6]);
+					item['Elems'].forEach((object) => {
+						if (Array.isArray(object['Elems'])) {
+							object['Elems'].forEach((Elems) => {
+								if (Elems['Head'][0] === id) {
+									resolve(Elems['Head'][6]);
 								}
 							});
 						}
