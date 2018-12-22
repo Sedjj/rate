@@ -2,7 +2,7 @@ const log = require('../utils/logger');
 const {getStatistic, setStatistic} = require('../storage/statistic');
 const config = require('config');
 const {throttle} = require('../utils/throttle');
-const {equalsTotal, parserScore} = require('../utils/searchHelper');
+const {equalsTotal} = require('../utils/searchHelper');
 const {getResultList} = require('../fetch');
 const {searchHelper} = require('../modifiableFile');
 
@@ -88,7 +88,7 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
  */
 async function baseRecordCorrection(statistic, endScore) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
-	const newScore = parserScore(endScore);
+	const newScore = searchHelper.parserScore(endScore);
 	const result = (newScore !== '') ? equalsTotal(statistic.score, newScore, typeRate[statistic.strategy]) : -1;
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 	if (result === 0 || result === 1 || result === -1) {
