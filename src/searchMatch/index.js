@@ -31,11 +31,11 @@ let waitingEndCount = 0;
 function search() {
 	getAllMatches(urlFootballRate)
 		.then((items) => {
-			items.map((item) => {
+			items.forEach((item) => {
 				try {
 					footballLiveStrategy(searchHelper.getParams(item));
 				} catch (e) {
-					log.debug(`Ошибка при парсинге матча: ${item}`);
+					log.debug(`Ошибка при парсинге матча: ${JSON.stringify(item)} error: ${e}`);
 				}
 			});
 		})
@@ -228,18 +228,7 @@ function setIndexRate(id = 0, index = 1, param) {
 				mod: Math.abs(param.p1 - param.p2),
 			}
 		},
-		cards: {
-			one: {
-				red: param.cards.one.red,
-				attacks: param.cards.one.attacks,
-				danAttacks: param.cards.one.danAttacks,
-			},
-			two: {
-				red: param.cards.two.red,
-				attacks: param.cards.two.attacks,
-				danAttacks: param.cards.two.danAttacks,
-			}
-		},
+		cards: param.cards,
 		modifiedBy: new Date().toISOString()
 	}).then(async (statistic) => {
 		if (statistic !== null) {
@@ -296,7 +285,7 @@ function saveRate(param, strategy) {
 				mod: Math.abs(param.p1 - param.p2),
 			}
 		},
-		// TODO  красны1, красн2, дефолтные значения для остальных
+		cards: param.cards,
 		createdBy: new Date().toISOString(),
 		modifiedBy: new Date().toISOString()
 	}).catch((error) => {

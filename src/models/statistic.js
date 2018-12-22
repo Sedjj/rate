@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const StatisticSchema = new Schema({
 	matchId: {
-		type: String,
+		type: Number,
 		required: true,
-		default: ''
+		default: 0
 	},
 	score: {
 		sc1: {
