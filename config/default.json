@@ -17,7 +17,7 @@
 		"host": "dart.vivalaresistance.info",
 		"port": "3306",
 		"login": "swcbbabh",
-		"psswd": "aYEbh6q5gQ"
+		"password": "aYEbh6q5gQ"
 	},
 	"proxy": {
 		"host": "124.41.211.84",
@@ -31,7 +31,7 @@
 			"chatId": "-299200164",
 			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
 		},
-		"errorDev": {
+		"supportDev": {
 			"chatId": "-376344669",
 			"token": "633227407:AAFReZaI0D6UPZPKt5TT8PR1e_PDPAGA9IQ"
 		},
@@ -39,7 +39,7 @@
 			"chatId": "-276223662",
 			"token": "741538630:AAH3OtLgnLUeXDKZ6cXYe7GBI2uSBSHeOQk"
 		},
-		"errorProd": {
+		"supportProd": {
 			"chatId": "-327795203",
 			"token": "749722999:AAHdN926BxFWiO4Z7v4-b4yppz0pZen5j90"
 		}

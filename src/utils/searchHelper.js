@@ -30,7 +30,7 @@ function equalsTotal(oldScore, endScore, typeRate) {
  * @returns {boolean}
  */
 function equalsScore(oldScore, endScore) {
-	return (oldScore.sc1 === oldScore.sc2) && (endScore.sc1 === endScore.sc2);
+	return (oldScore.sc1 === endScore.sc1) && (oldScore.sc2 === endScore.sc2);
 }
 
 module.exports = {

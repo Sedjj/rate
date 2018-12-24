@@ -6,19 +6,34 @@ const {setFileApiTelegram} = require('../fetch');
 const token = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.token')
 	: config.get('bots.prod.token');
-const socket = config.get('socket');
 const chatId = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.chatId')
 	: config.get('bots.prod.chatId');
 
+const supportToken = process.env.NODE_ENV === 'development'
+	? config.get('bots.supportDev.token')
+	: config.get('bots.supportProd.token');
+const supportChatId = process.env.NODE_ENV === 'development'
+	? config.get('bots.supportDev.chatId')
+	: config.get('bots.supportProd.chatId');
+
+const socket = config.get('socket');
 const socksAgent = new SocksAgent({
 	socksHost: socket.host,
 	socksPort: socket.port,
 	socksUsername: socket.login,
-	socksPassword: socket.psswd
+	socksPassword: socket.password
 });
 
 const bot = new Telegram(token, {
+	agent: socksAgent,
+	webhookReply: true,
+	webHook: {
+		port: '3000'
+	}
+});
+
+const supportBot = new Telegram(supportToken, {
 	agent: socksAgent,
 	webhookReply: true,
 	webHook: {
@@ -42,6 +57,21 @@ function sendMessage(text) {
 }
 
 /**
+ * Метод отправки технических сообщений в телеграмм бот.
+ *
+ * @param {String} text строка для отправки в чат
+ */
+function sendMessageSupport(text) {
+	return new Promise((resolve, reject) => {
+		try {
+			resolve(supportBot.sendMessage(supportChatId, text));
+		} catch (error) {
+			reject(error);
+		}
+	});
+}
+
+/**
  * Метод отправки файла в телеграмм бот.
  *
  * @param {String} file для отправки в чат
@@ -49,7 +79,7 @@ function sendMessage(text) {
 function sendFile(file) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setFileApiTelegram(token, chatId, file));
+			resolve(setFileApiTelegram(supportToken, supportChatId, file));
 		} catch (error) {
 			reject(error);
 		}
@@ -58,5 +88,6 @@ function sendFile(file) {
 
 module.exports = {
 	sendMessage,
+	sendMessageSupport,
 	sendFile
 };
