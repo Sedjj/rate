@@ -2,7 +2,6 @@ require('../utils/dbProvider');
 const log = require('../utils/logger');
 const StatisticModel = require('../models/statistic');
 const {mapProps} = require('../utils/statisticHelpers');
-const {filterGame} = require('../utils/searchHelper');
 const config = require('config');
 
 const rate = config.get('output.rate') || 2000;
@@ -11,10 +10,9 @@ const rate = config.get('output.rate') || 2000;
  * Получить записи из таблицы статистика.
  *
  * @param {Object} param для таблицы.
- * @param {Array} excludeName масив элементов которые нужно исключить из названий команд.
  * @returns {Promise<any>}
  */
-function getStatistic(param = {}, excludeName = []) {
+function getStatistic(param = {}) {
 	return StatisticModel.find(param)
 		.read('secondary')
 		.exec()
@@ -24,38 +22,16 @@ function getStatistic(param = {}, excludeName = []) {
 				return [];
 			}
 			return statistics
-			/*.filter((statistic) => filterGame(statistic, excludeName))*/
 				.map((statistic, index) => {
 					let props = mapProps(statistic, index + 1);
-					props['rate'] = rate;
-					props['typeMatch'] = filterGame(statistic, excludeName);
+					props['score'] = statistic.score.sc1 + ':' + statistic.score.sc2;
+					props['typeMatch'] = (statistic.command.women + statistic.command.youth) > 0 ? 1 : 0;
 					props['profit'] = props.index * rate - rate;
 					return props;
 				});
 		})
 		.catch(error => {
-			log.error(`getStatistic param=${param}: ${error.message}`);
-			throw new Error(error);
-		});
-}
-
-/**
- * Метод для проверки, есть ли данное поле в таблице.
- *
- * @param {Object} param для таблицы
- * @returns {Promise<boolean | never>}
- */
-function isStatistic(param = {}) {
-	return StatisticModel.find(param)
-		.exec()
-		.then(statistics => {
-			if (statistics.length) {
-				return Promise.resolve(true);
-			}
-			return Promise.resolve(false);
-		})
-		.catch(error => {
-			log.error(`isStatistic param=${param}: ${error.message}`);
+			log.error(`getStatistic param=${JSON.stringify(JSON.stringify(param))}: ${error.message}`);
 			throw new Error(error);
 		});
 }
@@ -70,7 +46,7 @@ function deleteStatistic(param) {
 	return StatisticModel.findOneAndRemove({matchId: param.matchId})
 		.exec()
 		.catch(error => {
-			log.error(`deleteStatistic param=${param}: ${error.message}`);
+			log.error(`deleteStatistic param=${JSON.stringify(param)}: ${error.message}`);
 			throw new Error(error);
 		});
 }
@@ -92,7 +68,7 @@ function newStatistic(param) {
 			return statistic.save();
 		})
 		.catch(error => {
-			log.error(`newStatistic param=${param}: ${error.message}`);
+			log.error(`newStatistic param=${JSON.stringify(param)}: ${error.message}`);
 			throw new Error(error);
 		});
 
@@ -115,20 +91,31 @@ function setStatistic(param) {
 			if (param.total !== undefined) {
 				statistic.total = param.total;
 			}
+			if (param.snapshot && (param.snapshot.start !== undefined)) {
+				statistic.snapshot.start = param.snapshot.start;
+			}
+			if (param.snapshot && (param.snapshot.end !== undefined)) {
+				statistic.snapshot.end = param.snapshot.end;
+			}
+			if (param.cards && (param.cards.before !== undefined)) {
+				statistic.cards.before = param.cards.before;
+			}
+			if (param.cards && (param.cards.after !== undefined)) {
+				statistic.cards.after = param.cards.after;
+			}
 			if (param.modifiedBy !== undefined) {
 				statistic.modifiedBy = param.modifiedBy;
 			}
 			return statistic.save();
 		})
 		.catch(error => {
-			log.error(`Error setStatistic param=${param}: ${error.message}`);
+			log.error(`Error setStatistic param=${JSON.stringify(param)}: ${error.message}`);
 			throw new Error(error);
 		});
 }
 
 module.exports = {
 	getStatistic,
-	isStatistic,
 	deleteStatistic,
 	newStatistic,
 	setStatistic

@@ -9,14 +9,14 @@ const StatisticSchema = new Schema({
 	},
 	score: {
 		sc1: {
-			type: String,
+			type: Number,
 			required: true,
-			default: ''
+			default: 0
 		},
 		sc2: {
-			type: String,
+			type: Number,
 			required: true,
-			default: ''
+			default: 0
 		}
 	},
 	command: {
@@ -70,7 +70,7 @@ const StatisticSchema = new Schema({
 	strategy: {
 		type: Number,
 		required: true,
-		default: ''
+		default: 0
 	},
 	index: {
 		type: Number,
@@ -139,40 +139,119 @@ const StatisticSchema = new Schema({
 		}
 	},
 	cards: {
-		one: {
-			red: {
-				type: Number,
-				required: true,
-				default: 0
+		before: {
+			one: {
+				red: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				attacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				danAttacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOn: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOff: {
+					type: Number,
+					required: true,
+					default: 0
+				}
 			},
-			attacks: {
-				type: Number,
-				required: true,
-				default: 0
-			},
-			danAttacks: {
-				type: Number,
-				required: true,
-				default: 0
+			two: {
+				red: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				attacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				danAttacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOn: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOff: {
+					type: Number,
+					required: true,
+					default: 0
+				}
 			}
 		},
-		two: {
-			red: {
-				type: Number,
-				required: true,
-				default: 0
+		after: {
+			one: {
+				red: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				attacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				danAttacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOn: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOff: {
+					type: Number,
+					required: true,
+					default: 0
+				}
 			},
-			attacks: {
-				type: Number,
-				required: true,
-				default: 0
-			},
-			danAttacks: {
-				type: Number,
-				required: true,
-				default: 0
+			two: {
+				red: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				attacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				danAttacks: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOn: {
+					type: Number,
+					required: true,
+					default: 0
+				},
+				shotsOff: {
+					type: Number,
+					required: true,
+					default: 0
+				}
 			}
 		}
+
 	},
 	createdBy: {
 		type: Date,

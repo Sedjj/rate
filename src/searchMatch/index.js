@@ -15,6 +15,7 @@ const before = config.get('choice.live.football.time.before');
 const after = config.get('choice.live.football.time.after');
 const rateStrategyOne = config.get('choice.live.football.strategyOne.rate');
 const rateStrategyTwo = config.get('choice.live.football.strategyTwo.rate');
+const rateStrategyThree = config.get('choice.live.football.strategyThree.rate');
 const totalStrategy = config.get('choice.live.football.total');
 const typeRate = config.get('choice.live.football.typeRate');
 const waitingInterval = process.env.NODE_ENV === 'development'
@@ -55,12 +56,12 @@ function footballLiveStrategy(param) {
 			if ((param.score.sc1 + param.score.sc2) === 1) {
 				footballLiveStrategyOne(param);
 			}
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 < 2)) {
+			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 				footballLiveStrategyTwo(param);
 			}
-			/*if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 < 2)) {
-				footballLiveStrategyTree(param);
-			}*/
+			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+				footballLiveStrategyThree(param);
+			}
 		}
 	}
 }
@@ -73,8 +74,9 @@ function footballLiveStrategy(param) {
 function footballLiveStrategyOne(param) {
 	if ((Math.abs(param.p1 - param.p2) <= rateStrategyOne)) {
 		saveRate(param, 1)// пропускает дальше если запись ушла в БД
-			.then((statistic) => {
+			.then(async (statistic) => {
 				if (statistic !== null) {
+					await setSnapshot(param.matchId);
 					log.debug(`Найден ${param.matchId}: Стратегия гол лузера`);
 					waiting(param, 1);
 				}
@@ -86,7 +88,7 @@ function footballLiveStrategyOne(param) {
 }
 
 /**
- * Стратегия ничья с явным фаворитом
+ * Стратегия ничья с явным фаворитом 0:0
  *
  * @param {Object} param объект с параметрами матча
  */
@@ -94,9 +96,10 @@ function footballLiveStrategyTwo(param) {
 	if ((Math.abs(param.p1 - param.p2) > rateStrategyTwo)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, 2)// пропускает дальше если запись ушла в БД
-				.then((statistic) => {
+				.then(async (statistic) => {
 					if (statistic !== null) {
-						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом`);
+						await setSnapshot(param.matchId);
+						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  0:0`);
 						waiting(param, 2);
 					}
 				})
@@ -108,22 +111,23 @@ function footballLiveStrategyTwo(param) {
 }
 
 /**
- * Стратегия ничья с явным фаворитом
+ * Стратегия ничья с явным фаворитом 1:1
  *
  * @param {Object} param объект с параметрами матча
  */
-function footballLiveStrategyTree(param) {
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyTwo)) {
+function footballLiveStrategyThree(param) {
+	if ((Math.abs(param.p1 - param.p2) > rateStrategyThree)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, 3)// пропускает дальше если запись ушла в БД
-				.then((statistic) => {
+				.then(async (statistic) => {
 					if (statistic !== null) {
-						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом`);
+						await setSnapshot(param.matchId);
+						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  1:1`);
 						waiting(param, 3);
 					}
 				})
 				.catch((error) => {
-					log.error(`footballLiveStrategyTwo: ${error.message}`);
+					log.error(`footballLiveStrategyThree: ${error.message}`);
 				});
 		}
 	}
@@ -134,32 +138,27 @@ function footballLiveStrategyTree(param) {
  *
  * @param {Object} param объект с параметрами матча
  * @param {Number} strategy стратегия
- * @returns {Promise<Number>}
  */
 function waiting(param, strategy) {
 	let waitingIntervalJob;
-	return new Promise((resolve, reject) => {
-		waitingEndCount++;
-		log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
-		waitingIntervalJob = new CronJob(waitingInterval, async () => { // FIXME придумать  рендомный способ
-			try {
-				const indexMatch = await searchIndex(param.matchId, strategy, param.score);
-				if (indexMatch !== null) {
-					log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
-					waitingIntervalJob.stop();
-					waitingEndCount--;
-					log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
-					resolve(indexMatch);
-				}
-			} catch (error) {
-				log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
+	waitingEndCount++;
+	log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
+	waitingIntervalJob = new CronJob(waitingInterval, async () => { // FIXME придумать  рендомный способ
+		try {
+			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
+			if (indexMatch !== null) {
+				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
 				waitingIntervalJob.stop();
-				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 				waitingEndCount--;
-				reject(error);
+				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 			}
-		}, null, true);
-	});
+		} catch (error) {
+			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
+			waitingIntervalJob.stop();
+			log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+			waitingEndCount--;
+		}
+	}, null, true);
 }
 
 /**
@@ -172,27 +171,59 @@ function waiting(param, strategy) {
  *
  * если счет изменился то выходим и в бд пишем 1 и не отслеживаем конец матча
  *
- * @param {number} matchId матча
+ * @param {Number} matchId матча
  * @param {Number} strategy стратегия
  * @param {Object} oldScore старый счет матча
+ * @returns {Promise<Number | null>}
  */
-function searchIndex(matchId, strategy, oldScore) {
+async function searchIndex(matchId, strategy, oldScore) {
+	try {
+		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
+		let index = null;
+		const param = searchHelper.getParams(item, true);
+		if (equalsScore(oldScore, param.score) && (param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
+			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
+			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
+			if (index !== null) {
+				setIndexRate(index, param);
+				setTotalRate(index, param);
+			}
+		} else {
+			setTotalRate(-1, param);
+			index = -1;
+		}
+		return index;
+	} catch (error) {
+		log.error(`searchIndex id: ${matchId}`);
+		deleteStatistic({
+			matchId: matchId
+		}).then(() => {
+			log.debug(`Матч ${matchId} удален`);
+		}).catch((errors) => {
+			log.error(`deleteStatistic: ${errors.message}`);
+		});
+		throw new Error(error);
+	}
+}
+
+/*function searchIndex(matchId, strategy, oldScore) {
 	return getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId))
-		.then((item) => {
-			let index = null;
-			const param = searchHelper.getParams(item);
+		.then(async (item) => {
+			let index = false;
+			const param = searchHelper.getParams(item, true);
 			if (equalsScore(oldScore, param.score && param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
 				const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
-				searchHelper.searchTotal(item, total, totalStrategy[strategy])
-					.then((index) => {
-						if (index !== null) {
-							setIndexRate(matchId, index, param);
-							setTotalRate(matchId, index, param);
+				await searchHelper.searchTotal(item, total, totalStrategy[strategy])
+					.then((itemTotal) => {
+						if (itemTotal !== null) {
+							setIndexRate(matchId, itemTotal, param);
+							setTotalRate(matchId, itemTotal, param);
+							index = true;
 						}
 					});
 			} else {
 				setTotalRate(matchId, -1, param);
-				return -1;
+				return true;
 			}
 			return index;
 		})
@@ -207,28 +238,38 @@ function searchIndex(matchId, strategy, oldScore) {
 			});
 			throw new Error(error);
 		});
+}*/
+
+/**
+ * Метод для изменения начальных параметров карточек.
+ *
+ * @param {number} matchId матча
+ */
+async function setSnapshot(matchId) {
+	const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
+	const param = searchHelper['getParams'](item, true);
+	return setStatistic({
+		matchId: param.matchId,
+		cards: {
+			before: param.cards
+		},
+		modifiedBy: new Date().toISOString()
+	});
 }
 
 /**
  * Метод для изменения ставки.
  *
- * @param {Number} id матча
  * @param {Number} index результат ставки
  * @param {Object} param объект с параметрами матча
  */
-function setIndexRate(id = 0, index = 1, param) {
+function setIndexRate(index = 1, param) {
 	return setStatistic({
-		matchId: id,
+		matchId: param.matchId,
 		index: index, // тип ставки.
-		snapshot: {
-			end: {
-				p1: param.p1,
-				x: param.x,
-				p2: param.p2,
-				mod: Math.abs(param.p1 - param.p2),
-			}
+		cards: {
+			after: param.cards
 		},
-		cards: param.cards,
 		modifiedBy: new Date().toISOString()
 	}).then(async (statistic) => {
 		if (statistic !== null) {
@@ -243,17 +284,20 @@ function setIndexRate(id = 0, index = 1, param) {
 /**
  * Метод для изменения ставки.
  *
- * @param {Number} id матча
  * @param {Number} total коэфф ставки
  * @param {Object} param объект с параметрами матча
  */
-function setTotalRate(id = 0, total = -2, param) {
+function setTotalRate( total = -2, param) {
 	return setStatistic({
-		matchId: id,
+		matchId: param.matchId,
 		total: total,
 		snapshot: {
 			end: {
-				time: param.time
+				time: param.time,
+				p1: param.p1,
+				x: param.x,
+				p2: param.p2,
+				mod: Math.abs(param.p1 - param.p2),
 			}
 		},
 		modifiedBy: new Date().toISOString()
@@ -285,7 +329,6 @@ function saveRate(param, strategy) {
 				mod: Math.abs(param.p1 - param.p2),
 			}
 		},
-		cards: param.cards,
 		createdBy: new Date().toISOString(),
 		modifiedBy: new Date().toISOString()
 	}).catch((error) => {
@@ -295,6 +338,5 @@ function saveRate(param, strategy) {
 }
 
 module.exports = {
-	search,
-	footballLiveStrategyTree
+	search
 };

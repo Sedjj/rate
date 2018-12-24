@@ -27,7 +27,7 @@ async function checkingResults() {
 	query['$and'].push({createdBy: {$gte: beforeDate.toISOString()}});
 	query['$and'].push({createdBy: {$lte: currentDate.toISOString()}});
 	log.debug(`Начало проверки результатов с ${beforeDate.toISOString()} по ${currentDate.toISOString()}`);
-	return getStatistic(query, ['(', ')'])
+	return getStatistic(query)
 		.then((statistics) => {
 			return result(statistics, beforeDate.toISOString(), currentDate.toISOString());
 		}).catch((error) => {

@@ -1,23 +1,4 @@
 /**
- * Метод для отсеивание по названию матча
- *
- * @param {Object} item матч
- * @param {Array} excludeName масив элементов которые нужно исключить из названий команд.
- * @returns {boolean}
- */
-function filterGame(item, excludeName) {
-	return excludeName.reduce((current, exclude) => {
-		if ((item.command.ru.one.indexOf(exclude) === -1) && (item.command.ru.two.indexOf(exclude) === -1)) {
-			current = false;
-		}// FIXME Посмотреть как парсятся английские имена
-		/*if ((item.command.en.one.indexOf(exclude) === -1) && (item.command.en.two.indexOf(exclude) === -1)) {
-			current = false;
-		}*/
-		return current;
-	}, true);
-}
-
-/**
  * Cравниваем Total 2-x таймов не изменился ли.
  * Eсли изменился то меняем даные в таблице .
  * {
@@ -30,7 +11,7 @@ function filterGame(item, excludeName) {
  * @param {Number} typeRate тип ставки
  */
 function equalsTotal(oldScore, endScore, typeRate) {
-	const start = oldScore.sc1 + oldScore.sc1 + typeRate; // FIXME привести к одному виду
+	const start = oldScore.sc1 + oldScore.sc1 + typeRate;
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;
@@ -54,6 +35,5 @@ function equalsScore(oldScore, endScore) {
 
 module.exports = {
 	equalsScore,
-	filterGame,
 	equalsTotal
 };

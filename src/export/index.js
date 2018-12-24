@@ -50,7 +50,7 @@ function returnStatisticListTemplate() {
 	query['$and'].push({modifiedBy: {$gte: beforeDate.toISOString()}});
 	query['$and'].push({modifiedBy: {$lte: currentDate.toISOString()}});
 	log.debug(`Начало экспорта Statistics с ${beforeDate.toISOString()} по ${currentDate.toISOString()}`);
-	return getStatistic(query, ['(', ')'])// , 'U19', 'women'
+	return getStatistic(query)
 		.then((items) => {
 			props.statistics = items;
 			log.debug(`Подготовлено данных ${items.length}`);

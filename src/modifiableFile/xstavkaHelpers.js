@@ -186,33 +186,49 @@ function searchCards(item = []) {
 		one: {
 			red: 0,
 			attacks: 0,
-			danAttacks: 0
+			danAttacks: 0,
+			shotsOn: 0,
+			shotsOff: 0
 		},
 		two: {
 			red: 0,
 			attacks: 0,
-			danAttacks: 0
+			danAttacks: 0,
+			shotsOn: 0,
+			shotsOff: 0
 		}
 	};
 	item.forEach((item) => {
-		switch (item.key) {
+		switch (item['Key']) {
 			case 'IRedCard1':
-				cards.one.red = item.value;
+				cards.one.red = item['Value'];
 				break;
 			case 'IRedCard2':
-				cards.two.red = item.value;
+				cards.two.red = item['Value'];
 				break;
 			case 'Attacks1':
-				cards.one.attacks = item.value;
+				cards.one.attacks = item['Value'];
 				break;
 			case 'Attacks2':
-				cards.two.attacks = item.value;
+				cards.two.attacks = item['Value'];
 				break;
 			case 'DanAttacks1':
-				cards.one.danAttacks = item.value;
+				cards.one.danAttacks = item['Value'];
 				break;
 			case 'DanAttacks2':
-				cards.two.danAttacks = item.value;
+				cards.two.danAttacks = item['Value'];
+				break;
+			case 'ShotsOn1':
+				cards.one.shotsOn = item['Value'];
+				break;
+			case 'ShotsOn2':
+				cards.two.shotsOn = item['Value'];
+				break;
+			case 'ShotsOff1':
+				cards.one.shotsOff = item['Value'];
+				break;
+			case 'ShotsOff2':
+				cards.two.shotsOff = item['Value'];
 				break;
 		}
 	});

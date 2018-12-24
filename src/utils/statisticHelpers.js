@@ -35,14 +35,14 @@ function mapProps(statistic, index) {
 		total: statistic.total,
 		snapshot: {
 			start: {
-				time: statistic.snapshot.start.time,
+				time: statistic.snapshot.start.time / 60,
 				p1: statistic.snapshot.start.p1,
 				x: statistic.snapshot.start.x,
 				p2: statistic.snapshot.start.p2,
 				mod: statistic.snapshot.start.mod,
 			},
 			end: {
-				time: statistic.snapshot.end.time,
+				time: statistic.snapshot.end.time / 60,
 				p1: statistic.snapshot.end.p1,
 				x: statistic.snapshot.end.x,
 				p2: statistic.snapshot.end.p2,
@@ -50,15 +50,37 @@ function mapProps(statistic, index) {
 			}
 		},
 		cards: {
-			one: {
-				red: statistic.cards.one.red,
-				attacks: statistic.cards.one.attacks,
-				danAttacks: statistic.cards.one.danAttacks,
+			before: {
+				one: {
+					red: statistic.cards.before.one.red,
+					attacks: statistic.cards.before.one.attacks,
+					danAttacks: statistic.cards.before.one.danAttacks,
+					shotsOn: statistic.cards.before.one.shotsOn,
+					shotsOff: statistic.cards.before.one.shotsOff
+				},
+				two: {
+					red: statistic.cards.before.two.red,
+					attacks: statistic.cards.before.two.attacks,
+					danAttacks: statistic.cards.before.two.danAttacks,
+					shotsOn: statistic.cards.before.two.shotsOn,
+					shotsOff: statistic.cards.before.two.shotsOff
+				}
 			},
-			two: {
-				red: statistic.cards.one.red,
-				attacks: statistic.cards.one.attacks,
-				danAttacks: statistic.cards.one.danAttacks,
+			after: {
+				one: {
+					red: statistic.cards.after.one.red,
+					attacks: statistic.cards.after.one.attacks,
+					danAttacks: statistic.cards.after.one.danAttacks,
+					shotsOn: statistic.cards.after.one.shotsOn,
+					shotsOff: statistic.cards.after.one.shotsOff
+				},
+				two: {
+					red: statistic.cards.after.two.red,
+					attacks: statistic.cards.after.two.attacks,
+					danAttacks: statistic.cards.after.two.danAttacks,
+					shotsOn: statistic.cards.after.two.shotsOn,
+					shotsOff: statistic.cards.after.two.shotsOff
+				}
 			}
 		},
 		createdBy: getFormattedDate(statistic.createdBy),
