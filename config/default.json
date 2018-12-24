@@ -130,10 +130,16 @@
 					"after": 4200
 				},
 				"strategyOne": {
-					"rate": 1
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 1.5
 				},
 				"strategyTwo": {
-					"rate": 6
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 4
+				},
+				"strategyThree": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 4
 				},
 				"titleTotal": "ожидаемый коэффициент: '0'- заглушка, '1'- первая стратегия, '2'- вторая стратегия, '3'- третья стратегия",
 				"total": [
