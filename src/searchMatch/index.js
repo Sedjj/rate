@@ -217,40 +217,6 @@ async function searchIndex(matchId, strategy, oldScore) {
 	}
 }
 
-/*function searchIndex(matchId, strategy, oldScore) {
-	return getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId))
-		.then(async (item) => {
-			let index = false;
-			const param = searchHelper.getParams(item, true);
-			if (equalsScore(oldScore, param.score && param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
-				const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
-				await searchHelper.searchTotal(item, total, totalStrategy[strategy])
-					.then((itemTotal) => {
-						if (itemTotal !== null) {
-							setIndexRate(matchId, itemTotal, param);
-							setTotalRate(matchId, itemTotal, param);
-							index = true;
-						}
-					});
-			} else {
-				setTotalRate(matchId, -1, param);
-				return true;
-			}
-			return index;
-		})
-		.catch(error => {
-			log.error(`searchIndex id: ${matchId}`);
-			deleteStatistic({
-				matchId: matchId
-			}).then(() => {
-				log.debug(`Матч ${matchId} удален`);
-			}).catch((error) => {
-				log.error(`deleteStatistic: ${error.message}`);
-			});
-			throw new Error(error);
-		});
-}*/
-
 /**
  * Метод для изменения начальных параметров карточек.
  *
