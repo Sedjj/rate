@@ -161,8 +161,16 @@
 		}
 	},
 	"cron": {
-		"schedulerSearch": "*/05 * * * *",
-		"waitingInterval": "*/2 * * * *",
+		"schedulerSearch": {
+			"title": "в секундах",
+			"before": 150,
+			"after": 250
+		},
+		"waitingInterval": {
+			"title": "в секундах",
+			"before": 20,
+			"after": 60
+		},
 		"schedulerBackupExport": "00 05 10 * * 0-7"
 	},
 	"path": {

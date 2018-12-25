@@ -40,15 +40,32 @@ const rc = function () {
 		}
 
 		const crontab = [];
+		let random, minutes;
 		const typeNames = Object.keys(ruleTypes);
 		for (let i = 0, total = typeNames.length; i < total; i++) {
 			const rule = rules[typeNames[i]];
-			crontab.push(
-				rule ?
-					'*/' + Math.round(Math.random() * (rule.range[1] - rule.range[0]) + rule.range[0]).toString()
-					:
-					'*'
-			);
+			// FIXME костыль только для секунд
+			if (typeNames[i] === 'seconds') {
+				random = Math.round(Math.random() * (rule.range[1] - rule.range[0]) + rule.range[0]);
+				minutes = Math.floor(random / 60);
+				rules[typeNames[i]].value = random - minutes * 60;
+			}
+			if (typeNames[i] === 'minute') {
+				if (minutes > 0) {
+					rules[typeNames[i]] = {
+						value: minutes
+					};
+				}
+			}
+
+		}
+		for (let i = 0, total = typeNames.length; i < total; i++) {
+			const rule = rules[typeNames[i]];
+			if (rule) {
+				crontab.push('*/' + rules[typeNames[i]].value.toString());
+			} else {
+				crontab.push('*');
+			}
 		}
 
 		rules = {};

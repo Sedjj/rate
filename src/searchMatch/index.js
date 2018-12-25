@@ -1,5 +1,6 @@
 const log = require('../utils/logger');
-const {CronJob} = require('cron');
+const {CronJob, CronTime} = require('cron');
+const rc = require('../utils/random-cron');
 const {newStatistic, setStatistic, deleteStatistic} = require('../storage/statistic');
 const {getAllMatches, getExpandedMatch} = require('../fetch');
 const config = require('config');
@@ -19,8 +20,11 @@ const rateStrategyThree = config.get('choice.live.football.strategyThree.rate');
 const totalStrategy = config.get('choice.live.football.total');
 const typeRate = config.get('choice.live.football.typeRate');
 const waitingInterval = process.env.NODE_ENV === 'development'
-	? '*/20 * * * * *'
-	: config.get('cron.waitingInterval');
+	? rc.some('seconds').between(10, 20).generate()
+	: rc.some('seconds').between(
+		config.get('cron.waitingInterval.before'),
+		config.get('cron.waitingInterval.after')
+	).generate();
 
 let waitingEndCount = 0;
 
@@ -140,11 +144,16 @@ function footballLiveStrategyThree(param) {
  * @param {Number} strategy стратегия
  */
 function waiting(param, strategy) {
-	let waitingIntervalJob;
 	waitingEndCount++;
 	log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
-	waitingIntervalJob = new CronJob(waitingInterval, async () => { // FIXME придумать  рендомный способ
+	let waitingIntervalJob = new CronJob(waitingInterval, async () => {
 		try {
+			waitingIntervalJob.setTime(new CronTime(
+				rc.some('seconds').between(
+					config.get('cron.waitingInterval.before'),
+					config.get('cron.waitingInterval.after')
+				).generate()
+			));
 			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
 			if (indexMatch !== null) {
 				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
@@ -158,7 +167,9 @@ function waiting(param, strategy) {
 			log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 			waitingEndCount--;
 		}
-	}, null, true);
+	}, () => {
+		waitingIntervalJob.start();
+	}, true);
 }
 
 /**
@@ -287,7 +298,7 @@ function setIndexRate(index = 1, param) {
  * @param {Number} total коэфф ставки
  * @param {Object} param объект с параметрами матча
  */
-function setTotalRate( total = -2, param) {
+function setTotalRate(total = -2, param) {
 	return setStatistic({
 		matchId: param.matchId,
 		total: total,
