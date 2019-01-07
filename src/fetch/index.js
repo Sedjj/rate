@@ -1,7 +1,7 @@
 const config = require('config');
 const request = require('request');
 const log = require('./../utils/logger');
-const {getStringToDateTime} = require('./../utils/dateFormat');
+const {getStringToUTCDateString} = require('./../utils/dateFormat');
 
 const proxy = config.get('proxy');
 
@@ -74,7 +74,7 @@ function postResultZone(url, date) {
 	return new Promise((resolve, reject) => {
 		const param = {
 			'Language': 'ru',
-			'Params': [getStringToDateTime(date), null, null, null, null, 300],
+			'Params': [getStringToUTCDateString(date), null, null, null, null, 300],
 			'Vers': 6,
 			'Adult': false,
 			'partner': 51

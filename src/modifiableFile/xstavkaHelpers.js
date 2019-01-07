@@ -1,4 +1,4 @@
-const {getStringToDateTime} = require('./../utils/dateFormat');
+const {getStringToUTCDateString} = require('./../utils/dateFormat');
 const config = require('config');
 
 const numericalDesignation = config.get('choice.live.football.numericalDesignation');
@@ -273,7 +273,7 @@ async function serchResult(data, id) {
  * @returns {void | string | never}
  */
 function replaceUrl(url, date) {
-	return url.replace('${date}', getStringToDateTime(date));
+	return url.replace('${date}', getStringToUTCDateString(date));
 }
 
 module.exports = {

@@ -56,7 +56,7 @@ function getFormattedTime(date) {
  * @returns {String} дата в формате строки
  */
 function getTime(date) {
-	return new Date(getFormattedDate(date)).getTime();
+	return new Date(getFormattedDateTime(date)).getTime();
 }
 
 /**
@@ -65,7 +65,7 @@ function getTime(date) {
  * @param {Date} date - дата
  * @returns {String} дата в формате строки
  */
-function getDateTime(date) {
+function getLocalDateTime(date) {
 	return getFormattedDateTime(new Date(date));
 }
 
@@ -75,15 +75,26 @@ function getDateTime(date) {
  * @param {Date} date - дата
  * @returns {String} дата в формате строки
  */
-function getStringToDateTime(date) {
+function getLocalStringToDateTime(date) {
 	return getFormattedDate(new Date(date));
+}
+
+/**
+ * Преобразует строку даты в формата вида yyyy-mm-dd
+ *
+ * @param {String} date - дата
+ * @returns {String} дата в формате строки
+ */
+function getStringToUTCDateString(date) {
+	return date.split('T')[0];
 }
 
 module.exports = {
 	getFormattedDateTime,
 	getFormattedDate,
 	getFormattedTime,
-	getDateTime,
+	getLocalDateTime,
 	getTime,
-	getStringToDateTime
+	getLocalStringToDateTime,
+	getStringToUTCDateString
 };

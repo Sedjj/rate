@@ -28,9 +28,9 @@ function replaceAll(str, find, replace) {
  */
 function decorateMessageMatch(param) {
 	return `Матч: ${param.matchId}; Стр: ${param.strategy}; Счет: ${param.score.sc1}:${param.score.sc2}
-	Группа: ${param.group.ru}
-	  Команда 1:  ${param.command.ru.one}
-	  Команда 2:  ${param.command.ru.two}`;
+	Группа: ${param.group.en}
+	  Команда 1:  ${param.command.en.one}
+	  Команда 2:  ${param.command.en.two}`;
 }
 
 module.exports = {

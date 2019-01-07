@@ -17,7 +17,7 @@ const schedulerSearch = process.env.NODE_ENV === 'development'
 	).generate();
 
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
-	? '*/10 * * * * *'
+	? '*/50 * * * * *'
 	: config.get('cron.schedulerBackupExport');
 
 /**

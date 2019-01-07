@@ -144,22 +144,26 @@ function footballLiveStrategyThree(param) {
  * @param {Number} strategy стратегия
  */
 function waiting(param, strategy) {
+	let reboot = false;
 	waitingEndCount++;
 	log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
 	let waitingIntervalJob = new CronJob(waitingInterval, async () => {
 		try {
-			waitingIntervalJob.setTime(new CronTime(
-				rc.some('seconds').between(
-					config.get('cron.waitingInterval.before'),
-					config.get('cron.waitingInterval.after')
-				).generate()
-			));
 			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
 			if (indexMatch !== null) {
 				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
 				waitingIntervalJob.stop();
 				waitingEndCount--;
 				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+				reboot = false;
+			} else {
+				waitingIntervalJob.setTime(new CronTime(
+					rc.some('seconds').between(
+						config.get('cron.waitingInterval.before'),
+						config.get('cron.waitingInterval.after')
+					).generate()
+				));
+				reboot = true;
 			}
 		} catch (error) {
 			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
@@ -168,7 +172,9 @@ function waiting(param, strategy) {
 			waitingEndCount--;
 		}
 	}, () => {
-		waitingIntervalJob.start();
+		if (reboot) {
+			waitingIntervalJob.start();
+		}
 	}, true);
 }
 

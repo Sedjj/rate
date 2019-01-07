@@ -39,9 +39,9 @@ async function exportBackupStatistic() {
  * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
  */
 function returnStatisticListTemplate() {
-	const currentDate = new Date(new Date().setHours(23, 0, 0, 59));
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
-	beforeDate.setDate(beforeDate.getDate() - 1);
+	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
+	beforeDate.setUTCDate(beforeDate.getUTCDate() - 1);
 	let props = {
 		statistics: [],
 	};
