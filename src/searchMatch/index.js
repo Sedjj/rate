@@ -166,6 +166,7 @@ function waiting(param, strategy) {
 				));
 			}
 		} catch (error) {
+			reboot = false;
 			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
 			waitingIntervalJob.stop();
 			log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
