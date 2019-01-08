@@ -45,8 +45,8 @@ async function checkingResults() {
  */
 async function result(statistics, beforeDate, currentDate) {
 	try {
-		const beforeData = await postResultDebounce(searchHelper.replaceUrl(urlAll, beforeDate));
 		const currentData = await postResultDebounce(searchHelper.replaceUrl(urlAll, currentDate));
+		const beforeData = await postResultDebounce(searchHelper.replaceUrl(urlAll, beforeDate));
 		statistics.forEach(async (statistic) => {
 			const endScore = await serchResultEndMatch(beforeData, currentData, statistic);
 			await baseRecordCorrection(statistic, endScore);
@@ -67,9 +67,9 @@ async function result(statistics, beforeDate, currentDate) {
 function serchResultEndMatch(beforeData, currentData, statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let endScore = await searchHelper.serchResult(beforeData, statistic.matchId);
+			let endScore = await searchHelper.serchResult(currentData, statistic.matchId);
 			if (endScore === '') {
-				endScore = await searchHelper.serchResult(currentData, statistic.matchId);
+				endScore = await searchHelper.serchResult(beforeData, statistic.matchId);
 			}
 			resolve(endScore);
 		} catch (error) {
@@ -77,7 +77,6 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
 		}
 	});
 }
-
 
 /**
  * Метод для сравнения результатов.

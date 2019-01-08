@@ -25,8 +25,8 @@ function getParams(item, extended = false) {
 				one: item['O1E'], // название команды 1 на en
 				two: item['O2E']  // название команды 2 на en
 			},
-			women: parserScoreWomen(item['LE']),
-			youth: parserScoreYouth(item['LE'])
+			women: parserScoreWomen(item['O1E']),
+			youth: parserScoreYouth(item['O1E'])
 		},
 		group: {
 			ru: item['L'],

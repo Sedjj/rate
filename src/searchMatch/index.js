@@ -157,13 +157,13 @@ function waiting(param, strategy) {
 				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 				reboot = false;
 			} else {
+				reboot = true;
 				waitingIntervalJob.setTime(new CronTime(
 					rc.some('seconds').between(
 						config.get('cron.waitingInterval.before'),
 						config.get('cron.waitingInterval.after')
 					).generate()
 				));
-				reboot = true;
 			}
 		} catch (error) {
 			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
