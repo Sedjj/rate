@@ -151,11 +151,11 @@ function waiting(param, strategy) {
 		try {
 			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
 			if (indexMatch !== null) {
+				reboot = false;
 				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
 				waitingIntervalJob.stop();
 				waitingEndCount--;
 				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
-				reboot = false;
 			} else {
 				reboot = true;
 				waitingIntervalJob.setTime(new CronTime(
