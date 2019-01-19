@@ -21,7 +21,7 @@ while [[ $? -ne 0 && $COUNTER -lt 60 ]] ; do
 done
 
 # Restore from dump
-mongorestore --gzip --drop -d rateBot --archive="data/dump/rateBot.gz"
+mongorestore --gzip --drop -d rateBot --archive="data/dump/rateBot-19.01.gz"
 # Restore from scripts
 mongo 127.0.0.1:27017/rateBot /data/scripts/index.js
 

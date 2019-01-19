@@ -5,11 +5,12 @@ mongodump --gzip -d rateBot --archive="/home/rb-app/mongodb/db/rateBot-04.12.gz"
 
 Востановление из бэкапа
 ```bash
-mongorestore --gzip --drop -d rateBot --archive="/data/db/db/rateBot-04.12.gz" 
+mongorestore --gzip --drop -d rateBot --archive="/data/dump/rateBot-19.01.gz"
 ```
 
+Скопировать файл в докер
 ```bash
-COPY "D:\git\bot\rate\mongoDB\db\rateBot-04.12.gz" "localhost:27017/data/db/rateBot-04.12.gz"
+COPY "D:\git\bot\rate\mongoDB\db\rateBot-19.01.gz" "localhost:27017/data/db/rateBot.gz"
 ```
 
 

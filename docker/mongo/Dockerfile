@@ -13,9 +13,10 @@ COPY mongoDB/mongo.sh /usr/local/bin/
 # Copy scripts
 COPY mongoDB/scripts /data/scripts/
 
-# RUN mongod --logpath=/data/log/mongodb.log && sleep 20 && \
-# mongorestore --gzip --drop -d rateBot --archive="data/dump/rateBot.gz" && \
+# RUN sleep 20 && \
+#   mongorestore --gzip --drop -d rateBot --archive="data/dump/rateBot-19.01.gz"
+# && \
 # mongo 127.0.0.1:27017/rateBot /data/scripts/index.js
-ENTRYPOINT ["mongo.sh"]
+# ENTRYPOINT ["mongo.sh"]
 
 # CMD ["/data/mongo.sh"]
