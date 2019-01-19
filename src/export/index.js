@@ -62,8 +62,15 @@ function returnStatisticListTemplate() {
 					.then(file => {
 						const template = new XlsxTemplate(file);
 						// Replacements take place on first sheet
-						const sheetNumber = 1;
-						template.substitute(sheetNumber, props);
+						template.substitute(1, {
+							statistics: props.statistics.filter((item)=> item.strategy === 1)
+						});
+						template.substitute(2, {
+							statistics: props.statistics.filter((item)=> item.strategy === 2)
+						});
+						template.substitute(3, {
+							statistics: props.statistics.filter((item)=> item.strategy === 3)
+						});
 						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});
 					});

@@ -24,8 +24,8 @@ function getStatistic(param = {}) {
 			return statistics
 				.map((statistic, index) => {
 					let props = mapProps(statistic, index + 1);
-					props['score'] = statistic.score.sc1 + ':' + statistic.score.sc2;
-					props['typeMatch'] = (statistic.command.women + statistic.command.youth) > 0 ? 1 : 0;
+					props['displayScore'] = props.score.sc1 + ':' + props.score.sc2;
+					props['typeMatch'] = (props.command.women + props.command.youth) > 0 ? 1 : 0;
 					props['profit'] = props.index * rate - rate;
 					return props;
 				});

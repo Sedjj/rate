@@ -12,8 +12,8 @@ function mapProps(statistic, index) {
 		id: index,
 		matchId: statistic.matchId,
 		score: {
-			ru: statistic.score.sc1,
-			en: statistic.score.sc2,
+			sc1: statistic.score.sc1,
+			sc2: statistic.score.sc2,
 		},
 		command: {
 			ru: {
@@ -33,6 +33,7 @@ function mapProps(statistic, index) {
 		},
 		index: statistic.index,
 		total: statistic.total,
+		strategy: statistic.strategy,
 		snapshot: {
 			start: {
 				time: statistic.snapshot.start.time / 60,

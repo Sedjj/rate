@@ -38,7 +38,7 @@ function search() {
 		.then((items) => {
 			items.forEach((item) => {
 				try {
-					footballLiveStrategy(searchHelper.getParams(item));
+					footballLiveStrategy(searchHelper['getParams'](item));
 				} catch (e) {
 					log.debug(`Ошибка при парсинге матча: ${JSON.stringify(item)} error: ${e}`);
 				}
@@ -198,7 +198,7 @@ async function searchIndex(matchId, strategy, oldScore) {
 	try {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
-		const param = searchHelper.getParams(item, true);
+		const param = searchHelper['getParams'](item, true);
 		if (equalsScore(oldScore, param.score) && (param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
 			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
 			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
