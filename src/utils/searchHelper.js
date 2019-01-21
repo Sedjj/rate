@@ -6,12 +6,12 @@
  * 		конечный < (исходный счет + typeRate) -> 0
  * 		конечный > (исходный счет  + typeRate) -> ставка(1.666)
  * }
- * @param {Object} oldScore исходные данные Total
+ * @param {Object} startScore исходные данные Total
  * @param {Object} endScore результирующие данные Total
  * @param {Number} typeRate тип ставки
  */
-function equalsTotal(oldScore, endScore, typeRate) {
-	const start = oldScore.sc1 + oldScore.sc1 + typeRate;
+function equalsTotal(startScore, endScore, typeRate) {
+	const start = startScore.sc1 + startScore.sc2 + typeRate;
 	const end = endScore.sc1 + endScore.sc2;
 	if (start === end) {
 		return 1;

@@ -85,13 +85,13 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
  * @param {String} endScore строка для парсинга
  * @returns {Promise<void>}
  */
-async function baseRecordCorrection(statistic, endScore) {
-	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Результат матча ${(endScore !== '') ? endScore : 'не определен'}`);
-	const newScore = searchHelper.parserScore(endScore);
-	const result = (newScore !== '') ? equalsTotal(statistic.score, newScore, typeRate[statistic.strategy]) : -1;
-	log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
+async function baseRecordCorrection(statistic, score) {
+	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
+	const endScore = searchHelper.parserScore(score);
+	const result = (endScore !== '') ? equalsTotal(statistic.score, endScore, typeRate[statistic.strategy]) : -1;
+	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 	if (result === 0 || result === 1 || result === -1) {
-		log.debug(`Матч ${statistic.matchId}: 'Стратегия ничья с явным фаворитом' - Корректировка коэффициента ставки ${result}`);
+		log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Корректировка коэффициента ставки ${result}`);
 		await setIndexRate(statistic.matchId, result);
 	}
 	return Promise.resolve([]);
