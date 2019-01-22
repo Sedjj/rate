@@ -21,5 +21,4 @@ ls /data/scripts/
 
 apt-get update && apt-get install nano
 nano /data/mongo.sh
-
 ```

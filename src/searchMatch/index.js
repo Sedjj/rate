@@ -203,8 +203,8 @@ async function searchIndex(matchId, strategy, oldScore) {
 			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
 			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
 			if (index !== null) {
+				await setTotalRate(index, param);
 				setIndexRate(index, param);
-				setTotalRate(index, param);
 			}
 		} else {
 			setTotalRate(-1, param);

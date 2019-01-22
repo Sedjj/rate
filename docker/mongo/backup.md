@@ -1,11 +1,16 @@
-Полный бэкап базы
+Сделать дам на сервере
 ```bash
-mongodump --gzip -d rateBot --archive="/home/rb-app/mongodb/db/rateBot-04.12.gz"
+mongodump --gzip -d rateBot --archive="/home/rb-app/rate_bot/mongoDB/dump/rateBot-22.01.gz"
 ```
 
 Востановление из бэкапа
 ```bash
-mongorestore --gzip --drop -d rateBot --archive="/data/dump/rateBot-19.01.gz"
+mongorestore --gzip --drop -d rateBot --archive="/data/dump/rateBot-22.01.gz"
+```
+
+Обновить данные на компе
+```bash
+mongorestore --gzip --drop -d rateBot --archive="rateBot-19.01.gz"
 ```
 
 Скопировать файл в докер
@@ -22,4 +27,10 @@ mongoexport -d rateBot -c statistics -o statistics.json
 Копировать из докера нужный файл: где `nostalgic_kalam` находится через `docker ps` и берется поле `name`
 ```bash
 docker cp  nostalgic_kalam:\data\db\statistics.json D:\git\bot\rate\mongoDB\dump
+```
+
+Удалить данные из базы через консоль
+```mongo
+mongo rateBot
+db.statistics.drop();
 ```

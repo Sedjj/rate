@@ -8,7 +8,7 @@ RUN mkdir -p /data/log/
 COPY mongoDB/dump/ /data/dump/
 
 # Copy mongo.sh
-COPY mongoDB/mongo.sh /usr/local/bin/
+# COPY mongoDB/mongo.sh /usr/local/bin/
 
 # Copy scripts
 COPY mongoDB/scripts /data/scripts/
