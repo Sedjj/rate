@@ -2,28 +2,28 @@ const config = require('config');
 const active = config.get('parser.active');
 
 let searchHelper;
-switch (active[0]) {
-	case '1xstavka': {
-		searchHelper = require('./xstavkaHelpers');
-		break;
+
+const importComponent = (name) => {
+	switch (name) {
+		case '1xstavka': {
+			return require('./xstavkaHelpers');
+		}
+		case '1xbet': {
+			return require('./xbetHelper');
+		}
+		case 'fonbet': {
+			return require('./fonbetHelper');
+		}
+		case 'lds': {
+			return require('./ldsHelper');
+		}
+		case 'marathonbet': {
+			return require('./marathonbetHelper');
+		}
 	}
-	case '1xbet': {
-		searchHelper = require('./xbetHelper');
-		break;
-	}
-	case 'fonbet': {
-		searchHelper = require('./fonbetHelper');
-		break;
-	}
-	case 'lds': {
-		searchHelper = require('./ldsHelper');
-		break;
-	}
-	case 'marathonbet': {
-		searchHelper = require('./marathonbetHelper');
-		break;
-	}
-}
+};
+
+searchHelper = importComponent(active[0]);
 
 module.exports = {
 	searchHelper

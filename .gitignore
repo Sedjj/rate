@@ -71,3 +71,4 @@ logs/
 
 connection.*
 help/postman.md
+docker/build/

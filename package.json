@@ -7,7 +7,9 @@
 		"start": "set NODE_ENV=production&&node index.js",
 		"dev": "set NODE_ENV=development&&node index.js",
 		"docs": "jsdoc -c jsdoc.json README.md",
-		"help-api": "apidoc -i routes -o help/api"
+		"help-api": "apidoc -i routes -o help/api",
+		"build": "webpack --mode=development --config ./webpack.config.js --progress --profile",
+		"test": "jest"
 	},
 	"repository": {
 		"type": "git",
@@ -18,12 +20,26 @@
 		"bot",
 		"rate"
 	],
+	"jest": {
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"jsx",
+			"json",
+			"node"
+		]
+	},
 	"author": "Eldar Salimzebarov",
 	"license": "MIT",
 	"homepage": "https://gitlab.com:developmentKit/projects/bot/rate.git#readme",
 	"dependencies": {
 		"apidoc": "^0.17.6",
-		"config": "^2.0.1",
+		"config": "^3.0.1",
 		"cron": "^1.4.1",
 		"mongodb": "^3.1.10",
 		"mongodb-backup": "^1.6.9",
@@ -39,6 +55,14 @@
 	},
 	"devDependencies": {
 		"eslint": "^5.7.0",
-		"jsdoc": "^3.5.5"
+		"jsdoc": "^3.5.5",
+		"resolve-path": "^1.4.0",
+		"ts-jest": "^23.10.5",
+		"ts-loader": "^5.3.3",
+		"tslint": "^5.12.1",
+		"tslint-loader": "^3.5.4",
+		"webpack": "^4.29.0",
+		"webpack-cli": "^3.2.1",
+		"webpack-node-externals": "^1.7.2"
 	}
 }

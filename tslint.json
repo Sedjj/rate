@@ -1,0 +1,62 @@
+{
+	"extends": [
+		"tslint:recommended",
+		"tslint:latest"
+	],
+	"linterOptions": {
+		"exclude": [
+			"config/**/*.js",
+			"node_modules/**/*.ts",
+			"coverage/lcov-report/*.js"
+		]
+	},
+	"rules": {
+		"no-debugger": 0,
+		/*разрешить console*/
+		"no-console": false,
+		/*Конец файла должен заканчиваться новой строкой*/
+		"eofline": false,
+		/*отключает сортировку полей объекта*/
+		"object-literal-sort-keys": false,
+		/*Запрещает листинг объекта объекта в выражении утверждения типа*/
+		"no-object-literal-type-assertion": false,
+		/*отключает сортировку import*/
+		"ordered-imports": false,
+		/*Запрещает ненужный доступ к строковым литералам*/
+		"no-string-literal": false,
+		"eol-last": false,
+		"jsx-no-lambda": [
+			false
+		],
+		"jsx-wrap-multiline": false,
+		"quotemark": [
+			true,
+			"single",
+			"jsx-double"
+		],
+		"semicolon": [
+			true,
+			"always",
+			"ignore-bound-class-methods"
+		],
+		"trailing-comma": false,
+		"jsx-no-multiline-js": false,
+		"no-submodule-imports": [
+			true
+		],
+		"indent": [
+			true,
+			"tabs",
+			4
+		],
+		"no-trailing-whitespace": false,
+		"max-line-length": [
+			true,
+			1000
+		],
+		"jsx-alignment": false,
+		"jsx-self-close": false,
+		"arrow-parens": false,
+		"align": false
+	}
+}

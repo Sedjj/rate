@@ -8,8 +8,12 @@ const {decorateMessageMatch} = require('../utils/formateMessage');
  * @returns {Promise<void>}
  */
 async function matchRate(statistic) {
-	await sendMessage(decorateMessageMatch(statistic));
-	await sendMessage(statistic.command.en.one);
+	if (statistic.strategy === 2 && statistic.snapshot.end.time < 3780 && statistic.snapshot.end.mod >= 5.5) {
+		if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
+			await sendMessage(decorateMessageMatch(statistic));
+			await sendMessage(statistic.command.en.one);
+		}
+	}
 }
 
 module.exports = {
