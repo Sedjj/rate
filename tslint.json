@@ -11,7 +11,7 @@
 		]
 	},
 	"rules": {
-		"no-debugger": 0,
+		"no-debugger": false,
 		/*разрешить console*/
 		"no-console": false,
 		/*Конец файла должен заканчиваться новой строкой*/

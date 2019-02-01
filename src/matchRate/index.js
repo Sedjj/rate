@@ -8,10 +8,26 @@ const {decorateMessageMatch} = require('../utils/formateMessage');
  * @returns {Promise<void>}
  */
 async function matchRate(statistic) {
-	if (statistic.strategy === 2 && statistic.snapshot.end.time < 3780 && statistic.snapshot.end.mod >= 5.5) {
-		if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
-			await sendMessage(decorateMessageMatch(statistic));
-			await sendMessage(statistic.command.en.one);
+	if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
+		switch (statistic.strategy) {
+			case 1 :
+				if (2.9 <= statistic.snapshot.end.x && statistic.snapshot.end.x <= 3) {
+					await sendMessage(decorateMessageMatch(statistic));
+					await sendMessage(statistic.command.en.one);
+				}
+				break;
+			case 2 :
+				if ((3000 <= statistic.snapshot.end.time && statistic.snapshot.end.time <= 3570) && statistic.snapshot.start.x >= 2.8) {
+					await sendMessage(decorateMessageMatch(statistic));
+					await sendMessage(statistic.command.en.one);
+				}
+				break;
+			case 3 :
+				if (3000 <= statistic.snapshot.start.time && statistic.snapshot.end.time <= 3780) {
+					await sendMessage(decorateMessageMatch(statistic));
+					await sendMessage(statistic.command.en.one);
+				}
+				break;
 		}
 	}
 }
