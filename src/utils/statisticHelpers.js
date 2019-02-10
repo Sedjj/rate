@@ -1,4 +1,4 @@
-const {getFormattedDate} = require('../utils/dateFormat');
+const {getFormattedDate, getLocalStringToDate} = require('../utils/dateFormat');
 
 /**
  * Преобразовывает статистику в необходимый формат
@@ -36,14 +36,16 @@ function mapProps(statistic, index) {
 		strategy: statistic.strategy,
 		snapshot: {
 			start: {
-				time: statistic.snapshot.start.time / 60,
+				time: statistic.snapshot.start.time,
+				displayTime: statistic.snapshot.start.time / 60,
 				p1: statistic.snapshot.start.p1,
 				x: statistic.snapshot.start.x,
 				p2: statistic.snapshot.start.p2,
 				mod: statistic.snapshot.start.mod,
 			},
 			end: {
-				time: statistic.snapshot.end.time / 60,
+				time: statistic.snapshot.end.time,
+				displayTime: statistic.snapshot.end.time / 60,
 				p1: statistic.snapshot.end.p1,
 				x: statistic.snapshot.end.x,
 				p2: statistic.snapshot.end.p2,
@@ -84,7 +86,7 @@ function mapProps(statistic, index) {
 				}
 			}
 		},
-		createdBy: getFormattedDate(statistic.createdBy),
+		createdBy: getLocalStringToDate(statistic.createdBy),
 		modifiedBy: getFormattedDate(statistic.modifiedBy)
 	};
 }

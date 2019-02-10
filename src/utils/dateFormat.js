@@ -70,13 +70,14 @@ function getLocalDateTime(date) {
 }
 
 /**
- * Преобразует строку даты в формата вида yyyy-mm-dd
+ * Преобразует строку даты в формата вида yyyy.mm.dd
  *
  * @param {Date} date - дата
- * @returns {String} дата в формате строки
+ * @return {String} пример 2018.12.19
  */
-function getLocalStringToDateTime(date) {
-	return getFormattedDate(new Date(date));
+function getLocalStringToDate(date) {
+	const tempDate = new Date(date);
+	return tempDate.toLocaleDateString('en-EN', {timeZone: 'UTC'});
 }
 
 /**
@@ -95,6 +96,6 @@ module.exports = {
 	getFormattedTime,
 	getLocalDateTime,
 	getTime,
-	getLocalStringToDateTime,
+	getLocalStringToDate,
 	getStringToUTCDateString
 };
