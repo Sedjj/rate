@@ -1,7 +1,5 @@
-const Telegram = require('telegraf/telegram');
-const SocksAgent = require('socks5-https-client/lib/Agent');
 const config = require('config');
-const {setFileApiTelegram} = require('../fetch');
+const {setFileApiTelegram, setTextApiTelegram} = require('../fetch');
 
 const token = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.token')
@@ -9,6 +7,9 @@ const token = process.env.NODE_ENV === 'development'
 const chatId = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.chatId')
 	: config.get('bots.prod.chatId');
+const channelId = process.env.NODE_ENV === 'development'
+	? config.get('bots.dev.channelId')
+	: config.get('bots.prod.channelId');
 
 const supportToken = process.env.NODE_ENV === 'development'
 	? config.get('bots.supportDev.token')
@@ -17,39 +18,30 @@ const supportChatId = process.env.NODE_ENV === 'development'
 	? config.get('bots.supportDev.chatId')
 	: config.get('bots.supportProd.chatId');
 
-const socket = config.get('socket');
-const socksAgent = new SocksAgent({
-	socksHost: socket.host,
-	socksPort: socket.port,
-	socksUsername: socket.login,
-	socksPassword: socket.password
-});
-
-const bot = new Telegram(token, {
-	agent: socksAgent,
-	webhookReply: true,
-	webHook: {
-		port: '3000'
-	}
-});
-
-const supportBot = new Telegram(supportToken, {
-	agent: socksAgent,
-	webhookReply: true,
-	webHook: {
-		port: '3000'
-	}
-});
+/**
+ * Метод отправки сообщений в телеграмм бот.
+ *
+ * @param {String} text строка для отправки в чат
+ */
+function sendMessageChat(text) {
+	return new Promise((resolve, reject) => {
+		try {
+			resolve(setTextApiTelegram(token, chatId, text));
+		} catch (error) {
+			reject(error);
+		}
+	});
+}
 
 /**
  * Метод отправки сообщений в телеграмм бот.
  *
  * @param {String} text строка для отправки в чат
  */
-function sendMessage(text) {
+function sendMessageChannel(text) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(bot.sendMessage(chatId, text));
+			resolve(setTextApiTelegram(token, channelId, text));
 		} catch (error) {
 			reject(error);
 		}
@@ -64,7 +56,7 @@ function sendMessage(text) {
 function sendMessageSupport(text) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(supportBot.sendMessage(supportChatId, text));
+			resolve(setTextApiTelegram(supportToken, supportChatId, text));
 		} catch (error) {
 			reject(error);
 		}
@@ -87,7 +79,8 @@ function sendFile(file) {
 }
 
 module.exports = {
-	sendMessage,
+	sendMessageChat,
+	sendMessageChannel,
 	sendMessageSupport,
 	sendFile
 };

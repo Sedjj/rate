@@ -162,10 +162,46 @@ function setFileApiTelegram(token, chatId, document) {
 	});
 }
 
+/**
+ * Отправляет сообщение в чат или канал на API Telegram.
+ *
+ * @param {String} token идентификатор бота
+ * @param {String} chatId id чата
+ * @param {String} text текст сообщения
+ * @returns {Promise<any>}
+ */
+function setTextApiTelegram(token, chatId, text) {
+	let props = {
+		url: `https://api.telegram.org/bot${token}/sendMessage`,
+		headers: {
+			'content-type': 'application/json'
+		},
+		json: {
+			chat_id: chatId,
+			text: text,
+			/*parse_mode: 'HTML'*/
+		}
+	};
+	if (process.env.NODE_ENV === 'development') {
+		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
+	}
+	return new Promise((resolve, reject) => {
+		request(props.url, props, (error, res, body) => {
+			if (error || (res && res.statusCode !== 200)) {
+				log.error(`setFileApiTelegram: ${res ? res.statusMessage : (error && error.message)}`);
+				return reject(error);
+			}
+			log.debug(`Отработал: Метод для отправки соощения ${JSON.stringify(body.result)}`);
+			resolve(body);
+		});
+	});
+}
+
 module.exports = {
 	getAllMatches,
 	getExpandedMatch,
 	postResultZone,
 	getResultList,
-	setFileApiTelegram
+	setFileApiTelegram,
+	setTextApiTelegram
 };
