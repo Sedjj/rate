@@ -41,7 +41,7 @@ async function exportBackupStatistic() {
 function returnStatisticListTemplate() {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
-	beforeDate.setUTCDate(beforeDate.getUTCDate() - 1);
+	beforeDate.setUTCDate(beforeDate.getUTCDate() - 7);
 	let props = {
 		statistics: [],
 	};
@@ -63,13 +63,47 @@ function returnStatisticListTemplate() {
 						const template = new XlsxTemplate(file);
 						// Replacements take place on first sheet
 						template.substitute(1, {
-							statistics: props.statistics.filter((item)=> item.strategy === 1)
+							statistics: props.statistics.filter((item) => item.strategy === 1)
 						});
 						template.substitute(2, {
-							statistics: props.statistics.filter((item)=> item.strategy === 2)
+							statistics: props.statistics.filter((item) => item.strategy === 2)
 						});
 						template.substitute(3, {
-							statistics: props.statistics.filter((item)=> item.strategy === 3)
+							statistics: props.statistics.filter((item) => item.strategy === 3)
+						});
+						template.substitute(4, {
+							statistics: props.statistics.filter((item) => {
+								if ((3060 < item.snapshot.end.time && item.snapshot.end.time < 3570) && (item.command.women !== 1) && (item.strategy === 2)) {
+									if (item.snapshot.start.p1 < item.snapshot.start.p2) {
+										if (item.cards.after.one.attacks < 75) {
+											return true;
+										}
+									} else {
+										if (item.cards.after.two.attacks < 75) {
+											return true;
+										}
+									}
+								}
+								return false;
+							})
+						});
+						template.substitute(5, {
+							statistics: props.statistics.filter((item) => {
+								if ((item.command.women !== 1) && (item.command.youth !== 1)) {
+									if (3000 < item.snapshot.start.time && item.snapshot.end.time < 3720) {
+										if (item.snapshot.start.p1 < item.snapshot.start.p2) {
+											if (item.cards.after.one.attacks < 99) {
+												return true;
+											}
+										} else {
+											if (item.cards.after.two.attacks < 99) {
+												return true;
+											}
+										}
+									}
+								}
+								return false;
+							})
 						});
 						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});

@@ -1,21 +1,21 @@
 Сделать дам на сервере
 ```bash
-mongodump --gzip -d rateBot --archive="/home/rb-app/rate_bot/mongoDB/dump/rateBot-22.01.gz"
+mongodump --gzip -d rateBot --archive="/home/rb-app/rate_bot/mongoDB/dump/rateBot-10.02.gz"
 ```
 
 Востановление из бэкапа
 ```bash
-mongorestore --gzip --drop -d rateBot --archive="/data/dump/rateBot-22.01.gz"
+mongorestore --gzip --drop -d rateBot --archive="/data/dump/rateBot-10.02.gz"
 ```
 
 Обновить данные на компе
 ```bash
-mongorestore --gzip --drop -d rateBot --archive="rateBot-19.01.gz"
+mongorestore --gzip --drop -d rateBot --archive="rateBot-10.02.gz"
 ```
 
 Скопировать файл в докер
 ```bash
-COPY "D:\git\bot\rate\mongoDB\db\rateBot-19.01.gz" "localhost:27017/data/db/rateBot.gz"
+COPY "D:\git\bot\rate\mongoDB\dump\rateBot-10.02.gz" "localhost:27017/data/dump/rateBot-10.02.gz"
 ```
 
 
