@@ -16,8 +16,12 @@ const schedulerSearch = process.env.NODE_ENV === 'development'
 		config.get('cron.schedulerSearch.after')
 	).generate();
 
+const schedulerCheckingResults = process.env.NODE_ENV === 'development'
+	? '*/45 * * * * *'
+	: config.get('cron.schedulerCheckingResults');
+
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
-	? '*/50 * * * * *'
+	? '*/59 * * * * *'
 	: config.get('cron.schedulerBackupExport');
 
 /**
@@ -34,9 +38,9 @@ if (schedulerSearch) {
 				).generate()
 			));
 			search();
-		} catch (ex) {
+		} catch (error) {
 			schedulerSearchJob.stop();
-			log.error('cron pattern not valid');
+			log.error(`cron pattern not valid: ${error}`);
 		}
 	}, () => {
 		schedulerSearchJob.start();
@@ -50,13 +54,25 @@ if (schedulerBackupExport) {
 	log.info('****start scheduler backup export****');
 	let schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
 		try {
-			checkingResults()
-				.then(() => {
-					exportBackupStatisticDebounce();
-				});
-		} catch (ex) {
+			exportBackupStatisticDebounce();
+		} catch (error) {
 			schedulerBackupExportJob.stop();
-			log.error('cron pattern not valid');
+			log.error(`cron pattern not valid: ${error}`);
+		}
+	}, null, true);
+}
+
+/**
+ * Планировщик получения результатов матчей.
+ */
+if (schedulerCheckingResults) {
+	log.info('****start scheduler checking results****');
+	let schedulerCheckingResultsJob = new CronJob(schedulerCheckingResults, () => {
+		try {
+			checkingResults();
+		} catch (error) {
+			schedulerCheckingResultsJob.stop();
+			log.error(`cron pattern not valid: ${error}`);
 		}
 	}, null, true);
 }
