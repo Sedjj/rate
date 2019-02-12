@@ -4,16 +4,16 @@
 
 ###Создать пользователя `rb-app`:
 ```bash
-sudo adduser rb-app
-sudo adduser rb-app sudo
+sudo adduser rb-app &&
+sudo adduser rb-app sudo &&
 sudo gpasswd -a rb-app sudo
 ```
 Войти в систему под пользователем `rb-app`.
 
-Смена пароля
+Смена пароля root
 ```bash
 sudo bash
-passwd имя_пользователя
+passwd root
 ```
 
 ###Отключение доступа по паролю
@@ -25,7 +25,7 @@ sudo nano /etc/ssh/sshd_config
 ```
 * Откройте файл /etc/ssh/sshd_config . В зависимости от Linux-дистрибутива, строка PasswordAuthentification может присутствовать в файле в закомментированном виде (# в начале строки) или отсутствовать – соответственно раскомментируйте или добавьте ее (PasswordAuthentification no).
 
-* Для запрет ssh-подключения от имени root-пользователя. Найдите в нем строку PermitRootLogin  и замените ее значение на: PermitRootLogin  no.
+* (Стоит уточнить)Для запрет ssh-подключения от имени root-пользователя. Найдите в нем строку PermitRootLogin  и замените ее значение на: PermitRootLogin  no.
 
 * Сохраните изменения, после чего перезапустите службу SSH:
 ```bash
@@ -178,9 +178,9 @@ sudo debsums -ac
 
 ###Установка часового пояса
 ```bash
-sudo dpkg-reconfigure tzdata
-sudo /etc/init.d/cron stop
-sudo /etc/init.d/cron start
+sudo dpkg-reconfigure tzdata &&
+sudo /etc/init.d/cron stop &&
+sudo /etc/init.d/cron start &&
 timedatectl
 ```
 
@@ -194,12 +194,13 @@ sudo apt-get install htop
 ###Установить curl (если отсутствует):
 ```bash
 sudo apt-get install curl
+sudo apt-get install build-essential libssl-dev
 ```
 
-###[Установить Node.js](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-18.04/):
+###[Установить Node.js](https://github.com/nodesource/distributions):
 ```bash
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-nvm install node
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
 
 ###[Установить MongoDB](https://docs.mongodb.com/master/tutorial/install-mongodb-on-ubuntu/):
@@ -304,7 +305,7 @@ sudo ufw allow ssh
 
 Включение mongo:
 ```bash
-sudo ufw allow from 94.51.209.173 to any port 27017
+sudo ufw allow from  37.79.133.158 to any port 27017
 ```
 
 Несмотря на то, что порт открыт, MongoDB в настоящее время только прослушивает локальный адрес 127.0.0.1. Чтобы разрешить удаленные подключения, добавьте публично маршрутизируемый IP-адрес вашего сервера в mongod.confфайл.
