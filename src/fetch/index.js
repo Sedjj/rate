@@ -179,7 +179,7 @@ function setTextApiTelegram(token, chatId, text) {
 		json: {
 			chat_id: chatId,
 			text: text,
-			/*parse_mode: 'HTML'*/
+			parse_mode: 'HTML'
 		}
 	};
 	if (process.env.NODE_ENV === 'development') {

@@ -46,11 +46,17 @@ function decorateMessageMatch(param) {
 	  Команда 2:  ${param.command.en.two}`;
 }
 
+/**
+ * Форматирование строки для канала.
+ *
+ * @param {Object} param объект матча
+ * @returns {string}
+ */
 function decorateMessageChannel(param) {
 	const time = secondsToMinutes(param.snapshot.end.time);
 	const scope = `${param.score.sc1}:${param.score.sc2}`;
 	const typeTotal = param.score.sc1 + param.score.sc2 + typeRate[param.strategy];
-	return `${param.group.en}\n${param.command.en.one}\n${param.command.en.two}\n_________\n${scope} / ${time}'\nTotal over ${typeTotal} / ${param.total}`;
+	return `<b>${param.group.en}</b>\n\n${param.command.en.one}\n${param.command.en.two}\n\n<pre>${scope} / ${time}'\nTotal over ${typeTotal} / ${param.total}</pre>`;
 }
 
 module.exports = {
