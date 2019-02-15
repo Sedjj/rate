@@ -28,12 +28,12 @@ async function matchRate(statistic) {
 			if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 				if (3000 < statistic.snapshot.start.time && statistic.snapshot.end.time < 3720) {
 					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-						if (statistic.cards.after.one.attacks < 99) {
+						if (statistic.cards.before.one.attacks < 99) {
 							await sendMessageChat(decorateMessageMatch(statistic));
 							await sendMessageChannel(decorateMessageChannel(statistic));
 						}
 					} else {
-						if (statistic.cards.after.two.attacks < 99) {
+						if (statistic.cards.before.two.attacks < 99) {
 							await sendMessageChat(decorateMessageMatch(statistic));
 							await sendMessageChannel(decorateMessageChannel(statistic));
 						}
