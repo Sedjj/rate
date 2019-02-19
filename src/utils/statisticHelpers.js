@@ -86,7 +86,7 @@ function mapProps(statistic, index) {
 				}
 			}
 		},
-		createdBy: getLocalStringToDate(statistic.createdBy),
+		createdBy: getFormattedDate(statistic.createdBy),
 		modifiedBy: getFormattedDate(statistic.modifiedBy)
 	};
 }
