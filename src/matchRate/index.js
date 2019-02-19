@@ -8,18 +8,23 @@ const {decorateMessageMatch, decorateMessageChannel} = require('../utils/formate
  * @returns {Promise<void>}
  */
 async function matchRate(statistic) {
+	await sendMessageChat(decorateMessageMatch(statistic));
 	switch (statistic.strategy) {
 		case 2 :
-			if ((3060 < statistic.snapshot.end.time && statistic.snapshot.end.time < 3570) && (statistic.command.women !== 1)) {
-				if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-					if (statistic.cards.after.one.attacks < 75) {
-						await sendMessageChat(decorateMessageMatch(statistic));
-						await sendMessageChannel(decorateMessageChannel(statistic));
-					}
-				} else {
-					if (statistic.cards.after.two.attacks < 75) {
-						await sendMessageChat(decorateMessageMatch(statistic));
-						await sendMessageChannel(decorateMessageChannel(statistic));
+			if (statistic.command.women !== 1) {
+				if ((3060 < statistic.snapshot.end.time && statistic.snapshot.end.time < 3570) && (statistic.snapshot.start.mod < 5.6)) {
+					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
+						if (statistic.cards.after.one.attacks < 75) {
+							//await sendMessageChat(decorateMessageMatch(statistic));
+							await sendMessageChannel(decorateMessageChannel(statistic));
+							await sendMessageChannel('<pre>Result</pre>');
+						}
+					} else {
+						if (statistic.cards.after.two.attacks < 75) {
+							//await sendMessageChat(decorateMessageMatch(statistic));
+							await sendMessageChannel(decorateMessageChannel(statistic));
+							await sendMessageChannel('<pre>Result</pre>');
+						}
 					}
 				}
 			}
@@ -29,13 +34,15 @@ async function matchRate(statistic) {
 				if (3000 < statistic.snapshot.start.time && statistic.snapshot.end.time < 3720) {
 					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
 						if (statistic.cards.before.one.attacks < 99) {
-							await sendMessageChat(decorateMessageMatch(statistic));
+							//await sendMessageChat(decorateMessageMatch(statistic));
 							await sendMessageChannel(decorateMessageChannel(statistic));
+							await sendMessageChannel('<pre>Result</pre>');
 						}
 					} else {
 						if (statistic.cards.before.two.attacks < 99) {
-							await sendMessageChat(decorateMessageMatch(statistic));
+							//await sendMessageChat(decorateMessageMatch(statistic));
 							await sendMessageChannel(decorateMessageChannel(statistic));
+							await sendMessageChannel('<pre>Result</pre>');
 						}
 					}
 				}
