@@ -72,31 +72,28 @@ function returnStatisticListTemplate() {
 							statistics: props.statistics.filter((item) => item.strategy === 3)
 						});
 						template.substitute(4, {
-							statistics: props.statistics.filter((item) => {
-								if ((3060 < item.snapshot.end.time && item.snapshot.end.time < 3570) && (item.command.women !== 1) && (item.strategy === 2)) {
-									if (item.snapshot.start.p1 < item.snapshot.start.p2) {
-										if (item.cards.after.one.attacks < 75) {
-											return true;
-										}
-									} else {
-										if (item.cards.after.two.attacks < 75) {
-											return true;
-										}
-									}
-								}
-								return false;
-							})
-						});
-						template.substitute(5, {
-							statistics: props.statistics.filter((item) => {
-								if ((item.command.women !== 1) && (item.command.youth !== 1)) {
-									if (3000 < item.snapshot.start.time && item.snapshot.end.time < 3720) {
-										if (item.snapshot.start.p1 < item.snapshot.start.p2) {
-											if (item.cards.after.one.attacks < 99) {
+							statistics: props.statistics.filter((statistic) => {
+								if ( (statistic.command.women !== 1) && (statistic.strategy === 2)) {
+									if ((3060 < statistic.snapshot.end.time && statistic.snapshot.end.time < 3570) && (statistic.snapshot.start.mod < 5.6)) {
+										if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
+											if (statistic.cards.after.one.attacks < 75) {
 												return true;
 											}
 										} else {
-											if (item.cards.after.two.attacks < 99) {
+											if (statistic.cards.after.two.attacks < 75) {
+												return true;
+											}
+										}
+									}
+								}
+								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1) && (statistic.strategy === 3)) {
+									if (3000 < statistic.snapshot.start.time && statistic.snapshot.end.time < 3720) {
+										if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
+											if (statistic.cards.before.one.attacks < 99) {
+												return true;
+											}
+										} else {
+											if (statistic.cards.before.two.attacks < 99) {
 												return true;
 											}
 										}
