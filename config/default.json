@@ -168,7 +168,7 @@
 			"after": 60
 		},
 		"schedulerCheckingResults": "00 05 10 * * 0-7",
-		"schedulerBackupExport": "00 05 30 * * 1"
+		"schedulerBackupExport": "00 30 10 * * 1"
 	},
 	"path": {
 		"storagePath": "",
