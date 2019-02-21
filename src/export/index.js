@@ -74,13 +74,13 @@ function returnStatisticListTemplate() {
 						template.substitute(4, {
 							statistics: props.statistics.filter((statistic) => {
 								if ( (statistic.command.women !== 1) && (statistic.strategy === 2)) {
-									if ((3060 < statistic.snapshot.end.time && statistic.snapshot.end.time < 3570) && (statistic.snapshot.start.mod < 5.6)) {
+									if ((3060 < statistic.snapshot.end.time && statistic.snapshot.end.time < 3420) && (statistic.snapshot.start.mod < 5.6)) {
 										if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-											if (statistic.cards.after.one.attacks < 75) {
+											if (statistic.cards.after.one.attacks < 81) {
 												return true;
 											}
 										} else {
-											if (statistic.cards.after.two.attacks < 75) {
+											if (statistic.cards.after.two.attacks < 81) {
 												return true;
 											}
 										}

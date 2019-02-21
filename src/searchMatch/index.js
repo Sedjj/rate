@@ -153,9 +153,9 @@ function waiting(param, strategy) {
 			if (indexMatch !== null) {
 				reboot = false;
 				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
-				waitingIntervalJob.stop();
 				waitingEndCount--;
 				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+				waitingIntervalJob.stop();
 			} else {
 				reboot = true;
 				waitingIntervalJob.setTime(new CronTime(
@@ -167,10 +167,10 @@ function waiting(param, strategy) {
 			}
 		} catch (error) {
 			reboot = false;
-			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
-			waitingIntervalJob.stop();
-			log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 			waitingEndCount--;
+			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
+			log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+			waitingIntervalJob.stop();
 		}
 	}, () => {
 		if (reboot) {
