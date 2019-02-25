@@ -73,27 +73,30 @@ function returnStatisticListTemplate() {
 						});
 						template.substitute(4, {
 							statistics: props.statistics.filter((statistic) => {
-								if ( (statistic.command.women !== 1) && (statistic.strategy === 2)) {
-									if ((3060 < statistic.snapshot.end.time && statistic.snapshot.end.time < 3420) && (statistic.snapshot.start.mod < 5.6)) {
-										if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-											if (statistic.cards.after.one.attacks < 81) {
-												return true;
-											}
-										} else {
-											if (statistic.cards.after.two.attacks < 81) {
+								if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
+									if (statistic.command.women !== 1) {
+										if ((55 < statistic.cards.after.one.attacks && statistic.cards.after.one.attacks < 93) && (statistic.snapshot.end.mod > 4.59)) {
+											if (statistic.cards.before.one.shotsOn < 3 && statistic.snapshot.start.time < 2748) {
 												return true;
 											}
 										}
 									}
+								} else { //B
+									if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
+										if ((statistic.snapshot.start.p1 > 6.99) && (statistic.cards.before.two.shotsOn > 2)) {
+											return true;
+										}
+									}
 								}
-								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1) && (statistic.strategy === 3)) {
-									if (3000 < statistic.snapshot.start.time && statistic.snapshot.end.time < 3720) {
-										if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-											if (statistic.cards.before.one.attacks < 99) {
-												return true;
-											}
-										} else {
-											if (statistic.cards.before.two.attacks < 99) {
+								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
+									// A
+									if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
+										if ((statistic.cards.before.one.shotsOff > 5) && (statistic.snapshot.end.time < 3720)) {
+											return true;
+										}
+									} else { //B
+										if (statistic.cards.before.two.shotsOn > 1) {
+											if ((3000 < statistic.snapshot.start.time) && (statistic.snapshot.end.time < 3780)) {
 												return true;
 											}
 										}
