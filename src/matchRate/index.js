@@ -20,7 +20,7 @@ async function matchRate(statistic) {
 				}
 				break;
 			case 2 :
-				if ((3000 < statistic.snapshot.end.time < 3570)) {
+				if ((3000 < statistic.snapshot.end.time) && (statistic.snapshot.end.time < 3570)) {
 					// A
 					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
 						if ((statistic.cards.after.one.danAttacks < 46) && (statistic.snapshot.start.x > 2.5)) {
@@ -31,7 +31,7 @@ async function matchRate(statistic) {
 							}
 						}
 					} else { //B
-						if ((50 < statistic.cards.after.two.attacks < 80)) {
+						if ((50 < statistic.cards.after.two.attacks) && (statistic.cards.after.two.attacks < 80)) {
 							//await sendMessageChat(decorateMessageMatch(statistic));
 							await sendMessageChannel(decorateMessageChannel(statistic));
 							await sendMessageChannel('<pre>Result</pre>');
@@ -43,7 +43,7 @@ async function matchRate(statistic) {
 				if ((statistic.snapshot.end.time < 3720)) {
 					// A
 					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-						if (statistic.snapshot.end.x > 2.4) {
+						if (statistic.snapshot.end.x < 2.4) {
 							if ((statistic.cards.after.one.danAttacks > 50) && (statistic.cards.before.one.attacks > 52)) {
 								//await sendMessageChat(decorateMessageMatch(statistic));
 								await sendMessageChannel(decorateMessageChannel(statistic));
