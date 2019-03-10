@@ -14,8 +14,8 @@
 		"pass": ""
 	},
 	"proxy": {
-		"host": "212.202.244.90",
-		"port": "8080",
+		"host": "207.148.123.39",
+		"port": "3128",
 		"user": "",
 		"password": ""
 	},
@@ -49,7 +49,9 @@
 		}
 	},
 	"parser": {
-		"active": ["1xstavka"],
+		"active": [
+			"1xstavka"
+		],
 		"1xstavka": {
 			"live": {
 				"football": {
@@ -139,8 +141,14 @@
 		"live": {
 			"football": {
 				"time": {
-					"before": 2700,
-					"after": 3810
+					"larger": {
+						"before": 2700,
+						"after": 3810
+					},
+					"less": {
+						"before": 0,
+						"after": 2700
+					}
 				},
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) > rate",

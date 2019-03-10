@@ -9,11 +9,18 @@ const active = config.get('parser.active');
 const urlFootballRate = config.get(`parser.${active[0]}.live.football.rate`);
 const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.football.expandedRate`);
 
-const before = config.get('choice.live.football.time.before');
-const after = config.get('choice.live.football.time.after');
+const largerBefore = config.get('choice.live.football.time.larger.before');
+const largerAfter = config.get('choice.live.football.time.larger.after');
+
+const lessBefore = config.get('choice.live.football.time.less.before');
+const lessAfter = config.get('choice.live.football.time.less.after');
+
 const rateStrategyOne = config.get('choice.live.football.strategyOne.rate');
 const rateStrategyTwo = config.get('choice.live.football.strategyTwo.rate');
 const rateStrategyThree = config.get('choice.live.football.strategyThree.rate');
+const rateStrategyFour = config.get('choice.live.football.strategyFour.rate');
+const rateStrategyFive = config.get('choice.live.football.strategyFive.rate');
+const rateStrategySix = config.get('choice.live.football.strategySix.rate');
 
 /**
  * Метод поиска совпадений по данным стратегиям.
@@ -43,7 +50,8 @@ function search() {
  */
 function footballLiveStrategy(param) {
 	if ((param.p1 !== '') && (param.p2 !== '') && (param.x !== '')) {
-		if ((param.time >= before) && (param.time <= after)) {
+		// тотал больше
+		if ((param.time >= largerBefore) && (param.time <= largerAfter)) {
 			if ((param.score.sc1 + param.score.sc2) === 1) {
 				footballLiveStrategyOne(param);
 			}
@@ -53,13 +61,15 @@ function footballLiveStrategy(param) {
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
 				footballLiveStrategyThree(param);
 			}
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+		} // тотал меньше
+		if ((param.time >= lessBefore) && (param.time <= lessAfter)) {
+			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 				footballLiveStrategyFour(param);
 			}
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 				footballLiveStrategyFive(param);
 			}
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 				footballLiveStrategySix(param);
 			}
 		}
@@ -76,7 +86,7 @@ function footballLiveStrategyOne(param) {
 		saveRate(param, 1)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId);
+					await setSnapshot(param.matchId,1);
 					log.debug(`Найден ${param.matchId}: Стратегия гол лузера`);
 					waiting(param, 1);
 				}
@@ -98,7 +108,7 @@ function footballLiveStrategyTwo(param) {
 			saveRate(param, 2)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId);
+						await setSnapshot(param.matchId,2);
 						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  0:0`);
 						waiting(param, 2);
 					}
@@ -121,7 +131,7 @@ function footballLiveStrategyThree(param) {
 			saveRate(param, 3)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId);
+						await setSnapshot(param.matchId,3);
 						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  1:1`);
 						waiting(param, 3);
 					}
@@ -139,14 +149,14 @@ function footballLiveStrategyThree(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyFour(param) {
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyThree)) {
+	if ((Math.abs(param.p1 - param.p2) > rateStrategyFour)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, 3)// пропускает дальше если запись ушла в БД
+			saveRate(param, 4)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId);
-						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  1:1`);
-						waiting(param, 3);
+						await setSnapshot(param.matchId,4);
+						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  0:0`);
+						waiting(param, 4);
 					}
 				})
 				.catch((error) => {
@@ -162,14 +172,14 @@ function footballLiveStrategyFour(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyFive(param) {
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyThree)) {
+	if ((Math.abs(param.p1 - param.p2) > rateStrategyFive)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, 3)// пропускает дальше если запись ушла в БД
+			saveRate(param, 5)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId);
-						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  1:1`);
-						waiting(param, 3);
+						await setSnapshot(param.matchId,5);
+						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  0:0`);
+						waiting(param, 5);
 					}
 				})
 				.catch((error) => {
@@ -185,14 +195,14 @@ function footballLiveStrategyFive(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategySix(param) {
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyThree)) {
+	if ((Math.abs(param.p1 - param.p2) > rateStrategySix)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, 3)// пропускает дальше если запись ушла в БД
+			saveRate(param, 6)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId);
-						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  1:1`);
-						waiting(param, 3);
+						await setSnapshot(param.matchId,6);
+						log.debug(`Найден ${param.matchId}: Стратегия ничья с явным фаворитом  0:0`);
+						waiting(param, 6);
 					}
 				})
 				.catch((error) => {
@@ -202,17 +212,18 @@ function footballLiveStrategySix(param) {
 	}
 }
 
-
 /**
  * Метод для изменения начальных параметров карточек.
  *
  * @param {number} matchId матча
+ * @param {Number} strategy стратегия ставок
  */
-async function setSnapshot(matchId) {
+async function setSnapshot(matchId, strategy) {
 	const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 	const param = searchHelper['getParams'](item, true);
 	return setStatistic({
 		matchId: param.matchId,
+		strategy: strategy,
 		cards: {
 			before: param.cards
 		},

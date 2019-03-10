@@ -43,7 +43,7 @@ function getStatistic(param = {}) {
  * @returns {Promise<boolean | never>}
  */
 function deleteStatistic(param) {
-	return StatisticModel.findOneAndRemove({matchId: param.matchId})
+	return StatisticModel.findOneAndRemove({matchId: param.matchId, strategy: param.strategy})
 		.exec()
 		.catch(error => {
 			log.error(`deleteStatistic param=${JSON.stringify(param)}: ${error.message}`);
@@ -58,7 +58,7 @@ function deleteStatistic(param) {
  * @returns {Promise<any>}
  */
 function newStatistic(param) {
-	return StatisticModel.find({matchId: param.matchId})
+	return StatisticModel.find({matchId: param.matchId, strategy: param.strategy})
 		.exec()
 		.then(statistics => {
 			if (statistics.length) {
@@ -81,7 +81,7 @@ function newStatistic(param) {
  * @returns {Promise<any>}
  */
 function setStatistic(param) {
-	return StatisticModel.findOne({matchId: param.matchId})
+	return StatisticModel.findOne({matchId: param.matchId, strategy: param.strategy})
 		.read('secondary')
 		.exec()
 		.then(statistic => {

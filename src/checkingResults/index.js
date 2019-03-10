@@ -82,7 +82,7 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
  * Метод для сравнения результатов.
  *
  * @param {Object} statistic объект матча
- * @param {String} endScore строка для парсинга
+ * @param {String} score строка для парсинга
  * @returns {Promise<void>}
  */
 async function baseRecordCorrection(statistic, score) {
