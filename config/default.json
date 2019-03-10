@@ -22,12 +22,20 @@
 	"myId": "43166705",
 	"bots": {
 		"dev": {
-			"channelId": "-1001295299807",
+			"channelId": "",
 			"chatId": "-299200164",
-			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
+			"token": "704208442:AAG6oMYGXwuU-APfHsy5YjIzfrijey7xEic"
 		},
 		"supportDev": {
 			"chatId": "-376344669",
+			"token": "633510677:AAGoFQGr8f_cDP3LVHYvRiN7kr5bo13HDew"
+		},
+		"test": {
+			"chatId": "-299200164",
+			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
+		},
+		"supportTest": {
+			"chatId": "-327795203",
 			"token": "633227407:AAFReZaI0D6UPZPKt5TT8PR1e_PDPAGA9IQ"
 		},
 		"prod": {
@@ -55,6 +63,15 @@
 				"live": "",
 				"allZone": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup",
 				"all": "https://1xstavka.ru/getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=ru&adult=false&showAll=true"
+			},
+			"authentication": {
+				"auth": "https://1xstavka.ru/en/user/auth/",
+				"twofactor": "https://1xstavka.ru/user/twofactor"
+			},
+			"rate": {
+				"putbetscommon": "https://1xstavka.ru/datalinelive/putbetscommon",
+				"updateCoupon": "https://1xstavka.ru/LiveUtil/UpdateCoupon",
+				"balance": "https://1xstavka.ru/user/balance"
 			}
 		},
 		"lds": {
@@ -123,7 +140,7 @@
 			"football": {
 				"time": {
 					"before": 2700,
-					"after": 4200
+					"after": 3810
 				},
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) > rate",
@@ -131,15 +148,30 @@
 				},
 				"strategyTwo": {
 					"titleRate": "Math.abs(p1 - p2) > rate",
-					"rate": 4
+					"rate": 2.5
 				},
 				"strategyThree": {
 					"titleRate": "Math.abs(p1 - p2) > rate",
-					"rate": 4
+					"rate": 2.5
 				},
-				"titleTotal": "Ожидаемый коэффициент: '0'- заглушка, '1'- первая стратегия, '2'- вторая стратегия, '3'- третья стратегия",
+				"strategyFour": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 2.5
+				},
+				"strategyFive": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 2.5
+				},
+				"strategySix": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 2.5
+				},
+				"titleTotal": "Ожидаемый коэффициент: '0'- заглушка, '1'- первая стратегия, '2'- вторая стратегия, '3'- третья стратегия, '4'- третья стратегия, '5'- третья стратегия, '6'- третья стратегия",
 				"total": [
 					0,
+					1.4,
+					1.4,
+					1.4,
 					1.4,
 					1.4,
 					1.4
@@ -149,7 +181,10 @@
 					0,
 					0.5,
 					0.5,
-					0.5
+					0.5,
+					1.5,
+					1.5,
+					1.5
 				],
 				"titleNumericalDesignation": "Числовое обозначение футбола",
 				"numericalDesignation": 1

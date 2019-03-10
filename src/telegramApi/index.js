@@ -3,20 +3,20 @@ const {setFileApiTelegram, setTextApiTelegram} = require('../fetch');
 
 const token = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.token')
-	: config.get('bots.prod.token');
+	: config.get('bots.test.token');
 const chatId = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.chatId')
-	: config.get('bots.prod.chatId');
+	: config.get('bots.test.chatId');
 const channelId = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.channelId')
-	: config.get('bots.prod.channelId');
+	: config.get('bots.test.channelId');
 
 const supportToken = process.env.NODE_ENV === 'development'
 	? config.get('bots.supportDev.token')
-	: config.get('bots.supportProd.token');
+	: config.get('bots.supportTest.token');
 const supportChatId = process.env.NODE_ENV === 'development'
 	? config.get('bots.supportDev.chatId')
-	: config.get('bots.supportProd.chatId');
+	: config.get('bots.supportTest.chatId');
 
 /**
  * Метод отправки сообщений в телеграмм бот.
