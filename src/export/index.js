@@ -72,6 +72,18 @@ function returnStatisticListTemplate() {
 							statistics: props.statistics.filter((item) => item.strategy === 3)
 						});
 						template.substitute(4, {
+							statistics: props.statistics.filter((item) => item.strategy === 4)
+						});
+						template.substitute(5, {
+							statistics: props.statistics.filter((item) => item.strategy === 5)
+						});
+						template.substitute(6, {
+							statistics: props.statistics.filter((item) => item.strategy === 6)
+						});
+						template.substitute(7, {
+							statistics: props.statistics.filter((item) => item.strategy === 7)
+						});
+						/*template.substitute(8, {
 							statistics: props.statistics.filter((statistic) => {
 								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 									switch (statistic.strategy) {
@@ -116,7 +128,7 @@ function returnStatisticListTemplate() {
 								}
 								return false;
 							})
-						});
+						});*/
 						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});
 					});
