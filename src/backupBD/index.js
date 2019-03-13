@@ -1,6 +1,6 @@
 const backup = require('mongodb-backup');
 const restore = require('mongodb-restore');
-const log = require('../utils/logger')(module);
+const {log} = require('../utils/logger')(module);
 const path = require('path');
 const config = require('config');
 

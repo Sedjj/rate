@@ -1,5 +1,5 @@
 require('../utils/dbProvider');
-const log = require('../utils/logger');
+const {log} = require('../utils/logger');
 const StatisticModel = require('../models/statistic');
 const {mapProps} = require('../utils/statisticHelpers');
 const config = require('config');

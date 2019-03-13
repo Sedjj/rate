@@ -1,4 +1,4 @@
-const log = require('../utils/logger');
+const {log} = require('../utils/logger');
 const {newStatistic, setStatistic} = require('../storage/statistic');
 const {getAllMatches, getExpandedMatch} = require('../fetch');
 const config = require('config');

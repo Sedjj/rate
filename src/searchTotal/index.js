@@ -1,5 +1,5 @@
 const {CronJob, CronTime} = require('cron');
-const log = require('../utils/logger');
+const {log} = require('../utils/logger');
 const config = require('config');
 const rc = require('../utils/random-cron');
 const {setStatistic, deleteStatistic} = require('../storage/statistic');

@@ -1,4 +1,4 @@
-const log = require('../utils/logger');
+const {log} = require('../utils/logger');
 const {getStatistic, setStatistic} = require('../storage/statistic');
 const config = require('config');
 const {throttle} = require('../utils/throttle');

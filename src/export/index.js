@@ -1,6 +1,6 @@
 const path = require('path');
 const config = require('config');
-const log = require('../utils/logger');
+const {log} = require('../utils/logger');
 const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
 const {getStatistic} = require('../storage/statistic');
 const XlsxTemplate = require('xlsx-template');

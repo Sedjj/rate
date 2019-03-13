@@ -1,5 +1,5 @@
 const config = require('config');
-const log = require('../utils/logger');
+const {log} = require('../utils/logger');
 const {encode} = require('../utils/crypt');
 const {authentication, putbetsCommon, updateCoupon} = require('../fetch');
 
