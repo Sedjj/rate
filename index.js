@@ -12,17 +12,17 @@ const exportBackupStatisticDebounce = throttle(exportBackupStatistic, 20000);
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(10, 20).generate()
 	: rc.some('seconds').between(
-		config.get('cron.schedulerSearch.before'),
-		config.get('cron.schedulerSearch.after')
+		config.cron.schedulerSearch.before,
+		config.cron.schedulerSearch.after
 	).generate();
 
 const schedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
-	: config.get('cron.schedulerCheckingResults');
+	: config.cron.schedulerCheckingResults;
 
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
 	? '*/59 * * * * *'
-	: config.get('cron.schedulerBackupExport');
+	: config.cron.schedulerBackupExport;
 
 /**
  * Планировшик поиска матчей.
@@ -33,8 +33,8 @@ if (schedulerSearch) {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
 				rc.some('seconds').between(
-					config.get('cron.schedulerSearch.before'),
-					config.get('cron.schedulerSearch.after')
+					config.cron.schedulerSearch.before,
+					config.cron.schedulerSearch.after
 				).generate()
 			));
 			search();

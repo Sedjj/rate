@@ -2,8 +2,10 @@ const config = require('config');
 const request = require('request');
 const {log} = require('./../utils/logger');
 const {getStringToUTCDateString} = require('./../utils/dateFormat');
+const {Cookie} = require('request-cookies');
 
 const proxy = config.get('proxy');
+const cookie = new Map();
 
 /**
  * Метод для получения ставок.
@@ -236,5 +238,6 @@ module.exports = {
 	postResultZone,
 	getResultList,
 	setFileApiTelegram,
-	setTextApiTelegram
+	setTextApiTelegram,
+	setSupportMsgApiTelegram,
 };

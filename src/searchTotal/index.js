@@ -8,16 +8,16 @@ const {equalsScore} = require('../utils/searchHelper');
 const {matchRate} = require('../matchRate');
 const {searchHelper} = require('../modifiableFile');
 
-const active = config.get('parser.active');
+const active = config.parser.active;
 const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.football.expandedRate`);
-const after = config.get('choice.live.football.time.after');
-const totalStrategy = config.get('choice.live.football.total');
-const typeRate = config.get('choice.live.football.typeRate');
+const after = config.choice.live.football.time.after;
+const totalStrategy = config.choice.live.football.total;
+const typeRate = config.choice.live.football.typeRate;
 const waitingInterval = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(10, 20).generate()
 	: rc.some('seconds').between(
-		config.get('cron.waitingInterval.before'),
-		config.get('cron.waitingInterval.after')
+		config.cron.waitingInterval.before,
+		config.cron.waitingInterval.after
 	).generate();
 
 let waitingEndCount = 0;
@@ -45,8 +45,8 @@ function waiting(param, strategy) {
 				reboot = true;
 				waitingIntervalJob.setTime(new CronTime(
 					rc.some('seconds').between(
-						config.get('cron.waitingInterval.before'),
-						config.get('cron.waitingInterval.after')
+						config.cron.waitingInterval.before,
+						config.cron.waitingInterval.after
 					).generate()
 				));
 			}

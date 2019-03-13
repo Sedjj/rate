@@ -56,7 +56,7 @@ function sendMessageChannel(text) {
 function sendMessageSupport(text) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setSupportMsgApiTelegram(supportToken, supportChatId, text));
+			resolve(setTextApiTelegram(supportToken, supportChatId, text));
 		} catch (error) {
 			reject(error);
 		}

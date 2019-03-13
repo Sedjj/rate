@@ -1,10 +1,10 @@
 require('../utils/dbProvider');
 const {log} = require('../utils/logger');
-const StatisticModel = require('../models/statistic');
+const {StatisticModel} = require('../models/statistic');
 const {mapProps} = require('../utils/statisticHelpers');
 const config = require('config');
 
-const rate = config.get('output.rate') || 2000;
+const rate = config.output.rate || 2000;
 
 /**
  * Получить записи из таблицы статистика.

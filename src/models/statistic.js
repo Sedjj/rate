@@ -263,4 +263,6 @@ const StatisticSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('Statistic', StatisticSchema);
+module.exports = {
+	StatisticModel: mongoose.model('Statistic', StatisticSchema)
+};
