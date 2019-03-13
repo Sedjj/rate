@@ -1,6 +1,6 @@
-const {TelegramTransport} = require('./telegramTransport');
+/*const {TelegramTransport} = require('./telegramTransport');*/
 const {createLogger, transports, format} = require('winston');
-const {sendMessageSupport} = require('../telegramApi');
+/*const {sendMessageSupport} = require('../telegramApi');*/
 
 const options = {
 	fileInfo: {
@@ -43,11 +43,11 @@ const options = {
 		handleExceptions: true,
 		json: false,
 		colorize: true
-	},
+	}/*,
 	telegram: {
 		level: 'error',
 		stream: sendMessageSupport
-	}
+	}*/
 };
 
 const config = {
@@ -56,7 +56,7 @@ const config = {
 		new transports.File(options.fileInfo),
 		new transports.File(options.fileError),
 		new transports.File(options.fileDebug),
-		new TelegramTransport(options.telegram),
+		// new TelegramTransport(options.telegram),
 		new transports.Console(),
 	],
 	exceptionHandlers: [

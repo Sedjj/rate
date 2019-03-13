@@ -1,5 +1,5 @@
 const config = require('config');
-const typeRate = config.get('choice.live.football.typeRate');
+const typeRate = config.choice.live.football.typeRate;
 
 /**
  * Сбрасывает все зарезервированные символы для регулярных выражений.
