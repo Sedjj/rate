@@ -1,5 +1,5 @@
 const config = require('config');
-const {setFileApiTelegram, setTextApiTelegram} = require('../fetch');
+const {setFileApiTelegram, setTextApiTelegram, setSupportMsgApiTelegram} = require('../fetch');
 
 const token = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.token')
@@ -56,7 +56,7 @@ function sendMessageChannel(text) {
 function sendMessageSupport(text) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setTextApiTelegram(supportToken, supportChatId, text));
+			resolve(setSupportMsgApiTelegram(supportToken, supportChatId, text));
 		} catch (error) {
 			reject(error);
 		}

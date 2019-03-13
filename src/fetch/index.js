@@ -1,6 +1,6 @@
 const config = require('config');
 const request = require('request');
-const log = require('./../utils/logger');
+const {log} = require('./../utils/logger');
 const {getStringToUTCDateString} = require('./../utils/dateFormat');
 
 const proxy = config.get('proxy');
@@ -67,7 +67,7 @@ function getExpandedMatch(url) {
  * Метод для получения всех результатов из зоны
  *
  * @param {String} url адрес запроса
- * @param {Date} date - дата
+ * @param {String} date - дата
  * @returns {Promise<JSON | void>}
  */
 function postResultZone(url, date) {
@@ -186,7 +186,7 @@ function setTextApiTelegram(token, chatId, text) {
 		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
 	}
 	return new Promise((resolve, reject) => {
-		request(props.url, props, (error, res, body) => {
+		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
 				log.error(`setFileApiTelegram: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
@@ -197,6 +197,39 @@ function setTextApiTelegram(token, chatId, text) {
 	});
 }
 
+/**
+ * Отправляет сообщение в чат support на API Telegram.
+ * Сделан отдельный метод где нет логирования а то уходит в рекурсию
+ *
+ * @param {String} token идентификатор бота
+ * @param {String} chatId id чата
+ * @param {String} text текст сообщения
+ * @returns {Promise<any>}
+ */
+function setSupportMsgApiTelegram(token, chatId, text) {
+	let props = {
+		url: `https://api.telegram.org/bot${token}/sendMessage`,
+		headers: {
+			'content-type': 'application/json'
+		},
+		json: {
+			chat_id: chatId,
+			text: text,
+			parse_mode: 'HTML'
+		}
+	};
+	if (process.env.NODE_ENV === 'development') {
+		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
+	}
+	return new Promise((resolve, reject) => {
+		request.post(props, (error, res, body) => {
+			if (error || (res && res.statusCode !== 200)) {
+				return reject(error);
+			}
+			resolve(body);
+		});
+	});
+}
 module.exports = {
 	getAllMatches,
 	getExpandedMatch,

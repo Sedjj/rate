@@ -1,4 +1,6 @@
+const {TelegramTransport} = require('./telegramTransport');
 const {createLogger, transports, format} = require('winston');
+const {sendMessageSupport} = require('../telegramApi');
 
 const options = {
 	fileInfo: {
@@ -41,6 +43,10 @@ const options = {
 		handleExceptions: true,
 		json: false,
 		colorize: true
+	},
+	telegram: {
+		level: 'error',
+		stream: sendMessageSupport
 	}
 };
 
@@ -50,7 +56,8 @@ const config = {
 		new transports.File(options.fileInfo),
 		new transports.File(options.fileError),
 		new transports.File(options.fileDebug),
-		new transports.Console()
+		new TelegramTransport(options.telegram),
+		new transports.Console(),
 	],
 	exceptionHandlers: [
 		new transports.File(options.exceptions)
@@ -60,6 +67,7 @@ const config = {
 		format.timestamp({
 			format: 'YYYY-MM-DD HH:mm:ss'
 		}),
+		format.colorize(),
 		format.json(),
 		//
 		// Alternatively you could use this custom printf format if you
@@ -76,14 +84,16 @@ const config = {
  * @param module
  * @returns {*}
  */
-const logger = createLogger(config);
+const log = createLogger(config);
 
 // create a stream object with a 'write' function that will be used by `morgan`
-logger.stream = {
+log.stream = {
 	write: function (message) {
 		// use the 'info' log level so the output will be picked up by both transports (file and console)
-		logger.info(message);
+		log.info(message);
 	}
 };
 
-module.exports = logger;
+module.exports = {
+	log
+};
