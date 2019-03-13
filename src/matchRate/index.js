@@ -9,8 +9,7 @@ const {decorateMessageMatch, decorateMessageChannel} = require('../utils/formate
  */
 async function matchRate(statistic) {
 	await sendMessageChat(decorateMessageMatch(statistic));
-
-	if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
+	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 		switch (statistic.strategy) {
 			case 1 :
 				if ((statistic.snapshot.end.x < 3) && (statistic.snapshot.end.mod > 2.5)) {
@@ -60,7 +59,7 @@ async function matchRate(statistic) {
 				}
 				break;
 		}
-	}
+	}*/
 }
 
 module.exports = {

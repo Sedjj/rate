@@ -141,14 +141,8 @@
 		"live": {
 			"football": {
 				"time": {
-					"larger": {
-						"before": 2700,
-						"after": 3810
-					},
-					"less": {
-						"before": 0,
-						"after": 2700
-					}
+					"before": 2700,
+					"after": 4500
 				},
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) > rate",

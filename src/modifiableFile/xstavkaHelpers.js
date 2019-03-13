@@ -146,8 +146,8 @@ function parserScoreYouth(value) {
  * Метод для нахождения ставки в ответе.
  *
  * @param {Object} item объект матча
- * @param {Number} desiredTotal minimum index
- * @param {Number} minimumIndex минимальный индекс
+ * @param {Number} desiredTotal искомый total
+ * @param {Number} minimumIndex ожидаемый коэффициент
  * @returns {Promise<Number>}
  */
 function searchTotal(item, desiredTotal, minimumIndex) {

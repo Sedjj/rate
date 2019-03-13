@@ -10,8 +10,7 @@ const {searchHelper} = require('../modifiableFile');
 
 const active = config.get('parser.active');
 const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.football.expandedRate`);
-const largerAfter = config.get('choice.live.football.time.larger.after');
-const lessAfter = config.get('choice.live.football.time.less.after');
+const after = config.get('choice.live.football.time.after');
 const totalStrategy = config.get('choice.live.football.total');
 const typeRate = config.get('choice.live.football.typeRate');
 const waitingInterval = process.env.NODE_ENV === 'development'
@@ -85,7 +84,7 @@ async function searchIndex(matchId, strategy, oldScore) {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
 		const param = searchHelper['getParams'](item, true);
-		if (equalsScore(oldScore, param.score) && (param.time <= largerAfter)) { //не изменился ли счет и не вышло ли за ределы время
+		if (equalsScore(oldScore, param.score) && (param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
 			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
 			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
 			if (index !== null) {
