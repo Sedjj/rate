@@ -84,13 +84,14 @@ function footballLiveStrategy(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyOne(param) {
+	const strategy = 1;
 	if ((Math.abs(param.p1 - param.p2) <= rateStrategyOne)) {
-		saveRate(param, 1, -2, 1)// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, 1);
-					log.debug(`Найден ${param.matchId}: Стратегия гол лузера`);
-					waiting(param, 1);
+					await setSnapshot(param.matchId, strategy, -2, 1);
+					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					waiting(param, strategy);
 				}
 			})
 			.catch((error) => {
@@ -105,14 +106,15 @@ function footballLiveStrategyOne(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyTwo(param) {
+	const strategy = 2;
 	if ((Math.abs(param.p1 - param.p2) > rateStrategyTwo)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, 2, -2, 1)// пропускает дальше если запись ушла в БД
+			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId, 2);
-						log.debug(`Найден ${param.matchId}: Стратегия 2`);
-						waiting(param, 2);
+						await setSnapshot(param.matchId, strategy, -2, 1);
+						log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+						waiting(param, strategy);
 					}
 				})
 				.catch((error) => {
@@ -128,14 +130,15 @@ function footballLiveStrategyTwo(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyThree(param) {
+	const strategy = 3;
 	if ((Math.abs(param.p1 - param.p2) > rateStrategyThree)) {
 		if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, 3, -2, 1)// пропускает дальше если запись ушла в БД
+			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
-						await setSnapshot(param.matchId, 3);
-						log.debug(`Найден ${param.matchId}: Стратегия 3`);
-						waiting(param, 3);
+						await setSnapshot(param.matchId, strategy, -2, 1);
+						log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+						waiting(param, strategy);
 					}
 				})
 				.catch((error) => {
@@ -151,13 +154,14 @@ function footballLiveStrategyThree(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyFour(param) {
+	const strategy = 4;
 	if ((Math.abs(param.p1 - param.p2) > rateStrategyFour)) {
-		saveRate(param, 4, 1, param.x)// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, 4);
-					log.debug(`Найден ${param.matchId}: Стратегия 4`);
-					await matchRate(param);
+					await setSnapshot(param.matchId, strategy, 1, param.x);
+					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					await matchRate({...param, strategy: strategy});
 				}
 			})
 			.catch((error) => {
@@ -172,14 +176,14 @@ function footballLiveStrategyFour(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyFive(param) {
+	const strategy = 5;
 	if ((Math.abs(param.p1 - param.p2) > rateStrategyFive)) {
-		const total = param.underTotal[typeRate[5]] ? param.underTotal[typeRate[5]] : 1; // TODO проверить что работает
-		saveRate(param, 5, total, param.underTotal[typeRate[5]])// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, 5);
-					log.debug(`Найден ${param.matchId}: Стратегия 5`);
-					await matchRate(param);
+					await setSnapshot(param.matchId, strategy);
+					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					await matchRate({...param, strategy: strategy});
 				}
 			})
 			.catch((error) => {
@@ -194,13 +198,14 @@ function footballLiveStrategyFive(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategySix(param) {
+	const strategy = 6;
 	if ((Math.abs(param.p1 - param.p2) > rateStrategySix)) {
-		saveRate(param, 6, 1, param.x)// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, 6);
-					log.debug(`Найден ${param.matchId}: Стратегия 6`);
-					await matchRate(param);
+					await setSnapshot(param.matchId, strategy, 1, param.x);
+					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					await matchRate({...param, strategy: strategy});
 				}
 			})
 			.catch((error) => {
@@ -215,14 +220,14 @@ function footballLiveStrategySix(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategySeven(param) {
+	const strategy = 7;
 	if ((Math.abs(param.p1 - param.p2) > rateStrategySeven)) {
-		const total = param.underTotal[typeRate[7]] ? param.underTotal[typeRate[7]] : 1; // TODO проверить что работает
-		saveRate(param, 7, total, param.underTotal[typeRate[7]])// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, 7);
-					log.debug(`Найден ${param.matchId}: Стратегия 7`);
-					await matchRate(param);
+					await setSnapshot(param.matchId, strategy);
+					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					await matchRate({...param, strategy: strategy});
 				}
 			})
 			.catch((error) => {
@@ -236,13 +241,30 @@ function footballLiveStrategySeven(param) {
  *
  * @param {number} matchId матча
  * @param {Number} strategy стратегия ставок
+ * @param {Number} total коэффициент ставоки
+ * @param {Number} index значение ставоки
+ * @returns {Promise<Promise<any>|*>}
  */
-async function setSnapshot(matchId, strategy) {
+async function setSnapshot(matchId, strategy, total = undefined, index = undefined) {
 	const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 	const param = searchHelper['getParams'](item, true);
+	const desiredTotal = total || param.underTotal.reduce((acc, current) => {
+		if (current.key === typeRate[strategy]) {
+			acc = current.value;
+		}
+		return acc;
+	}, undefined);
+	const desiredIndex = index || param.underTotal.reduce((acc, current) => {
+		if (current.key === typeRate[strategy]) {
+			acc = current.value;
+		}
+		return acc;
+	}, undefined);
 	return setStatistic({
 		matchId: param.matchId,
 		strategy: strategy,
+		total: desiredTotal,
+		index: desiredIndex, // результат ставки.
 		cards: {
 			before: param.cards
 		},
@@ -250,25 +272,20 @@ async function setSnapshot(matchId, strategy) {
 	});
 }
 
-
 /**
  * Метод для создании записи в бд.
  *
  * @param {Object} param объект с параметрами матча
  * @param {Number} strategy стратегия ставок
- * @param {Number} total коэффициент ставоки
- * @param {Number} index значение ставоки
  * @returns {Promise<any | never>}
  */
-function saveRate(param, strategy, total, index) {
+function saveRate(param, strategy) {
 	return newStatistic({
 		matchId: param.matchId, // id матча
 		score: param.score, // счет матча
 		command: param.command,
 		group: param.group,
 		strategy: strategy, // стратегия
-		index: index, // результат ставки.
-		total: total,
 		snapshot: {
 			start: {
 				time: param.time,

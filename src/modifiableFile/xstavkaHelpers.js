@@ -11,9 +11,9 @@ const numericalDesignation = config.get('choice.live.football.numericalDesignati
  * @returns {Object}
  */
 function getParams(item, extended = false) {
-	const index = extended ? indexGameExtended(item) : indexGame(item);
-	const cards = searchCards(item['SC']['S']);
-	return {
+	const rate = extended ? indexGameExtended(item) : indexGame(item);
+	const cards = parserCards(item['SC']['S']);
+	let param = {
 		successfully: true,
 		matchId: item['I'],
 		command: {
@@ -32,13 +32,23 @@ function getParams(item, extended = false) {
 			ru: item['L'],
 			en: item['LE']
 		},
-		p1: index.p1,
-		x: index.x,
-		p2: index.p2,
+		p1: rate.p1,
+		x: rate.x,
+		p2: rate.p2,
 		score: scoreGame(item),
 		time: timeGame(item),
 		cards: cards
 	};
+
+	if (extended) {
+		const total = parserTotal(item['GE']);
+		param = {
+			...param,
+			overTotal: total.over,
+			underTotal: total.under,
+		};
+	}
+	return param;
 }
 
 /**
@@ -143,6 +153,43 @@ function parserScoreYouth(value) {
 }
 
 /**
+ * Метод для получения всех total текущего матча.
+ *
+ * @param {Object} item объект матча
+ * @returns {{underTotal: Array, overTotal: Array}}
+ */
+function parserTotal(item = []) {
+	let over = [];
+	let under = [];
+	item.forEach((rate) => {
+		if (rate.G === 17 && rate.E) { // 17 - тотал
+			// 0 - так как столбец "Тотал больше"
+			if (Array.isArray(rate.E[0])) {
+				over = rate.E[0].map((overTotal) => {
+					return {
+						key: overTotal.P,
+						value: overTotal.C
+					};
+				});
+			}
+			// 1 - так как столбец "Тотал меньше"
+			if (Array.isArray(rate.E[1])) {
+				under = rate.E[1].map((underTotal) => {
+					return {
+						key: underTotal.P,
+						value: underTotal.C
+					};
+				});
+			}
+		}
+	});
+	return {
+		over,
+		under
+	};
+}
+
+/**
  * Метод для нахождения ставки в ответе.
  *
  * @param {Object} item объект матча
@@ -155,10 +202,10 @@ function searchTotal(item, desiredTotal, minimumIndex) {
 		try {
 			if (item['GE'] && Array.isArray(item['GE'])) {
 				item['GE'].forEach((rate) => {
-					if (rate['G'] === 17) { // 17 - тотал
+					if (rate.G === 17) { // 17 - тотал
 						if (rate.E && Array.isArray(rate.E[0])) {
 							rate.E[0].forEach((itemTotal) => { // 0 - так как столбец "Тотал больше"
-								if (itemTotal['P'] === desiredTotal) {
+								if (itemTotal.P === desiredTotal) {
 									if (itemTotal.C > minimumIndex) {
 										resolve(itemTotal.C);
 									}
@@ -181,7 +228,7 @@ function searchTotal(item, desiredTotal, minimumIndex) {
  * @param {Object} item объект матча
  * @returns {Object}
  */
-function searchCards(item = []) {
+function parserCards(item = []) {
 	let cards = {
 		one: {
 			red: 0,
@@ -242,7 +289,7 @@ function searchCards(item = []) {
  * @param {number} id матча
  * @returns {Promise<void>}
  */
-async function serchResult(data, id) {
+async function searchResult(data, id) {
 	return new Promise((resolve, reject) => {
 		try {
 			data.forEach((item) => {
@@ -269,7 +316,7 @@ async function serchResult(data, id) {
  * Метод для подмены url.
  *
  * @param {String} url адрес запроса
- * @param {Date} date дата
+ * @param {String} date дата
  * @returns {void | string | never}
  */
 function replaceUrl(url, date) {
@@ -281,5 +328,5 @@ module.exports = {
 	parserScore,
 	searchTotal,
 	replaceUrl,
-	serchResult
+	searchResult
 };
