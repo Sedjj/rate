@@ -55,16 +55,20 @@
 		"1xstavka": {
 			"live": {
 				"football": {
-					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=50&mode=4&country=1&partner=51&getEmpty=true",
-					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=ru&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
-					"card": "https://1xstavka.ru/SubService/api/GetEventTypesByGameId?gameId=${id}&lng=ru&Source=0"
+					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=200&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
+					"card": "https://1xstavka.ru/SubService/api/GetEventTypesByGameId?gameId=${id}&lng=en&Source=0"
 				},
-				"tennis": ""
+				"tableTennis": {
+					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=10&count=200&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
+					"card": ""
+				}
 			},
 			"result": {
 				"live": "",
 				"allZone": "https://1xstavka.ru/getTranslate/ViewGameResultsGroup",
-				"all": "https://1xstavka.ru/getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=ru&adult=false&showAll=true"
+				"all": "https://1xstavka.ru/getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=en&adult=false&showAll=true"
 			},
 			"authentication": {
 				"auth": "https://1xstavka.ru/en/user/auth/",
