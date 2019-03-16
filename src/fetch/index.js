@@ -239,4 +239,5 @@ module.exports = {
 	getResultList,
 	setFileApiTelegram,
 	setTextApiTelegram,
+	setSupportMsgApiTelegram,
 };

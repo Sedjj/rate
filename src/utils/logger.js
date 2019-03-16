@@ -1,4 +1,3 @@
-/*const {TelegramTransport} = require('./telegramTransport');*/
 const {createLogger, transports, format} = require('winston');
 /*const {sendMessageSupport} = require('../telegramApi');*/
 
@@ -43,11 +42,7 @@ const options = {
 		handleExceptions: true,
 		json: false,
 		colorize: true
-	}/*,
-	telegram: {
-		level: 'error',
-		stream: sendMessageSupport
-	}*/
+	}
 };
 
 const config = {
@@ -56,7 +51,6 @@ const config = {
 		new transports.File(options.fileInfo),
 		new transports.File(options.fileError),
 		new transports.File(options.fileDebug),
-		// new TelegramTransport(options.telegram),
 		new transports.Console(),
 	],
 	exceptionHandlers: [
@@ -79,20 +73,28 @@ const config = {
 };
 
 /**
- * Обертка над логером.
- *
- * @param module
- * @returns {*}
+ * Обертка над логером для дополнительных действий
  */
-const log = createLogger(config);
-
-// create a stream object with a 'write' function that will be used by `morgan`
-log.stream = {
-	write: function (message) {
-		// use the 'info' log level so the output will be picked up by both transports (file and console)
-		log.info(message);
+class WrapperLogger {
+	constructor() {
+		this.logger = createLogger(config);
 	}
-};
+
+	info(message) {
+		this.logger.info(message);
+	}
+
+	debug(message) {
+		this.logger.debug(message);
+	}
+
+	error(message) {
+		this.logger.error(message);
+		// sendMessageSupportDebounce(message);
+	}
+}
+
+const log = new WrapperLogger();
 
 module.exports = {
 	log
