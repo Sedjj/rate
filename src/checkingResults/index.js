@@ -52,7 +52,7 @@ async function result(statistics, beforeDate, currentDate) {
 			await baseRecordCorrection(statistic, endScore);
 		});
 	} catch (error) {
-		log.error(`serchResult: ${error}`);
+		log.error(`searchResult: ${error}`);
 	}
 }
 
@@ -67,9 +67,9 @@ async function result(statistics, beforeDate, currentDate) {
 function serchResultEndMatch(beforeData, currentData, statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let endScore = await searchHelper.serchResult(currentData, statistic.matchId);
+			let endScore = await searchHelper.searchResult(currentData, statistic.matchId);
 			if (endScore === '') {
-				endScore = await searchHelper.serchResult(beforeData, statistic.matchId);
+				endScore = await searchHelper.searchResult(beforeData, statistic.matchId);
 			}
 			resolve(endScore);
 		} catch (error) {

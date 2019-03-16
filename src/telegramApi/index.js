@@ -1,5 +1,5 @@
 const config = require('config');
-const {setFileApiTelegram, setTextApiTelegram, setSupportMsgApiTelegram} = require('../fetch');
+const {setFileApiTelegram, setTextApiTelegram} = require('../fetch');
 
 const token = process.env.NODE_ENV === 'development'
 	? config.get('bots.dev.token')

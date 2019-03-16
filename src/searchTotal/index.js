@@ -7,6 +7,7 @@ const {getExpandedMatch} = require('../fetch');
 const {equalsScore} = require('../utils/searchHelper');
 const {matchRate} = require('../matchRate');
 const {searchHelper} = require('../modifiableFile');
+const {counterWaiting} = require('../utils/counterWaiting');
 
 const active = config.parser.active;
 const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.football.expandedRate`);
@@ -20,8 +21,6 @@ const waitingInterval = process.env.NODE_ENV === 'development'
 		config.cron.waitingInterval.after
 	).generate();
 
-let waitingEndCount = 0;
-
 /**
  * Метод для мониторинга Total.
  *
@@ -30,16 +29,14 @@ let waitingEndCount = 0;
  */
 function waiting(param, strategy) {
 	let reboot = false;
-	waitingEndCount++;
-	log.debug(`Всего в очереди на окончание матча: ${waitingEndCount}`);
+	counterWaiting.increment();
 	let waitingIntervalJob = new CronJob(waitingInterval, async () => {
 		try {
 			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
 			if (indexMatch !== null) {
 				reboot = false;
 				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
-				waitingEndCount--;
-				log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
+				counterWaiting.decrement();
 				waitingIntervalJob.stop();
 			} else {
 				reboot = true;
@@ -52,9 +49,8 @@ function waiting(param, strategy) {
 			}
 		} catch (error) {
 			reboot = false;
-			waitingEndCount--;
+			counterWaiting.decrement();
 			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
-			log.debug(`Всего в очереди на окончание матча осталось: ${waitingEndCount}`);
 			waitingIntervalJob.stop();
 		}
 	}, () => {

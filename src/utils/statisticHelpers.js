@@ -1,4 +1,4 @@
-const {getFormattedDate, getLocalStringToDate} = require('../utils/dateFormat');
+const {getFormattedDate} = require('../utils/dateFormat');
 
 /**
  * Преобразовывает статистику в необходимый формат
