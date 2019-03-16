@@ -1,7 +1,7 @@
-require('../utils/dbProvider');
-const {log} = require('../utils/logger');
-const {StatisticModel} = require('../models/statistic');
-const {mapProps} = require('../utils/statisticHelpers');
+require('../../utils/dbProvider');
+const {log} = require('../../utils/logger');
+const {TableTennisModel} = require('../../models/tableTennis');
+const {mapProps} = require('../../utils/statisticHelpers');
 const config = require('config');
 
 const rate = config.output.rate || 2000;
@@ -13,7 +13,7 @@ const rate = config.output.rate || 2000;
  * @returns {Promise<any>}
  */
 function getStatistic(param = {}) {
-	return StatisticModel.find(param)
+	return TableTennisModel.find(param)
 		.read('secondary')
 		.exec()
 		.then(statistics => {
@@ -43,7 +43,7 @@ function getStatistic(param = {}) {
  * @returns {Promise<boolean | never>}
  */
 function deleteStatistic(param) {
-	return StatisticModel.findOneAndRemove({matchId: param.matchId, strategy: param.strategy})
+	return TableTennisModel.findOneAndRemove({matchId: param.matchId, strategy: param.strategy})
 		.exec()
 		.catch(error => {
 			log.error(`deleteStatistic param=${JSON.stringify(param)}: ${error.message}`);
@@ -58,13 +58,13 @@ function deleteStatistic(param) {
  * @returns {Promise<any>}
  */
 function newStatistic(param) {
-	return StatisticModel.find({matchId: param.matchId, strategy: param.strategy})
+	return TableTennisModel.find({matchId: param.matchId, strategy: param.strategy})
 		.exec()
 		.then(statistics => {
 			if (statistics.length) {
 				return Promise.resolve(null);
 			}
-			const statistic = new StatisticModel(param);
+			const statistic = new TableTennisModel(param);
 			return statistic.save();
 		})
 		.catch(error => {
@@ -81,7 +81,7 @@ function newStatistic(param) {
  * @returns {Promise<any>}
  */
 function setStatistic(param) {
-	return StatisticModel.findOne({matchId: param.matchId, strategy: param.strategy})
+	return TableTennisModel.findOne({matchId: param.matchId, strategy: param.strategy})
 		.read('secondary')
 		.exec()
 		.then(statistic => {

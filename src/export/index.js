@@ -2,7 +2,7 @@ const path = require('path');
 const config = require('config');
 const {log} = require('../utils/logger');
 const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
-const {getStatistic} = require('../storage/statistic');
+const {getStatistic} = require('../storage/football');
 const XlsxTemplate = require('xlsx-template');
 const {sendFile} = require('../telegramApi');
 

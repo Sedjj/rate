@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const StatisticSchema = new Schema({
+const FootballSchema = new Schema({
 	matchId: {
 		type: Number,
 		required: true,
@@ -264,5 +264,5 @@ const StatisticSchema = new Schema({
 });
 
 module.exports = {
-	StatisticModel: mongoose.model('Statistic', StatisticSchema)
+	FootballModel: mongoose.model('Football', FootballSchema)
 };

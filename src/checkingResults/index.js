@@ -1,5 +1,5 @@
 const {log} = require('../utils/logger');
-const {getStatistic, setStatistic} = require('../storage/statistic');
+const {getStatistic, setStatistic} = require('../storage/football');
 const config = require('config');
 const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../utils/searchHelper');
 const {throttle} = require('../utils/throttle');

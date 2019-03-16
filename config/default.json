@@ -200,6 +200,28 @@
 				],
 				"titleNumericalDesignation": "Числовое обозначение футбола",
 				"numericalDesignation": 1
+			},
+			"tableTennis": {
+				"time": {
+					"before": 2700,
+					"after": 4500
+				},
+				"strategyOne": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 1.5
+				},
+				"titleTotal": "Ожидаемый коэффициент: '0'- заглушка, '1'- первая стратегия",
+				"total": [
+					0,
+					1.4
+				],
+				"titleTypeRate": "Прибавляем к сумме результата матчей",
+				"typeRate": [
+					0,
+					0.5
+				],
+				"titleNumericalDesignation": "Числовое обозначение настольного тениса",
+				"numericalDesignation": 10
 			}
 		}
 	},
