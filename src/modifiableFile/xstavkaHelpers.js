@@ -1,7 +1,7 @@
 const {getStringToUTCDateString} = require('./../utils/dateFormat');
 const config = require('config');
 
-const numericalDesignation = config.get('choice.live.football.numericalDesignation');
+const numericalDesignation = config.choice.live.football.numericalDesignation;
 
 /**
  * Метод для вытаскивания нужных данных из JSON ответа
@@ -12,7 +12,7 @@ const numericalDesignation = config.get('choice.live.football.numericalDesignati
  */
 function getParams(item, extended = false) {
 	const rate = extended ? indexGameExtended(item) : indexGame(item);
-	const cards = parserCards(item['SC']['S']);
+	const cards = parserCards(item['SC']);
 	let param = {
 		successfully: true,
 		matchId: item['I'],
@@ -58,46 +58,85 @@ function getParams(item, extended = false) {
  * @returns {{sc1: number, sc2: number}}
  */
 function scoreGame(item) {
-	return {
-		sc1: item['SC']['FS']['S1'] ? item['SC']['FS']['S1'] : 0, // проверяем счет матча
-		sc2: item['SC']['FS']['S2'] ? item['SC']['FS']['S2'] : 0 // проверяем счет матча
+	const rate = {
+		sc1: 0,
+		sc2: 0
 	};
+	if (item['SC'] && item['SC']['FS']) {
+		if (item['SC']['FS']['S1']) {
+			rate.sc1 = item['SC']['FS']['S1'];
+		}
+		if (item['SC']['FS']['S2']) {
+			rate.sc1 = item['SC']['FS']['S1'];
+		}
+	}
+	return rate;
 }
 
 /**
  * Метод для определения ставок матча.
  *
- * @param {Object} item объект матча
+ * @param {Object} items объект матча
  * @returns {{p1: number, x: number, p2: number}}
  */
-function indexGame(item) {
-	return {
-		p1: item.E[0] && item.E[0]['T'] === 1 ? item.E[0].C : '', // победа первой
-		x: item.E[1] && item.E[1]['T'] === 2 ? item.E[1].C : '', // ничья
-		p2: item.E[2] && item.E[2]['T'] === 3 ? item.E[2].C : '' // победа второй
+function indexGame(items) {
+	const rate = {
+		p1: 0,
+		x: 0,
+		p2: 0,
 	};
+	if (items['E'] && Array.isArray(items['E'])) {
+		items['E'].forEach((item) => {
+			switch (item['T']) {
+				case 1: // победа первой
+					rate.p1 = item['C'];
+					break;
+				case 2: // ничья
+					rate.x = item['C'];
+					break;
+				case 3: // победа второй
+					rate.p2 = item['C'];
+					break;
+			}
+		});
+	}
+	return rate;
 }
 
 /**
  * Метод для определения ставок матча.
  *
- * @param {Object} item объект матча
+ * @param {Object} items объект матча
  * @returns {{p1: number, x: number, p2: number}}
  */
-function indexGameExtended(item) {
-	let p1 = 0, x = 0, p2 = 0;
-	if (item['GE'] && Array.isArray(item['GE'])) {
-		item['GE'].forEach((rate) => {
+function indexGameExtended(items) {
+	const rate = {
+		p1: 0,
+		x: 0,
+		p2: 0,
+	};
+	if (items['GE'] && Array.isArray(items['GE'])) {
+		items['GE'].forEach((rate) => {
 			if (rate['G'] === 1) { // 1 - p1 x p2
-				if (rate.E && Array.isArray(rate.E[0])) {
-					p1 = rate.E[0][0].C;
-					x = rate.E[1][0].C;
-					p2 = rate.E[2][0].C;
+				if (rate.E && Array.isArray(rate.E)) {
+					rate['E'].forEach((item) => {
+						switch (item[0]['T']) {
+							case 1: // победа первой
+								rate.p1 = item[0]['C'];
+								break;
+							case 2: // ничья
+								rate.x = item[0]['C'];
+								break;
+							case 3: // победа второй
+								rate.p2 = item[0]['C'];
+								break;
+						}
+					});
 				}
 			}
 		});
 	}
-	return {p1, x, p2};
+	return rate;
 }
 
 /**
@@ -107,7 +146,11 @@ function indexGameExtended(item) {
  * @returns {number}
  */
 function timeGame(item) {
-	return item['SC']['TS'] ? Math.floor(item['SC']['TS']) : 0;
+	let time = 0;
+	if (item['SC']['TS']) {
+		time = Math.floor(item['SC']['TS']);
+	}
+	return time;
 }
 
 /**
@@ -162,12 +205,12 @@ function parserTotal(item = []) {
 	let over = [];
 	let under = [];
 	item.forEach((rate) => {
-		if (rate.G === 17 && rate.E) { // 17 - тотал
+		if (rate['G'] === 17 && rate.E) { // 17 - тотал
 			// 0 - так как столбец "Тотал больше"
 			if (Array.isArray(rate.E[0])) {
 				over = rate.E[0].map((overTotal) => {
 					return {
-						key: overTotal.P,
+						key: overTotal['P'],
 						value: overTotal.C
 					};
 				});
@@ -176,7 +219,7 @@ function parserTotal(item = []) {
 			if (Array.isArray(rate.E[1])) {
 				under = rate.E[1].map((underTotal) => {
 					return {
-						key: underTotal.P,
+						key: underTotal['P'],
 						value: underTotal.C
 					};
 				});
@@ -202,10 +245,10 @@ function searchTotal(item, desiredTotal, minimumIndex) {
 		try {
 			if (item['GE'] && Array.isArray(item['GE'])) {
 				item['GE'].forEach((rate) => {
-					if (rate.G === 17) { // 17 - тотал
+					if (rate['G'] === 17) { // 17 - тотал
 						if (rate.E && Array.isArray(rate.E[0])) {
 							rate.E[0].forEach((itemTotal) => { // 0 - так как столбец "Тотал больше"
-								if (itemTotal.P === desiredTotal) {
+								if (itemTotal['P'] === desiredTotal) {
 									if (itemTotal.C > minimumIndex) {
 										resolve(itemTotal.C);
 									}
@@ -229,7 +272,7 @@ function searchTotal(item, desiredTotal, minimumIndex) {
  * @returns {Object}
  */
 function parserCards(item = []) {
-	let cards = {
+	const cards = {
 		one: {
 			red: 0,
 			attacks: 0,
@@ -245,40 +288,42 @@ function parserCards(item = []) {
 			shotsOff: 0
 		}
 	};
-	item.forEach((item) => {
-		switch (item['Key']) {
-			case 'IRedCard1':
-				cards.one.red = item['Value'];
-				break;
-			case 'IRedCard2':
-				cards.two.red = item['Value'];
-				break;
-			case 'Attacks1':
-				cards.one.attacks = item['Value'];
-				break;
-			case 'Attacks2':
-				cards.two.attacks = item['Value'];
-				break;
-			case 'DanAttacks1':
-				cards.one.danAttacks = item['Value'];
-				break;
-			case 'DanAttacks2':
-				cards.two.danAttacks = item['Value'];
-				break;
-			case 'ShotsOn1':
-				cards.one.shotsOn = item['Value'];
-				break;
-			case 'ShotsOn2':
-				cards.two.shotsOn = item['Value'];
-				break;
-			case 'ShotsOff1':
-				cards.one.shotsOff = item['Value'];
-				break;
-			case 'ShotsOff2':
-				cards.two.shotsOff = item['Value'];
-				break;
-		}
-	});
+	if (item['S'] && Array.isArray(item['S'])) {
+		item['S'].forEach((item) => {
+			switch (item['Key']) {
+				case 'IRedCard1':
+					cards.one.red = item['Value'];
+					break;
+				case 'IRedCard2':
+					cards.two.red = item['Value'];
+					break;
+				case 'Attacks1':
+					cards.one.attacks = item['Value'];
+					break;
+				case 'Attacks2':
+					cards.two.attacks = item['Value'];
+					break;
+				case 'DanAttacks1':
+					cards.one.danAttacks = item['Value'];
+					break;
+				case 'DanAttacks2':
+					cards.two.danAttacks = item['Value'];
+					break;
+				case 'ShotsOn1':
+					cards.one.shotsOn = item['Value'];
+					break;
+				case 'ShotsOn2':
+					cards.two.shotsOn = item['Value'];
+					break;
+				case 'ShotsOff1':
+					cards.one.shotsOff = item['Value'];
+					break;
+				case 'ShotsOff2':
+					cards.two.shotsOff = item['Value'];
+					break;
+			}
+		});
+	}
 	return cards;
 }
 
