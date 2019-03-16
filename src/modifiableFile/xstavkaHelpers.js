@@ -36,16 +36,23 @@ function getParams(item, extended = false) {
 		x: rate.x,
 		p2: rate.p2,
 		score: scoreGame(item),
+		set: setGame(item),
 		time: timeGame(item),
 		cards: cards
 	};
 
 	if (extended) {
-		const total = parserTotal(item['GE']);
+		const betting = parserBetting(item['GE']);
 		param = {
 			...param,
-			overTotal: total.over,
-			underTotal: total.under,
+			total: {
+				over: betting.total.over,
+				under: betting.total.under,
+			},
+			handicap: {
+				over: betting.handicap.over,
+				under: betting.handicap.under,
+			}
 		};
 	}
 	return param;
@@ -71,6 +78,20 @@ function scoreGame(item) {
 		}
 	}
 	return rate;
+}
+
+/**
+ * Метод для определения сета матча.
+ *
+ * @param {Object} item объект матча
+ * @returns {number}
+ */
+function setGame(item) {
+	let set = 1;
+	if (item['SC'] && item['SC']['CP']) {
+		set = item['SC']['CP'];
+	}
+	return set;
 }
 
 /**
@@ -199,37 +220,62 @@ function parserScoreYouth(value) {
  * Метод для получения всех total текущего матча.
  *
  * @param {Object} item объект матча
- * @returns {{underTotal: Array, overTotal: Array}}
+ * @returns {{total: {over: Array, under: Array}, handicap: {over: Array, under: Array}}}
  */
-function parserTotal(item = []) {
-	let over = [];
-	let under = [];
+function parserBetting(item = []) {
+	const betting = {
+		total: {
+			over: [],
+			under: [],
+		},
+		handicap: {
+			over: [],
+			under: [],
+		}
+	};
 	item.forEach((rate) => {
 		if (rate['G'] === 17 && rate.E) { // 17 - тотал
 			// 0 - так как столбец "Тотал больше"
 			if (Array.isArray(rate.E[0])) {
-				over = rate.E[0].map((overTotal) => {
+				betting.total.over = rate.E[0].map((overTotal) => {
 					return {
-						key: overTotal['P'],
+						key: Math.abs(overTotal['P']),
 						value: overTotal.C
 					};
 				});
 			}
 			// 1 - так как столбец "Тотал меньше"
 			if (Array.isArray(rate.E[1])) {
-				under = rate.E[1].map((underTotal) => {
+				betting.total.under = rate.E[1].map((underTotal) => {
 					return {
-						key: underTotal['P'],
+						key: Math.abs(underTotal['P']),
+						value: underTotal.C
+					};
+				});
+			}
+		}
+		if (rate['G'] === 2 && rate.E) { // 2 - фора
+			// 0 - так как столбец "Фора больше"
+			if (Array.isArray(rate.E[0])) {
+				betting.handicap.over = rate.E[0].map((overTotal) => {
+					return {
+						key: Math.abs(overTotal['P']),
+						value: overTotal.C
+					};
+				});
+			}
+			// 1 - так как столбец "Фора меньше"
+			if (Array.isArray(rate.E[1])) {
+				betting.handicap.under = rate.E[1].map((underTotal) => {
+					return {
+						key: Math.abs(underTotal['P']),
 						value: underTotal.C
 					};
 				});
 			}
 		}
 	});
-	return {
-		over,
-		under
-	};
+	return betting;
 }
 
 /**

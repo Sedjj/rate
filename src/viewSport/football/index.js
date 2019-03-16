@@ -68,7 +68,7 @@ function footballLiveStrategyOne(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, -2, 1);
-					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					waiting(param, strategy);
 				}
 			})
@@ -91,7 +91,7 @@ function footballLiveStrategyTwo(param) {
 				.then(async (statistic) => {
 					if (statistic !== null) {
 						await setSnapshot(param.matchId, strategy, -2, 1);
-						log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+						log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 						waiting(param, strategy);
 					}
 				})
@@ -115,7 +115,7 @@ function footballLiveStrategyThree(param) {
 				.then(async (statistic) => {
 					if (statistic !== null) {
 						await setSnapshot(param.matchId, strategy, -2, 1);
-						log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+						log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 						waiting(param, strategy);
 					}
 				})
@@ -138,7 +138,7 @@ function footballLiveStrategyFour(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, 1, param.x);
-					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate({...param, strategy: strategy});
 				}
 			})
@@ -160,7 +160,7 @@ function footballLiveStrategyFive(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy);
-					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate({...param, strategy: strategy});
 				}
 			})
@@ -182,7 +182,7 @@ function footballLiveStrategySix(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, 1, param.x);
-					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate({...param, strategy: strategy});
 				}
 			})
@@ -204,7 +204,7 @@ function footballLiveStrategySeven(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy);
-					log.debug(`Найден ${param.matchId}: Стратегия ${strategy}`);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate({...param, strategy: strategy});
 				}
 			})
