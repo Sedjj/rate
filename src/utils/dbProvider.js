@@ -3,16 +3,18 @@ const {log} = require('./logger');
 const config = require('config');
 
 const dbUri = process.env.NODE_ENV === 'development'
-	? `mongodb://${config.get('dbDev.user')}:${encodeURIComponent(config.get('dbDev.pass'))}@${config.get('dbDev.hostString')}${config.get('dbDev.name')}`
-	: `mongodb://${config.get('dbProd.user')}:${encodeURIComponent(config.get('dbProd.pass'))}@${config.get('dbProd.hostString')}${config.get('dbProd.name')}`;
+	? `mongodb://${config.dbDev.user}:${encodeURIComponent(config.dbDev.pass)}@${config.dbDev.hostString}${config.dbDev.name}`
+	: `mongodb://${config.dbProd.user}:${encodeURIComponent(config.dbProd.pass)}@${config.dbProd.hostString}${config.dbProd.name}`;
 
-log.info(`dbUri :${dbUri}`);
+log.info(`dbUri: ${dbUri}`);
 
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUri, {
 	useNewUrlParser: true
 });
+
 const db = mongoose.connection;
+
 db.on('error', (error) => {
 	log.error(`Connection error: ${error}`);
 });

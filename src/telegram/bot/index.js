@@ -1,14 +1,16 @@
 const config = require('config');
 const TelegramBot = require('node-telegram-bot-api');
+const {exportBackup} = require('../../backupBD');
 const {counterWaiting} = require('../../utils/counterWaiting');
 const {throttle} = require('../../utils/throttle');
 const {exportBackupStatistic} = require('../../export');
+const {use} = require('node-telegram-bot-api-middleware');
 
 const exportBackupStatisticDebounce = throttle(exportBackupStatistic, 20000);
 
 const supportToken = process.env.NODE_ENV === 'development'
-	? config.bots.dev.token
-	: config.bots.test.token;
+	? config.bots.supportDev.token
+	: config.bots.supportTest.token;
 
 const proxy = config.proxy;
 const administrators = config.roles.admin;
@@ -31,12 +33,21 @@ const bot = new TelegramBot(supportToken, props);
 const waiting = 'Сколько матчей в ожидании';
 const weekExport = 'Экспорт за неделю';
 const twoDaysExport = 'Экспорт за 2 дня';
+const exportBackupFootballs = 'Бэкап таблицы footballs';
+const exportBackupTableTennis = 'Бэкап таблицы tableTennis';
 
 const keyboard = [
-	[waiting], [weekExport], [twoDaysExport]
+	[waiting],
+	[weekExport],
+	[twoDaysExport],
+	[exportBackupFootballs],
+	[exportBackupTableTennis]
 ];
-bot.on('message', (msg) => {
-	if (!accessCheck(msg.from)) {
+
+const response = use(accessCheck);
+
+bot.on('message', response((msg) => {
+	if (!msg.text) {
 		return;
 	}
 	switch (msg.text.toString()) {
@@ -51,6 +62,14 @@ bot.on('message', (msg) => {
 			sendText(msg, 'Ожидайте файл');
 			exportBackupStatisticDebounce(2);
 			break;
+		case exportBackupFootballs:
+			sendText(msg, 'Ожидайте файл');
+			exportBackup('footballs');
+			break;
+		case exportBackupTableTennis:
+			sendText(msg, 'Ожидайте файл');
+			exportBackup('tabletennis');
+			break;
 		default:
 			bot.sendMessage(msg.chat.id, 'Hi, choose action?', {
 				reply_markup: {
@@ -58,15 +77,17 @@ bot.on('message', (msg) => {
 				}
 			});
 	}
-});
+}));
 
 /**
  * Проверка прав на доступ к меню.
  *
- * @param {Object} from объек с пользователем что запрашивает меню
+ * @param {Object} msg объект что пришел из telegram
  */
-function accessCheck(from) {
-	return administrators.some((user) => user === from.id);
+function accessCheck(msg) {
+	if (!administrators.some((user) => user === msg.from.id)) {
+		this.stop();
+	}
 }
 
 /**

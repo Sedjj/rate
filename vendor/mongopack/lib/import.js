@@ -7,30 +7,29 @@
 *@return typeof result from callback<String | Boolean | Number ...>
 */
 
-var flag = require('../util').flag;
-var flagCustom = require('../util').flagCustom;
-var temp = require('os').tmpDir;
-var exec = require('child_process').exec;
-var defaultFormat = 'csv';
+const flag = require('../util').flag;
+const flagCustom = require('../util').flagCustom;
+const exec = require('child_process').exec;
+const defaultFormat = 'csv';
 
 function importData(exec) {
 	// All fields are mandatory except the callback;
 	// optional options include HOST | PORT | USERNAME | PASSWORD | DESTINATION | TYPE
-	return function Import(database, collection, file, options) {
-		var cmd = '';
-		var host = options.host || 'localhost';
-		var port = options.port || 27017;
-		var username = options.username || '';
-		var password = options.password || '';
-		var database = database;
-		var file = file || ''; // if undefined, mongoimport reads from the stdin
-		var type = options.type || defaultFormat;
+	return function Import(databases, collection, files, options) {
+		let cmd = '';
+		const host = options.host || 'localhost';
+		const port = options.port || 27017;
+		const username = options.username || '';
+		const password = options.password || '';
+		let database = databases;
+		let file = files || ''; // if undefined, mongoimport reads from the stdin
+		const type = options.type || defaultFormat;
 		
 		// use fieldFile option in place of the fields option (eg. headerline.txt) for <tsv|csv> files,
 		// place on per line ends with \x0a;
-		var fieldFile = options.fieldFile ? options.fieldFile : ''; // not needed when csv|tsv has headerline
+		const fieldFile = options.fieldFile ? options.fieldFile : ''; // not needed when csv|tsv has headerline
 		
-		var fields; // not needed when csv|tsv has headerline
+		let fields; // not needed when csv|tsv has headerline
 		if (options.fields) {
 			if (Array.isArray(options.fields)) {
 				fields = options.fields.join(',');
@@ -56,8 +55,8 @@ function importData(exec) {
 		cmd += fields ? flag('fields') + fields : '';
 		cmd += type ? flagCustom('type') + type : '';
 		
-		for (var i in options) {
-			if (typeof options[i] == 'boolean' && options[i] == true) {
+		for (let i in options) {
+			if (typeof options[i] == 'boolean' && options[i] === true) {
 				cmd += flag(i);
 				// to ensure options already treated are not overwritten
 			} else if (['fields', 'fieldFile', 'query', 'username', 'password', 'port', 'host', 'type'].indexOf(i)) {
@@ -68,15 +67,16 @@ function importData(exec) {
 		}
 		
 		cmd = 'mongoimport ' + cmd;
+		console.log(`cmd: ${cmd}`);
 		return new Promise((resolve, reject) => {
 			exec(cmd, (error, stdout) => {
 				if (error) {
-					reject(error);
+					reject(error.message);
 				}
 				resolve(stdout);
 			});
 		});
-	}
+	};
 	
 }
 

@@ -4,7 +4,6 @@ const {
 	setTextApiTelegram,
 	setSupportMsgApiTelegram
 } = require('../../fetch');
-require('../bot');
 
 const token = process.env.NODE_ENV === 'development'
 	? config.bots.dev.token

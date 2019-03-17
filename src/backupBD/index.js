@@ -1,50 +1,75 @@
-const backup = require('mongodb-backup');
-const restore = require('mongodb-restore');
-const {log} = require('../utils/logger')(module);
+const {mongoexport} = require('../../vendor/mongopack');
+const {mongoimport} = require('../../vendor/mongopack');
+const {log} = require('../utils/logger');
 const path = require('path');
 const config = require('config');
+const {sendFile} = require('../telegram/api');
+const {readFileToStream} = require('../utils/fsHelpers');
 
-const dbUri = process.env.NODE_ENV === 'development'
-	? `mongodb://${config.get('dbDev.user')}:${encodeURIComponent(config.get('dbDev.pass'))}@${config.get('dbDev.hostString')}${config.get('dbDev.name')}`
-	: `mongodb://${config.get('dbProd.user')}:${encodeURIComponent(config.get('dbProd.pass'))}@${config.get('dbProd.hostString')}${config.get('dbProd.name')}`;
+const database = process.env.NODE_ENV === 'development'
+	? config.dbDev.name
+	: config.dbProd.name;
 
-const archivesPath = config.get('path.storagePath') || process.cwd();
-const archivesDirectory = config.get('path.directory.archives') || 'archives';
+const archivesPath = config.path.storagePath || process.cwd();
+const archivesDirectory = config.path.directory.archives || 'archives';
 const objectPath = path.join(archivesPath, archivesDirectory);
+
+const options = {
+	type: 'json', // default is csv
+	pretty: true, // gives a pretty formatted json in output file
+};
 
 /**
  * Метод для сворачивания дампа.
  *
+ * @param {String} collection название коллекции
  * @returns {Promise<void>}
  */
-async function exportBackup() {
+function exportBackup(collection) {
+	if (!collection) {
+		return;
+	}
 	log.info('Начало архивирования БД');
-	await backup({
-		uri: dbUri,
-		root: objectPath,
-		callback: (error) => {
+	mongoexport(database, collection, path.join(objectPath, `${collection}.json`), options)
+		.then((error) => {
 			if (error) {
 				log.error(`exportBackup: ${error}`);
-			} else {
-				log.info('Закончилось архивирования БД');
+				throw new Error();
 			}
-		}
-	});
+			log.info('Закончилось архивирования БД');
+			readFileToStream(path.join(objectPath, `${collection}.json`))
+				.then((stream) => {
+					sendFile(stream);
+					log.debug('Файл statistic отправлен');
+				});
+		})
+		.catch((error) => {
+			log.error(`Упал метод exportBackup - ${error} - для: ${collection.toString()}`);
+		});
 }
 
-async function importBackup() {
+/**
+ * Метод для разворачивания коллекции.
+ *
+ * @param {String} collection название коллекции
+ * @returns {Promise<void>}
+ */
+function importBackup(collection) {
+	if (!collection) {
+		return;
+	}
 	log.info('Начало востановление БД');
-	await restore({
-		uri: dbUri,
-		root: objectPath,
-		callback: (error) => {
+	mongoimport(database, collection, path.join(objectPath, `${collection}.json`), options)
+		.then((error) => {
 			if (error) {
 				log.error(`importBackup: ${error}`);
-			} else {
-				log.info('Закончилось востановление БД');
+				throw new Error();
 			}
-		}
-	});
+			log.info('Закончилось востановление БД');
+		})
+		.catch((error) => {
+			log.error(`Упал метод importBackup - ${error} - для: ${collection.toString()}`);
+		});
 }
 
 module.exports = {
