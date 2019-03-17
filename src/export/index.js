@@ -4,7 +4,7 @@ const {log} = require('../utils/logger');
 const {readFile, saveBufferToFile, readFileToStream} = require('../utils/fsHelpers');
 const {getStatistic} = require('../storage/football');
 const XlsxTemplate = require('xlsx-template');
-const {sendFile} = require('../telegramApi');
+const {sendFile} = require('../telegram/api');
 
 const storagePath = config.path.storagePath || process.cwd();
 const exportTemplatesDirectory = config.path.directory.exportTemplates || 'exportTemplates';
@@ -19,11 +19,12 @@ const reportsPathOutput = path.join(storagePath, uploadDirectory, reportsOutput)
 /**
  * Метод для отправки бэкапа таблицы статистики
  *
+ * @param {Number} days количество дней для экспорта
  * @returns {Promise<void>}
  */
-async function exportBackupStatistic() {
+async function exportBackupStatistic(days) {
 	try {
-		const file = await returnStatisticListTemplate();
+		const file = await returnStatisticListTemplate(days);
 		const filePath = await saveBufferToFile(reportsPathOutput, file);
 		const stream = await readFileToStream(filePath);
 		await sendFile(stream);
@@ -36,12 +37,13 @@ async function exportBackupStatistic() {
 /**
  * Возвращает заполненый шаблон списка статистики.
  *
+ * @param {Number} days количество дней для экспорта
  * @returns {Promise<{statistics: Array} | never>}
  */
-function returnStatisticListTemplate() {
+function returnStatisticListTemplate(days = 2) {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
-	beforeDate.setUTCDate(beforeDate.getUTCDate() - 7);
+	beforeDate.setUTCDate(beforeDate.getUTCDate() - days);
 	let props = {
 		statistics: [],
 	};

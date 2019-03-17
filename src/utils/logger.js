@@ -1,5 +1,5 @@
 const {createLogger, transports, format} = require('winston');
-/*const {sendMessageSupport} = require('../telegramApi');*/
+/*const {sendMessageSupport} = require('../telegram/api');*/
 
 const options = {
 	fileInfo: {
@@ -90,7 +90,7 @@ class WrapperLogger {
 
 	error(message) {
 		this.logger.error(message);
-		// sendMessageSupportDebounce(message);
+		// sendMessageSupport(message);
 	}
 }
 

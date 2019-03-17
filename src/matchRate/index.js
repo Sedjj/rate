@@ -1,4 +1,4 @@
-const {sendMessageChat, sendMessageChannel} = require('../telegramApi');
+const {sendMessageChat, sendMessageChannel} = require('../telegram/api');
 const {decorateMessageMatch, decorateMessageChannel} = require('../utils/formateMessage');
 
 /**
