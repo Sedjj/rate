@@ -5,10 +5,11 @@ const {decorateMessageMatch, decorateMessageChannel} = require('../utils/formate
  * Метод для вывода в телеграмм матча и запуск процедуры "Ставка".
  *
  * @param {Object} statistic объект матча
+ * @param {String} type вид спорта
  * @returns {Promise<void>}
  */
-async function matchRate(statistic) {
-	await sendMessageChat(decorateMessageMatch(statistic));
+async function matchRate(statistic, type) {
+	await sendMessageChat(decorateMessageMatch(statistic, type));
 	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 		switch (statistic.strategy) {
 			case 1 :

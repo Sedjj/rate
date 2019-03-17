@@ -37,10 +37,12 @@ function secondsToMinutes(time) {
  * Форматирование строки вывода.
  *
  * @param {Object} param объект матча
+ * @param {String} type вид спорта
  * @returns {*}
  */
-function decorateMessageMatch(param) {
+function decorateMessageMatch(param, type) {
 	return `Матч: ${param.matchId}; Стр: ${param.strategy}; Счет: ${param.score.sc1}:${param.score.sc2}
+	Вид спорта: ${type}
 	Группа: ${param.group.en}
 	  Команда 1:  ${param.command.en.one}
 	  Команда 2:  ${param.command.en.two}`;

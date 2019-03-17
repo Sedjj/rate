@@ -139,7 +139,7 @@ function footballLiveStrategyFour(param) {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, 1, param.x);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy: strategy});
+					matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -161,7 +161,7 @@ function footballLiveStrategyFive(param) {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy: strategy});
+					matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -183,7 +183,7 @@ function footballLiveStrategySix(param) {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, 1, param.x);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy: strategy});
+					matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -205,7 +205,7 @@ function footballLiveStrategySeven(param) {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy: strategy});
+					matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -226,13 +226,13 @@ function footballLiveStrategySeven(param) {
 async function setSnapshot(matchId, strategy, total = undefined, index = undefined) {
 	const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 	const param = searchHelper['getParams'](item, true);
-	const desiredTotal = total || param.underTotal.reduce((acc, current) => {
+	const desiredTotal = total || param.total.under.reduce((acc, current) => {
 		if (current.key === typeRate[strategy]) {
 			acc = current.value;
 		}
 		return acc;
 	}, undefined);
-	const desiredIndex = index || param.underTotal.reduce((acc, current) => {
+	const desiredIndex = index || param.total.under.reduce((acc, current) => {
 		if (current.key === typeRate[strategy]) {
 			acc = current.value;
 		}

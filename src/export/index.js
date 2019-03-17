@@ -6,12 +6,12 @@ const {getStatistic} = require('../storage/football');
 const XlsxTemplate = require('xlsx-template');
 const {sendFile} = require('../telegramApi');
 
-const storagePath = config.get('path.storagePath') || process.cwd();
-const exportTemplatesDirectory = config.get('path.directory.exportTemplates') || 'exportTemplates';
-const uploadDirectory = config.get('path.directory.upload') || 'upload';
+const storagePath = config.path.storagePath || process.cwd();
+const exportTemplatesDirectory = config.path.directory.exportTemplates || 'exportTemplates';
+const uploadDirectory = config.path.directory.upload || 'upload';
 
-const reportsInput = config.get('path.storage.fileName.reports.input') || 'Reports-list-default.xlsx';
-const reportsOutput = config.get('path.storage.fileName.reports.output') || 'Reports.xlsx';
+const reportsInput = config.path.storage.fileName.reports.input || 'Reports-list-default.xlsx';
+const reportsOutput = config.path.storage.fileName.reports.output || 'Reports.xlsx';
 
 const reportsPathInput = path.join(storagePath, exportTemplatesDirectory, reportsInput);
 const reportsPathOutput = path.join(storagePath, uploadDirectory, reportsOutput);
@@ -36,7 +36,7 @@ async function exportBackupStatistic() {
 /**
  * Возвращает заполненый шаблон списка статистики.
  *
- * @returns {Promise<{statistic: Array, currentDate: Date} | never>}
+ * @returns {Promise<{statistics: Array} | never>}
  */
 function returnStatisticListTemplate() {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
