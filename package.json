@@ -46,6 +46,7 @@
 		"mongodb-backup": "^1.6.9",
 		"mongodb-restore": "^1.6.2",
 		"mongoose": "^5.4.19",
+		"node-telegram-bot-api": "^0.30.0",
 		"request": "^2.88.0",
 		"request-cookies": "^1.1.0",
 		"socks5-https-client": "^1.2.1",

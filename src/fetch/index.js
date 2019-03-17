@@ -6,7 +6,7 @@ const {log} = require('./../utils/logger');
 const {getStringToUTCDateString} = require('./../utils/dateFormat');
 const {Cookie} = require('request-cookies');
 
-const proxy = config.get('proxy');
+const proxy = config.proxy;
 const cookie = new Map();
 
 /**

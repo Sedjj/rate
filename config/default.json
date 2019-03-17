@@ -20,6 +20,12 @@
 		"password": ""
 	},
 	"myId": "43166705",
+	"roles": {
+		"admin": [
+			43166705,
+			537523607
+		]
+	},
 	"bots": {
 		"dev": {
 			"channelId": "",
@@ -31,6 +37,7 @@
 			"token": "633510677:AAGoFQGr8f_cDP3LVHYvRiN7kr5bo13HDew"
 		},
 		"test": {
+			"channelId": "",
 			"chatId": "-299200164",
 			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
 		},

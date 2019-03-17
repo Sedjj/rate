@@ -3,24 +3,22 @@ const {
 	setFileApiTelegram,
 	setTextApiTelegram,
 	setSupportMsgApiTelegram
-} = require('../fetch');
+} = require('../../fetch');
+require('../bot');
 
 const token = process.env.NODE_ENV === 'development'
-	? config.get('bots.dev.token')
-	: config.get('bots.test.token');
+	? config.bots.dev.token
+	: config.bots.test.token;
 const chatId = process.env.NODE_ENV === 'development'
-	? config.get('bots.dev.chatId')
-	: config.get('bots.test.chatId');
+	? config.bots.dev.chatId
+	: config.bots.test.chatId;
 const channelId = process.env.NODE_ENV === 'development'
-	? config.get('bots.dev.channelId')
-	: config.get('bots.test.channelId');
+	? config.bots.dev.channelId
+	: config.bots.test.channelId;
 
-const supportToken = process.env.NODE_ENV === 'development'
-	? config.get('bots.supportDev.token')
-	: config.get('bots.supportTest.token');
 const supportChatId = process.env.NODE_ENV === 'development'
-	? config.get('bots.supportDev.chatId')
-	: config.get('bots.supportTest.chatId');
+	? config.bots.supportDev.chatId
+	: config.bots.supportTest.chatId;
 
 /**
  * Метод отправки сообщений в телеграмм бот.
@@ -60,7 +58,7 @@ function sendMessageChannel(text) {
 function sendMessageSupport(text) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setSupportMsgApiTelegram(supportToken, supportChatId, text));
+			resolve(setSupportMsgApiTelegram(token, supportChatId, text));
 		} catch (error) {
 			reject(error);
 		}
@@ -75,7 +73,7 @@ function sendMessageSupport(text) {
 function sendFile(file) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setFileApiTelegram(supportToken, supportChatId, file));
+			resolve(setFileApiTelegram(token, supportChatId, file));
 		} catch (error) {
 			reject(error);
 		}
