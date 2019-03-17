@@ -2,6 +2,7 @@ const {CronJob, CronTime} = require('cron');
 const rc = require('./src/utils/random-cron');
 const config = require('config');
 const {log} = require('./src/utils/logger');
+const {performAuth} = require('./src/auth');
 const {search} = require('./src/searchMatch');
 const {checkingResults} = require('./src/checkingResults');
 const {exportBackupStatistic} = require('./src/export');
