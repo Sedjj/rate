@@ -11,49 +11,54 @@ const numericalDesignation = config.choice.live.football.numericalDesignation;
  * @returns {Object}
  */
 function getParams(item, extended = false) {
-	const rate = extended ? indexGameExtended(item) : indexGame(item);
-	const cards = parserCards(item['SC']);
-	let param = {
-		successfully: true,
-		matchId: item['I'],
-		command: {
-			ru: {
-				one: item['O1'], // название команды 1
-				two: item['O2']  // название команды 2
-			},
-			en: {
-				one: item['O1E'], // название команды 1 на en
-				two: item['O2E']  // название команды 2 на en
-			},
-			women: parserScoreWomen(item['O1E']),
-			youth: parserScoreYouth(item['O1E'])
-		},
-		group: {
-			ru: item['L'],
-			en: item['LE']
-		},
-		p1: rate.p1,
-		x: rate.x,
-		p2: rate.p2,
-		score: scoreGame(item),
-		set: setGame(item),
-		time: timeGame(item),
-		cards: cards
-	};
-
-	if (extended) {
-		const betting = parserBetting(item['GE']);
+	let param;
+	try {
+		const rate = extended ? indexGameExtended(item) : indexGame(item);
+		const cards = parserCards(item['SC']);
 		param = {
-			...param,
-			total: {
-				over: betting.total.over,
-				under: betting.total.under,
+			successfully: true,
+			matchId: item['I'],
+			command: {
+				ru: {
+					one: item['O1'], // название команды 1
+					two: item['O2']  // название команды 2
+				},
+				en: {
+					one: item['O1E'], // название команды 1 на en
+					two: item['O2E']  // название команды 2 на en
+				},
+				women: parserScoreWomen(item['O1E']),
+				youth: parserScoreYouth(item['O1E'])
 			},
-			handicap: {
-				over: betting.handicap.over,
-				under: betting.handicap.under,
-			}
+			group: {
+				ru: item['L'],
+				en: item['LE']
+			},
+			p1: rate.p1,
+			x: rate.x,
+			p2: rate.p2,
+			score: scoreGame(item),
+			set: setGame(item),
+			time: timeGame(item),
+			cards: cards
 		};
+
+		if (extended) {
+			const betting = parserBetting(item['GE']);
+			param = {
+				...param,
+				total: {
+					over: betting.total.over,
+					under: betting.total.under,
+				},
+				handicap: {
+					over: betting.handicap.over,
+					under: betting.handicap.under,
+				}
+			};
+		}
+	} catch (error) {
+		console.log(error);
 	}
 	return param;
 }
@@ -201,8 +206,13 @@ function parserScore(value) {
  * @returns {Object | string}
  */
 function parserScoreWomen(value) {
-	const parserReturn = value.match(/(?!=\s)\(Women\)/ig);
-	return parserReturn ? 1 : 0;
+	let parserReturn = 0;
+	if (value && value.length > 5) {
+		parserReturn = value.match(/(?!=\s)\(Women\)/ig);
+		return parserReturn ? 1 : 0;
+	} else {
+		return parserReturn;
+	}
 }
 
 /**
@@ -212,8 +222,13 @@ function parserScoreWomen(value) {
  * @returns {number}
  */
 function parserScoreYouth(value) {
-	const parserReturn = value.match(/(?!=\s)U\d{2}/ig);
-	return parserReturn ? 1 : 0;
+	let parserReturn = 0;
+	if (value && value.length > 5) {
+		parserReturn = value.match(/(?!=\s)U\d{2}/ig);
+		return parserReturn ? 1 : 0;
+	} else {
+		return parserReturn;
+	}
 }
 
 /**
@@ -239,7 +254,7 @@ function parserBetting(item = []) {
 			if (Array.isArray(rate.E[0])) {
 				betting.total.over = rate.E[0].map((overTotal) => {
 					return {
-						key: Math.abs(overTotal['P']),
+						key: overTotal['P'] ? Math.abs(overTotal['P']) : 0,
 						value: overTotal.C
 					};
 				});
@@ -248,7 +263,7 @@ function parserBetting(item = []) {
 			if (Array.isArray(rate.E[1])) {
 				betting.total.under = rate.E[1].map((underTotal) => {
 					return {
-						key: Math.abs(underTotal['P']),
+						key: underTotal['P'] ? Math.abs(underTotal['P']) : 0,
 						value: underTotal.C
 					};
 				});
@@ -257,19 +272,19 @@ function parserBetting(item = []) {
 		if (rate['G'] === 2 && rate.E) { // 2 - фора
 			// 0 - так как столбец "Фора больше"
 			if (Array.isArray(rate.E[0])) {
-				betting.handicap.over = rate.E[0].map((overTotal) => {
+				betting.handicap.over = rate.E[0].map((overHandicap) => {
 					return {
-						key: Math.abs(overTotal['P']),
-						value: overTotal.C
+						key: overHandicap['P'] ? Math.abs(overHandicap['P']) : 0,
+						value: overHandicap.C
 					};
 				});
 			}
 			// 1 - так как столбец "Фора меньше"
 			if (Array.isArray(rate.E[1])) {
-				betting.handicap.under = rate.E[1].map((underTotal) => {
+				betting.handicap.under = rate.E[1].map((underHandicap) => {
 					return {
-						key: Math.abs(underTotal['P']),
-						value: underTotal.C
+						key: underHandicap['P'] ? Math.abs(underHandicap['P']) : 0,
+						value: underHandicap.C
 					};
 				});
 			}
