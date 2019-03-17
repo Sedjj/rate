@@ -14,8 +14,8 @@
 		"pass": ""
 	},
 	"proxy": {
-		"host": "93.109.241.246",
-		"port": "34666",
+		"host": "54.39.235.237",
+		"port": "3128",
 		"user": "",
 		"password": ""
 	},
@@ -202,10 +202,7 @@
 				"numericalDesignation": 1
 			},
 			"tableTennis": {
-				"time": {
-					"before": 2700,
-					"after": 4500
-				},
+				"set": 1,
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) > rate",
 					"rate": 0.1
@@ -237,6 +234,7 @@
 			"after": 60
 		},
 		"schedulerCheckingResults": "00 05 10 * * 0-7",
+		"schedulerTestExport": "00 15 10 * * 0-7",
 		"schedulerBackupExport": "00 30 10 * * 1"
 	},
 	"path": {

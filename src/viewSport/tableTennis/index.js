@@ -1,18 +1,9 @@
 const {log} = require('../../utils/logger');
-const {newStatistic, setStatistic} = require('../../storage/tableTennis');
-const {getExpandedMatch} = require('../../fetch');
+const {newStatistic} = require('../../storage/tableTennis');
 const config = require('config');
 const {matchRate} = require('../../matchRate');
-const {searchHelper} = require('../../modifiableFile');
 
-const active = config.parser.active;
-const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.tableTennis.expandedRate`);
-
-const before = config.choice.live.tableTennis.time.before;
-const after = config.choice.live.tableTennis.time.after;
-
-const rateStrategyOne = config.choice.live.tableTennis.strategyOne.rate;
-const typeRate = config.choice.live.tableTennis.typeRate;
+const set = config.choice.live.tableTennis.set;
 
 /**
  * Общая стратегия для Live футбола
@@ -21,71 +12,33 @@ const typeRate = config.choice.live.tableTennis.typeRate;
  */
 function tableTennisLiveStrategy(param) {
 	if ((param.p1 !== '') && (param.p2 !== '')) {
-		if (param.set === 1) {
-			// фора больше
+		if (param.set === set) {
 			if ((param.score.sc1 + param.score.sc2) === 0) {
-				footballLiveStrategyOne(param);
+				tableTennisLiveStrategyOne(param);
 			}
 		}
 	}
 }
 
 /**
- * Стратегия гол лузера
+ * Стратегия 1
  *
  * @param {Object} param объект с параметрами матча
  */
-function footballLiveStrategyOne(param) {
+function tableTennisLiveStrategyOne(param) {
 	const strategy = 1;
-	if ((Math.abs(param.p1 - param.p2) <= rateStrategyOne)) {
+	if ((0.3 < param.p1 && param.p1 < 0.6) || (0.3 < param.p2 && param.p2 < 0.6 )) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, strategy, -2, 1);
 					log.debug(`Найден ${param.matchId}: Настольный тенис - стратегия ${strategy}`);
-					matchRate({...param, strategy: strategy});
+					matchRate({...param, strategy}, 'тенис');
 				}
 			})
 			.catch((error) => {
-				log.error(`footballLiveStrategyOne: ${error.message}`);
+				log.error(`tableTennisLiveStrategyOne: ${error.message}`);
 			});
 	}
-}
-
-/**
- * Метод для изменения начальных параметров карточек.
- *
- * @param {number} matchId матча
- * @param {Number} strategy стратегия ставок
- * @param {Number} total коэффициент ставоки
- * @param {Number} index значение ставоки
- * @returns {Promise<Promise<any>|*>}
- */
-async function setSnapshot(matchId, strategy, total = undefined, index = undefined) {
-	const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
-	const param = searchHelper['getParams'](item, true);
-	const desiredTotal = total || param.underTotal.reduce((acc, current) => {
-		if (current.key === typeRate[strategy]) {
-			acc = current.value;
-		}
-		return acc;
-	}, undefined);
-	const desiredIndex = index || param.underTotal.reduce((acc, current) => {
-		if (current.key === typeRate[strategy]) {
-			acc = current.value;
-		}
-		return acc;
-	}, undefined);
-	return setStatistic({
-		matchId: param.matchId,
-		strategy: strategy,
-		total: desiredTotal,
-		index: desiredIndex, // результат ставки.
-		cards: {
-			before: param.cards
-		},
-		modifiedBy: new Date().toISOString()
-	});
 }
 
 /**
@@ -106,9 +59,7 @@ function saveRate(param, strategy) {
 			start: {
 				time: param.time,
 				p1: param.p1,
-				x: param.x,
-				p2: param.p2,
-				mod: Math.abs(param.p1 - param.p2),
+				p2: param.p2
 			}
 		},
 		createdBy: new Date().toISOString(),

@@ -22,7 +22,7 @@ const schedulerCheckingResults = process.env.NODE_ENV === 'development'
 
 const schedulerBackupExport = process.env.NODE_ENV === 'development'
 	? '*/59 * * * * *'
-	: config.cron.schedulerBackupExport;
+	: config.cron.schedulerTestExport;
 
 /**
  * Планировшик поиска матчей.
