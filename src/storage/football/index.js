@@ -18,7 +18,7 @@ function getStatistic(param = {}) {
 		.exec()
 		.then(statistics => {
 			if (!statistics) {
-				log.error('StatisticNotFound', 'Statistic with  not found');
+				log.error('StatisticNotFound', 'Statistic with not found');
 				return [];
 			}
 			return statistics
@@ -85,6 +85,10 @@ function setStatistic(param) {
 		.read('secondary')
 		.exec()
 		.then(statistic => {
+			if (!statistic) {
+				log.error('StatisticNotFound', 'Statistic with not found');
+				return Promise.resolve(null);
+			}
 			if (param.index !== undefined) {
 				statistic.index = param.index;
 			}

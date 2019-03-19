@@ -109,7 +109,7 @@ async function baseRecordCorrection(statistic, score) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
 	if (result === 0 || result === 1 || result === -1) {
 		log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Корректировка коэффициента ставки ${result}`);
-		await setIndexRate(statistic.matchId, result);
+		await setIndexRate(statistic.matchId, result, statistic.strategy);
 	}
 	return Promise.resolve([]);
 }
@@ -119,10 +119,13 @@ async function baseRecordCorrection(statistic, score) {
  *
  * @param {Number} id матча
  * @param {Number} index результат ставки
+ * @param {Number} strategy стратегия ставок
+ * @returns {Promise<any>|*}
  */
-function setIndexRate(id = 0, index = 1) {
+function setIndexRate(id = 0, index = 1, strategy) {
 	return setStatistic({
 		matchId: id,
+		strategy: strategy,
 		index: index, // тип ставки.
 	});
 }
