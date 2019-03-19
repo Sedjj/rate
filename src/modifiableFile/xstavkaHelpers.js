@@ -79,7 +79,7 @@ function scoreGame(item) {
 			rate.sc1 = item['SC']['FS']['S1'];
 		}
 		if (item['SC']['FS']['S2']) {
-			rate.sc1 = item['SC']['FS']['S1'];
+			rate.sc2 = item['SC']['FS']['S2'];
 		}
 	}
 	return rate;
