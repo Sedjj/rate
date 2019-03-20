@@ -32,5 +32,6 @@ docker cp  nostalgic_kalam:\data\db\statistics.json D:\git\bot\rate\mongoDB\dump
 Удалить данные из базы через консоль
 ```mongo
 mongo rateBot
-db.statistics.drop();
+db.tabletennis.drop();
+db.footballs.drop();
 ```
