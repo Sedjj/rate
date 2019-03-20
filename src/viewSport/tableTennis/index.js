@@ -11,7 +11,7 @@ const set = config.choice.live.tableTennis.set;
  * @param {Object} param объект с параметрами матча
  */
 function tableTennisLiveStrategy(param) {
-	if ((param.p1 !== '') && (param.p2 !== '')) {
+	if ((param.p1 !== '') && (param.p2 !== '') && (param.p1 !== 0) && (param.p2 !== 0)) {
 		if (param.set === set) {
 			if ((param.score.sc1 + param.score.sc2) === 0) {
 				tableTennisLiveStrategyOne(param);
@@ -27,7 +27,7 @@ function tableTennisLiveStrategy(param) {
  */
 function tableTennisLiveStrategyOne(param) {
 	const strategy = 1;
-	if ((1.3 < param.p1 && param.p1 < 1.6) || (1.3 < param.p2 && param.p2 < 1.6 )) {
+	if ((1.3 < param.p1 && param.p1 < 1.6) || (1.3 < param.p2 && param.p2 < 1.6)) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {

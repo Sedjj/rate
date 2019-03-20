@@ -5,11 +5,8 @@ const {log} = require('./src/utils/logger');
 /*const {performAuth} = require('./src/auth');*/
 const {search} = require('./src/searchMatch');
 const {checkingResults} = require('./src/checkingResults');
-const {exportBackupStatistic} = require('./src/export');
-const {throttle} = require('./src/utils/throttle');
 require('./src/telegram/bot');
 
-const exportBackupStatisticDebounce = throttle(exportBackupStatistic, 20000);
 
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(10, 20).generate()
@@ -21,10 +18,6 @@ const schedulerSearch = process.env.NODE_ENV === 'development'
 const schedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
 	: config.cron.schedulerCheckingResults;
-
-const schedulerBackupExport = process.env.NODE_ENV === 'development'
-	? '*/59 * * * * *'
-	: config.cron.schedulerTestExport;
 
 /**
  * Планировшик поиска матчей.
@@ -47,21 +40,6 @@ if (schedulerSearch) {
 	}, () => {
 		schedulerSearchJob.start();
 	}, true);
-}
-
-/**
- * Планировщик бэкапа статистики.
- */
-if (schedulerBackupExport) {
-	log.info('****start scheduler backup export****');
-	let schedulerBackupExportJob = new CronJob(schedulerBackupExport, () => {
-		try {
-			exportBackupStatisticDebounce();
-		} catch (error) {
-			schedulerBackupExportJob.stop();
-			log.error(`cron pattern not valid: ${error}`);
-		}
-	}, null, true);
 }
 
 /**

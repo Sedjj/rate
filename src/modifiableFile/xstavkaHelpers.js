@@ -140,7 +140,7 @@ function indexGameExtended(items) {
 		p1: 0,
 		x: 0,
 		p2: 0,
-	};
+	}; // TODO не работает парсер
 	if (items['GE'] && Array.isArray(items['GE'])) {
 		items['GE'].forEach((rate) => {
 			if (rate['G'] === 1) { // 1 - p1 x p2

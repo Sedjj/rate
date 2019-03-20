@@ -90,7 +90,7 @@ async function baseRecordCorrection(statistic, score) {
 	const endScore = searchHelper.parserScore(score);
 	let result = -1;
 	if (endScore !== '') {
-		switch (statistic) {
+		switch (statistic.strategy) {
 			case 1:
 			case 2:
 			case 3:

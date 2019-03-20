@@ -27,7 +27,7 @@ const typeRate = config.choice.live.football.typeRate;
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategy(param) {
-	if ((param.p1 !== '') && (param.p2 !== '') && (param.x !== '')) {
+	if ((param.p1 !== '') && (param.p2 !== '') && (param.p1 !== 0) && (param.p2 !== 0) && (param.x !== '')) {
 		if ((param.time >= before) && (param.time <= after)) {
 			// тотал больше
 			if ((param.score.sc1 + param.score.sc2) === 1) {
