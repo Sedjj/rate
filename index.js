@@ -7,7 +7,6 @@ const {search} = require('./src/searchMatch');
 const {checkingResults} = require('./src/checkingResults');
 require('./src/telegram/bot');
 
-
 const schedulerSearch = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(10, 20).generate()
 	: rc.some('seconds').between(

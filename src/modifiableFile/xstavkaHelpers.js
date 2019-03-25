@@ -86,15 +86,29 @@ function scoreGame(item) {
 }
 
 /**
- * Метод для определения сета матча.
+ * Метод для определения сета и счета матча.
  *
  * @param {Object} item объект матча
  * @returns {number}
  */
 function setGame(item) {
-	let set = 1;
+	let set = {
+		key: 0,
+		value: {
+			sc1: 0,
+			sc2: 0
+		}
+	};
 	if (item['SC'] && item['SC']['CP']) {
-		set = item['SC']['CP'];
+		set.key = item['SC']['CP'];
+		if (item['SC']['PS']) {
+			item['SC']['PS'].forEach((item) => {
+				if (item.Key === set.key){
+					set.value.sc1 = item.Value.S1 ? item.Value.S1 : 0;
+					set.value.sc2 = item.Value.S2 ? item.Value.S2 : 0;
+				}
+			});
+		}
 	}
 	return set;
 }
