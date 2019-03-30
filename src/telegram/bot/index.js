@@ -3,10 +3,11 @@ const TelegramBot = require('node-telegram-bot-api');
 const {exportBackup} = require('../../backupBD');
 const {counterWaiting} = require('../../utils/counterWaiting');
 const {throttle} = require('../../utils/throttle');
-const {exportBackupStatistic} = require('../../export');
+const {exportFootballStatistic, exportTableTennisStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
 
-const exportBackupStatisticDebounce = throttle(exportBackupStatistic, 20000);
+const exportFootballStatisticDebounce = throttle(exportFootballStatistic, 20000);
+const exportTableTennisStatisticDebounce = throttle(exportTableTennisStatistic, 20000);
 
 const supportToken = process.env.NODE_ENV === 'development'
 	? config.bots.supportDev.token
@@ -31,15 +32,19 @@ if (process.env.NODE_ENV === 'development') {
 const bot = new TelegramBot(supportToken, props);
 
 const waiting = 'Сколько матчей в ожидании';
-const weekExport = 'Экспорт за неделю';
-const twoDaysExport = 'Экспорт за 2 дня';
+const twoDaysExportFootball = 'Экспорт футбола за 2 дня';
+const twoDaysExportTableTennis = 'Экспорт тениса за 2 дня';
+const weekExportFootball = 'Экспорт футбола за неделю';
+const weekExportTableTennis = 'Экспорт за тениса неделю';
 const exportBackupFootballs = 'Бэкап таблицы footballs';
 const exportBackupTableTennis = 'Бэкап таблицы tableTennis';
 
 const keyboard = [
 	[waiting],
-	[weekExport],
-	[twoDaysExport],
+	[twoDaysExportFootball],
+	[twoDaysExportTableTennis],
+	[weekExportFootball],
+	[weekExportTableTennis],
 	[exportBackupFootballs],
 	[exportBackupTableTennis]
 ];
@@ -54,13 +59,21 @@ bot.on('message', response((msg) => {
 		case waiting:
 			sendText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
 			break;
-		case weekExport:
+		case twoDaysExportFootball:
 			sendText(msg, 'Ожидайте файл');
-			exportBackupStatisticDebounce(7);
+			exportFootballStatisticDebounce(2);
 			break;
-		case twoDaysExport:
+		case twoDaysExportTableTennis:
 			sendText(msg, 'Ожидайте файл');
-			exportBackupStatisticDebounce(2);
+			exportTableTennisStatisticDebounce(2);
+			break;
+		case weekExportFootball:
+			sendText(msg, 'Ожидайте файл');
+			exportFootballStatisticDebounce(7);
+			break;
+		case weekExportTableTennis:
+			sendText(msg, 'Ожидайте файл');
+			exportTableTennisStatisticDebounce(7);
 			break;
 		case exportBackupFootballs:
 			sendText(msg, 'Ожидайте файл');

@@ -63,7 +63,7 @@ function footballLiveStrategy(param) {
  */
 function footballLiveStrategyOne(param) {
 	const strategy = 1;
-	if ((Math.abs(param.p1 - param.p2) <= rateStrategyOne)) {
+	if (Math.abs(param.p1 - param.p2) <= rateStrategyOne) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
@@ -85,7 +85,7 @@ function footballLiveStrategyOne(param) {
  */
 function footballLiveStrategyTwo(param) {
 	const strategy = 2;
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyTwo)) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategyTwo) {
 		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
@@ -109,7 +109,7 @@ function footballLiveStrategyTwo(param) {
  */
 function footballLiveStrategyThree(param) {
 	const strategy = 3;
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyThree)) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategyThree) {
 		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
@@ -133,13 +133,13 @@ function footballLiveStrategyThree(param) {
  */
 function footballLiveStrategyFour(param) {
 	const strategy = 4;
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyFour)) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategyFour) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, 1, param.x);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy}, 'футбол');
+					// matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -155,13 +155,13 @@ function footballLiveStrategyFour(param) {
  */
 function footballLiveStrategyFive(param) {
 	const strategy = 5;
-	if ((Math.abs(param.p1 - param.p2) > rateStrategyFive)) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategyFive) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy}, 'футбол');
+					// matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -177,13 +177,13 @@ function footballLiveStrategyFive(param) {
  */
 function footballLiveStrategySix(param) {
 	const strategy = 6;
-	if ((Math.abs(param.p1 - param.p2) > rateStrategySix)) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategySix) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy, 1, param.x);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy}, 'футбол');
+					// matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -199,13 +199,13 @@ function footballLiveStrategySix(param) {
  */
 function footballLiveStrategySeven(param) {
 	const strategy = 7;
-	if ((Math.abs(param.p1 - param.p2) > rateStrategySeven)) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategySeven) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					await setSnapshot(param.matchId, strategy);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate({...param, strategy}, 'футбол');
+					// matchRate({...param, strategy}, 'футбол');
 				}
 			})
 			.catch((error) => {
