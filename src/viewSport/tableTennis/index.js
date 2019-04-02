@@ -31,7 +31,7 @@ function tableTennisLiveStrategy(param) {
  */
 function tableTennisLiveStrategyOne(param) {
 	const strategy = 1;
-	if ((1.3 < param.p1 && param.p1 < 1.5) || (1.3 < param.p2 && param.p2 < 1.5)) {
+	if ((param.p2 < 1.65) || (param.p2 < 1.65)) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {

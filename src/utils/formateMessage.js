@@ -49,6 +49,16 @@ function decorateMessageMatch(param, type) {
 }
 
 /**
+ * Форматирование строки вывода для тениса.
+ *
+ * @param {Object} param объект матча
+ * @returns {*}
+ */
+function decorateMessageTennis(param) {
+	return `<b>${param.group.en}</b>\n\n${param.command.en.one}\n${param.command.en.two}\n\n<pre>стр ${param.strategy} / ${param.p1} / ${param.p2}</pre>`;
+}
+
+/**
  * Форматирование строки для канала.
  *
  * @param {Object} param объект матча
@@ -63,6 +73,7 @@ function decorateMessageChannel(param) {
 
 module.exports = {
 	decorateMessageMatch,
+	decorateMessageTennis,
 	decorateMessageChannel,
 	replaceAll
 };
