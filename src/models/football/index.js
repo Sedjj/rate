@@ -20,7 +20,6 @@ const FootballSchema = new Schema({
 		},
 		resulting: {
 			type: String,
-			required: true,
 			default: ''
 		},
 	},

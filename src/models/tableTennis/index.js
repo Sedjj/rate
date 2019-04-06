@@ -20,7 +20,6 @@ const TableTennisSchema = new Schema({
 		},
 		resulting: {
 			type: String,
-			required: true,
 			default: ''
 		},
 	},
