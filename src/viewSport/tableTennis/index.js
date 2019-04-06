@@ -4,7 +4,7 @@ const config = require('config');
 const {matchRate} = require('../../matchRate');
 
 const set = config.choice.live.tableTennis.set;
-const rateStrategyTwo = config.choice.live.tableTennis.strategyTwo.rate;
+/*const rateStrategyTwo = config.choice.live.tableTennis.strategyTwo.rate;*/
 
 /**
  * Общая стратегия для Live футбола
@@ -17,9 +17,6 @@ function tableTennisLiveStrategy(param) {
 			if ((param.set.value.sc1 + param.set.value.sc2) === 0) {
 				tableTennisLiveStrategyOne(param);
 			}
-			if ((param.set.value.sc1 + param.set.value.sc2) === 0) {
-				tableTennisLiveStrategyTwo(param);
-			}
 		}
 	}
 }
@@ -31,7 +28,7 @@ function tableTennisLiveStrategy(param) {
  */
 function tableTennisLiveStrategyOne(param) {
 	const strategy = 1;
-	if ((param.p2 < 1.65) || (param.p2 < 1.65)) {
+	if (param.group.en === 'Pro League. Moscow') {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
@@ -41,27 +38,6 @@ function tableTennisLiveStrategyOne(param) {
 			})
 			.catch((error) => {
 				log.error(`tableTennisLiveStrategyOne: ${error.message}`);
-			});
-	}
-}
-
-/**
- * Стратегия 2
- *
- * @param {Object} param объект с параметрами матча
- */
-function tableTennisLiveStrategyTwo(param) {
-	const strategy = 2;
-	if (Math.abs(param.p1 - param.p2) <= rateStrategyTwo) {
-		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
-			.then(async (statistic) => {
-				if (statistic !== null) {
-					log.debug(`Найден ${param.matchId}: Настольный тенис - стратегия ${strategy}`);
-					matchRate({...param, strategy}, 'тенис');
-				}
-			})
-			.catch((error) => {
-				log.error(`tableTennisLiveStrategyTwo: ${error.message}`);
 			});
 	}
 }

@@ -11,13 +11,10 @@ const urlTableTennisRate = config.get(`parser.${active[0]}.live.tableTennis.rate
 
 /**
  * Метод поиска совпадений по данным стратегиям.
- *
- * @returns {*}
  */
-async function search() {
+async function searchFootball() {
 	try {
 		const football = await getAllMatches(urlFootballRate);
-		const tableTennis = await getAllMatches(urlTableTennisRate);
 		football.forEach((item) => {
 			try {
 				footballLiveStrategy(searchHelper['getParams'](item));
@@ -25,6 +22,17 @@ async function search() {
 				log.debug(`Ошибка при парсинге матча: ${JSON.stringify(item)} error: ${error}`);
 			}
 		});
+	} catch (error) {
+		log.error(`search: ${error}`);
+	}
+}
+
+/**
+ * Метод поиска совпадений по данным стратегиям.
+ */
+async function searchTableTennis() {
+	try {
+		const tableTennis = await getAllMatches(urlTableTennisRate);
 		tableTennis.forEach((item) => {
 			try {
 				tableTennisLiveStrategy(searchHelper['getParams'](item));
@@ -38,5 +46,6 @@ async function search() {
 }
 
 module.exports = {
-	search
+	searchFootball,
+	searchTableTennis
 };

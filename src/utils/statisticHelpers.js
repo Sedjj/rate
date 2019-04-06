@@ -14,6 +14,7 @@ function mapProps(statistic, index) {
 		score: {
 			sc1: statistic.score.sc1,
 			sc2: statistic.score.sc2,
+			resulting: statistic.score.resulting,
 		},
 		command: {
 			ru: {

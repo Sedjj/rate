@@ -1,7 +1,4 @@
 const {getStringToUTCDateString} = require('./../utils/dateFormat');
-const config = require('config');
-
-const numericalDesignation = config.choice.live.football.numericalDesignation;
 
 /**
  * Метод для вытаскивания нужных данных из JSON ответа
@@ -199,7 +196,7 @@ function timeGame(item) {
  * @param {String} value строка для парсинга
  * @returns {Object | string}
  */
-function parserScore(value) {
+function parserScoreFootball(value) {
 	if (value.length > 12) {
 		const score = value.match(/\d\:\d(?=,|\))/ig);
 		const scoreOne = score[0] ? score[0].match(/\d/ig) : [0, 0];
@@ -407,9 +404,10 @@ function parserCards(item = []) {
  *
  * @param {Array} data все матчи на определенный день
  * @param {number} id матча
+ * @param {number} numericalDesignation числовое значение обозначение типа матча
  * @returns {Promise<void>}
  */
-async function searchResult(data, id) {
+async function searchResult(data, id, numericalDesignation) {
 	return new Promise((resolve, reject) => {
 		try {
 			data.forEach((item) => {
@@ -418,7 +416,7 @@ async function searchResult(data, id) {
 						if (Array.isArray(object['Elems'])) {
 							object['Elems'].forEach((Elems) => {
 								if (Elems['Head'][0] === id) {
-									resolve(Elems['Head'][6]);
+									resolve(Elems['Head'][17]);
 								}
 							});
 						}
@@ -445,7 +443,7 @@ function replaceUrl(url, date) {
 
 module.exports = {
 	getParams,
-	parserScore,
+	parserScoreFootball,
 	searchTotal,
 	replaceUrl,
 	searchResult

@@ -43,9 +43,6 @@ function getStatisticsTableTennis(days = 2) {
 						template.substitute(1, {
 							statistics: props.statistics.filter((item) => item.strategy === 1)
 						});
-						template.substitute(2, {
-							statistics: props.statistics.filter((item) => item.strategy === 2)
-						});
 						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});
 					});
