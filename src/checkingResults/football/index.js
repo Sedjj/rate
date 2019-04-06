@@ -1,24 +1,24 @@
-const {log} = require('../utils/logger');
-const {getStatistic, setStatistic} = require('../storage/football');
+const {log} = require('../../utils/logger');
+const {getStatistic, setStatistic} = require('../../storage/football');
 const config = require('config');
-const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../utils/searchHelper');
-const {throttle} = require('../utils/throttle');
-const {getResultList} = require('../fetch');
-const {searchHelper} = require('../modifiableFile');
+const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../../utils/searchHelper');
+const {throttle} = require('../../utils/throttle');
+const {getResultList} = require('../../fetch');
+const {searchHelper} = require('../../modifiableFile');
 
 const active = config.parser.active;
 const urlAll = config.get(`parser.${active[0]}.result.all`);
 
 const postResultDebounce = throttle(getResultList, 20000);
 const typeRate = config.choice.live.football.typeRate;
-
+const numericalDesignation = config.choice.live.football.numericalDesignation;
 
 /**
  *  Метод проверки результатов матчей.
  *
  * @returns {Promise<any | never>}
  */
-async function checkingResults() {
+async function checkingResultsFotball() {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
 	beforeDate.setUTCDate(beforeDate.getUTCDate() - 1);
@@ -67,9 +67,9 @@ async function result(statistics, beforeDate, currentDate) {
 function serchResultEndMatch(beforeData, currentData, statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let endScore = await searchHelper.searchResult(currentData, statistic.matchId);
+			let endScore = await searchHelper.searchResult(currentData, statistic.matchId, numericalDesignation);
 			if (endScore === '') {
-				endScore = await searchHelper.searchResult(beforeData, statistic.matchId);
+				endScore = await searchHelper.searchResult(beforeData, statistic.matchId, numericalDesignation);
 			}
 			resolve(endScore);
 		} catch (error) {
@@ -87,7 +87,7 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
  */
 async function baseRecordCorrection(statistic, score) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
-	const endScore = searchHelper.parserScore(score);
+	const endScore = searchHelper.parserScoreFootball(score);
 	let result = -1;
 	if (endScore !== '') {
 		switch (statistic.strategy) {
@@ -131,5 +131,5 @@ function setIndexRate(id = 0, index = 1, strategy) {
 }
 
 module.exports = {
-	checkingResults
+	checkingResultsFotball
 };

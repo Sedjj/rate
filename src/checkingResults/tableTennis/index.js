@@ -1,5 +1,5 @@
 const {log} = require('../../utils/logger');
-const {getStatistic, setStatistic} = require('../../storage/football');
+const {getStatistic, setStatistic} = require('../../storage/tableTennis');
 const config = require('config');
 const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../../utils/searchHelper');
 const {throttle} = require('../../utils/throttle');
@@ -11,14 +11,14 @@ const urlAll = config.get(`parser.${active[0]}.result.all`);
 
 const postResultDebounce = throttle(getResultList, 20000);
 const typeRate = config.choice.live.football.typeRate;
-
+const numericalDesignation = config.choice.live.tableTennis.numericalDesignation;
 
 /**
  *  Метод проверки результатов матчей.
  *
  * @returns {Promise<any | never>}
  */
-async function checkingResults() {
+async function checkingResultsTableTennis() {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
 	beforeDate.setUTCDate(beforeDate.getUTCDate() - 1);
@@ -67,9 +67,9 @@ async function result(statistics, beforeDate, currentDate) {
 function serchResultEndMatch(beforeData, currentData, statistic) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let endScore = await searchHelper.searchResult(currentData, statistic.matchId);
+			let endScore = await searchHelper.searchResult(currentData, statistic.matchId, numericalDesignation);
 			if (endScore === '') {
-				endScore = await searchHelper.searchResult(beforeData, statistic.matchId);
+				endScore = await searchHelper.searchResult(beforeData, statistic.matchId, numericalDesignation);
 			}
 			resolve(endScore);
 		} catch (error) {
@@ -87,29 +87,8 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
  */
 async function baseRecordCorrection(statistic, score) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
-	const endScore = searchHelper.parserScore(score);
-	let result = -1;
-	if (endScore !== '') {
-		switch (statistic.strategy) {
-			case 1:
-			case 2:
-			case 3:
-				result = equalsTotalOver(statistic.score, endScore, typeRate[statistic.strategy]);
-				break;
-			case 4:
-			case 6:
-				result = areEqualTotal(endScore);
-				break;
-			case 5:
-			case 7:
-				result = equalsTotalUnder(statistic.score, endScore, typeRate[statistic.strategy]);
-				break;
-		}
-	}
-	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
-	if (result === 0 || result === 1 || result === -1) {
-		log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Корректировка коэффициента ставки ${result}`);
-		await setIndexRate(statistic.matchId, result, statistic.strategy);
+	if (score !== '') {
+		await setIndexRate(statistic.matchId, score, statistic.strategy);
 	}
 	return Promise.resolve([]);
 }
@@ -118,18 +97,20 @@ async function baseRecordCorrection(statistic, score) {
  * Метод для изменения ставки.
  *
  * @param {Number} id матча
- * @param {Number} index результат ставки
+ * @param {String} score счет матча
  * @param {Number} strategy стратегия ставок
  * @returns {Promise<any>|*}
  */
-function setIndexRate(id = 0, index = 1, strategy) {
+function setIndexRate(id = 0, score, strategy) {
 	return setStatistic({
 		matchId: id,
 		strategy: strategy,
-		index: index, // тип ставки.
+		score:{
+			resulting: score
+		}
 	});
 }
 
 module.exports = {
-	checkingResults
+	checkingResultsTableTennis
 };
