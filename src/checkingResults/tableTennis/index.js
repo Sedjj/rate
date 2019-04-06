@@ -1,16 +1,16 @@
-const {log} = require('../utils/logger');
-const {getStatistic, setStatistic} = require('../storage/football');
+const {log} = require('../../utils/logger');
+const {getStatistic, setStatistic} = require('../../storage/football');
 const config = require('config');
-const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../utils/searchHelper');
-const {throttle} = require('../utils/throttle');
-const {getResultList} = require('../fetch');
-const {searchHelper} = require('../modifiableFile');
+const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../../utils/searchHelper');
+const {throttle} = require('../../utils/throttle');
+const {getResultList} = require('../../fetch');
+const {searchHelper} = require('../../modifiableFile');
 
-const active = config.get('parser.active');
+const active = config.parser.active;
 const urlAll = config.get(`parser.${active[0]}.result.all`);
 
 const postResultDebounce = throttle(getResultList, 20000);
-const typeRate = config.get('choice.live.football.typeRate');
+const typeRate = config.choice.live.football.typeRate;
 
 
 /**

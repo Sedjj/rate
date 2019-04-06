@@ -13,10 +13,5 @@ COPY mongoDB/dump/ /data/dump/
 # Copy scripts
 COPY mongoDB/scripts /data/scripts/
 
-# RUN sleep 20 && \
-#   mongorestore --gzip --drop -d rateBot --archive="data/dump/rateBot-19.01.gz"
-# && \
-# mongo 127.0.0.1:27017/rateBot /data/scripts/index.js
-# ENTRYPOINT ["mongo.sh"]
-
-# CMD ["/data/mongo.sh"]
+# Запуск импорта
+#CMD mongoimport --host localhost --port 27017 --type json --collection tabletennis --mode merge --db rateBot --file data/dump/tabletennis.json

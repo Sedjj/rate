@@ -224,10 +224,15 @@
 		}
 	},
 	"cron": {
-		"schedulerSearch": {
+		"schedulerSearchFootball": {
 			"title": "в секундах",
 			"before": 150,
 			"after": 250
+		},
+		"schedulerSearchTableTennis": {
+			"title": "в секундах",
+			"before": 20,
+			"after": 60
 		},
 		"waitingInterval": {
 			"title": "в секундах",
