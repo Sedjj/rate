@@ -147,11 +147,11 @@ function indexGame(items) {
  * @returns {{p1: number, x: number, p2: number}}
  */
 function indexGameExtended(items) {
-	const rate = {
+	const rateGame = {
 		p1: 0,
 		x: 0,
 		p2: 0,
-	}; // TODO не работает парсер
+	};
 	if (items['GE'] && Array.isArray(items['GE'])) {
 		items['GE'].forEach((rate) => {
 			if (rate['G'] === 1) { // 1 - p1 x p2
@@ -159,13 +159,13 @@ function indexGameExtended(items) {
 					rate['E'].forEach((item) => {
 						switch (item[0]['T']) {
 							case 1: // победа первой
-								rate.p1 = item[0]['C'];
+								rateGame.p1 = item[0]['C'];
 								break;
 							case 2: // ничья
-								rate.x = item[0]['C'];
+								rateGame.x = item[0]['C'];
 								break;
 							case 3: // победа второй
-								rate.p2 = item[0]['C'];
+								rateGame.p2 = item[0]['C'];
 								break;
 						}
 					});
@@ -173,7 +173,7 @@ function indexGameExtended(items) {
 			}
 		});
 	}
-	return rate;
+	return rateGame;
 }
 
 /**

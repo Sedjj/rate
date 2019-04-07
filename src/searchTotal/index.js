@@ -32,6 +32,7 @@ function waiting(param, strategy) {
 	counterWaiting.increment();
 	let waitingIntervalJob = new CronJob(waitingInterval, async () => {
 		try {
+			// TODO сюда 2 раза заходит поэтому счетчик матчей бывает отрицательный
 			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
 			if (indexMatch !== null) {
 				reboot = false;
