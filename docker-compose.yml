@@ -1,15 +1,15 @@
 version: "2"
 services:
-  bot_rate_mongo:
-    container_name: bot_rate_mongo
-    # image: mongo
-    build:
-      context: .
-      dockerfile: docker/mongo/Dockerfile
-    # build: ./docker/mongo
-    volumes:
-      - ./mongoDB/log:/data/log
-      - ./mongoDB/dump:/data/dump
-      - ./mongoDB/scripts:/data/scripts
+  mongo-rate:
+    container_name: mongo-rate
+    image: mongo
     ports:
       - "27017:27017"
+
+  mongo-rate-seed:
+    container_name: mongo-rate-seed
+    build:
+      context: .
+      dockerfile: docker/mongo-seed/Dockerfile
+    links:
+      - mongo-rate

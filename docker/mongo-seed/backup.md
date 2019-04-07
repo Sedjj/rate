@@ -26,8 +26,7 @@ mongoexport --type json --db rateBot --collection tabletennis --out data/dump/ta
 
 ####Импорт коллекции
 ```bash
-mongoimport --type json --collection footballs --mode merge --db rateBot --file data/dump/footballs.json
-mongoimport --type json --collection tabletennis --mode merge --db rateBot --file data/dump/tabletennis.json
+docker exec mongo-rate mongoimport --type json --collection footballs --mode merge --db rateBot --file data/dump/footballs.json && docker exec mongo-rate mongoimport --type json --collection tabletennis --mode merge --db rateBot --file data/dump/tabletennis.json
 ```
 
 ####Копировать из докера нужный файл: где `nostalgic_kalam` находится через `docker ps` и берется поле `name`

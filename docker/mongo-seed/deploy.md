@@ -1,11 +1,11 @@
-Сборка контейнера
-```bash
-docker build -t mongo-rate -f docker/mongo/DockerFile .
-```
-
 Удаление всех контейнеров
 ```bash
 docker system prune -a --volumes
+```
+
+Сборка контейнера
+```bash
+docker build -t mongo-rate -f docker/mongo/DockerFile .
 ```
 
 Запуск Контейнера

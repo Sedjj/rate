@@ -1,6 +1,7 @@
-print('Done statistics');
+print('Done footballs');
 
-db.statistics.insertMany([
+/*
+db.footballs.insertMany([
 	{
 		'score': {'sc1': 0, 'sc2': 1},
 		'command': {'ru': {'one': 'Дефенс Форс Аддис-Абеба', 'two': 'Велайта Дича'}, 'en': {'one': 'Defence Force', 'two': 'Welayta Dicha Sodo'}, 'women': 0, 'youth': 0},
@@ -65,4 +66,4 @@ db.statistics.insertMany([
 		'createdBy': new Date('2018-12-25T13:41:42.312Z'),
 		'modifiedBy': new Date('2018-12-25T13:42:33.238Z')
 	}
-]);
+]);*/

@@ -1,0 +1,2088 @@
+{
+	"_id": {
+		"$oid": "5ca8aec4759b56206b118ead"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Семен Королев (Рос)",
+			"two": "Михаил Кожемякин (Рос)"
+		},
+		"en": {
+			"one": "Semyon Korolev",
+			"two": "Mikhail Kozhemyakin"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.64,
+			"x": 0,
+			"p2": 2.26,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189958161,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T13:51:00.171Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T13:51:00.171Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8bed6759b56206b118f14"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:0 (11:8,12:10,11:8)"
+	},
+	"command": {
+		"ru": {
+			"one": "Иван Кирпитнев (Рос)",
+			"two": "Александр Давыдов (Рос)"
+		},
+		"en": {
+			"one": "Ivan Kirpitnyov",
+			"two": "Aleksandr Davydov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.77,
+			"x": 0,
+			"p2": 2.05,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189970628,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T14:59:34.158Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T14:59:34.158Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8c5e5759b56206b118f44"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:1 (15:13,15:13,8:11,14:12)"
+	},
+	"command": {
+		"ru": {
+			"one": "Андрей Цветков (Рос)",
+			"two": "Дмитрий Федоров (Рос)"
+		},
+		"en": {
+			"one": "Andrey Tsvetkov",
+			"two": "Dmitry Fedorov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.41,
+			"x": 0,
+			"p2": 1.57,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189974808,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T15:29:41.219Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T15:29:41.219Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8d402759b56206b118f6a"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "0:3 (8:11,9:11,8:11)"
+	},
+	"command": {
+		"ru": {
+			"one": "Иван Кирпитнев (Рос)",
+			"two": "Андрей Цветков (Рос)"
+		},
+		"en": {
+			"one": "Ivan Kirpitnyov",
+			"two": "Andrey Tsvetkov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.7,
+			"x": 0,
+			"p2": 2.16,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189983022,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T16:29:54.150Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T16:29:54.150Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8e2cb759b56206b118f8c"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Александр Давыдов (Рос)",
+			"two": "Андрей Цветков (Рос)"
+		},
+		"en": {
+			"one": "Aleksandr Davydov",
+			"two": "Andrey Tsvetkov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.73,
+			"x": 0,
+			"p2": 2.11,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189990313,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T17:32:59.139Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T17:32:59.139Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8e98f759b56206b118f97"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:1 (11:7,8:11,11:9,11:7)"
+	},
+	"command": {
+		"ru": {
+			"one": "Дмитрий Федоров (Рос)",
+			"two": "Иван Кирпитнев (Рос)"
+		},
+		"en": {
+			"one": "Dmitry Fedorov",
+			"two": "Ivan Kirpitnyov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.44,
+			"x": 0,
+			"p2": 2.79,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189993379,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T18:01:51.134Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T18:01:51.134Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8e9cc759b56206b118f98"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Дмитрий Федоров (Рос)",
+			"two": "Иван Кирпитнев (Рос)"
+		},
+		"en": {
+			"one": "Dmitry Fedorov",
+			"two": "Ivan Kirpitnyov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.51,
+			"x": 0,
+			"p2": 2.57,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189994096,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T18:02:52.138Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T18:02:52.138Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8efdf759b56206b118fa7"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:2 (9:11,11:4,11:2,0:11,11:9)"
+	},
+	"command": {
+		"ru": {
+			"one": "Андрей Цветков (Рос)",
+			"two": "Убайдулло Султонов (Рос)"
+		},
+		"en": {
+			"one": "Andrey Tsvetkov",
+			"two": "Ubaidullo Sultonov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.18,
+			"x": 0,
+			"p2": 1.68,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 189997062,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T18:28:47.139Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T18:28:47.139Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8f719759b56206b118fbe"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:1 (9:11,11:9,11:8,11:6)"
+	},
+	"command": {
+		"ru": {
+			"one": "Дмитрий Федоров (Рос)",
+			"two": "Александр Давыдов (Рос)"
+		},
+		"en": {
+			"one": "Dmitry Fedorov",
+			"two": "Aleksandr Davydov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.61,
+			"x": 0,
+			"p2": 2.31,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190001009,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T18:59:37.134Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T18:59:37.134Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca8fe1e759b56206b118fc6"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:2 (11:7,6:11,11:6,7:11,11:4)"
+	},
+	"command": {
+		"ru": {
+			"one": "Убайдулло Султонов (Рос)",
+			"two": "Иван Кирпитнев (Рос)"
+		},
+		"en": {
+			"one": "Ubaidullo Sultonov",
+			"two": "Ivan Kirpitnyov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.18,
+			"x": 0,
+			"p2": 1.68,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190003996,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T19:29:34.142Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T19:29:34.142Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca90cb9759b56206b118fe5"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "0:3 (12:14,5:11,6:11)"
+	},
+	"command": {
+		"ru": {
+			"one": "Андрей Цветков (Рос)",
+			"two": "Дмитрий Федоров (Рос)"
+		},
+		"en": {
+			"one": "Andrey Tsvetkov",
+			"two": "Dmitry Fedorov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.06,
+			"x": 0,
+			"p2": 1.76,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190008870,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T20:31:53.132Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T20:31:53.132Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca91a12759b56206b118fee"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "2:3 (11:7,11:3,9:11,5:11,6:11)"
+	},
+	"command": {
+		"ru": {
+			"one": "Станислав Бычков (Рос)",
+			"two": "Игорь Земит (Рос)"
+		},
+		"en": {
+			"one": "Stanislav Bychkov",
+			"two": "Igor Zemit"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.59,
+			"x": 0,
+			"p2": 2.36,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190012426,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-06T21:28:50.133Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-06T21:28:50.133Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca94ad2759b56206b11900e"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:1 (11:7,11:7,9:11,11:7)"
+	},
+	"command": {
+		"ru": {
+			"one": "Сарвар Атаханов (Рос)",
+			"two": "Дмитрий Корнеев (Рос)"
+		},
+		"en": {
+			"one": "Sarvar Atakhanov",
+			"two": "Dmitry Korneev"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.22,
+			"x": 0,
+			"p2": 1.66,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190025342,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T00:56:50.138Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T00:56:50.138Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca951de759b56206b119011"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": "3:2 (11:8,13:11,2:11,4:11,11:9)"
+	},
+	"command": {
+		"ru": {
+			"one": "Евгений Илюхин (Рос)",
+			"two": "Игорь Земит (Рос)"
+		},
+		"en": {
+			"one": "Evgeniy Ilyukhin",
+			"two": "Igor Zemit"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.54,
+			"x": 0,
+			"p2": 2.47,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190026962,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T01:26:54.139Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T01:26:54.139Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca96728759b56206b11901c"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Евгений Илюхин (Рос)",
+			"two": "Игорь Земит (Рос)"
+		},
+		"en": {
+			"one": "Evgeniy Ilyukhin",
+			"two": "Igor Zemit"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.54,
+			"x": 0,
+			"p2": 2.47,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190031586,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T02:57:44.136Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T02:57:44.136Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9878c759b56206b119039"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Сергей Хомутов (Рос)",
+			"two": "Алексей Тэнцер (Рос)"
+		},
+		"en": {
+			"one": "Sergey Khomutov",
+			"two": "Aleksey Tanzer"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.9,
+			"x": 0,
+			"p2": 1.9,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190039871,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T05:15:56.160Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T05:15:56.160Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca99777759b56206b11904c"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Игорь Полетаев (Рос)",
+			"two": "Алексей Тэнцер (Рос)"
+		},
+		"en": {
+			"one": "Igor Poletaev",
+			"two": "Aleksey Tanzer"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.73,
+			"x": 0,
+			"p2": 2.11,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190043839,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T06:23:51.132Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T06:23:51.132Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9af92101a87557f304ce4"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Игорь Полетаев (Рос)",
+			"two": "Алексей Тэнцер (Рос)"
+		},
+		"en": {
+			"one": "Igor Poletaev",
+			"two": "Aleksey Tanzer"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.77,
+			"x": 0,
+			"p2": 2.05,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190052332,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T08:06:42.137Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T08:06:42.137Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9b4fe101a87557f304cec"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Роман Березин (Рос)",
+			"two": "Дмитрий Мерзликин (Рос)"
+		},
+		"en": {
+			"one": "Roman Berezin",
+			"two": "Dmitry Merzlikin"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.62,
+			"x": 0,
+			"p2": 2.22,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190054957,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T08:29:50.169Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T08:29:50.169Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9b9e5101a87557f304cf9"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Артур Топорков (Рос)",
+			"two": "Жасур Худайбердиев (Кгз)"
+		},
+		"en": {
+			"one": "Artur Toporkov",
+			"two": "Jasur Hudayberdiev"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.31,
+			"x": 0,
+			"p2": 1.61,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190057154,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T08:50:45.135Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T08:50:45.135Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9c3f9101a87557f304d03"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Дмитрий Мерзликин (Рос)",
+			"two": "Александр Ченцов (Рос)"
+		},
+		"en": {
+			"one": "Dmitry Merzlikin",
+			"two": "Alexander Chentsov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.74,
+			"x": 0,
+			"p2": 1.42,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190063567,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T09:33:45.162Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T09:33:45.162Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9c7ff101a87557f304d0f"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Роман Березин (Рос)",
+			"two": "Артур Топорков (Рос)"
+		},
+		"en": {
+			"one": "Roman Berezin",
+			"two": "Artur Toporkov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.77,
+			"x": 0,
+			"p2": 2.05,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190065286,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T09:50:55.192Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T09:50:55.192Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9d0e9101a87557f304d1e"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Александр Ченцов (Рос)",
+			"two": "Жасур Худайбердиев (Кгз)"
+		},
+		"en": {
+			"one": "Alexander Chentsov",
+			"two": "Jasur Hudayberdiev"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 1.9,
+			"x": 0,
+			"p2": 1.9,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190070819,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T10:28:57.136Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T10:28:57.136Z"
+	},
+	"__v": 0
+}
+{
+	"_id": {
+		"$oid": "5ca9d771101a87557f304d44"
+	},
+	"score": {
+		"sc1": 0,
+		"sc2": 0,
+		"resulting": ""
+	},
+	"command": {
+		"ru": {
+			"one": "Дмитрий Мерзликин (Рос)",
+			"two": "Артур Топорков (Рос)"
+		},
+		"en": {
+			"one": "Dmitry Merzlikin",
+			"two": "Artur Toporkov"
+		},
+		"women": 0,
+		"youth": 0
+	},
+	"group": {
+		"ru": "Лига Про. Москва",
+		"en": "Pro League. Moscow"
+	},
+	"snapshot": {
+		"start": {
+			"time": 0,
+			"p1": 2.88,
+			"x": 0,
+			"p2": 1.38,
+			"mod": 0
+		},
+		"end": {
+			"time": 0,
+			"p1": 0,
+			"x": 0,
+			"p2": 0,
+			"mod": 0
+		}
+	},
+	"cards": {
+		"before": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		},
+		"after": {
+			"one": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			},
+			"two": {
+				"red": 0,
+				"attacks": 0,
+				"danAttacks": 0,
+				"shotsOn": 0,
+				"shotsOff": 0
+			}
+		}
+	},
+	"matchId": 190073643,
+	"strategy": 1,
+	"index": 0,
+	"total": 0,
+	"createdBy": {
+		"$date": "2019-04-07T10:56:49.132Z"
+	},
+	"modifiedBy": {
+		"$date": "2019-04-07T10:56:49.132Z"
+	},
+	"__v": 0
+}
