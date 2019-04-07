@@ -1,24 +1,23 @@
-const {log} = require('../../utils/logger');
-const {getStatistic, setStatistic} = require('../../storage/football');
+const {log} = require('../utils/logger');
 const config = require('config');
-const {equalsTotalOver, areEqualTotal, equalsTotalUnder} = require('../../utils/searchHelper');
-const {throttle} = require('../../utils/throttle');
-const {getResultList} = require('../../fetch');
-const {searchHelper} = require('../../modifiableFile');
+const {throttle} = require('../utils/throttle');
+const {getResultList} = require('../fetch');
+const {searchHelper} = require('../modifiableFile');
 
 const active = config.parser.active;
 const urlAll = config.get(`parser.${active[0]}.result.all`);
 
 const postResultDebounce = throttle(getResultList, 20000);
-const typeRate = config.choice.live.football.typeRate;
-const numericalDesignation = config.choice.live.football.numericalDesignation;
 
 /**
  *  Метод проверки результатов матчей.
  *
+ * @param {number} getStatistic получить записи из таблицы статистика.
+ * @param {number} setStatistic редактирование записи в таблице.
+ * @param {number} numericalDesignation числовое обозначение типа матча
  * @returns {Promise<any | never>}
  */
-async function checkingResultsFotball() {
+async function checkingResults(getStatistic, setStatistic, numericalDesignation) {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
 	beforeDate.setUTCDate(beforeDate.getUTCDate() - 1);
@@ -29,7 +28,7 @@ async function checkingResultsFotball() {
 	log.debug(`Начало проверки результатов с ${beforeDate.toISOString()} по ${currentDate.toISOString()}`);
 	return getStatistic(query)
 		.then((statistics) => {
-			return result(statistics, beforeDate.toISOString(), currentDate.toISOString());
+			return result(statistics, beforeDate.toISOString(), currentDate.toISOString(), setStatistic, numericalDesignation);
 		}).catch((error) => {
 			log.error(`checkingResults: ${error.message}`);
 		});
@@ -41,15 +40,17 @@ async function checkingResultsFotball() {
  * @param {Object} statistics объекты матчей
  * @param {String} beforeDate дата предыдущего дня
  * @param {String} currentDate дата текущего дня
+ * @param {number} setStatistic редактирование записи в таблице.
+ * @param {number} numericalDesignation числовое обозначение типа матча
  * @returns {Promise<void>}
  */
-async function result(statistics, beforeDate, currentDate) {
+async function result(statistics, beforeDate, currentDate, setStatistic, numericalDesignation) {
 	try {
 		const currentData = await postResultDebounce(searchHelper.replaceUrl(urlAll, currentDate));
 		const beforeData = await postResultDebounce(searchHelper.replaceUrl(urlAll, beforeDate));
 		statistics.forEach(async (statistic) => {
-			const endScore = await serchResultEndMatch(beforeData, currentData, statistic);
-			await baseRecordCorrection(statistic, endScore);
+			const endScore = await serchResultEndMatch(beforeData, currentData, statistic, numericalDesignation);
+			await baseRecordCorrection(statistic, endScore, setStatistic);
 		});
 	} catch (error) {
 		log.error(`searchResult: ${error}`);
@@ -62,9 +63,10 @@ async function result(statistics, beforeDate, currentDate) {
  * @param {Array} beforeData все матчи предыдущего дня
  * @param {Array} currentData все матчи текущего дня
  * @param {Object} statistic объекты матча
+ * @param {number} numericalDesignation числовое обозначение типа матча
  * @returns {Promise<String>}
  */
-function serchResultEndMatch(beforeData, currentData, statistic) {
+function serchResultEndMatch(beforeData, currentData, statistic, numericalDesignation) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let endScore = await searchHelper.searchResult(currentData, statistic.matchId, numericalDesignation);
@@ -81,55 +83,23 @@ function serchResultEndMatch(beforeData, currentData, statistic) {
 /**
  * Метод для сравнения результатов.
  *
+ * @param {number} setStatistic редактирование записи в таблице.
  * @param {Object} statistic объект матча
  * @param {String} score строка для парсинга
  * @returns {Promise<void>}
  */
-async function baseRecordCorrection(statistic, score) {
+async function baseRecordCorrection(setStatistic, statistic, score) {
 	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
-	const endScore = searchHelper.parserScoreFootball(score);
-	let result = -1;
-	if (endScore !== '') {
-		switch (statistic.strategy) {
-			case 1:
-			case 2:
-			case 3:
-				result = equalsTotalOver(statistic.score, endScore, typeRate[statistic.strategy]);
-				break;
-			case 4:
-			case 6:
-				result = areEqualTotal(endScore);
-				break;
-			case 5:
-			case 7:
-				result = equalsTotalUnder(statistic.score, endScore, typeRate[statistic.strategy]);
-				break;
+	await setStatistic({
+		matchId: statistic.matchId,
+		strategy: statistic.strategy,
+		score: {
+			resulting: score !== '' ? score : '-1'
 		}
-	}
-	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Коэффициента ставки ${(result !== null) ? result : 'не изменился'}`);
-	if (result === 0 || result === 1 || result === -1) {
-		log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Корректировка коэффициента ставки ${result}`);
-		await setIndexRate(statistic.matchId, result, statistic.strategy);
-	}
+	});
 	return Promise.resolve([]);
 }
 
-/**
- * Метод для изменения ставки.
- *
- * @param {Number} id матча
- * @param {Number} index результат ставки
- * @param {Number} strategy стратегия ставок
- * @returns {Promise<any>|*}
- */
-function setIndexRate(id = 0, index = 1, strategy) {
-	return setStatistic({
-		matchId: id,
-		strategy: strategy,
-		index: index, // тип ставки.
-	});
-}
-
 module.exports = {
-	checkingResultsFotball
+	checkingResults
 };

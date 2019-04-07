@@ -55,12 +55,6 @@ function getStatisticsFootball(days = 2) {
 						template.substitute(5, {
 							statistics: props.statistics.filter((item) => item.strategy === 5)
 						});
-						template.substitute(6, {
-							statistics: props.statistics.filter((item) => item.strategy === 6)
-						});
-						template.substitute(7, {
-							statistics: props.statistics.filter((item) => item.strategy === 7)
-						});
 						/*template.substitute(8, {
 							statistics: props.statistics.filter((statistic) => {
 								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
