@@ -1,9 +1,9 @@
 const {log} = require('../../utils/logger');
 const {newStatistic} = require('../../storage/tableTennis');
-const config = require('config');
+/*const config = require('config');*/
 const {matchRate} = require('../../matchRate');
 
-const set = config.choice.live.tableTennis.set;
+/*const set = config.choice.live.tableTennis.set;*/
 /*const rateStrategyTwo = config.choice.live.tableTennis.strategyTwo.rate;*/
 
 /**
@@ -13,10 +13,8 @@ const set = config.choice.live.tableTennis.set;
  */
 function tableTennisLiveStrategy(param) {
 	if ((param.p1 !== '') && (param.p2 !== '') && (param.p1 !== 0) && (param.p2 !== 0)) {
-		if (param.set.key === set) {
-			if ((param.set.value.sc1 + param.set.value.sc2) === 0) {
-				tableTennisLiveStrategyOne(param);
-			}
+		if ((param.score.sc1 + param.score.sc2) === 0) {
+			tableTennisLiveStrategyOne(param);
 		}
 	}
 }
