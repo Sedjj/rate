@@ -147,54 +147,44 @@ const TableTennisSchema = new Schema({
 			one: {
 				red: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				attacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				danAttacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOn: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOff: {
 					type: Number,
-					required: true,
 					default: 0
 				}
 			},
 			two: {
 				red: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				attacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				danAttacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOn: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOff: {
 					type: Number,
-					required: true,
 					default: 0
 				}
 			}
@@ -203,54 +193,44 @@ const TableTennisSchema = new Schema({
 			one: {
 				red: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				attacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				danAttacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOn: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOff: {
 					type: Number,
-					required: true,
 					default: 0
 				}
 			},
 			two: {
 				red: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				attacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				danAttacks: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOn: {
 					type: Number,
-					required: true,
 					default: 0
 				},
 				shotsOff: {
 					type: Number,
-					required: true,
 					default: 0
 				}
 			}
