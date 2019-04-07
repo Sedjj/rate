@@ -3,9 +3,10 @@ const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');
 /*const {performAuth} = require('./src/auth');*/
+const football = require('./storage/football');
+const tableTennis = require('./storage/tableTennis');
 const {searchFootball, searchTableTennis} = require('./searchMatch');
-const {checkingResultsFotball} = require('./checkingResults/football');
-const {checkingResultsTableTennis} = require('./checkingResults/tableTennis');
+const {checkingResults} = require('./checkingResults');
 require('./telegram/bot');
 
 const schedulerSearchFootball = process.env.NODE_ENV === 'development'
@@ -25,6 +26,9 @@ const schedulerSearchTableTennis = process.env.NODE_ENV === 'development'
 const schedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
 	: config.cron.schedulerCheckingResults;
+
+const numericalDesignationFootball = config.choice.live.football.numericalDesignation;
+const numericalDesignationTableTennis = config.choice.live.tableTennis.numericalDesignation;
 
 /**
  * Планировшик поиска матчей по футболу.
@@ -79,8 +83,8 @@ if (schedulerCheckingResults) {
 	log.info('****start scheduler checking results****');
 	let schedulerCheckingResultsJob = new CronJob(schedulerCheckingResults, () => {
 		try {
-			checkingResultsFotball();
-			checkingResultsTableTennis();
+			checkingResults(football.getStatistic, tableTennis.setStatistic, numericalDesignationFootball);
+			checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);
 		} catch (error) {
 			schedulerCheckingResultsJob.stop();
 			log.error(`cron pattern not valid: ${error}`);
