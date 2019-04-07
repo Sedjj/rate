@@ -1,12 +1,12 @@
 const {CronJob, CronTime} = require('cron');
-const rc = require('./src/utils/random-cron');
+const rc = require('./utils/random-cron');
 const config = require('config');
-const {log} = require('./src/utils/logger');
+const {log} = require('./utils/logger');
 /*const {performAuth} = require('./src/auth');*/
-const {searchFootball, searchTableTennis} = require('./src/searchMatch');
-const {checkingResultsFotball} = require('./src/checkingResults/football');
-const {checkingResultsTableTennis} = require('./src/checkingResults/tableTennis');
-require('./src/telegram/bot');
+const {searchFootball, searchTableTennis} = require('./searchMatch');
+const {checkingResultsFotball} = require('./checkingResults/football');
+const {checkingResultsTableTennis} = require('./checkingResults/tableTennis');
+require('./telegram/bot');
 
 const schedulerSearchFootball = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(50, 150).generate()

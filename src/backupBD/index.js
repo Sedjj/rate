@@ -11,7 +11,7 @@ const database = process.env.NODE_ENV === 'development'
 	: config.dbProd.name;
 
 const archivesPath = config.path.storagePath || process.cwd();
-const archivesDirectory = config.path.directory.archives || 'archives';
+const archivesDirectory = config.path.directory.upload || 'upload';
 const objectPath = path.join(archivesPath, archivesDirectory);
 
 const options = {
