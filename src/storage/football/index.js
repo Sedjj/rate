@@ -95,6 +95,9 @@ function setStatistic(param) {
 			if (param.total !== undefined) {
 				statistic.total = param.total;
 			}
+			if (param.score && (param.score.resulting !== undefined)) {
+				statistic.score.resulting = param.score.resulting;
+			}
 			if (param.snapshot && (param.snapshot.start !== undefined)) {
 				statistic.snapshot.start = param.snapshot.start;
 			}

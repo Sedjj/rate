@@ -50,7 +50,7 @@ async function result(statistics, beforeDate, currentDate, setStatistic, numeric
 		const beforeData = await postResultDebounce(searchHelper.replaceUrl(urlAll, beforeDate));
 		statistics.forEach(async (statistic) => {
 			const endScore = await serchResultEndMatch(beforeData, currentData, statistic, numericalDesignation);
-			await baseRecordCorrection(statistic, endScore, setStatistic);
+			await baseRecordCorrection(setStatistic, statistic, endScore);
 		});
 	} catch (error) {
 		log.error(`searchResult: ${error}`);

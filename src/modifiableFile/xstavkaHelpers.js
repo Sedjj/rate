@@ -416,7 +416,7 @@ async function searchResult(data, id, numericalDesignation) {
 						if (Array.isArray(object['Elems'])) {
 							object['Elems'].forEach((Elems) => {
 								if (Elems['Head'][0] === id) {
-									resolve(Elems['Head'][17]);
+									resolve(Elems['Head'][15]);
 								}
 							});
 						}
