@@ -83,7 +83,7 @@ if (schedulerCheckingResults) {
 	log.info('****start scheduler checking results****');
 	let schedulerCheckingResultsJob = new CronJob(schedulerCheckingResults, () => {
 		try {
-			checkingResults(football.getStatistic, tableTennis.setStatistic, numericalDesignationFootball);
+			checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
 			checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);
 		} catch (error) {
 			schedulerCheckingResultsJob.stop();
