@@ -8,8 +8,15 @@ const {decorateMessageTennis, decorateMessageMatch, decorateMessageChannel} = re
  * @param {String} type вид спорта
  * @returns {Promise<void>}
  */
-async function matchRate(statistic, type) {
-	await sendMessageChat(decorateMessageTennis(statistic));
+async function matchRate(statistic, type = '') {
+	switch (statistic.strategy) {
+		case 4 :
+		case 5 :
+			if (statistic.snapshot.start.mod <= 8 && statistic.total >= 1.8) {
+				await sendMessageChat(decorateMessageTennis(statistic));
+			}
+			break;
+	}
 	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 		switch (statistic.strategy) {
 			case 1 :

@@ -88,7 +88,7 @@
 				"twofactor": "https://1xstavka.ru/user/twofactor"
 			},
 			"rate": {
-				"getuserdata": "'https://1xstavka.ru/getuserdata'",
+				"getuserdata": "https://1xstavka.ru/getuserdata",
 				"putbetscommon": "https://1xstavka.ru/datalinelive/putbetscommon",
 				"updateCoupon": "https://1xstavka.ru/LiveUtil/UpdateCoupon",
 				"balance": "https://1xstavka.ru/user/balance"
