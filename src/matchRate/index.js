@@ -16,6 +16,13 @@ async function matchRate(statistic, type = '') {
 				await sendMessageChat(decorateMessageTennis(statistic));
 			}
 			break;
+		case 6 :
+			if (statistic.cards.before.one.attacks < 60 && statistic.cards.before.one.danAttacks  < 40) {
+				if(1.7 <= statistic.total && statistic.total <= 2){
+					await sendMessageChat(decorateMessageTennis(statistic));
+				}
+			}
+			break;
 	}
 	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 		switch (statistic.strategy) {

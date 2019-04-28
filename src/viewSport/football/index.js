@@ -17,6 +17,7 @@ const rateStrategyTwo = config.choice.live.football.strategyTwo.rate;
 const rateStrategyThree = config.choice.live.football.strategyThree.rate;
 const rateStrategyFour = config.choice.live.football.strategyFour.rate;
 const rateStrategyFive = config.choice.live.football.strategyFive.rate;
+const rateStrategySix = config.choice.live.football.strategySix.rate;
 const typeRate = config.choice.live.football.typeRate;
 
 /**
@@ -31,9 +32,11 @@ function footballLiveStrategy(param) {
 			if ((param.score.sc1 + param.score.sc2) === 1) {
 				footballLiveStrategyOne(param);
 			}
+			// тотал больше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 				footballLiveStrategyTwo(param);
 			}
+			// тотал больше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
 				footballLiveStrategyThree(param);
 			}
@@ -41,9 +44,13 @@ function footballLiveStrategy(param) {
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 				footballLiveStrategyFour(param);
 			}
-
+			// тотал меньше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
 				footballLiveStrategyFive(param);
+			}
+			// тотал больше
+			if ((param.score.sc1 > param.score.sc2)) {
+				footballLiveStrategySix(param);
 			}
 		}
 	}
@@ -160,6 +167,28 @@ function footballLiveStrategyFive(param) {
 			})
 			.catch((error) => {
 				log.error(`footballLiveStrategyFive: ${error.message}`);
+			});
+	}
+}
+
+/**
+ * Стратегия ничья с явным фаворитом p1 > p2
+ *
+ * @param {Object} param объект с параметрами матча
+ */
+function footballLiveStrategySix(param) {
+	const strategy = 6;
+	if (Math.abs(param.p1 - param.p2) < rateStrategySix) {
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+			.then(async (statistic) => {
+				if (statistic !== null) {
+					const football = await setSnapshot(param.matchId, strategy);
+					log.debug(`Найден ${football.matchId}: Футбол - стратегия ${strategy}`);
+					matchRate(football, 'футбол');
+				}
+			})
+			.catch((error) => {
+				log.error(`footballLiveStrategySix: ${error.message}`);
 			});
 	}
 }

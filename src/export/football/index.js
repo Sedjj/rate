@@ -55,6 +55,17 @@ function getStatisticsFootball(days = 2) {
 						template.substitute(5, {
 							statistics: props.statistics.filter((item) => item.strategy === 5)
 						});
+						template.substitute(6, {
+							statistics: props.statistics.filter((item) => {
+								if(item.strategy === 6){
+									if (item.cards.before.one.attacks < 60 && item.cards.before.one.danAttacks  < 40) {
+										if(1.7 <= item.total && item.total <= 2){
+											return true;
+										}
+									}
+								}
+							})
+						});
 						/*template.substitute(8, {
 							statistics: props.statistics.filter((statistic) => {
 								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
@@ -62,38 +73,6 @@ function getStatisticsFootball(days = 2) {
 										case 1 :
 											if ((statistic.snapshot.end.x < 3) && (statistic.snapshot.end.mod > 2.5)) {
 												return true;
-											}
-											break;
-										case 2 :
-											if ((3000 < statistic.snapshot.end.time) && (statistic.snapshot.end.time < 3570)) {
-												// A
-												if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-													if ((statistic.cards.after.one.danAttacks < 46) && (statistic.snapshot.start.x > 2.5)) {
-														if ((statistic.cards.after.one.attacks > 39) && (statistic.cards.before.one.shotsOn !== 1)) {
-															return true;
-														}
-													}
-												} else { //B
-													if ((50 < statistic.cards.after.two.attacks) && (statistic.cards.after.two.attacks < 80)) {
-														return true;
-													}
-												}
-											}
-											break;
-										case 3 :
-											if ((statistic.snapshot.end.time < 3720)) {
-												// A
-												if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-													if (statistic.snapshot.end.x < 2.4) {
-														if ((statistic.cards.after.one.danAttacks > 50) && (statistic.cards.before.one.attacks > 52)) {
-															return true;
-														}
-													}
-												} else { //B
-													if (statistic.snapshot.start.x < 2.4) {
-														return true;
-													}
-												}
 											}
 											break;
 									}

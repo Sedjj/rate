@@ -2,7 +2,7 @@ const {CronJob, CronTime} = require('cron');
 const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');
-/*const {performAuth} = require('./src/auth');*/
+/*const {performAuth} = require('./auth');*/
 const football = require('./storage/football');
 const tableTennis = require('./storage/tableTennis');
 const {searchFootball, searchTableTennis} = require('./searchMatch');
@@ -29,6 +29,8 @@ const schedulerCheckingResults = process.env.NODE_ENV === 'development'
 
 const numericalDesignationFootball = config.choice.live.football.numericalDesignation;
 const numericalDesignationTableTennis = config.choice.live.tableTennis.numericalDesignation;
+
+// performAuth();
 
 /**
  * Планировшик поиска матчей по футболу.
