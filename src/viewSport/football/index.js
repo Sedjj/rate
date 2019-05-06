@@ -85,7 +85,7 @@ function footballLiveStrategyOne(param) {
  */
 function footballLiveStrategyTwo(param) {
 	const strategy = 2;
-	if (Math.abs(param.p1 - param.p2) > rateStrategyTwo) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyTwo) {
 		if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
