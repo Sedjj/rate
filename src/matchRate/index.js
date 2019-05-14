@@ -10,18 +10,10 @@ const {decorateMessageTennis, decorateMessageMatch, decorateMessageChannel} = re
  */
 async function matchRate(statistic, type = '') {
 	switch (statistic.strategy) {
-		case 4 :
-		case 5 :
-			if (statistic.snapshot.start.mod <= 8 && statistic.total >= 1.8) {
-				await sendMessageChat(decorateMessageTennis(statistic));
-			}
+		case 1 :
+			await sendMessageChat(decorateMessageTennis(statistic));
 			break;
-		case 6 :
-			if (statistic.cards.before.one.attacks < 60 && statistic.cards.before.one.danAttacks  < 40) {
-				if(1.7 <= statistic.total && statistic.total <= 2){
-					await sendMessageChat(decorateMessageTennis(statistic));
-				}
-			}
+		default:
 			break;
 	}
 	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {

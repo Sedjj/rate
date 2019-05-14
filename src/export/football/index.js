@@ -43,19 +43,19 @@ function getStatisticsFootball(days = 2) {
 						template.substitute(1, {
 							statistics: props.statistics.filter((item) => item.strategy === 1)
 						});
-						template.substitute(2, {
+						/*template.substitute(2, {
 							statistics: props.statistics.filter((item) => item.strategy === 2)
 						});
 						template.substitute(3, {
 							statistics: props.statistics.filter((item) => item.strategy === 3)
-						});
+						});*/
 						template.substitute(4, {
 							statistics: props.statistics.filter((item) => item.strategy === 4)
 						});
 						template.substitute(5, {
 							statistics: props.statistics.filter((item) => item.strategy === 5)
 						});
-						template.substitute(6, {
+						/*template.substitute(6, {
 							statistics: props.statistics.filter((item) => {
 								if(item.strategy === 6){
 									if (item.cards.before.one.attacks < 60 && item.cards.before.one.danAttacks  < 40) {
@@ -64,20 +64,6 @@ function getStatisticsFootball(days = 2) {
 										}
 									}
 								}
-							})
-						});
-						/*template.substitute(8, {
-							statistics: props.statistics.filter((statistic) => {
-								if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
-									switch (statistic.strategy) {
-										case 1 :
-											if ((statistic.snapshot.end.x < 3) && (statistic.snapshot.end.mod > 2.5)) {
-												return true;
-											}
-											break;
-									}
-								}
-								return false;
 							})
 						});*/
 						log.debug('Генерация файла');

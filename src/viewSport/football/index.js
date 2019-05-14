@@ -34,11 +34,11 @@ function footballLiveStrategy(param) {
 			}
 			// тотал больше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
-				footballLiveStrategyTwo(param);
+				// footballLiveStrategyTwo(param);
 			}
 			// тотал больше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
-				footballLiveStrategyThree(param);
+				// footballLiveStrategyThree(param);
 			}
 			// тотал меньше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
@@ -50,7 +50,7 @@ function footballLiveStrategy(param) {
 			}
 			// тотал больше
 			if ((param.score.sc1 > param.score.sc2)) {
-				footballLiveStrategySix(param);
+				// footballLiveStrategySix(param);
 			}
 		}
 	}
@@ -134,13 +134,13 @@ function footballLiveStrategyThree(param) {
  */
 function footballLiveStrategyFour(param) {
 	const strategy = 4;
-	if (Math.abs(param.p1 - param.p2) > rateStrategyFour) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyFour) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					const football = await setSnapshot(param.matchId, strategy);
 					log.debug(`Найден ${football.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate(football, 'футбол');
+					// matchRate(football, 'футбол');
 				}
 			})
 			.catch((error) => {
@@ -156,13 +156,13 @@ function footballLiveStrategyFour(param) {
  */
 function footballLiveStrategyFive(param) {
 	const strategy = 5;
-	if (Math.abs(param.p1 - param.p2) > rateStrategyFive) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyFive) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					const football = await setSnapshot(param.matchId, strategy);
 					log.debug(`Найден ${football.matchId}: Футбол - стратегия ${strategy}`);
-					matchRate(football, 'футбол');
+					// matchRate(football, 'футбол');
 				}
 			})
 			.catch((error) => {

@@ -175,12 +175,12 @@
 					"rate": 2.5
 				},
 				"strategyFour": {
-					"titleRate": "Math.abs(p1 - p2) > rate",
-					"rate": 2.5
+					"titleRate": "Math.abs(p1 - p2) < rate",
+					"rate": 8
 				},
 				"strategyFive": {
-					"titleRate": "Math.abs(p1 - p2) > rate",
-					"rate": 2.5
+					"titleRate": "Math.abs(p1 - p2) < rate",
+					"rate": 8
 				},
 				"strategySix": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
@@ -192,8 +192,8 @@
 					2,
 					2,
 					2,
-					1.4,
-					1.4,
+					1.8,
+					1.7,
 					1.4
 				],
 				"titleTypeRate": "Прибавляем к сумме результата матчей",
