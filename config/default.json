@@ -164,23 +164,23 @@
 				},
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) <= rate",
-					"rate": 1.5
+					"rate": 2
 				},
 				"strategyTwo": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 8
+					"rate": 10
 				},
 				"strategyThree": {
-					"titleRate": "Math.abs(p1 - p2) > rate",
-					"rate": 2.5
+					"titleRate": "Math.abs(p1 - p2) <  rate",
+					"rate": 10
 				},
 				"strategyFour": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
 					"rate": 8
 				},
 				"strategyFive": {
-					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 8
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 2.5
 				},
 				"strategySix": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
@@ -190,7 +190,7 @@
 				"total": [
 					0,
 					2,
-					1.8,
+					2,
 					2,
 					1.4,
 					1.4,

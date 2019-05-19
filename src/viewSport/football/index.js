@@ -38,7 +38,7 @@ function footballLiveStrategy(param) {
 			}
 			// тотал больше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
-				// footballLiveStrategyThree(param);
+				footballLiveStrategyThree(param);
 			}
 			// тотал меньше
 			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
@@ -86,7 +86,7 @@ function footballLiveStrategyOne(param) {
 function footballLiveStrategyTwo(param) {
 	const strategy = 2;
 	if (Math.abs(param.p1 - param.p2) < rateStrategyTwo) {
-		if (param.x > Math.min(param.p1, param.p2)) {
+		// if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
@@ -98,7 +98,7 @@ function footballLiveStrategyTwo(param) {
 				.catch((error) => {
 					log.error(`footballLiveStrategyTwo: ${error.message}`);
 				});
-		}
+		// }
 	}
 }
 
@@ -109,8 +109,8 @@ function footballLiveStrategyTwo(param) {
  */
 function footballLiveStrategyThree(param) {
 	const strategy = 3;
-	if (Math.abs(param.p1 - param.p2) > rateStrategyThree) {
-		if (param.x > Math.min(param.p1, param.p2)) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyThree) {
+		// if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
 					if (statistic !== null) {
@@ -122,7 +122,7 @@ function footballLiveStrategyThree(param) {
 				.catch((error) => {
 					log.error(`footballLiveStrategyThree: ${error.message}`);
 				});
-		}
+		// }
 	}
 }
 
@@ -156,7 +156,7 @@ function footballLiveStrategyFour(param) {
  */
 function footballLiveStrategyFive(param) {
 	const strategy = 5;
-	if (Math.abs(param.p1 - param.p2) < rateStrategyFive) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategyFive) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {

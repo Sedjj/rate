@@ -43,16 +43,16 @@ function getStatisticsFootball(days = 2) {
 						template.substitute(1, {
 							statistics: props.statistics.filter((item) => item.strategy === 1)
 						});
-						/*template.substitute(2, {
+						template.substitute(2, {
 							statistics: props.statistics.filter((item) => item.strategy === 2)
 						});
 						template.substitute(3, {
 							statistics: props.statistics.filter((item) => item.strategy === 3)
-						});*/
+						});
 						template.substitute(4, {
 							statistics: props.statistics.filter((item) => {
-								if(item.strategy === 4){
-									if(item.total >= 1.8){
+								if (item.strategy === 4) {
+									if (item.total >= 1.8) {
 										return true;
 									}
 								}
@@ -60,8 +60,8 @@ function getStatisticsFootball(days = 2) {
 						});
 						template.substitute(5, {
 							statistics: props.statistics.filter((item) => {
-								if(item.strategy === 5){
-									if(item.total >= 1.7){
+								if (item.strategy === 5) {
+									if (item.total >= 1.6) {
 										return true;
 									}
 								}
