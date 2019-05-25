@@ -33,6 +33,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 ```bash
 sudo curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
 sudo apt-get install gitlab-runner
+
 sudo gitlab-runner register -n \
   --url https://gitlab.com/ \
   --registration-token yre9monAkRxbuBfGhAkx \
@@ -41,6 +42,8 @@ sudo gitlab-runner register -n \
   --docker-image "docker:latest" \
   --docker-privileged \
   --tag-list docker
+  
+sudo gitlab-runner restart
 ```
 
 Маленькая, но очень нужная настройка, добавление пользователя gitlab-runner в группу docker.
