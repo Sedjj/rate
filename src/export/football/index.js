@@ -44,7 +44,13 @@ function getStatisticsFootball(days = 2) {
 							statistics: props.statistics.filter((item) => item.strategy === 1)
 						});
 						template.substitute(2, {
-							statistics: props.statistics.filter((item) => item.strategy === 2)
+							statistics: props.statistics.filter((item) => {
+								if (item.strategy === 2) {
+									if (item.total < 2.1) {
+										return true;
+									}
+								}
+							})
 						});
 						template.substitute(3, {
 							statistics: props.statistics.filter((item) => item.strategy === 3)
