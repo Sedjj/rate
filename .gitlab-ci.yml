@@ -4,9 +4,8 @@ services:
   - docker:dind
 
 before_script:
-  - apk add --update py-pip &&
-    pip install gcc &&
-    pip install docker-compose
+  - apk add --no-cache py-pip
+  - pip install docker-compose~=1.23.0
 
 stages:
   - build
