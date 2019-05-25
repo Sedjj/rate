@@ -18,5 +18,5 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t live .
+    - docker build -t live docker\mongo-seed\Dockerfile
     - docker run -p 27017:27017 --name mongo-rate live
