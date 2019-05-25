@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:17.09.0-ce
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
