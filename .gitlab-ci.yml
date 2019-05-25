@@ -1,0 +1,24 @@
+image: docker:latest
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+  - stage
+
+before_script:
+  - docker info
+
+build:
+  stage: build
+  script:
+    - docker-compose build
+    - docker-compose up -d
+    #- docker build -t live .
+    #- docker run -p 27017:27017 --name mongo-rate live
