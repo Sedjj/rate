@@ -10,13 +10,13 @@ before_script:
 stages:
   - build
 
-build1:
+build:
   stage: build
   #only:
   #  - production
   script:
     - docker-compose up -d build
-  environment: production
-  when: on_success
+  #environment: production
+  #when: on_success
   #except:
   #  - master
