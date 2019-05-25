@@ -1,5 +1,8 @@
 ﻿FROM mongo
 
+ENV TZ=Asia/Yekaterinburg
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Copy db
 COPY docker/mongo-seed/dump/ /data/dump/
 

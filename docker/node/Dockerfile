@@ -1,10 +1,9 @@
 ﻿FROM node:11-alpine
 
-RUN dpkg-reconfigure tzdata && sudo /etc/init.d/cron stop &&
-    /etc/init.d/cron start && timedatectl
+ENV TZ=Asia/Yekaterinburg
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get install htop libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ &&
-npm install node-gyp && npm install pm2@latest -g
+RUN apt-get install htop
 
 # Создать директорию app
 RUN mkdir -p /app/config
@@ -21,10 +20,10 @@ RUN chmod 777 app/upload
 # Установить зависимости приложения
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
 # работает с npm@5+
-COPY package*.json ./
+COPY package*.json /app
 
 #  Используется при сборке кода в продакшене --only=production
-RUN npm install && npm audit fix
+RUN npm install --only=development && npm audit fix
 
 # Скопировать исходники приложения
 COPY config /app/config
@@ -34,4 +33,4 @@ COPY src /app
 
 EXPOSE 3000
 
-CMD [ "pm2", "start" , "npm" , "--start" ]
+CMD [ "npm" , "start" ]
