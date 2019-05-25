@@ -3,10 +3,6 @@ image: docker
 services:
   - docker:dind
 
-before_script:
-  - apk add --update py-pip &&
-    pip install docker-compose
-
 stages:
   - build
   - deploy
@@ -16,8 +12,8 @@ build:
   #only:
   #  - production
   script:
-    - sudo apt-get install -y gcc
-  when: manual
+    - sudo apt-get install -y python-pip
+    - pip install docker-compose
   #except:
   #  - master
 
@@ -26,10 +22,8 @@ build1:
   #only:
   #  - production
   script:
-    - sudo apt-get install -y python-pip
-    - pip install docker-compose
     - docker-compose up -d build
   environment: production
-  when: manual
+  when: on_success
   #except:
   #  - master
