@@ -5,7 +5,7 @@ services:
 
 before_script:
   - apk add --update py-pip &&
-    pip install -y gcc &&
+    pip install gcc &&
     pip install docker-compose
 
 stages:
