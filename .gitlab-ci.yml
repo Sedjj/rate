@@ -18,7 +18,5 @@ before_script:
 build:
   stage: build
   script:
-    - docker-compose build
-    - docker-compose up -d
-    #- docker build -t live .
-    #- docker run -p 27017:27017 --name mongo-rate live
+    - docker build -t live .
+    - docker run -p 27017:27017 --name mongo-rate live
