@@ -12,7 +12,7 @@ build:
   #only:
   #  - production
   script:
-    - sudo apt-get install -y python-pip
+    - apt-get install -y python-pip
     - pip install docker-compose
   #except:
   #  - master
