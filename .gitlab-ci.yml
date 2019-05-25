@@ -3,22 +3,16 @@ image: docker
 services:
   - docker:dind
 
+before_script:
+  - apk add --update py-pip &&
+    pip install -y gcc &&
+    pip install docker-compose
+
 stages:
   - build
-  - deploy
-
-build:
-  stage: build
-  #only:
-  #  - production
-  script:
-    - apt-get install -y python-pip
-    - pip install docker-compose
-  #except:
-  #  - master
 
 build1:
-  stage: deploy
+  stage: build
   #only:
   #  - production
   script:
