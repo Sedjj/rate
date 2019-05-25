@@ -5,6 +5,8 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+    networks:
+      - rate-bot
 
   mongo-rate-seed:
     container_name: mongo-rate-seed
@@ -13,3 +15,8 @@ services:
       dockerfile: docker/mongo-seed/Dockerfile
     links:
       - mongo-rate
+    networks:
+      - rate-bot
+
+networks:
+  rate-bot:
