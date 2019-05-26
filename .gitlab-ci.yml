@@ -19,7 +19,7 @@ deploy:
   #environment:
       #name: production
   when: on_success
-  #except:
+  #except: 
   #  - master # исключить ветки
   tags:
     - docker
