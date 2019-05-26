@@ -9,29 +9,15 @@ before_script:
 
 stages:
   - build
-  - deploy
 
-build:
+deploy:
   stage: build
   #only:
   #  - production # только для этой ветки
   script:
-    - docker-compose build
-  environment:
-    name: production
-  #except:
-  #  - master # исключить ветки
-  tags:
-    - docker
-
-deploy:
-  stage: deploy
-  #only:
-  #  - production # только для этой ветки
-  script:
-    - docker-compose up -d
-  environment:
-    name: production
+    - docker-compose up -d --build
+  #environment:
+      #name: production
   when: on_success
   #except:
   #  - master # исключить ветки
