@@ -5,7 +5,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Создать директорий и раздаем права на расшареные папки
 RUN mkdir -pv logs upload node_modules && \
-chmod 777 logs && chmod 777 upload && chmod -w- node_modules
+chmod 777 logs && chmod 777 upload && chmod -R a+rwx node_modules
 
 # Установить зависимости приложения
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
