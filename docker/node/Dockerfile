@@ -23,5 +23,5 @@ COPY vendor /vendor
 COPY src /src
 
 RUN chmod 777 /src
-
+ 
 CMD [ "npm", "run" , "start" ]
