@@ -4,7 +4,7 @@
 	"description": "Simple bot for rates",
 	"main": "src/index.js",
 	"scripts": {
-		"start": "set NODE_ENV=production&&node src/index.js",
+		"start": "node src/index.js",
 		"dev": "set NODE_ENV=development&&node src/index.js",
 		"docs": "jsdoc -c jsdoc.json README.md",
 		"help-api": "apidoc -i routes -o help/api",

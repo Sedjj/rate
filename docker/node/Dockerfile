@@ -22,6 +22,9 @@ COPY exportTemplates /exportTemplates
 COPY vendor /vendor
 COPY src /src
 
+RUN ls
+RUN ls /src
+
 RUN chmod 777 /src
 
 CMD [ "npm", "run" , "start" ]
