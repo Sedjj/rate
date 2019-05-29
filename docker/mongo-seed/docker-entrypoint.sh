@@ -7,5 +7,5 @@ if [ "$1" = 'mongoDB' ]; then
 	mongoimport --host mongo-rate --type json --collection tabletennis --mode merge --db rateBot --file data/dump/tabletennis.json
 
 	echo 'Restore from scripts'
-	mongo 127.0.0.1:27017/rateBot data/scripts/index.js
+	mongo rateBot --shell data/scripts/index.js --host mongo-rate --port 27017
 fi
