@@ -21,7 +21,7 @@ COPY config /config
 COPY exportTemplates /exportTemplates
 COPY vendor /vendor
 COPY src /src
- 
+
 RUN chmod 777 /src
 
-CMD [ "npm" , "start" ]
+CMD [ "sudo", "npm", "run" , "start" ]
