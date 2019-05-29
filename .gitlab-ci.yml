@@ -7,7 +7,7 @@ deploy:
   #  - production # только для этой ветки
   script:
     - docker-compose stop
-    - docker-compose up --build
+    - docker-compose up -d --build
   when: always
   #except:
   #  - master # исключить ветки
