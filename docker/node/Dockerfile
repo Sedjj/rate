@@ -12,9 +12,6 @@ chmod 777 logs && chmod 777 upload && chmod -w- node_modules
 # работает с npm@5+
 COPY package.json ./
 COPY package-lock.json ./
-#RUN ln -s ./package.json
-
-RUN npm -v && node -v
 
 #  Используется при сборке кода в продакшене --only=production
 RUN npm install --only=production && npm audit fix
@@ -27,4 +24,4 @@ COPY src /src
 
 RUN chmod 777 /src
 
-CMD [ "node" , "src/index.js" ]
+CMD [ "npm" , "start" ]
