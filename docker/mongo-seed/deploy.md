@@ -5,7 +5,7 @@ docker system prune -a --volumes
 
 Сборка контейнера
 ```bash
-docker build -t mongo-rate -f docker/mongo/DockerFile .
+docker build --rm -t mongo-rate -f docker/mongo-seed/DockerFile .
 ```
 
 Запуск Контейнера

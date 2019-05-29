@@ -22,6 +22,14 @@ sudo apt-get update
 sudo apt-get upgrade
 ```
 
+###Установка часового пояса
+```bash
+sudo dpkg-reconfigure tzdata &&
+sudo /etc/init.d/cron stop &&
+sudo /etc/init.d/cron start &&
+timedatectl
+```
+
 ### Настройка Docker compose
 ```bash
 sudo apt install curl 
@@ -37,11 +45,10 @@ sudo apt-get install gitlab-runner
 sudo gitlab-runner register -n \
   --url https://gitlab.com/ \
   --registration-token yre9monAkRxbuBfGhAkx \
-  --executor docker \
-  --description "Docker Prod Runner" \
-  --docker-image "docker:latest" \
+  --executor shell \
+  --description "Prod Runner" \
   --docker-privileged \
-  --tag-list docker
+  --tag-list rate-shell
   
 sudo gitlab-runner restart
 ```
@@ -49,16 +56,6 @@ sudo gitlab-runner restart
 Маленькая, но очень нужная настройка, добавление пользователя gitlab-runner в группу docker.
 ```bash
 sudo usermod -aG docker gitlab-runner
-```
-
-## Ручное развёртывание
-
-Склонировать файлы проекта:
-```bash
-cd ~
-git clone git@gitlab.com:developmentKit/projects/bot/rate.git
-cd rate_bot
-npm install --only=production
 ```
 
 Как только служба Docker настроена на автоматический запуск после перезагрузки VPS, все контейнеры Docker также будут запускаться автоматически. Все ваши приложения, работающие в контейнерах Docker, вернутся в онлайн без какого-либо ручного вмешательства.
