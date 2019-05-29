@@ -1,1 +1,1 @@
-load('data/scripts/footballs.js');
+load('footballs.js');
