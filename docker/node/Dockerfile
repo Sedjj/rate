@@ -15,7 +15,7 @@ COPY package-lock.json ./
 #RUN ln -s ./package.json
 
 #  Используется при сборке кода в продакшене --only=production
-RUN npm install && npm audit fix
+RUN npm install --only=production && npm audit fix
 
 # Скопировать исходники приложения
 COPY config /config
