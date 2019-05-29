@@ -15,7 +15,7 @@ COPY package-lock.json ./
 #RUN ln -s ./package.json
 
 #  Используется при сборке кода в продакшене --only=production
-RUN npm install --only=production && npm audit fix
+RUN npm install && npm audit fix
 
 # Скопировать исходники приложения
 COPY config /config
@@ -23,4 +23,4 @@ COPY exportTemplates /exportTemplates
 COPY vendor /vendor
 COPY src /src
 
-CMD [ "npm" , "start" ]
+CMD [ "node" , "src/index.js" ]
