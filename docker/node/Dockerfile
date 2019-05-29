@@ -11,7 +11,7 @@ chmod 777 logs && chmod 777 upload && chmod -w- node_modules
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
 # работает с npm@5+
 COPY package.json ./
-COPY package-lock.json ./
+#COPY package-lock.json ./
 
 #  Используется при сборке кода в продакшене --only=production
 RUN npm install --only=production && npm audit fix
@@ -23,5 +23,5 @@ COPY vendor /vendor
 COPY src /src
 
 RUN chmod 777 /src
- 
+
 CMD [ "npm", "run" , "start" ]
