@@ -4,10 +4,11 @@ ENV TZ=Asia/Yekaterinburg
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
+RUN chmod 777 .
 
 # Создать директорий и раздаем права на расшареные папки
 RUN mkdir -pv logs upload node_modules && \
-chmod 777 logs && chmod 777 upload && chmod 777 node_modules
+chmod 777 logs && chmod 777 upload
 
 # Установить зависимости приложения
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
@@ -16,7 +17,7 @@ COPY package.json ./
 #COPY package-lock.json ./
 
 #  Используется при сборке кода в продакшене --only=production
-RUN npm install
+#RUN npm install
 #RUN npm audit fix
 
 # Скопировать исходники приложения
@@ -29,5 +30,5 @@ COPY src src
 
 RUN chmod 777 .
 
-CMD ls -all && ls -all src && ls -all node_modules && npm run start debug
+CMD npm install && ls -all && npm run start
 #CMD [ "npm", "run" , "start" ]
