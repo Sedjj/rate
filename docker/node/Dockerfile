@@ -14,7 +14,7 @@ COPY package.json app/
 #COPY package-lock.json ./
 
 #  Используется при сборке кода в продакшене --only=production
-RUN cd app && npm install --only=production
+RUN cd app && npm install
 RUN cd app && npm audit fix
 
 # Скопировать исходники приложения
