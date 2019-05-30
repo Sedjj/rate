@@ -62,7 +62,7 @@
 	},
 	"devDependencies": {
 		"eslint": "^5.16.0",
-		"jsdoc": "^3.5.5",
+		"jsdoc": "^3.6.2",
 		"resolve-path": "^1.4.0",
 		"ts-loader": "^5.3.3",
 		"tslint": "^5.15.0",
