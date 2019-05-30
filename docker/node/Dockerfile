@@ -39,5 +39,4 @@ RUN chown -R appuser:xyzgroup /home/app
 # Switch to 'appuser'
 USER appuser
 
-CMD npm start --loglevel=warn
-#CMD [ "npm", "run" , "start" ]
+CMD [ "npm", "start" ]

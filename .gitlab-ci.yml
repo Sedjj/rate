@@ -8,6 +8,8 @@ deploy:
   script:
     - docker-compose stop
     - docker-compose up -d --build
+    - docker build --rm -t rate -f docker/node/DockerFile .
+    - docker run -p -i -t rate
   when: always
   #except:
   #  - master # исключить ветки
