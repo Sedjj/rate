@@ -29,5 +29,5 @@ COPY src src
 
 RUN chmod 777 .
 
-CMD ls -all && ls -all /src && ls -all node_modules && npm run start debug
+CMD ls -all && ls -all src && ls -all node_modules && npm run start debug
 #CMD [ "npm", "run" , "start" ]
