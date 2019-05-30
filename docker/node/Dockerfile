@@ -1,34 +1,43 @@
 ﻿FROM node:12-alpine
 
 ENV TZ=Asia/Yekaterinburg
+ENV NPM_CONFIG_PREFIX=/home/app/.npm-global
+ENV PATH=$PATH:/home/app/.npm-global/bin
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-WORKDIR /app
-RUN chmod 777 .
-
 # Создать директорий и раздаем права на расшареные папки
-RUN mkdir -pv logs upload node_modules && \
-chmod 777 logs && chmod 777 upload
+RUN mkdir -pv /home/app/logs /home/app/upload
+
+# Скопировать исходники приложения
+COPY config /home/app/config
+COPY exportTemplates /home/app/exportTemplates
+COPY vendor /home/app/vendor
+COPY src /home/app/src
 
 # Установить зависимости приложения
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
 # работает с npm@5+
-COPY package.json ./
-#COPY package-lock.json ./
+COPY  package.json /home/app
+#COPY package-lock.json /home/app
 
-#  Используется при сборке кода в продакшене --only=production
-#RUN npm install
+WORKDIR /home/app
+
+# Running npm install for production purpose will not run dev dependencies.
+RUN npm install --loglevel=warn
 #RUN npm audit fix
 
-# Скопировать исходники приложения
-COPY config config
-COPY exportTemplates exportTemplates
-COPY vendor vendor
-COPY src src
+# Create a user group 'xyzgroup'
+RUN addgroup -S xyzgroup
 
-#RUN ls app/node_modules
+# Create a user 'appuser' under 'xyzgroup'
+RUN adduser -S -D -h /home/app appuser xyzgroup
 
-RUN chmod 777 .
+# Chown all the files to the app user.
+RUN chown -R appuser:xyzgroup /home/app
 
-CMD npm install && ls -all && npm run start
+# Switch to 'appuser'
+USER appuser
+
+CMD npm start --loglevel=warn
 #CMD [ "npm", "run" , "start" ]
