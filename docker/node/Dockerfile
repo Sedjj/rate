@@ -18,14 +18,14 @@ COPY src /home/app/src
 # Установить зависимости приложения
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
 # работает с npm@5+
-COPY  package.json /home/app
-#COPY package-lock.json /home/app
+COPY package.json /home/app
+COPY package-lock.json /home/app
 
 WORKDIR /home/app
 
 # Running npm install for production purpose will not run dev dependencies.
-RUN npm install --loglevel=warn
-#RUN npm audit fix
+RUN npm install --only=production
+RUN npm audit fix
 
 # Create a user group 'xyzgroup'
 RUN addgroup -S xyzgroup
