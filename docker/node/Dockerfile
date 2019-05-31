@@ -6,7 +6,7 @@ ENV PATH=$PATH:/home/app/.npm-global/bin
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN npm install node-gyp -g && npm install pm2@latest -g
+RUN npm install pm2 -g
 
 # Создать директорий и раздаем права на расшареные папки
 RUN mkdir -pv /home/app/logs /home/app/upload
@@ -41,5 +41,5 @@ RUN chown -R appuser:xyzgroup /home/app
 # Switch to 'appuser'
 USER appuser
 
-CMD pm2 start npm --start
+CMD ["pm2-runtime", "src/index.js"]
 #CMD ["pm2", "star", "npm", "--start"]
