@@ -6,7 +6,7 @@ ENV PATH=$PATH:/home/app/.npm-global/bin
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN npm install node-gyp && npm install pm2@latest -g
+RUN npm install node-gyp -g && npm install pm2@latest -g
 
 # Создать директорий и раздаем права на расшареные папки
 RUN mkdir -pv /home/app/logs /home/app/upload
