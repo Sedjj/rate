@@ -45,8 +45,10 @@ sudo apt-get install build-essential libssl-dev
 
 ###[Установить Node.js](https://github.com/nodesource/distributions):
 ```bash
-curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
-sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash - &&
+sudo apt-get install -y nodejs &&
+sudo apt install npm 
+
 ```
 
 ###[Установить MongoDB](https://docs.mongodb.com/master/tutorial/install-mongodb-on-ubuntu/):
