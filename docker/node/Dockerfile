@@ -41,5 +41,4 @@ RUN chown -R appuser:xyzgroup /home/app
 # Switch to 'appuser'
 USER appuser
 
-CMD ["pm2-runtime", "src/index.js"]
-#CMD ["pm2", "star", "npm", "--start"]
+CMD ["pm2-runtime", "--json", "process.yml"]
