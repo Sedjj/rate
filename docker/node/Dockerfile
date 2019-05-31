@@ -21,6 +21,7 @@ COPY src /home/app/src
 # Используется символ подстановки для копирования как package.json, так и package-lock.json,
 # работает с npm@5+
 COPY package.json /home/app
+COPY process.yml /home/app
 COPY package-lock.json /home/app
 
 WORKDIR /home/app
