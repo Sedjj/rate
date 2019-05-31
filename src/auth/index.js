@@ -1,17 +1,18 @@
 const config = require('config');
 const request = require('superagent');
 const {log} = require('../utils/logger');
-const FormData = require('form-data');
 const {encode} = require('../utils/crypt');
+const {Cookie} = require('request-cookies');
 
 const active = config.parser.active;
 const urlAuth = config.get(`parser.${active[0]}.authentication.auth`);
-const urlTwofactor = config.get(`parser.${active[0]}.authentication.twofactor`);
-const urlUserdata = config.get(`parser.${active[0]}.rate.getuserdata`);
-const urlPutbetscommon = config.get(`parser.${active[0]}.rate.putbetscommon`);
+const urlTwoFactor = config.get(`parser.${active[0]}.authentication.twofactor`);
+const urlUserData = config.get(`parser.${active[0]}.rate.getuserdata`);
+const urlPutbetsCommon = config.get(`parser.${active[0]}.rate.putbetscommon`);
 const urlUpdateCoupon = config.get(`parser.${active[0]}.rate.updateCoupon`);
 const urlBalance = config.get(`parser.${active[0]}.rate.balance`);
-const agent = request.agent('/cookied-page');
+const agent = request.agent();
+let cookies = '';
 
 async function performAuth() {
 	const param = {
@@ -20,10 +21,10 @@ async function performAuth() {
 	};
 	await getuserdata();
 	await authentication(param);
-	await twofactor(param);
+	/*await twofactor(param);
 	await putbetsCommon(param);
 	await updateCoupon();
-	await getBalance();
+	await getBalance();*/
 }
 
 /**
@@ -32,14 +33,24 @@ async function performAuth() {
  * @returns {Promise<void>}
  */
 async function getuserdata() {
-	await agent.post(urlUserdata)
+	await agent.post(urlUserData)
 		.set({
 			'Accept': 'application/json, text/javascript, */*; q=0.01',
 			'X-Requested-With': 'XMLHttpRequest',
 		})
 		.type('json')
 		.then((res) => {
-			console.log('getuserdata', res.text);
+
+
+			// agent.jar.setCookies(cookie);
+			const setCookie = res.headers['set-cookie'];
+			if (setCookie.length > 0) {
+				setCookie.forEach((item) => {
+					let cookieObj = new Cookie(item);
+					cookies += cookieObj.getCookieHeaderString() + '; ';
+				});
+			}
+			console.log('getuserdata', cookies);
 		})
 		.catch(error => {
 			log.debug(`Ошибка getuserdata: ${error}`);
@@ -57,12 +68,17 @@ async function authentication(param) {
 		.set({
 			'Accept': 'application/json, text/javascript, */*; q=0.01',
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-			'X-Requested-With': 'XMLHttpRequest'
+			'X-Requested-With': 'XMLHttpRequest',
+			'Cookie': cookies
 		})
-		.type('json')
-		.auth(param.uLogin, param.uPassword, {type: 'auto'})
+		.type('form')
+		.send({uLogin: param.uLogin})
+		.send({uPassword: param.uPassword})
+		/*.auth(param.uLogin, param.uPassword, {type: 'auto'})*/
 		.then((res) => {
-			console.log('auth', res.text);
+			const cookie = res.header['set-cookie'];
+			console.log('cookie', cookie);
+			console.log('authentication', res.text);
 			//return agent.get('/cookied-page');
 		})
 		.catch(error => {
@@ -78,7 +94,7 @@ async function authentication(param) {
  */
 async function twofactor(param) {
 	// FIXME через FormData
-	await agent.post(urlTwofactor)
+	await agent.post(urlTwoFactor)
 		.set({
 			'Accept': 'application/json, text/javascript, */*; q=0.01',
 			'X-Requested-With': 'XMLHttpRequest',
@@ -100,7 +116,7 @@ async function twofactor(param) {
  * @returns {Promise<void>}
  */
 async function putbetsCommon(param) {
-	await agent.post(urlPutbetscommon)
+	await agent.post(urlPutbetsCommon)
 		.set({
 			'Accept': 'application/json, text/javascript, */*; q=0.01',
 			'Content-Type': 'application/json',
@@ -198,6 +214,13 @@ async function getBalance() {
 		.catch(error => {
 			log.debug(`Ошибка getuserdata: ${error}`);
 		});
+}
+
+function mapToObj(map) {
+	const obj = {};
+	for (let [k, v] of map)
+		obj[k] = v;
+	return obj;
 }
 
 module.exports = {
