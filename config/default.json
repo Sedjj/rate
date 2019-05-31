@@ -9,7 +9,7 @@
 	},
 	"dbProd": {
 		"name": "rateBot",
-		"hostString": "localhost:27017/",
+		"hostString": "mongo-rate:27017/",
 		"user": "",
 		"pass": ""
 	},
