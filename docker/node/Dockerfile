@@ -6,6 +6,10 @@ ENV PATH=$PATH:/home/app/.npm-global/bin
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+RUN apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ \
+	&& npm install node-gyp \
+	&& sudo npm install pm2@latest -g
+
 # Создать директорий и раздаем права на расшареные папки
 RUN mkdir -pv /home/app/logs /home/app/upload
 
@@ -39,4 +43,4 @@ RUN chown -R appuser:xyzgroup /home/app
 # Switch to 'appuser'
 USER appuser
 
-CMD [ "npm", "start" ]
+CMD ["pm2", "star", "npm", "--start"]

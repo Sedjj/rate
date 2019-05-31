@@ -3,13 +3,13 @@ stages:
 
 deploy:
   stage: build
-  #only:
-  #  - production # только для этой ветки
+  only:
+    - production # только для этой ветки
   script:
     - docker-compose stop
     - docker-compose up -d --build
   when: always
-  #except:
-  #  - master # исключить ветки
+  except:
+    - master # исключить ветки
   tags:
     - docker
