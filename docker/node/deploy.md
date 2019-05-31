@@ -1,6 +1,6 @@
 Удаление всех контейнеров
 ```bash
-docker system prune -a --volumes
+docker system prune -a -f --volumes
 ```
 
 Сборка контейнера

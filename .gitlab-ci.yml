@@ -8,8 +8,6 @@ deploy:
   script:
     - docker-compose stop
     - docker-compose up -d --build
-    - npm i
-    - npm start
   when: always
   #except:
   #  - master # исключить ветки

@@ -18,15 +18,15 @@ services:
     networks:
       - bot
 
-#  rate:
-#    container_name: rate
-#    build:
-#      context: .
-#      dockerfile: docker/node/Dockerfile
-#    links:
-#      - mongo-rate
-#    networks:
-#      - bot
+  rate:
+    container_name: rate
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    links:
+      - mongo-rate
+    networks:
+      - bot
 
 networks:
   bot:
