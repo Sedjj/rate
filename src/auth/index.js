@@ -1,8 +1,8 @@
 const config = require('config');
-const request = require('superagent');
+const got = require('got');
+const {CookieJar} = require('tough-cookie');
 const {log} = require('../utils/logger');
 const {encode} = require('../utils/crypt');
-const {Cookie} = require('request-cookies');
 
 const active = config.parser.active;
 const urlAuth = config.get(`parser.${active[0]}.authentication.auth`);
@@ -11,15 +11,20 @@ const urlUserData = config.get(`parser.${active[0]}.rate.getuserdata`);
 const urlPutbetsCommon = config.get(`parser.${active[0]}.rate.putbetscommon`);
 const urlUpdateCoupon = config.get(`parser.${active[0]}.rate.updateCoupon`);
 const urlBalance = config.get(`parser.${active[0]}.rate.balance`);
-const agent = request.agent();
-let cookies = '';
+
+const cookieJar = new CookieJar();
+const client = got.extend({
+	baseUrl: 'https://1xstavka.ru',
+	cookieJar
+});
 
 async function performAuth() {
 	const param = {
 		uLogin: encode('55311279'), // 'NTUzMTEyNzk=',
 		uPassword: encode('088706'), // 'MDg4NzA2'
 	};
-	await getuserdata();
+	await getGGRU();
+	await getUserData();
 	await authentication(param);
 	/*await twofactor(param);
 	await putbetsCommon(param);
@@ -32,29 +37,40 @@ async function performAuth() {
  *
  * @returns {Promise<void>}
  */
-async function getuserdata() {
-	await agent.post(urlUserData)
-		.set({
-			'Accept': 'application/json, text/javascript, */*; q=0.01',
+async function getUserData() {
+	await client.get('/', {
+		headers: {
+			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+		}
+	});
+	await client.get('en', {
+		headers: {
+			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+		}
+	});
+	await client.post('getuserdata', {
+		headers: {
+			'Accept': 'application/json, text/plain, */*',
 			'X-Requested-With': 'XMLHttpRequest',
-		})
-		.type('json')
-		.then((res) => {
+		}
+	});
+	await client.get('getuserdata', {
+		headers: {
+			'Accept': '*/*',
+			'X-Requested-With': 'XMLHttpRequest',
+		}
+	});
+}
 
+async function getGGRU() {
+	const {body} = await client.get('en/live/');
+	const value = body.match(/(?:GGRU\s=\s)+(\d*)/ig);
+	if (value.length) {
+		const GGRU = value[0].split('=')[1];
 
-			// agent.jar.setCookies(cookie);
-			const setCookie = res.headers['set-cookie'];
-			if (setCookie.length > 0) {
-				setCookie.forEach((item) => {
-					let cookieObj = new Cookie(item);
-					cookies += cookieObj.getCookieHeaderString() + '; ';
-				});
-			}
-			console.log('getuserdata', cookies);
-		})
-		.catch(error => {
-			log.debug(`Ошибка getuserdata: ${error}`);
+		cookieJar.setCookie(`ggru=${GGRU}`, 'https://1xstavka.ru', {}, () => {
 		});
+	}
 }
 
 /**
@@ -64,26 +80,20 @@ async function getuserdata() {
  * returns {Promise<void>}
  */
 async function authentication(param) {
-	await agent.post(urlAuth)
-		.set({
-			'Accept': 'application/json, text/javascript, */*; q=0.01',
-			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+	const body = await client.post('en/user/auth', {
+		headers: {
+			'Content-Type': 'application/json;charset=UTF-8',
 			'X-Requested-With': 'XMLHttpRequest',
-			'Cookie': cookies
+			'Accept': 'application/json, text/plain, */*'
+		},
+		responseType: 'json',
+		body: JSON.stringify({
+			uLogin: param.uLogin,
+			uPassword: param.uPassword,
+			save: false
 		})
-		.type('form')
-		.send({uLogin: param.uLogin})
-		.send({uPassword: param.uPassword})
-		/*.auth(param.uLogin, param.uPassword, {type: 'auto'})*/
-		.then((res) => {
-			const cookie = res.header['set-cookie'];
-			console.log('cookie', cookie);
-			console.log('authentication', res.text);
-			//return agent.get('/cookied-page');
-		})
-		.catch(error => {
-			log.debug(`Ошибка авторизации: ${JSON.stringify(param)}, error: ${error}`);
-		});
+	});
+	console.log(body);
 }
 
 /**
@@ -216,13 +226,14 @@ async function getBalance() {
 		});
 }
 
-function mapToObj(map) {
-	const obj = {};
-	for (let [k, v] of map)
-		obj[k] = v;
-	return obj;
-}
-
 module.exports = {
 	performAuth
 };
+
+
+/*
+const a = {headers: {cat: 'meow', wolf: ['bark', 'wrrr']}};
+const b = {headers: {cow: 'moo', wolf: ['auuu']}};
+
+{...a, ...b}            // => {headers: {cow: 'moo', wolf: ['auuu']}}
+got.mergeOptions(a, b)  // => {headers: {cat: 'meow', cow: 'moo', wolf: ['auuu']}}*/
