@@ -15,10 +15,7 @@ mongoose.connect(dbUri, {
 
 const db = mongoose.connection;
 
-db.on('error', (error) => {
-	console.log(`Connection error: ${error}`);
-	// logExtended.error(`Connection error: ${error}`);
-});
+db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', () => {
 	console.log(`Connected to DB on ${dbUri}`);

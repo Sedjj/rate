@@ -1,4 +1,5 @@
 const {CronJob, CronTime} = require('cron');
+require('./utils/dbProvider');
 const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');

@@ -1,4 +1,3 @@
-require('../../utils/dbProvider');
 const {log} = require('../../utils/logger');
 const {TableTennisModel} = require('../../models/tableTennis');
 const {mapProps} = require('../../utils/statisticHelpers');
