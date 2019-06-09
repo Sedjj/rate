@@ -3,11 +3,13 @@ const {getAllMatches} = require('../fetch');
 const config = require('config');
 const {footballLiveStrategy} = require('../viewSport/football');
 const {tableTennisLiveStrategy} = require('../viewSport/tableTennis');
+const {tennisLiveStrategy} = require('../viewSport/tennis');
 const {searchHelper} = require('../modifiableFile');
 
 const active = config.parser.active;
 const urlFootballRate = config.get(`parser.${active[0]}.live.football.rate`);
 const urlTableTennisRate = config.get(`parser.${active[0]}.live.tableTennis.rate`);
+const urlTennisRate = config.get(`parser.${active[0]}.live.tennis.rate`);
 
 /**
  * Метод поиска совпадений по данным стратегиям.
@@ -45,7 +47,26 @@ async function searchTableTennis() {
 	}
 }
 
+/**
+ * Метод поиска совпадений по данным стратегиям.
+ */
+async function searchTennis() {
+	try {
+		const tennis = await getAllMatches(urlTennisRate);
+		tennis.forEach((item) => {
+			try {
+				tennisLiveStrategy(searchHelper['getParams'](item));
+			} catch (error) {
+				log.debug(`Ошибка при парсинге матча: ${JSON.stringify(item)} error: ${error}`);
+			}
+		});
+	} catch (error) {
+		log.error(`search: ${error}`);
+	}
+}
+
 module.exports = {
 	searchFootball,
-	searchTableTennis
+	searchTableTennis,
+	searchTennis,
 };

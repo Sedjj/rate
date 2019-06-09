@@ -68,12 +68,17 @@
 		"1xstavka": {
 			"live": {
 				"football": {
-					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=200&mode=4&country=1&partner=51&getEmpty=true",
+					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=2000&mode=4&country=1&partner=51&getEmpty=true",
 					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
 					"card": "https://1xstavka.ru/SubService/api/GetEventTypesByGameId?gameId=${id}&lng=en&Source=0"
 				},
 				"tableTennis": {
-					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=10&count=200&mode=4&country=1&partner=51&getEmpty=true",
+					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=10&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
+					"card": ""
+				},
+				"tennis": {
+					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=4&count=2000&mode=4&country=1&partner=51&getEmpty=true",
 					"expandedRate": "https://1xstavka.ru/LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51",
 					"card": ""
 				}
@@ -221,6 +226,15 @@
 				},
 				"titleNumericalDesignation": "Числовое обозначение настольного тениса",
 				"numericalDesignation": 10
+			},
+			"tennis": {
+				"set": 1,
+				"strategyOne": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 1
+				},
+				"titleNumericalDesignation": "Числовое обозначение настольного тениса",
+				"numericalDesignation": 10
 			}
 		}
 	},
@@ -231,6 +245,11 @@
 			"after": 250
 		},
 		"schedulerSearchTableTennis": {
+			"title": "в секундах",
+			"before": 20,
+			"after": 60
+		},
+		"schedulerSearchTennis": {
 			"title": "в секундах",
 			"before": 20,
 			"after": 60
@@ -254,6 +273,10 @@
 			"tableTennis": {
 				"inputName": "Reports-tableTennis-default.xlsx",
 				"outputName": "Reports-tableTennis.xlsx"
+			},
+			"tennis": {
+				"inputName": "Reports-tennis-default.xlsx",
+				"outputName": "Reports-tennis.xlsx"
 			}
 		},
 		"directory": {
