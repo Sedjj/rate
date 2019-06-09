@@ -4,24 +4,24 @@
 	"dbDev": {
 		"name": "rateBot",
 		"hostString": "localhost:27017/",
-		"user": "",
-		"pass": ""
+		"user": "root",
+		"pass": "0vI9pxggocZylOd"
 	},
 	"dbProd": {
 		"name": "rateBot",
 		"hostString": "mongo-rate:27017/",
-		"user": "",
-		"pass": ""
+		"user": "root",
+		"pass": "0vI9pxggocZylOd"
 	},
 	"proxy": {
-		"host": "88.87.85.220",
-		"port": "46053",
+		"host": "94.177.250.112",
+		"port": "8080",
 		"user": "",
 		"password": ""
 	},
 	"socket": {
-		"server": "149.56.27.45",
-		"port": "1080",
+		"server": "104.238.177.118",
+		"port": "443",
 		"user": "",
 		"pass": ""
 	},
@@ -171,16 +171,16 @@
 					"rate": 10
 				},
 				"strategyThree": {
-					"titleRate": "Math.abs(p1 - p2) <  rate",
-					"rate": 10
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 2
 				},
 				"strategyFour": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
 					"rate": 8
 				},
 				"strategyFive": {
-					"titleRate": "Math.abs(p1 - p2) > rate",
-					"rate": 2.5
+					"titleRate": "Math.abs(p1 - p2) < rate",
+					"rate": 8
 				},
 				"strategySix": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
@@ -264,5 +264,21 @@
 	},
 	"output": {
 		"rate": 2000
+	},
+	"emulator":{
+		"flows": 1,
+		"sleep": 5000
+	},
+	"chrome":{
+		"options":{
+			"arguments":[
+				"no-sandbox",
+				"incognito",
+				"test-type",
+				"disable-webgl",
+				"disable-webgl-image-chromium"
+			]
+		}
+
 	}
 }
