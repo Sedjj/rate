@@ -109,7 +109,7 @@ function footballLiveStrategyTwo(param) {
  */
 function footballLiveStrategyThree(param) {
 	const strategy = 3;
-	if (Math.abs(param.p1 - param.p2) < rateStrategyThree) {
+	if (Math.abs(param.p1 - param.p2) > rateStrategyThree) {
 		// if (param.x > Math.min(param.p1, param.p2)) {
 			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 				.then(async (statistic) => {
@@ -156,7 +156,7 @@ function footballLiveStrategyFour(param) {
  */
 function footballLiveStrategyFive(param) {
 	const strategy = 5;
-	if (Math.abs(param.p1 - param.p2) > rateStrategyFive) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyFive) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
