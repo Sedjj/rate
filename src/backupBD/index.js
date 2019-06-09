@@ -1,14 +1,18 @@
-const {mongoexport} = require('../../vendor/mongopack');
 const {mongoimport} = require('../../vendor/mongopack');
 const {log} = require('../utils/logger');
 const path = require('path');
 const config = require('config');
 const {sendFile} = require('../telegram/api');
 const {readFileToStream} = require('../utils/fsHelpers');
+const exec = require('child_process').exec;
 
 const database = process.env.NODE_ENV === 'development'
 	? config.dbDev.name
 	: config.dbProd.name;
+
+const dbUri = process.env.NODE_ENV === 'development'
+	? `mongodb://${config.dbDev.user}:${encodeURIComponent(config.dbDev.pass)}@${config.dbDev.hostString}${config.dbDev.name}`
+	: `mongodb://${config.dbProd.user}:${encodeURIComponent(config.dbProd.pass)}@${config.dbProd.hostString}${config.dbProd.name}`;
 
 const archivesPath = config.path.storagePath || process.cwd();
 const archivesDirectory = config.path.directory.upload || 'upload';
@@ -30,7 +34,9 @@ function exportBackup(collection) {
 		return;
 	}
 	log.info('Начало архивирования БД');
-	mongoexport(database, collection, path.join(objectPath, `${collection}.json`), options)
+	const command = `mongodb-backup ${dbUri} -c '["${collection}"]' -p json -o ${path.join(objectPath, `${collection}.json`)}`;
+	log.info(command);
+	execShell(command)
 		.then((error) => {
 			if (error) {
 				log.error(`exportBackup: ${error}`);
@@ -70,6 +76,23 @@ function importBackup(collection) {
 		.catch((error) => {
 			log.error(`Упал метод importBackup - ${error} - для: ${collection.toString()}`);
 		});
+}
+
+/**
+ * Функция выполнения shell команд.
+ *
+ * @param {String} cmd команда для выполнения
+ * @returns {Promise<any>}
+ */
+function execShell(cmd) {
+	return new Promise((resolve, reject) => {
+		exec(cmd, (error, stdout) => {
+			if (error !== undefined && error !== null) {
+				reject(error.message);
+			}
+			resolve(stdout);
+		});
+	});
 }
 
 module.exports = {
