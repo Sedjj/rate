@@ -42,4 +42,4 @@ RUN chown -R appuser:xyzgroup /home/app
 # Switch to 'appuser'
 USER appuser
 
-CMD ["pm2-runtime", "--format", "process.yml"]
+CMD ["pm2-runtime", "--format", "process.yml", "--merge-logs --log-date-format='YYYY-MM-DD'"]
