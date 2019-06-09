@@ -4,14 +4,14 @@
 	"dbDev": {
 		"name": "rateBot",
 		"hostString": "localhost:27017/",
-		"user": "root",
-		"pass": "0vI9pxggocZylOd"
+		"user": "",
+		"pass": ""
 	},
 	"dbProd": {
 		"name": "rateBot",
 		"hostString": "mongo-rate:27017/",
-		"user": "root",
-		"pass": "0vI9pxggocZylOd"
+		"user": "",
+		"pass": ""
 	},
 	"proxy": {
 		"host": "94.177.250.112",
