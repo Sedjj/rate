@@ -1,13 +1,8 @@
 const chrome = require('selenium-webdriver/chrome');
 const config = require('config');
-const log = require('../../utils/logger')(module);
-const {By, Key, until} = require('selenium-webdriver');
+const {By} = require('selenium-webdriver');
 const webdriver = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
-const {randomInteger} = require('./../utils/randomHelper');
-const {languages} = require('../../data/strict-languages');
-const {userAgent} = require('../../data/user-agent');
-const {workingProxy} = require('../proxyApi');
 
 chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
 const argument = config.get('chrome.options.arguments');
@@ -32,7 +27,7 @@ async function driverChrome() {
  * @returns {Promise<void>}
  */
 async function init(driver) {
-	return await driver.manage().window().setSize(randomInteger(600, 1024), randomInteger(300, 768));
+	return await driver.manage().window().setRect({width: 1400, height: 1000});
 }
 
 /**
@@ -42,13 +37,7 @@ async function init(driver) {
  */
 async function emulatorOfUniqueness() {
 	const options = new chrome.Options();
-	options.addArguments('user-agent=' + userAgent[randomInteger(0, 7)]);
-	options.addArguments('lang=' + languages[randomInteger(0, 101)]);
-	let proxy;
-	if ((proxy = await workingProxy())) {
-		log.info('**** proxy: ' + proxy.protocol + '://' + proxy.ip + ':' + proxy.port);
-		options.addArguments('proxy-server=' + proxy.ip + ':' + proxy.port);
-	}
+	options.addArguments('headless');
 	argument.forEach((item) => {
 		options.addArguments(item);
 	});
@@ -67,6 +56,54 @@ async function findSelectorCssAndCall(driver, selector) {
 }
 
 /**
+ * Функция для поиска элемента по id и заполнение формы.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector поиска
+ * @param {String} text текст заполнения
+ * @returns {Promise<void>}
+ */
+async function findIdAndFill(driver, selector, text) {
+	const el = await driver.findElement(By.id(selector));
+	await write(el, text);
+	return Promise.resolve();
+}
+
+/**
+ * Функция для поиска элемента по селектору css и заполнение формы.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector поиска
+ * @param {String} text текст заполнения
+ * @returns {Promise<void>}
+ */
+async function findSelectorCssAndFill(driver, selector, text) {
+	const el = await driver.findElement(By.css(selector));
+	await write(el, text);
+	return Promise.resolve();
+}
+
+/**
+ * Функция для поиска элемента по содержимому селектора css и вызова click.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector поиска
+ * @param {String} value текст заполнения
+ * @returns {Promise<void>}
+ */
+async function findTextBySelectorCssAndCall(driver, selector, value) {
+	const items = await driver.findElements(By.css(selector));
+	await items.reduce(async (acc, item) => {
+		const text = await item.getText();
+		if (text.indexOf(value) !== -1) {
+			item.click();
+		}
+		return acc;
+	}, Promise.resolve());
+	return Promise.resolve();
+}
+
+/**
  * Вызов стороннего скрипта.
  *
  * @param {object} driver инстанс драйвера
@@ -75,6 +112,28 @@ async function findSelectorCssAndCall(driver, selector) {
  */
 async function callJS(driver, script) {
 	return await driver.executeScript(script);
+}
+
+/**
+ * Заполнить элементы ввода
+ * @param {HTMLInputElement} el элемент дя заполнения
+ * @param {String} text текст заполнения
+ * @returns {Promise<void>}
+ */
+async function write(el, text) {
+	return await el.sendKeys(text);
+}
+
+/**
+ * Получение cookies авторизованного пользователя.
+ *
+ * @param {object} driver инстанс драйвера
+ * @returns {Promise<void>}
+ */
+async function getCookies(driver) {
+	await driver.manage().getCookies().then(function (cookies) {
+		console.log(cookies);
+	});
 }
 
 /**
@@ -100,6 +159,11 @@ module.exports = {
 	driverChrome,
 	init,
 	findSelectorCssAndCall,
+	findIdAndFill,
+	findSelectorCssAndFill,
+	findTextBySelectorCssAndCall,
 	callJS,
-	switchTab
+	write,
+	switchTab,
+	getCookies
 };

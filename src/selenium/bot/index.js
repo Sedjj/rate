@@ -1,46 +1,53 @@
-const log = require('../../utils/logger')(module);
+const {log} = require('../../utils/logger');
 const config = require('config');
-const {driverChrome, init, findSelectorCssAndCall, callJS, switchTab} = require('../api');
+const {
+	switchTab,
+	driverChrome,
+	findTextBySelectorCssAndCall,
+	init,
+	findSelectorCssAndCall,
+	findIdAndFill,
+	getCookies,
+	findSelectorCssAndFill
+} = require('../api');
 
-const flows = config.get('emulator.flows');
-const newJS = config.get('channelDzen.newJS');
+const flows = config.emulator.flows;
 
 /**
  * Эмулмирует работу на PC
  */
-async function emulatorPC() {
+async function performEmulation(ids, totalName) {
 	let driver;
 	try {
+		const param = {
+			uLogin: '55311279',
+			uPassword: '088706',
+		};
 		driver = await driverChrome();
 		await init(driver);
-		await driver.get('https://zen.yandex.ru/subscriptions?clid=300&country_code=ru');
-		await callJS(driver, 'localStorage.clear();');
-		await findSelectorCssAndCall(driver, '.onboarding__animation-order-1 > .onboarding__source');
-		await findSelectorCssAndCall(driver, '.onboarding__animation-order-2 > .onboarding__source');
-		await findSelectorCssAndCall(driver, '.onboarding__animation-order-3 > .onboarding__source');
-		await findSelectorCssAndCall(driver, '.onboarding__animation-order-4 > .onboarding__source');
-		await findSelectorCssAndCall(driver, '.onboarding__animation-order-5 > .onboarding__source');
-		await findSelectorCssAndCall(driver, '.onboarding-bb__next');
-		await callJS(driver, 'window.open(\'/id/' + newJS + '\',\'_self\');');
-		await callJS(driver, 'localStorage.clear();');
-		await switchTab(driver, false);
-		// канал
-		await findSelectorCssAndCall(driver, '.channel-subscribe');
-		//await driver.sleep(2000);
-		await findSelectorCssAndCall(driver, '.doc__link');
-		// статья
+		await driver.get('https://1xstavka.ru/en/live/');
+		await driver.sleep(8000);
+		await findSelectorCssAndCall(driver, '.base_auth_form');
+		await findIdAndFill(driver, 'auth_id_email', param.uLogin);
+		await findIdAndFill(driver, 'auth-form-password', param.uPassword);
+		await findSelectorCssAndCall(driver, '.auth-button.auth-button--block');
+		await driver.sleep(8000);
+		await findSelectorCssAndCall(driver, '.ls-search__button');
+		await findSelectorCssAndFill(driver, '.ls-search__input', ids);
+		await findSelectorCssAndCall(driver, '.ls-search__button');
+		await driver.sleep(5000);
+		await getCookies(driver);
+		await findSelectorCssAndCall(driver, '.search-popup-event');
+		await driver.sleep(8000);
 		await switchTab(driver);
-		
-		for (let i = 1; i < 1500; i += 10) {
-			await driver.sleep(300);
-			await callJS(driver, 'window.scrollTo(0,' + i + ');');
-		}
-		/*await driver.findElement(By.css('.button2_view_classic]')).click();
-		await driver.findElement(By.css('.article-left-block__icon_type_like]')).click();*/
-		//await driver.sleep(10000000);
+		await findTextBySelectorCssAndCall(driver, '[data-type="9"]', totalName);
+		await driver.sleep(2000);
+		await findSelectorCssAndFill(driver, '.bet_sum_input', '20');
+		await findSelectorCssAndCall(driver, '.coupon-btn-group__item');
+		await driver.sleep(10000);
 		await driver.quit();
 	} catch (e) {
-		log.info('Error emulatorPC -> ' + e);
+		log.info('Error performEmulation -> ' + e);
 		await driver.quit();
 	}
 }
@@ -53,20 +60,12 @@ async function emulatorPC() {
 function emulatorStream() {
 	const promise = [];
 	for (let i = 0; i < flows; i++) {
-		promise.push(emulatorPC())
+		promise.push(performEmulation());
 	}
-	return Promise.all(promise)
-}
-
-/**
- * Эмулмирует работу на телефоне
- */
-function emulatorAndroid() {
-
+	return Promise.all(promise);
 }
 
 module.exports = {
-	emulatorPC,
-	emulatorStream,
-	emulatorAndroid
+	performEmulation,
+	emulatorStream
 };
