@@ -1,5 +1,9 @@
+const config = require('config');
+const {performEmulation} = require('../selenium/bot');
 const {sendMessageChat, sendMessageChannel} = require('../telegram/api');
 const {decorateMessageTennis, decorateMessageMatch, decorateMessageChannel} = require('../utils/formateMessage');
+
+const typeRate = config.choice.live.football.typeRate;
 
 /**
  * Метод для вывода в телеграмм матча и запуск процедуры "Ставка".
@@ -9,13 +13,22 @@ const {decorateMessageTennis, decorateMessageMatch, decorateMessageChannel} = re
  * @returns {Promise<void>}
  */
 async function matchRate(statistic, type = '') {
+	const total = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	switch (statistic.strategy) {
 		case 1 :
 			await sendMessageChat(decorateMessageTennis(statistic));
+			performEmulation(statistic.matchId, `Total Over ${total}`);
+			break;
+		case 4 :
+			performEmulation(statistic.matchId, `Total Over ${total}`);
+			break;
+		case 5 :
+			performEmulation(statistic.matchId, `Total Over ${total}`);
 			break;
 		default:
 			break;
 	}
+
 	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
 		switch (statistic.strategy) {
 			case 1 :
