@@ -1,6 +1,5 @@
 const {log} = require('../../utils/logger');
 const {newStatistic} = require('../../storage/tennis');
-/*const config = require('config');*/
 const {matchRate} = require('../../matchRate');
 
 /*const set = config.choice.live.tableTennis.set;*/
