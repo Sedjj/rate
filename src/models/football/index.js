@@ -235,7 +235,6 @@ const FootballSchema = new Schema({
 				}
 			}
 		}
-
 	},
 	createdBy: {
 		type: Date,

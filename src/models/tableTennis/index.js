@@ -235,7 +235,6 @@ const TableTennisSchema = new Schema({
 				}
 			}
 		}
-
 	},
 	createdBy: {
 		type: Date,

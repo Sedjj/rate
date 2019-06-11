@@ -36,7 +36,7 @@ async function performEmulation(ids, totalName) {
 		await findSelectorCssAndFill(driver, '.ls-search__input', ids);
 		await findSelectorCssAndCall(driver, '.ls-search__button');
 		await driver.sleep(5000);
-		await getCookies(driver);
+		// await getCookies(driver);
 		await findSelectorCssAndCall(driver, '.search-popup-event');
 		await driver.sleep(8000);
 		await switchTab(driver);

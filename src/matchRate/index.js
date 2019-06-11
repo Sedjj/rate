@@ -17,13 +17,13 @@ async function matchRate(statistic, type = '') {
 	switch (statistic.strategy) {
 		case 1 :
 			await sendMessageChat(decorateMessageTennis(statistic));
-			performEmulation(statistic.matchId, `Total Over ${total}`);
+			await performEmulation(statistic.matchId, `Total Over ${total}`);
 			break;
 		case 4 :
-			performEmulation(statistic.matchId, `Total Over ${total}`);
+			await performEmulation(statistic.matchId, `Total Under ${total}`);
 			break;
 		case 5 :
-			performEmulation(statistic.matchId, `Total Over ${total}`);
+			await performEmulation(statistic.matchId, `Total Under ${total}`);
 			break;
 		default:
 			break;

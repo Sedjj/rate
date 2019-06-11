@@ -235,7 +235,6 @@ const TennisSchema = new Schema({
 				}
 			}
 		}
-
 	},
 	createdBy: {
 		type: Date,
