@@ -86,10 +86,10 @@ function scoreGame(item) {
  * Метод для определения сета и счета матча.
  *
  * @param {Object} item объект матча
- * @returns {number}
+ * @returns {object}
  */
 function setGame(item) {
-	let set = {
+	const set = {
 		key: 0,
 		value: {
 			sc1: 0,
@@ -100,9 +100,11 @@ function setGame(item) {
 		set.key = item['SC']['CP'];
 		if (item['SC']['PS']) {
 			item['SC']['PS'].forEach((item) => {
-				if (item.Key === set.key){
-					set.value.sc1 = item.Value.S1 ? item.Value.S1 : 0;
-					set.value.sc2 = item.Value.S2 ? item.Value.S2 : 0;
+				if (item.Key === set.key) {
+					if (item['Value']) {
+						set.value.sc1 = item['Value']['S1'] ? item['Value']['S1'] : 0;
+						set.value.sc2 = item['Value']['S2'] ? item['Value']['S2'] : 0;
+					}
 				}
 			});
 		}
@@ -405,7 +407,7 @@ function parserCards(item = []) {
  * @param {Array} data все матчи на определенный день
  * @param {number} id матча
  * @param {number} numericalDesignation числовое значение обозначение типа матча
- * @returns {Promise<void>}
+ * @returns {Promise<string>}
  */
 async function searchResult(data, id, numericalDesignation) {
 	return new Promise((resolve, reject) => {
@@ -416,7 +418,10 @@ async function searchResult(data, id, numericalDesignation) {
 						if (Array.isArray(object['Elems'])) {
 							object['Elems'].forEach((Elems) => {
 								if (Elems['Head'][0] === id) {
-									resolve(Elems['Head'][17]);
+									if (Elems['Head'][17]) {
+										// FIXME придумать как динамически определять счет
+										resolve(Elems['Head'][17].toString());
+									}
 								}
 							});
 						}

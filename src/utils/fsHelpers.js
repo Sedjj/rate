@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const mkdirp = require('mkdirp');
-const rimraf = require('rimraf');
+/*const mkdirp = require('mkdirp');
+const rimraf = require('rimraf');*/
 
 /**
  * Promise-версия метода mkdirp
@@ -10,7 +10,7 @@ const rimraf = require('rimraf');
  * @param {String} directory путь к директории
  * @returns {Promise}
  */
-function makeDir(directory) {
+/*function makeDir(directory) {
 	return new Promise((resolve, reject) => {
 		mkdirp(directory, error => {
 			if (error) {
@@ -20,7 +20,7 @@ function makeDir(directory) {
 			}
 		});
 	});
-}
+}*/
 
 /**
  * Promise-версия метода rimraf
@@ -28,7 +28,7 @@ function makeDir(directory) {
  * @param {String} directory путь к директории
  * @returns {Promise}
  */
-function deleteDir(directory) {
+/*function deleteDir(directory) {
 	return new Promise((resolve, reject) => {
 		rimraf(directory, error => {
 			if (error) {
@@ -38,7 +38,7 @@ function deleteDir(directory) {
 			}
 		});
 	});
-}
+}*/
 
 /**
  * Генерирует рандомное имя файла
@@ -76,26 +76,6 @@ function saveBufferToFile(filePath, buffer) {
 				resolve(filePath);
 			}
 			writeStream.end();
-		});
-	});
-}
-
-/**
- * Сохраняет stream в файл
- *
- * @param {String} filePath путь к файлу
- * @param {Stream} stream поток
- * @returns {Promise}
- */
-function saveStreamToFile(filePath, stream) {
-	return new Promise((resolve, reject) => {
-		const writeStream = fs.createWriteStream(filePath);
-		stream.pipe(writeStream);
-		stream.on('end', () => {
-			resolve(filePath);
-		});
-		stream.on('error', (err) => {
-			reject(err);
 		});
 	});
 }
@@ -209,11 +189,8 @@ function checkFileExists(filePath) {
 }
 
 module.exports = {
-	makeDir,
-	deleteDir,
 	generateName,
 	saveBufferToFile,
-	saveStreamToFile,
 	readFileToStream,
 	deleteFile,
 	moveFile,

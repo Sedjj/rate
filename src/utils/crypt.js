@@ -67,7 +67,7 @@ const encode = function (u, urisafe) {
 	return !urisafe
 		? _encode(String(u))
 		: _encode(String(u)).replace(/[+\/]/g, function (m0) {
-			return m0 == '+' ? '-' : '_';
+			return m0 === '+' ? '-' : '_';
 		}).replace(/=/g, '');
 };
 
@@ -84,7 +84,7 @@ const cb_btou = function (cccc) {
 			cp = ((0x07 & cccc.charCodeAt(0)) << 18)
 				| ((0x3f & cccc.charCodeAt(1)) << 12)
 				| ((0x3f & cccc.charCodeAt(2)) << 6)
-				| (0x3f & cccc.charCodeAt(3)),
+				| (0x3f & cccc.charCodeAt(3));
 				offset = cp - 0x10000;
 			return (fromCharCode((offset >>> 10) + 0xD800)
 				+ fromCharCode((offset & 0x3FF) + 0xDC00));
@@ -133,7 +133,7 @@ const _decode = function (a) {
 const decode = function (a) {
 	return _decode(
 		String(a).replace(/[-_]/g, function (m0) {
-			return m0 == '-' ? '+' : '/';
+			return m0 === '-' ? '+' : '/';
 		}).replace(/[^A-Za-z0-9\+\/]/g, '')
 	);
 };

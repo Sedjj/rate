@@ -1,7 +1,7 @@
 const {log} = require('../../utils/logger');
 const {newStatistic} = require('../../storage/tableTennis');
 /*const config = require('config');*/
-const {matchRate} = require('../../matchRate');
+/*const {matchRate} = require('../../matchRate');*/
 
 /*const set = config.choice.live.tableTennis.set;*/
 /*const rateStrategyTwo = config.choice.live.tableTennis.strategyTwo.rate;*/

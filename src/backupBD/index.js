@@ -27,7 +27,6 @@ const options = {
  * Метод для сворачивания дампа.
  *
  * @param {String} collection название коллекции
- * @returns {Promise<void>}
  */
 function exportBackup(collection) {
 	if (!collection) {
@@ -58,7 +57,6 @@ function exportBackup(collection) {
  * Метод для разворачивания коллекции.
  *
  * @param {String} collection название коллекции
- * @returns {Promise<void>}
  */
 function importBackup(collection) {
 	if (!collection) {

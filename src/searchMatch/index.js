@@ -7,9 +7,9 @@ const {tennisLiveStrategy} = require('../viewSport/tennis');
 const {searchHelper} = require('../modifiableFile');
 
 const active = config.parser.active;
-const urlFootballRate = config.get(`parser.${active[0]}.live.football.rate`);
-const urlTableTennisRate = config.get(`parser.${active[0]}.live.tableTennis.rate`);
-const urlTennisRate = config.get(`parser.${active[0]}.live.tennis.rate`);
+const urlFootballRate = config.parser[`${active[0]}`].live['football'].rate;
+const urlTableTennisRate = config.parser[`${active[0]}`].live['tableTennis'].rate;
+const urlTennisRate = config.parser[`${active[0]}`].live['tennis'].rate;
 
 /**
  * Метод поиска совпадений по данным стратегиям.

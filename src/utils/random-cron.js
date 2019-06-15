@@ -44,7 +44,7 @@ const rc = function () {
 		const typeNames = Object.keys(ruleTypes);
 		for (let i = 0, total = typeNames.length; i < total; i++) {
 			const rule = rules[typeNames[i]];
-			// FIXME костыль только для секунд
+			// TODO костыль только для секунд
 			if (typeNames[i] === 'seconds') {
 				random = Math.round(Math.random() * (rule.range[1] - rule.range[0]) + rule.range[0]);
 				minutes = Math.floor(random / 60);

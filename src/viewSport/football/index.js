@@ -7,7 +7,7 @@ const {waiting} = require('../../searchTotal');
 const {searchHelper} = require('../../modifiableFile');
 
 const active = config.parser.active;
-const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.football.expandedRate`);
+const urlFootballExpandedRate = config.parser[`${active[0]}`].live['football']['expandedRate'];
 
 const before = config.choice.live.football.time.before;
 const after = config.choice.live.football.time.after;
@@ -86,19 +86,17 @@ function footballLiveStrategyOne(param) {
 function footballLiveStrategyTwo(param) {
 	const strategy = 2;
 	if (Math.abs(param.p1 - param.p2) < rateStrategyTwo) {
-		// if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
-				.then(async (statistic) => {
-					if (statistic !== null) {
-						await setSnapshot(param.matchId, strategy, -2, 1);
-						log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-						waiting(param, strategy);
-					}
-				})
-				.catch((error) => {
-					log.error(`footballLiveStrategyTwo: ${error.message}`);
-				});
-		// }
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+			.then(async (statistic) => {
+				if (statistic !== null) {
+					await setSnapshot(param.matchId, strategy, -2, 1);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
+					waiting(param, strategy);
+				}
+			})
+			.catch((error) => {
+				log.error(`footballLiveStrategyTwo: ${error.message}`);
+			});
 	}
 }
 
@@ -110,19 +108,17 @@ function footballLiveStrategyTwo(param) {
 function footballLiveStrategyThree(param) {
 	const strategy = 3;
 	if (Math.abs(param.p1 - param.p2) > rateStrategyThree) {
-		// if (param.x > Math.min(param.p1, param.p2)) {
-			saveRate(param, strategy)// пропускает дальше если запись ушла в БД
-				.then(async (statistic) => {
-					if (statistic !== null) {
-						await setSnapshot(param.matchId, strategy, -2, 1);
-						log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-						waiting(param, strategy);
-					}
-				})
-				.catch((error) => {
-					log.error(`footballLiveStrategyThree: ${error.message}`);
-				});
-		// }
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+			.then(async (statistic) => {
+				if (statistic !== null) {
+					await setSnapshot(param.matchId, strategy, -2, 1);
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
+					waiting(param, strategy);
+				}
+			})
+			.catch((error) => {
+				log.error(`footballLiveStrategyThree: ${error.message}`);
+			});
 	}
 }
 

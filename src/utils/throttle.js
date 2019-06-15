@@ -2,13 +2,12 @@
  *
  * @param {Function} func функция которую нужно притормозить
  * @param {Number} ms пауза в миллисекундах
- * @returns {wrapper}
  */
 function throttle(func, ms) {
 	let timer = null;
 	let resolves = [];
 
-	return function (...args) {
+	return (...args) => {
 		// Run the function after a certain amount of time
 		clearTimeout(timer);
 		timer = setTimeout(() => {

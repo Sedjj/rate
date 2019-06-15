@@ -19,7 +19,7 @@ function getAllMatches(url) {
 			}
 			let value = [];
 			try {
-				value = JSON.parse(body).Value;
+				value = JSON.parse(body)['Value'];
 			} catch (error) {
 				log.error(`getAllMatches JSON.parse: ${error}`);
 				return reject(error);
@@ -48,7 +48,7 @@ function getExpandedMatch(url) {
 			}
 			let value = [];
 			try {
-				value = JSON.parse(body).Value;
+				value = JSON.parse(body)['Value'];
 			} catch (error) {
 				log.error(`getExpandedMatch JSON.parse: ${error}`);
 				return reject(error);
@@ -78,7 +78,7 @@ function getResultList(url) {
 			}
 			let value = [];
 			try {
-				value = JSON.parse(body).Data;
+				value = JSON.parse(body)['Data'];
 			} catch (error) {
 				log.error(`getResultList: ${error}`);
 				return reject(error);

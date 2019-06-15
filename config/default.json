@@ -66,6 +66,7 @@
 			"1xstavka"
 		],
 		"1xstavka": {
+			"startPage": "https://1xstavka.ru/en",
 			"live": {
 				"football": {
 					"rate": "https://1xstavka.ru/LiveFeed/Get1x2_VZip?sports=1&count=2000&mode=4&country=1&partner=51&getEmpty=true",
@@ -288,20 +289,23 @@
 	"output": {
 		"rate": 2000
 	},
-	"emulator":{
+	"emulator": {
 		"flows": 1,
-		"sleep": 5000
-	},
-	"chrome":{
-		"options":{
-			"arguments":[
-				"no-sandbox",
-				"incognito",
-				"test-type",
-				"disable-webgl",
-				"disable-webgl-image-chromium"
-			]
-		}
-
+		"chrome": {
+			"options": {
+				"arguments": [
+					"no-sandbox",
+					"incognito",
+					"test-type",
+					"disable-webgl",
+					"disable-webgl-image-chromium"
+				]
+			}
+		},
+		"auth": {
+			"login": "55311279",
+			"password": "088706"
+		},
+		"betAmount": 15
 	}
 }

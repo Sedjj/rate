@@ -5,15 +5,15 @@ const {getResultList} = require('../fetch');
 const {searchHelper} = require('../modifiableFile');
 
 const active = config.parser.active;
-const urlAll = config.get(`parser.${active[0]}.result.all`);
+const urlAll = config.parser[`${active[0]}`].result.all;
 
 const postResultDebounce = throttle(getResultList, 20000);
 
 /**
  *  Метод проверки результатов матчей.
  *
- * @param {number} getStatistic получить записи из таблицы статистика.
- * @param {number} setStatistic редактирование записи в таблице.
+ * @param {Function} getStatistic получить записи из таблицы статистика.
+ * @param {Function} setStatistic редактирование записи в таблице.
  * @param {number} numericalDesignation числовое обозначение типа матча
  * @returns {Promise<any | never>}
  */
@@ -40,7 +40,7 @@ async function checkingResults(getStatistic, setStatistic, numericalDesignation)
  * @param {Object} statistics объекты матчей
  * @param {String} beforeDate дата предыдущего дня
  * @param {String} currentDate дата текущего дня
- * @param {number} setStatistic редактирование записи в таблице.
+ * @param {Function} setStatistic редактирование записи в таблице.
  * @param {number} numericalDesignation числовое обозначение типа матча
  * @returns {Promise<void>}
  */
@@ -83,7 +83,7 @@ function serchResultEndMatch(beforeData, currentData, statistic, numericalDesign
 /**
  * Метод для сравнения результатов.
  *
- * @param {number} setStatistic редактирование записи в таблице.
+ * @param {Function} setStatistic редактирование записи в таблице.
  * @param {Object} statistic объект матча
  * @param {String} score строка для парсинга
  * @returns {Promise<void>}

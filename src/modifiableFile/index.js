@@ -1,5 +1,5 @@
 const config = require('config');
-const active = config.get('parser.active');
+const active = config.parser.active;
 
 let searchHelper;
 

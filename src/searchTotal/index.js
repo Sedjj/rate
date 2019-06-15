@@ -10,7 +10,7 @@ const {searchHelper} = require('../modifiableFile');
 const {counterWaiting} = require('../utils/counterWaiting');
 
 const active = config.parser.active;
-const urlFootballExpandedRate = config.get(`parser.${active[0]}.live.football.expandedRate`);
+const urlFootballExpandedRate = config.parser[`${active[0]}`].live['football']['expandedRate'];
 const after = config.choice.live.football.time.after;
 const totalStrategy = config.choice.live.football.total;
 const typeRate = config.choice.live.football.typeRate;

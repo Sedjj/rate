@@ -1,16 +1,14 @@
 const config = require('config');
 const got = require('got');
 const {CookieJar} = require('tough-cookie');
-const {log} = require('../utils/logger');
 const {encode} = require('../utils/crypt');
 
 const active = config.parser.active;
-const urlAuth = config.get(`parser.${active[0]}.authentication.auth`);
-const urlTwoFactor = config.get(`parser.${active[0]}.authentication.twofactor`);
-const urlUserData = config.get(`parser.${active[0]}.rate.getuserdata`);
-const urlPutbetsCommon = config.get(`parser.${active[0]}.rate.putbetscommon`);
-const urlUpdateCoupon = config.get(`parser.${active[0]}.rate.updateCoupon`);
-const urlBalance = config.get(`parser.${active[0]}.rate.balance`);
+/*const urlAuth = config.parser[`${active[0]}`].authentication.auth;*/
+/*const urlUserData = config.parser[`${active[0]}`].rate['getuserdata'];*/
+const urlPutbetsCommon = config.parser[`${active[0]}`].rate['putbetscommon'];
+const urlUpdateCoupon = config.parser[`${active[0]}`].rate['updateCoupon'];
+const urlBalance = config.parser[`${active[0]}`].rate['balance'];
 
 const cookieJar = new CookieJar();
 const client = got.extend({
@@ -97,43 +95,19 @@ async function authentication(param) {
 }
 
 /**
- * Метод двухфакторной авторизации.
- *
- * @param {Object} param параметры для отправки
- * @returns {Promise<void>}
- */
-async function twofactor(param) {
-	// FIXME через FormData
-	await agent.post(urlTwoFactor)
-		.set({
-			'Accept': 'application/json, text/javascript, */*; q=0.01',
-			'X-Requested-With': 'XMLHttpRequest',
-		})
-		.type('json')
-		.then((res) => {
-			console.log('getuserdata', res.text);
-			log.debug('Отработал: Метод для авторизации пользователя');
-		})
-		.catch(error => {
-			log.debug(`Ошибка getuserdata: ${error}`);
-		});
-}
-
-/**
  * Метод для ставки.
  *
- * @param {Object} param параметры для отправки
  * @returns {Promise<void>}
  */
-async function putbetsCommon(param) {
-	await agent.post(urlPutbetsCommon)
-		.set({
-			'Accept': 'application/json, text/javascript, */*; q=0.01',
-			'Content-Type': 'application/json',
+async function putbetsCommon() {
+	await client.post(urlPutbetsCommon, {
+		headers: {
+			'Content-Type': 'application/json;charset=UTF-8',
 			'X-Requested-With': 'XMLHttpRequest',
-		})
-		.type('json')
-		.send({
+			'Accept': 'application/json, text/plain, */*'
+		},
+		responseType: 'json',
+		body: JSON.stringify({
 			'Live': true,
 			'Events': [{
 				'GameId': 186133331,
@@ -158,12 +132,7 @@ async function putbetsCommon(param) {
 			'CheckCf': 2,
 			'partner': 51
 		})
-		.then((res) => {
-			console.log('getuserdata', res.text);
-		})
-		.catch(error => {
-			log.debug(`Ошибка getuserdata: ${error}`);
-		});
+	});
 }
 
 /**
@@ -172,14 +141,14 @@ async function putbetsCommon(param) {
  * @returns {Promise<void>}
  */
 async function updateCoupon() {
-	await agent.post(urlUpdateCoupon)
-		.set({
-			'Accept': 'application/json, text/javascript, */*; q=0.01',
-			'Content-Type': 'application/json',
+	await client.post(urlUpdateCoupon, {
+		headers: {
+			'Content-Type': 'application/json;charset=UTF-8',
 			'X-Requested-With': 'XMLHttpRequest',
-		})
-		.type('json')
-		.send({
+			'Accept': 'application/json, text/plain, */*'
+		},
+		responseType: 'json',
+		body: JSON.stringify({
 			'Events': [{'GameId': 186133331, 'Type': 10, 'Coef': 1.9, 'Param': 1, 'PlayerId': 0, 'Kind': 1, 'InstrumentId': 0, 'Seconds': 0, 'Price': 0, 'Expired': 0}],
 			'NeedUpdateLine': false,
 			'Lng': 'en',
@@ -188,12 +157,7 @@ async function updateCoupon() {
 			'Vid': 0,
 			'partner': 51
 		})
-		.then((res) => {
-			console.log('getuserdata', res.text);
-		})
-		.catch(error => {
-			log.debug(`Ошибка getuserdata: ${error}`);
-		});
+	});
 }
 
 /**
@@ -202,14 +166,14 @@ async function updateCoupon() {
  * @returns {Promise<void>}
  */
 async function getBalance() {
-	await agent.post(urlBalance)
-		.set({
-			'Accept': 'application/json, text/javascript, */*; q=0.01',
-			'Content-Type': 'application/json',
+	await client.post(urlBalance, {
+		headers: {
+			'Content-Type': 'application/json;charset=UTF-8',
 			'X-Requested-With': 'XMLHttpRequest',
-		})
-		.type('json')
-		.send({
+			'Accept': 'application/json, text/plain, */*'
+		},
+		responseType: 'json',
+		body: JSON.stringify({
 			'Events': [{'GameId': 186133331, 'Type': 10, 'Coef': 1.9, 'Param': 1, 'PlayerId': 0, 'Kind': 1, 'InstrumentId': 0, 'Seconds': 0, 'Price': 0, 'Expired': 0}],
 			'NeedUpdateLine': false,
 			'Lng': 'en',
@@ -218,22 +182,12 @@ async function getBalance() {
 			'Vid': 0,
 			'partner': 51
 		})
-		.then((res) => {
-			console.log('getuserdata', res.text);
-		})
-		.catch(error => {
-			log.debug(`Ошибка getuserdata: ${error}`);
-		});
+	});
 }
 
 module.exports = {
-	performAuth
+	performAuth,
+	getBalance,
+	updateCoupon,
+	putbetsCommon
 };
-
-
-/*
-const a = {headers: {cat: 'meow', wolf: ['bark', 'wrrr']}};
-const b = {headers: {cow: 'moo', wolf: ['auuu']}};
-
-{...a, ...b}            // => {headers: {cow: 'moo', wolf: ['auuu']}}
-got.mergeOptions(a, b)  // => {headers: {cat: 'meow', cow: 'moo', wolf: ['auuu']}}*/

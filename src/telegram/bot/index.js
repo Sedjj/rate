@@ -53,9 +53,9 @@ const keyboardInit = [
 
 const response = use(accessCheck);
 
-function menu(msg) {
+async function menu(msg) {
 	const chat = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
-	bot.sendMessage(chat, 'Hi, choose action!', {
+	await bot.sendMessage(chat, 'Hi, choose action!', {
 		reply_markup: {
 			keyboard: keyboardInit,
 			parse_mode: 'Markdown'
@@ -63,63 +63,63 @@ function menu(msg) {
 	});
 }
 
-bot.onText(/\/start/, response((msg) => {
+bot.onText(/\/start/, response(async (msg) => {
 	if (!msg.text) {
 		return;
 	}
-	menu(msg);
+	await menu(msg);
 }));
 
-bot.on('callback_query', (msg) => {
+bot.on('callback_query', async (msg) => {
 	if (!msg.data) {
 		return;
 	}
 	switch (msg.data) {
 		case 'waiting':
-			sendAnsweText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
+			await sendAnsweText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
 			break;
 		case 'twoDaysExportFootball':
-			sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnsweText(msg, 'Ожидайте файл');
 			exportFootballStatisticDebounce(2);
 			break;
 		case 'twoDaysExportTableTennis':
-			sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnsweText(msg, 'Ожидайте файл');
 			exportTableTennisStatisticDebounce(2);
 			break;
 		case 'weekExportFootball':
-			sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnsweText(msg, 'Ожидайте файл');
 			exportFootballStatisticDebounce(7);
 			break;
 		case 'weekExportTableTennis':
-			sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnsweText(msg, 'Ожидайте файл');
 			exportTableTennisStatisticDebounce(7);
 			break;
 		case 'exportBackupFootballs':
-			sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnsweText(msg, 'Ожидайте файл');
 			exportBackup('footballs');
 			break;
 		case 'exportBackupTableTennis':
-			sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnsweText(msg, 'Ожидайте файл');
 			exportBackup('tabletennis');
 			break;
 	}
-	menu(msg);
+	await menu(msg);
 });
 
-bot.on('message', response((msg) => {
+bot.on('message', response(async (msg) => {
 	if (!msg.text) {
 		return;
 	}
 	const chat = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
 	switch (msg.text.toString()) {
 		case waiting:
-			sendText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
+			await sendText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
 			break;
 		case exportTable:
-			inlineKeyboard(chat, menuList('export'));
+			await inlineKeyboard(chat, menuList('export'));
 			break;
 		case backup:
-			inlineKeyboard(chat, menuList('backup'));
+			await inlineKeyboard(chat, menuList('backup'));
 			break;
 	}
 }));
@@ -129,14 +129,14 @@ bot.on('message', response((msg) => {
  * @param chat
  * @param msg
  */
-function inlineKeyboard(chat, msg) {
+async function inlineKeyboard(chat, msg) {
 	const options = {
 		reply_markup: JSON.stringify({
 			inline_keyboard: msg.buttons,
 			parse_mode: 'Markdown'
 		})
 	};
-	bot.sendMessage(chat, msg.title, options);
+	await bot.sendMessage(chat, msg.title, options);
 	/*bot.sendMessage(chat, ' ', {
 		reply_markup: {
 			remove_keyboard: true
@@ -149,7 +149,7 @@ function inlineKeyboard(chat, msg) {
  *
  * @param {Object} msg объект что пришел из telegram
  */
-function accessCheck(msg) {
+async function accessCheck(msg) {
 	const chat = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
 	if (!administrators.some((user) => user === chat)) {
 		this.stop();
@@ -162,24 +162,24 @@ function accessCheck(msg) {
  * @param {Object} msg объект что пришел из telegram
  * @param {String} text текст для отправки
  */
-function sendText(msg, text) {
-		bot.sendMessage(
-			msg.chat.id,
-			text,
-			{
-				reply_markup: {
-					keyboard: keyboardInit
-				}
+async function sendText(msg, text) {
+	await bot.sendMessage(
+		msg.chat.id,
+		text,
+		{
+			reply_markup: {
+				keyboard: keyboardInit
 			}
-		);
+		}
+	);
 }
 
 /**
  * Обертка для удаления сообщения
  * @param {Object} msg объект что пришел из telegram
  */
-function deleteMessage(msg) {
-	bot.sendMessage(
+async function deleteMessage(msg) {
+	await bot.sendMessage(
 		msg.chat.id,
 		msg.message_id,
 		{
@@ -196,8 +196,8 @@ function deleteMessage(msg) {
  * @param {Object} msg объект что пришел из telegram
  * @param {String} text текст для отправки
  */
-function sendAnsweText(msg, text) {
-	bot.answerCallbackQuery(
+async function sendAnsweText(msg, text) {
+	await bot.answerCallbackQuery(
 		msg.id,
 		text,
 		true
@@ -209,13 +209,14 @@ function sendAnsweText(msg, text) {
  *
  * @param {String} text текст для отправки
  */
-function sendError(text) {
-	bot.sendMessage(
+async function sendError(text) {
+	await bot.sendMessage(
 		config.myId,
 		text
 	);
 }
 
 module.exports = {
-	sendError
+	sendError,
+	deleteMessage
 };
