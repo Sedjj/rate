@@ -1,7 +1,7 @@
 const config = require('config');
 const {performEmulation} = require('../selenium/bot');
-const {sendMessageChat, sendMessageChannel} = require('../telegram/api');
-const {decorateMessageTennis, decorateMessageMatch, decorateMessageChannel} = require('../utils/formateMessage');
+const {sendMessageChat} = require('../telegram/api');
+const {decorateMessageTennis} = require('../utils/formateMessage');
 
 const typeRate = config.choice.live.football.typeRate;
 
@@ -13,73 +13,31 @@ const typeRate = config.choice.live.football.typeRate;
  * @returns {Promise<void>}
  */
 async function matchRate(statistic, type = '') {
+	console.log(type);
 	const total = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
+	const {snapshot, cards, matchId, score} = statistic;
 	switch (statistic.strategy) {
 		case 1 :
-			await sendMessageChat(decorateMessageTennis(statistic));
-			await performEmulation(statistic.matchId, `Total Over ${total}`);
+			if (snapshot.start.x >= 3.16 && (snapshot.start.x - snapshot.start.p1) > 0.18) {
+				if (score.sc1 ===0 &&  score.sc2 ===1) {
+					await sendMessageChat(decorateMessageTennis(statistic));
+					await performEmulation(matchId, 9, `Total Over ${total}`);
+				}
+			}
 			break;
 		case 4 :
-			await performEmulation(statistic.matchId, `Total Under ${total}`);
-			break;
-		case 5 :
-			await performEmulation(statistic.matchId, `Total Under ${total}`);
+			if (snapshot.start.p1 <= snapshot.start.p2) {
+				if (snapshot.start.time < 45.9 && snapshot.start.x > 3) {
+					if ((cards.before.one.attacks > 0) && (cards.before.one.danAttacks !== 0)) {
+
+						await performEmulation(matchId, 10, `Total Under ${total}`);
+					}
+				}
+			}
 			break;
 		default:
 			break;
 	}
-
-	/*if ((statistic.command.women !== 1) && (statistic.command.youth !== 1)) {
-		switch (statistic.strategy) {
-			case 1 :
-				if ((statistic.snapshot.end.x < 3) && (statistic.snapshot.end.mod > 2.5)) {
-					//await sendMessageChat(decorateMessageMatch(statistic));
-					await sendMessageChannel(decorateMessageChannel(statistic));
-					await sendMessageChannel('<pre>Result</pre>');
-				}
-				break;
-			case 2 :
-				if ((3000 < statistic.snapshot.end.time) && (statistic.snapshot.end.time < 3570)) {
-					// A
-					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-						if ((statistic.cards.after.one.danAttacks < 46) && (statistic.snapshot.start.x > 2.5)) {
-							if ((statistic.cards.after.one.attacks > 39) && (statistic.cards.before.one.shotsOn !== 1)) {
-								//await sendMessageChat(decorateMessageMatch(statistic));
-								await sendMessageChannel(decorateMessageChannel(statistic));
-								await sendMessageChannel('<pre>Result</pre>');
-							}
-						}
-					} else { //B
-						if ((50 < statistic.cards.after.two.attacks) && (statistic.cards.after.two.attacks < 80)) {
-							//await sendMessageChat(decorateMessageMatch(statistic));
-							await sendMessageChannel(decorateMessageChannel(statistic));
-							await sendMessageChannel('<pre>Result</pre>');
-						}
-					}
-				}
-				break;
-			case 3 :
-				if ((statistic.snapshot.end.time < 3720)) {
-					// A
-					if (statistic.snapshot.start.p1 < statistic.snapshot.start.p2) {
-						if (statistic.snapshot.end.x < 2.4) {
-							if ((statistic.cards.after.one.danAttacks > 50) && (statistic.cards.before.one.attacks > 52)) {
-								//await sendMessageChat(decorateMessageMatch(statistic));
-								await sendMessageChannel(decorateMessageChannel(statistic));
-								await sendMessageChannel('<pre>Result</pre>');
-							}
-						}
-					} else { //B
-						if (statistic.snapshot.start.x < 2.4) {
-							//await sendMessageChat(decorateMessageMatch(statistic));
-							await sendMessageChannel(decorateMessageChannel(statistic));
-							await sendMessageChannel('<pre>Result</pre>');
-						}
-					}
-				}
-				break;
-		}
-	}*/
 }
 
 module.exports = {
