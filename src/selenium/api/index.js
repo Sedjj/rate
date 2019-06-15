@@ -1,11 +1,12 @@
 const chrome = require('selenium-webdriver/chrome');
 const config = require('config');
+const {log} = require('../../utils/logger');
 const {By} = require('selenium-webdriver');
 const webdriver = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
 
 chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
-const argument = config.get('chrome.options.arguments');
+const argument = config.emulator.chrome.options.arguments;
 
 /**
  * Создаем инстанс для хрома.
@@ -49,10 +50,63 @@ async function emulatorOfUniqueness() {
  *
  * @param {object} driver инстанс драйвера
  * @param {String} selector
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
+ */
+async function findSelectorCss(driver, selector) {
+	try {
+		const el = await driver.findElement(By.css(selector));
+		return !!el;
+	} catch (e) {
+		return false;
+	}
+}
+
+
+/**
+ * Функция для поиска элемента по селектору css и вызова click.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector
+ * @returns {Promise<boolean>}
  */
 async function findSelectorCssAndCall(driver, selector) {
-	return await driver.findElement(By.css(selector)).click();
+	try {
+		const el = await driver.findElement(By.css(selector));
+		if (el) {
+			await el.click();
+			await driver.sleep(500);
+			return true;
+		} else {
+			return false;
+		}
+	} catch (e) {
+		log.error('Error findSelectorCssAndCall -> ' + e);
+		return false;
+	}
+
+}
+
+/**
+ * Функция для поиска элемента по id и вызова click.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector
+ * @returns {Promise<boolean>}
+ */
+async function findIdAndCall(driver, selector) {
+	try {
+		const el = await driver.findElement(By.id(selector));
+		if (el) {
+			await el.click();
+			await driver.sleep(500);
+			return true;
+		} else {
+			return false;
+		}
+	} catch (e) {
+		log.error('Error findIdAndCall -> ' + e);
+		return false;
+	}
 }
 
 /**
@@ -61,12 +115,22 @@ async function findSelectorCssAndCall(driver, selector) {
  * @param {object} driver инстанс драйвера
  * @param {String} selector поиска
  * @param {String} text текст заполнения
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
 async function findIdAndFill(driver, selector, text) {
-	const el = await driver.findElement(By.id(selector));
-	await write(el, text);
-	return Promise.resolve();
+	try {
+		const el = await driver.findElement(By.id(selector));
+		if (el) {
+			await write(el, text);
+			await driver.sleep(500);
+			return true;
+		} else {
+			return false;
+		}
+	} catch (e) {
+		log.error('Error findIdAndFill -> ' + e);
+		return false;
+	}
 }
 
 /**
@@ -75,12 +139,22 @@ async function findIdAndFill(driver, selector, text) {
  * @param {object} driver инстанс драйвера
  * @param {String} selector поиска
  * @param {String} text текст заполнения
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
 async function findSelectorCssAndFill(driver, selector, text) {
-	const el = await driver.findElement(By.css(selector));
-	await write(el, text);
-	return Promise.resolve();
+	try {
+		const el = await driver.findElement(By.css(selector));
+		if (el) {
+			await write(el, text);
+			await driver.sleep(500);
+			return true;
+		} else {
+			return false;
+		}
+	} catch (e) {
+		log.error('Error findSelectorCssAndFill -> ' + e);
+		return false;
+	}
 }
 
 /**
@@ -89,18 +163,28 @@ async function findSelectorCssAndFill(driver, selector, text) {
  * @param {object} driver инстанс драйвера
  * @param {String} selector поиска
  * @param {String} value текст заполнения
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
 async function findTextBySelectorCssAndCall(driver, selector, value) {
-	const items = await driver.findElements(By.css(selector));
-	await items.reduce(async (acc, item) => {
-		const text = await item.getText();
-		if (text.indexOf(value) !== -1) {
-			item.click();
+	try {
+		const items = await driver.findElements(By.css(selector));
+		if (items && items.length > 0) {
+			return Promise.resolve(await items.reduce(async (acc, item) => {
+				const text = await item.getText();
+				if (text.indexOf(value) !== -1) {
+					item.click();
+					await driver.sleep(500);
+					acc = true;
+				}
+				return acc;
+			}, false));
+		} else {
+			return false;
 		}
-		return acc;
-	}, Promise.resolve());
-	return Promise.resolve();
+	} catch (e) {
+		log.error('Error findTextBySelectorCssAndCall -> ' + e);
+		return false;
+	}
 }
 
 /**
@@ -108,20 +192,35 @@ async function findTextBySelectorCssAndCall(driver, selector, value) {
  *
  * @param {object} driver инстанс драйвера
  * @param {String} script
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
 async function callJS(driver, script) {
-	return await driver.executeScript(script);
+	try {
+		await driver.executeScript(script);
+		return true;
+	} catch (e) {
+		log.error('Error callJS -> ' + e);
+		return false;
+	}
 }
 
 /**
  * Заполнить элементы ввода
  * @param {HTMLInputElement} el элемент дя заполнения
  * @param {String} text текст заполнения
- * @returns {Promise<void>}
+ * @returns {Promise<boolean>}
  */
 async function write(el, text) {
-	return await el.sendKeys(text);
+	try {
+		const value = await el.getText();
+		if (value === '') {
+			await el.sendKeys(text);
+		}
+		return true;
+	} catch (e) {
+		log.error('Error callJS -> ' + e);
+		return false;
+	}
 }
 
 /**
@@ -132,7 +231,7 @@ async function write(el, text) {
  */
 async function getCookies(driver) {
 	await driver.manage().getCookies().then(function (cookies) {
-		console.log(cookies);
+		log.info(cookies);
 	});
 }
 
@@ -141,24 +240,31 @@ async function getCookies(driver) {
  *
  * @param {object} driver инстанс драйвера
  * @param {boolean} closed флаг для определения нужно ли закрыть предыдущую вкладку
- * @returns {Promise<*>}
+ * @returns {Promise<boolean>}
  */
 async function switchTab(driver, closed = true) {
-	return await driver.getAllWindowHandles()
-		.then(handles => {
-			const nextTab = (handles.length > 1);
-			if (nextTab) {
-				closed && driver.close();
-				driver.switchTo().window(handles[1]);
-			}
-			return nextTab;
-		});
+	try {
+		const handles = await driver.getAllWindowHandles();
+		if (handles.length > 1) {
+			closed && driver.close();
+			await driver.switchTo().window(handles[1]);
+			await driver.sleep(500);
+			return true;
+		} else {
+			return false;
+		}
+	} catch (e) {
+		log.error('Error switchTab -> ' + e);
+		return false;
+	}
 }
 
 module.exports = {
 	driverChrome,
 	init,
+	findSelectorCss,
 	findSelectorCssAndCall,
+	findIdAndCall,
 	findIdAndFill,
 	findSelectorCssAndFill,
 	findTextBySelectorCssAndCall,
