@@ -275,8 +275,10 @@ async function screenShot(driver, nameFile) {
 		const base64Image = await driver.takeScreenshot(true);
 		const decodedImage = new Buffer.from(base64Image, 'base64');
 		const filePath = await saveBufferToFile(path.join(storagePath, uploadDirectory, nameFile), decodedImage);
-		const stream = await readFileToStream(filePath);
-		await sendFile(stream);
+		if(process.env.NODE_ENV !== 'development'){
+			const stream = await readFileToStream(filePath);
+			await sendFile(stream);
+		}
 		await driver.sleep(500);
 		return true;
 	} catch (e) {

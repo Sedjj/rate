@@ -44,12 +44,12 @@ async function performEmulation(ids, numberColumn, totalName) {
 			}
 		}
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
-		await driver.sleep(5000);
+		await driver.sleep(10000);
 		await driver.quit();
 	} catch (e) {
 		log.error('Error performEmulation -> ' + e);
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
-		await driver.sleep(5000);
+		await driver.sleep(10000);
 		await driver.quit();
 	}
 }
