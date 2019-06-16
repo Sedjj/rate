@@ -104,6 +104,7 @@ async function searchIndex(matchId, strategy, oldScore) {
 			matchId: matchId,
 			strategy: strategy
 		}).then(() => {
+			// FIXME тут где то сбивается коэфициент counterWaiting
 			log.debug(`Матч ${matchId} удален`);
 		}).catch((errors) => {
 			log.error(`deleteStatistic: ${errors.message}`);
