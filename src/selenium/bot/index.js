@@ -7,6 +7,7 @@ const {
 	findTextBySelectorCssAndCall,
 	init,
 	findSelectorCssAndCall,
+	screenShot,
 	findIdAndFill,
 	findIdAndCall,
 	findSelectorCssAndFill
@@ -33,18 +34,22 @@ const searchTimeouts = [2000, 5000, 8000, 1];
 async function performEmulation(ids, numberColumn, totalName) {
 	let driver;
 	try {
+		log.info(`Rate match ${ids} with "${totalName}"`);
 		driver = await driverChrome();
 		await init(driver);
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			if (await search(driver, ids)) {
 				await rate(driver, numberColumn, totalName);
-				await driver.sleep(5000);
 			}
 		}
+		await screenShot(driver, `${(new Date()).getTime()}.png`);
+		await driver.sleep(5000);
 		await driver.quit();
 	} catch (e) {
 		log.error('Error performEmulation -> ' + e);
+		await screenShot(driver, `${(new Date()).getTime()}.png`);
+		await driver.sleep(5000);
 		await driver.quit();
 	}
 }
@@ -115,9 +120,12 @@ async function popup(driver) {
 	for (const timeout of searchTimeouts) {
 		if (await findSelectorCss(driver, '.search-popup.v-modal-search') &&
 			await findSelectorCss(driver, '.search-popup-events > .search-popup-events__item')) {
-
-			await findSelectorCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
-			await driver.sleep(5000);
+			try {
+				await findSelectorCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
+			} catch (e) {
+				log.debug('Can`t search current match: ', e);
+				return false;
+			}
 			return await switchTab(driver);
 		} else {
 			log.debug(`Popup sleep on ${timeout}ms`);
@@ -140,10 +148,16 @@ async function rate(driver, numberColumn, totalName) {
 	for (const timeout of searchTimeouts) {
 		if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
 			try {
-				await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName);
-				if (await findSelectorCss(driver, '.coupon__bet-settings .bet_sum_input')) {
-					await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount);
-					return await findSelectorCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
+				if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
+					if (await findSelectorCss(driver, '.coupon__bet-settings .bet_sum_input')) {
+						await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount);
+						await findSelectorCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
+						log.info('Rate successfully');
+						return true;
+					}
+				} else {
+					log.debug('Current match not found');
+					return false;
 				}
 			} catch (e) {
 				log.debug('Rate locked on current match: ', e);

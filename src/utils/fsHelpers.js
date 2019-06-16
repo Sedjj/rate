@@ -63,7 +63,7 @@ function generateName(directory, extension = null) {
  * Сохраняет buffer в файл
  *
  * @param {String} filePath путь к файлу
- * @param {{statistics: Array} | never} buffer массив байтов
+ * @param {*} buffer массив байтов
  * @returns {Promise}
  */
 function saveBufferToFile(filePath, buffer) {

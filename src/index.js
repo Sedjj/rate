@@ -1,15 +1,15 @@
+process.env.NTBA_FIX_319 = 1;
 const {CronJob, CronTime} = require('cron');
 require('./utils/dbProvider');
+require('./telegram/bot');
 const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');
-/*const {performAuth} = require('./auth');*/
 const football = require('./storage/football');
 const tableTennis = require('./storage/tableTennis');
 const tennis = require('./storage/tennis');
 const {searchFootball, searchTableTennis, searchTennis} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
-require('./telegram/bot');
 
 const schedulerSearchFootball = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(50, 150).generate()
@@ -40,7 +40,6 @@ const numericalDesignationFootball = config.choice.live.football.numericalDesign
 const numericalDesignationTableTennis = config.choice.live.tableTennis.numericalDesignation;
 const numericalDesignationTennis = config.choice.live.tennis.numericalDesignation;
 
-// performAuth();
 
 /**
  * Планировшик поиска матчей по футболу.

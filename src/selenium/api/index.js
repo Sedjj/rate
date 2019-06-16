@@ -1,12 +1,17 @@
 const chrome = require('selenium-webdriver/chrome');
 const config = require('config');
+const path = require('path');
 const {log} = require('../../utils/logger');
 const {By} = require('selenium-webdriver');
 const webdriver = require('selenium-webdriver');
-const chromedriver = require('chromedriver');
+const {sendFile} = require('../../telegram/api');
+const {readFileToStream, saveBufferToFile} = require('../../utils/fsHelpers');
+const {path: pathChrome} = require('chromedriver');
 
-chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
+chrome.setDefaultService(new chrome.ServiceBuilder(pathChrome).build());
 const argument = config.emulator.chrome.options.arguments;
+const storagePath = config.path.storagePath || process.cwd();
+const uploadDirectory = config.path.directory.upload || 'upload';
 
 /**
  * Создаем инстанс для хрома.
@@ -28,7 +33,7 @@ async function driverChrome() {
  * @returns {Promise<void>}
  */
 async function init(driver) {
-	return await driver.manage().window().setRect({width: 1400, height: 1000});
+	return await driver.manage().window().setRect({width: 1600, height: 1200});
 }
 
 /**
@@ -259,6 +264,27 @@ async function switchTab(driver, closed = true) {
 	}
 }
 
+/**
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} nameFile имя выходного файла
+ * @returns {Promise<boolean>}
+ */
+async function screenShot(driver, nameFile) {
+	try {
+		const base64Image = await driver.takeScreenshot(true);
+		const decodedImage = new Buffer.from(base64Image, 'base64');
+		const filePath = await saveBufferToFile(path.join(storagePath, uploadDirectory, nameFile), decodedImage);
+		const stream = await readFileToStream(filePath);
+		await sendFile(stream);
+		await driver.sleep(500);
+		return true;
+	} catch (e) {
+		log.error('Error screenShot -> ' + e);
+		return false;
+	}
+}
+
 module.exports = {
 	driverChrome,
 	init,
@@ -271,5 +297,6 @@ module.exports = {
 	callJS,
 	write,
 	switchTab,
-	getCookies
+	getCookies,
+	screenShot
 };

@@ -14,14 +14,14 @@
 		"pass": ""
 	},
 	"proxy": {
-		"host": "94.177.250.112",
-		"port": "8080",
+		"host": "139.59.61.229",
+		"port": "3128",
 		"user": "",
 		"password": ""
 	},
 	"socket": {
-		"server": "104.238.177.118",
-		"port": "443",
+		"server": "173.244.200.154",
+		"port": "29669",
 		"user": "",
 		"pass": ""
 	},
@@ -298,6 +298,8 @@
 					"incognito",
 					"test-type",
 					"disable-webgl",
+					"window-size=1600,1200",
+					"disable-gpu",
 					"disable-webgl-image-chromium"
 				]
 			}
