@@ -1,5 +1,6 @@
 const config = require('config');
 const {performEmulation} = require('../selenium/bot');
+const {rateStatus} = require('../store/rateStatus');
 /*
 const {sendMessageChat} = require('../telegram/api');
 const {decorateMessageTennis} = require('../utils/formateMessage');
@@ -24,7 +25,9 @@ async function matchRate(statistic, type = '') {
 					if (score.sc1 === 0 && score.sc2 === 1) {
 						if ((cards.after.two.red !== 1) && (cards.before.one.attacks < 80)) {
 							// await sendMessageChat(decorateMessageTennis(statistic));
-							await performEmulation(matchId, 9, `Total Over ${total}`);
+							if (rateStatus.status) {
+								await performEmulation(matchId, 9, `Total Over ${total}`);
+							}
 						}
 					}
 				}
@@ -34,7 +37,9 @@ async function matchRate(statistic, type = '') {
 			if (snapshot.start.p1 <= snapshot.start.p2) {
 				if (snapshot.start.time < 2754 && snapshot.start.x > 3) {
 					if ((cards.before.one.attacks > 0) && (cards.before.one.danAttacks !== 0)) {
-						await performEmulation(matchId, 10, `Total Under ${total}`);
+						if (rateStatus.status) {
+							await performEmulation(matchId, 10, `Total Under ${total}`);
+						}
 					}
 				}
 			}

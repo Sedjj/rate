@@ -1,7 +1,8 @@
 const config = require('config');
 const TelegramBot = require('node-telegram-bot-api');
 const {exportBackup} = require('../../backupBD');
-const {counterWaiting} = require('../../utils/counterWaiting');
+const {counterWaiting} = require('../../store/counterWaiting');
+const {rateStatus} = require('../../store/rateStatus');
 const {throttle} = require('../../utils/throttle');
 const {exportFootballStatistic, exportTableTennisStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
@@ -43,10 +44,12 @@ const bot = new TelegramBot(supportToken, props);
 
 const waiting = 'Сколько матчей в ожидании';
 const exportTable = 'Экспорт';
+const rate = 'Ставки';
 const backup = 'Бэкап';
 
 const keyboardInit = [
 	[waiting],
+	[rate],
 	[exportTable],
 	[backup]
 ];
@@ -102,6 +105,15 @@ bot.on('callback_query', async (msg) => {
 			await sendAnsweText(msg, 'Ожидайте файл');
 			exportBackup('tabletennis');
 			break;
+		case 'enableBets':
+			rateStatus.turnOn();
+			await sendAnsweText(msg, 'Betting mechanism will be enabled');
+			break;
+		case 'turnOffBets':
+			rateStatus.turnOff();
+			await sendAnsweText(msg, 'Betting mechanism will be stopped');
+			break;
+
 	}
 	await menu(msg);
 });
@@ -117,6 +129,9 @@ bot.on('message', response(async (msg) => {
 			break;
 		case exportTable:
 			await inlineKeyboard(chat, menuList('export'));
+			break;
+		case rate:
+			await inlineKeyboard(chat, menuList('rate'));
 			break;
 		case backup:
 			await inlineKeyboard(chat, menuList('backup'));

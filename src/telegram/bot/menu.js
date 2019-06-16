@@ -31,6 +31,15 @@ function menuList(item) {
 					[{text: 'Бэкап tableTennis', callback_data: 'exportBackupTableTennis'}]
 				]
 			};
+		case 'rate':
+			return {
+				id: 3,
+				title: 'Выберите действие',
+				buttons: [
+					[{text: 'Вкл ставки', callback_data: 'enableBets'}],
+					[{text: 'Выкл ставки', callback_data: 'turnOffBets'}]
+				]
+			};
 	}
 }
 

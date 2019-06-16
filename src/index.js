@@ -1,7 +1,9 @@
 process.env.NTBA_FIX_319 = 1;
 const {CronJob, CronTime} = require('cron');
 require('./utils/dbProvider');
-require('./telegram/bot');
+if (process.env.NODE_ENV !== 'development') {
+	require('./telegram/bot');
+}
 const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');
@@ -11,47 +13,63 @@ const tennis = require('./storage/tennis');
 const {searchFootball, searchTableTennis, searchTennis} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
 
-const schedulerSearchFootball = process.env.NODE_ENV === 'development'
-	? rc.some('seconds').between(50, 150).generate()
-	: rc.some('seconds').between(
-		config.cron.schedulerSearchFootball.before,
-		config.cron.schedulerSearchFootball.after
-	).generate();
-
-const schedulerSearchTableTennis = process.env.NODE_ENV === 'development'
-	? rc.some('seconds').between(10, 20).generate()
-	: rc.some('seconds').between(
-		config.cron.schedulerSearchTableTennis.before,
-		config.cron.schedulerSearchTableTennis.after
-	).generate();
-
-const schedulerSearchTennis = process.env.NODE_ENV === 'development'
-	? rc.some('seconds').between(10, 20).generate()
-	: rc.some('seconds').between(
-		config.cron.schedulerSearchTennis.before,
-		config.cron.schedulerSearchTennis.after
-	).generate();
-
-const schedulerCheckingResults = process.env.NODE_ENV === 'development'
-	? '*/45 * * * * *'
-	: config.cron.schedulerCheckingResults;
-
 const numericalDesignationFootball = config.choice.live.football.numericalDesignation;
 const numericalDesignationTableTennis = config.choice.live.tableTennis.numericalDesignation;
 const numericalDesignationTennis = config.choice.live.tennis.numericalDesignation;
+
+const schedulerSearchFootball = {
+	title: 'в секундах',
+	before: 150,
+	after: 250
+};
+const schedulerSearchTableTennis = {
+	title: 'в секундах',
+	before: 20,
+	after: 60
+};
+const schedulerSearchTennis = {
+	title: 'в секундах',
+	before: 20,
+	after: 60
+};
+
+const rendomSchedulerSearchFootball = process.env.NODE_ENV === 'development'
+	? rc.some('seconds').between(150, 250).generate()
+	: rc.some('seconds').between(
+		schedulerSearchFootball.before,
+		schedulerSearchFootball.after
+	).generate();
+
+const rendomSchedulerSearchTableTennis = process.env.NODE_ENV === 'development'
+	? rc.some('seconds').between(10, 20).generate()
+	: rc.some('seconds').between(
+		schedulerSearchTableTennis.before,
+		schedulerSearchTableTennis.after
+	).generate();
+
+const rendomSchedulerSearchTennis = process.env.NODE_ENV === 'development'
+	? rc.some('seconds').between(10, 20).generate()
+	: rc.some('seconds').between(
+		schedulerSearchTennis.before,
+		schedulerSearchTennis.after
+	).generate();
+
+const rendomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
+	? '*/45 * * * * *'
+	: '00 05 10 * * 0-7';
 
 
 /**
  * Планировшик поиска матчей по футболу.
  */
-if (schedulerSearchFootball) {
+if (rendomSchedulerSearchFootball) {
 	log.info('****start scheduler search****');
-	let schedulerSearchJob = new CronJob(schedulerSearchFootball, () => {
+	let schedulerSearchJob = new CronJob(rendomSchedulerSearchFootball, () => {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
 				rc.some('seconds').between(
-					config.cron.schedulerSearchFootball.before,
-					config.cron.schedulerSearchFootball.after
+					schedulerSearchFootball.before,
+					schedulerSearchFootball.after
 				).generate()
 			));
 			searchFootball();
@@ -67,14 +85,14 @@ if (schedulerSearchFootball) {
 /**
  * Планировшик поиска матчей по настольному тенису.
  */
-if (schedulerSearchTableTennis) {
+if (rendomSchedulerSearchTableTennis) {
 	log.info('****start scheduler search****');
-	let schedulerSearchJob = new CronJob(schedulerSearchTableTennis, () => {
+	let schedulerSearchJob = new CronJob(rendomSchedulerSearchTableTennis, () => {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
 				rc.some('seconds').between(
-					config.cron.schedulerSearchTableTennis.before,
-					config.cron.schedulerSearchTableTennis.after
+					schedulerSearchTableTennis.before,
+					schedulerSearchTableTennis.after
 				).generate()
 			));
 			searchTableTennis();
@@ -90,14 +108,14 @@ if (schedulerSearchTableTennis) {
 /**
  * Планировшик поиска матчей по тенису.
  */
-if (schedulerSearchTennis) {
+if (rendomSchedulerSearchTennis) {
 	log.info('****start scheduler search****');
-	let schedulerSearchJob = new CronJob(schedulerSearchTennis, () => {
+	let schedulerSearchJob = new CronJob(rendomSchedulerSearchTennis, () => {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
 				rc.some('seconds').between(
-					config.cron.schedulerSearchTableTennis.before,
-					config.cron.schedulerSearchTableTennis.after
+					schedulerSearchTableTennis.before,
+					schedulerSearchTableTennis.after
 				).generate()
 			));
 			searchTennis();
@@ -113,9 +131,9 @@ if (schedulerSearchTennis) {
 /**
  * Планировщик получения результатов матчей.
  */
-if (schedulerCheckingResults) {
+if (rendomSchedulerCheckingResults) {
 	log.info('****start scheduler checking results****');
-	let schedulerCheckingResultsJob = new CronJob(schedulerCheckingResults, () => {
+	let schedulerCheckingResultsJob = new CronJob(rendomSchedulerCheckingResults, () => {
 		try {
 			checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
 			checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);

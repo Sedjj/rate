@@ -9,7 +9,6 @@ const {readFileToStream, saveBufferToFile} = require('../../utils/fsHelpers');
 const {path: pathChrome} = require('chromedriver');
 
 chrome.setDefaultService(new chrome.ServiceBuilder(pathChrome).build());
-const argument = config.emulator.chrome.options.arguments;
 const storagePath = config.path.storagePath || process.cwd();
 const uploadDirectory = config.path.directory.upload || 'upload';
 
@@ -44,9 +43,13 @@ async function init(driver) {
 async function emulatorOfUniqueness() {
 	const options = new chrome.Options();
 	options.addArguments('headless');
-	argument.forEach((item) => {
-		options.addArguments(item);
-	});
+	options.addArguments('no-sandbox');
+	options.addArguments('incognito');
+	options.addArguments('test-type');
+	options.addArguments('disable-webgl');
+	options.addArguments('window-size=1600,1200');
+	options.addArguments('disable-gpu');
+	options.addArguments('disable-webgl-image-chromium');
 	return options;
 }
 

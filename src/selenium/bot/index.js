@@ -13,7 +13,7 @@ const {
 	findSelectorCssAndFill
 } = require('../api');
 
-const auth = config.emulator.auth;
+const auth = config.auth;
 const betAmount = config.emulator.betAmount;
 const active = config.parser.active;
 const urlStartPage = config.parser[`${active[0]}`]['startPage'];
@@ -153,6 +153,7 @@ async function rate(driver, numberColumn, totalName) {
 						await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount);
 						await findSelectorCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
 						log.info('Rate successfully');
+						// FIXME подумать как обойти если изменился коэффициент
 						return true;
 					}
 				} else {

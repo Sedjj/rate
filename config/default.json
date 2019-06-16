@@ -1,6 +1,10 @@
 {
 	"ip": "localhost",
 	"port": 8081,
+	"auth": {
+		"login": "55311279",
+		"password": "088706"
+	},
 	"dbDev": {
 		"name": "rateBot",
 		"hostString": "localhost:27017/",
@@ -239,31 +243,6 @@
 			}
 		}
 	},
-	"cron": {
-		"schedulerSearchFootball": {
-			"title": "в секундах",
-			"before": 150,
-			"after": 250
-		},
-		"schedulerSearchTableTennis": {
-			"title": "в секундах",
-			"before": 20,
-			"after": 60
-		},
-		"schedulerSearchTennis": {
-			"title": "в секундах",
-			"before": 20,
-			"after": 60
-		},
-		"waitingInterval": {
-			"title": "в секундах",
-			"before": 20,
-			"after": 60
-		},
-		"schedulerCheckingResults": "00 05 10 * * 0-7",
-		"schedulerTestExport": "00 15 10 * * 0-7",
-		"schedulerBackupExport": "00 30 10 * * 1"
-	},
 	"path": {
 		"storagePath": "",
 		"storage": {
@@ -290,24 +269,7 @@
 		"rate": 2000
 	},
 	"emulator": {
-		"flows": 1,
-		"chrome": {
-			"options": {
-				"arguments": [
-					"no-sandbox",
-					"incognito",
-					"test-type",
-					"disable-webgl",
-					"window-size=1600,1200",
-					"disable-gpu",
-					"disable-webgl-image-chromium"
-				]
-			}
-		},
-		"auth": {
-			"login": "55311279",
-			"password": "088706"
-		},
+		"titleBetAmount": "Размер ставки",
 		"betAmount": 20
 	}
 }

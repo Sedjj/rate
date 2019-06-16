@@ -7,18 +7,23 @@ const {getExpandedMatch} = require('../fetch');
 const {equalsScore} = require('../utils/searchHelper');
 const {matchRate} = require('../matchRate');
 const {searchHelper} = require('../modifiableFile');
-const {counterWaiting} = require('../utils/counterWaiting');
+const {counterWaiting} = require('../store/counterWaiting');
 
 const active = config.parser.active;
+const waitingInterval = {
+	title: 'в секундах',
+	before: 20,
+	after: 60
+};
 const urlFootballExpandedRate = config.parser[`${active[0]}`].live['football']['expandedRate'];
 const after = config.choice.live.football.time.after;
 const totalStrategy = config.choice.live.football.total;
 const typeRate = config.choice.live.football.typeRate;
-const waitingInterval = process.env.NODE_ENV === 'development'
+const rendomWaitingInterval = process.env.NODE_ENV === 'development'
 	? rc.some('seconds').between(10, 20).generate()
 	: rc.some('seconds').between(
-		config.cron.waitingInterval.before,
-		config.cron.waitingInterval.after
+		waitingInterval.before,
+		waitingInterval.after
 	).generate();
 
 /**
@@ -30,7 +35,7 @@ const waitingInterval = process.env.NODE_ENV === 'development'
 function waiting(param, strategy) {
 	let reboot = false;
 	counterWaiting.increment();
-	let waitingIntervalJob = new CronJob(waitingInterval, async () => {
+	let waitingIntervalJob = new CronJob(rendomWaitingInterval, async () => {
 		try {
 			// TODO сюда 2 раза заходит поэтому счетчик матчей бывает отрицательный
 			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
@@ -43,8 +48,8 @@ function waiting(param, strategy) {
 				reboot = true;
 				waitingIntervalJob.setTime(new CronTime(
 					rc.some('seconds').between(
-						config.cron.waitingInterval.before,
-						config.cron.waitingInterval.after
+						waitingInterval.before,
+						waitingInterval.after
 					).generate()
 				));
 			}
@@ -125,7 +130,7 @@ function setIndexRate(index = 1, param, strategy) {
 		modifiedBy: new Date().toISOString()
 	}).then(async (statistic) => {
 		if (statistic !== null) {
-			 await matchRate(statistic, 'футбол');
+			await matchRate(statistic, 'футбол');
 		}
 	}).catch((error) => {
 		log.error(`setTotalRate: ${error.message}`);
