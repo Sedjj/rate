@@ -1,34 +1,22 @@
 function menuList(item) {
 	switch (item) {
-		case 'waiting':
+		case 'days':
 			return {
 				id: 1,
-				title: 'Тест',
+				title: 'Выберите количество дней на экспорт',
 				buttons: [
-					[{text: 'Ровно столько, сколько указано в определении функции.', callback_data: '0_1'}],
-					[{text: 'Сколько указано в определении функции или меньше.', callback_data: '0_2'}],
-					[{text: 'Сколько указано в определении функции или больше.', callback_data: '0_3'}],
-					[{text: 'Любое количество.', callback_data: '0_4'}]
+					[{text: '-', callback_data: 'down'}, {text: '2'}, {text: '+', callback_data: 'up'}],
+					[{text: 'экспорт', callback_data: 'export'}]
 				]
 			};
-		case 'export':
+		case 'selectSport':
 			return {
 				id: 2,
-				title: 'Выбирие вид экспорта',
+				title: 'Выбирие вид спорта',
 				buttons: [
-					[{text: 'Экспорт футбола за 2 дня', callback_data: 'twoDaysExportFootball'}],
-					[{text: 'Экспорт тениса за 2 дня', callback_data: 'twoDaysExportTableTennis'}],
-					[{text: 'Экспорт футбола за неделю\'', callback_data: 'weekExportFootball'}],
-					[{text: 'Экспорт за тениса неделю\'', callback_data: 'weekExportTableTennis'}]
-				]
-			};
-		case 'backup':
-			return {
-				id: 3,
-				title: 'Выберите тип бэкапа',
-				buttons: [
-					[{text: 'Бэкап footballs', callback_data: 'exportBackupFootballs'}],
-					[{text: 'Бэкап tableTennis', callback_data: 'exportBackupTableTennis'}]
+					[{text: 'Футбол', callback_data: 'exportFootball'}],
+					[{text: 'Настольный тенис', callback_data: 'exportTableTennis'}],
+					[{text: 'Большой тенис', callback_data: 'exportTennis'}],
 				]
 			};
 		case 'rate':
@@ -38,6 +26,24 @@ function menuList(item) {
 				buttons: [
 					[{text: 'Вкл ставки', callback_data: 'enableBets'}],
 					[{text: 'Выкл ставки', callback_data: 'turnOffBets'}]
+				]
+			};
+		case 'backup':
+			return {
+				id: 3,
+				title: 'Выберите тип бэкапа',
+				buttons: [
+					[{text: 'Бэкап футбол', callback_data: 'backupFootballs'}],
+					[{text: 'Бэкап настольный тенис', callback_data: 'backupTableTennis'}],
+					[{text: 'Бэкап большой тенис', callback_data: 'backupTennis'}]
+				]
+			};
+		case 'getFile':
+			return {
+				id: 3,
+				title: 'Выберите файл для скачивания',
+				buttons: [
+					[{text: 'debug logs', callback_data: 'debugLogs'}],
 				]
 			};
 	}

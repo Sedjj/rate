@@ -4,13 +4,20 @@ const {exportBackup} = require('../../backupBD');
 const {counterWaiting} = require('../../store/counterWaiting');
 const {rateStatus} = require('../../store/rateStatus');
 const {throttle} = require('../../utils/throttle');
-const {exportFootballStatistic, exportTableTennisStatistic} = require('../../export');
+const {exportFootballStatistic, exportTableTennisStatistic, exportTennisStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
 const agent = require('socks5-https-client/lib/Agent');
+const path = require('path');
+const {readFileToStream} = require('../../utils/fsHelpers');
+const {sendFile} = require('../api');
 const {menuList} = require('./menu');
 
 const exportFootballStatisticDebounce = throttle(exportFootballStatistic, 20000);
 const exportTableTennisStatisticDebounce = throttle(exportTableTennisStatistic, 20000);
+const exportTennisStatisticDebounce = throttle(exportTennisStatistic, 20000);
+
+const storagePath = config.path.storagePath || process.cwd();
+const logsDirectory = config.path.directory.logs || 'logs';
 
 const supportToken = process.env.NODE_ENV === 'development'
 	? config.bots.supportDev.token
@@ -43,15 +50,17 @@ if (process.env.NODE_ENV === 'development') {
 const bot = new TelegramBot(supportToken, props);
 
 const waiting = 'Сколько матчей в ожидании';
-const exportTable = 'Экспорт';
+const selectSport = 'Вид спорта';
 const rate = 'Ставки';
 const backup = 'Бэкап';
+const getFile = 'Получить файл';
 
 const keyboardInit = [
 	[waiting],
 	[rate],
-	[exportTable],
-	[backup]
+	[selectSport],
+	[backup],
+	[getFile]
 ];
 
 const response = use(accessCheck);
@@ -73,37 +82,54 @@ bot.onText(/\/start/, response(async (msg) => {
 	await menu(msg);
 }));
 
+const slide = {
+	name: '',
+	count: 2
+};
+
 bot.on('callback_query', async (msg) => {
 	if (!msg.data) {
 		return;
 	}
+	const chat = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
 	switch (msg.data) {
-		case 'waiting':
-			await sendAnsweText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
+		case 'up':
+			slide.count++;
+			await editMessage(msg, slide.count.toString());
 			break;
-		case 'twoDaysExportFootball':
+		case 'down':
+			if (slide.count > 2) {
+				slide.count--;
+				await editMessage(msg, slide.count.toString());
+			}
+			break;
+		case 'export':
 			await sendAnsweText(msg, 'Ожидайте файл');
-			exportFootballStatisticDebounce(2);
+			exportStatisticDebounce();
 			break;
-		case 'twoDaysExportTableTennis':
-			await sendAnsweText(msg, 'Ожидайте файл');
-			exportTableTennisStatisticDebounce(2);
+		case 'exportFootball':
+			slide.name = 'football';
+			await inlineKeyboard(chat, menuList('days'));
 			break;
-		case 'weekExportFootball':
-			await sendAnsweText(msg, 'Ожидайте файл');
-			exportFootballStatisticDebounce(7);
+		case 'exportTableTennis':
+			slide.name = 'tableTennis';
+			await inlineKeyboard(chat, menuList('days'));
 			break;
-		case 'weekExportTableTennis':
-			await sendAnsweText(msg, 'Ожидайте файл');
-			exportTableTennisStatisticDebounce(7);
+		case 'exportTennis':
+			slide.name = 'tennis';
+			await inlineKeyboard(chat, menuList('days'));
 			break;
-		case 'exportBackupFootballs':
+		case 'backupFootballs':
 			await sendAnsweText(msg, 'Ожидайте файл');
 			exportBackup('footballs');
 			break;
-		case 'exportBackupTableTennis':
+		case 'backupTableTennis':
 			await sendAnsweText(msg, 'Ожидайте файл');
 			exportBackup('tabletennis');
+			break;
+		case 'backupTennis':
+			await sendAnsweText(msg, 'Ожидайте файл');
+			exportBackup('tennis');
 			break;
 		case 'enableBets':
 			rateStatus.turnOn();
@@ -113,7 +139,10 @@ bot.on('callback_query', async (msg) => {
 			rateStatus.turnOff();
 			await sendAnsweText(msg, 'Betting mechanism will be stopped');
 			break;
-
+		case 'debugLogs':
+			await sendAnsweText(msg, 'Ожидайте файл');
+			await getLogs();
+			break;
 	}
 	await menu(msg);
 });
@@ -123,18 +152,23 @@ bot.on('message', response(async (msg) => {
 		return;
 	}
 	const chat = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
+	slide.count = 2;
+	slide.name = '';
 	switch (msg.text.toString()) {
 		case waiting:
 			await sendText(msg, `Матчей ожидающих Total: ${counterWaiting.count}`);
 			break;
-		case exportTable:
-			await inlineKeyboard(chat, menuList('export'));
+		case selectSport:
+			await inlineKeyboard(chat, menuList('selectSport'));
 			break;
 		case rate:
 			await inlineKeyboard(chat, menuList('rate'));
 			break;
 		case backup:
 			await inlineKeyboard(chat, menuList('backup'));
+			break;
+		case getFile:
+			await inlineKeyboard(chat, menuList('getFile'));
 			break;
 	}
 }));
@@ -206,6 +240,20 @@ async function deleteMessage(msg) {
 }
 
 /**
+ * Обертка для редактирования сообщения в боте.
+ *
+ * @param {Object} msg объект что пришел из telegram
+ * @param {String} text текст для замены
+ */
+async function editMessage(msg, text) {
+	const opts = {
+		chat_id: msg.chat.id,
+		message_id: msg.message_id,
+	};
+	await bot.editMessageText(text, opts);
+}
+
+/**
  * Обертка для отправки alert сообщения в бот.
  *
  * @param {Object} msg объект что пришел из telegram
@@ -229,6 +277,39 @@ async function sendError(text) {
 		config.myId,
 		text
 	);
+}
+
+/**
+ * Общий метод для экспорта.
+ */
+function exportStatisticDebounce() {
+	switch (slide.name) {
+		case 'football':
+			exportFootballStatisticDebounce(slide.count);
+			break;
+		case 'tableTennis':
+			exportTableTennisStatisticDebounce(slide.count);
+			break;
+		case 'tennis':
+			exportTennisStatisticDebounce(slide.count);
+			break;
+	}
+	slide.count = 2;
+	slide.name = '';
+}
+
+/**
+ * Метод для получения лог файла.
+ *
+ * @returns {Promise<void>}
+ */
+async function getLogs() {
+	try {
+		const stream = await readFileToStream(path.join(storagePath, logsDirectory, 'debug.log'));
+		await sendFile(stream);
+	} catch (e) {
+		console.log('Error getLogs -> ' + e);
+	}
 }
 
 module.exports = {

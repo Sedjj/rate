@@ -20,7 +20,7 @@ const active = config.parser.active;
 const urlStartPage = config.parser[`${active[0]}`]['startPage'];
 
 /**
- * Массив интервалов в миллисекундах после которых делается попытка поиска элемента
+ * Массив интервалов в миллисекундах после которых делается попытка снова
  */
 const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
 
