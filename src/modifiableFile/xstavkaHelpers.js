@@ -101,7 +101,7 @@ function setGame(item) {
 		if (item['SC']['PS']) {
 			item['SC']['PS'].forEach((item) => {
 				if (item.Key === set.key) {
-					if (item['Value']) {
+					if (item['Value'] != null) {
 						set.value.sc1 = item['Value']['S1'] ? item['Value']['S1'] : 0;
 						set.value.sc2 = item['Value']['S2'] ? item['Value']['S2'] : 0;
 					}
@@ -418,10 +418,7 @@ async function searchResult(data, id, numericalDesignation) {
 						if (Array.isArray(object['Elems'])) {
 							object['Elems'].forEach((Elems) => {
 								if (Elems['Head'][0] === id) {
-									if (Elems['Head'][17]) {
-										// FIXME придумать как динамически определять счет
-										resolve(Elems['Head'][17].toString());
-									}
+									resolve(searchScoreToArray(Elems['Head']));
 								}
 							});
 						}
@@ -444,6 +441,25 @@ async function searchResult(data, id, numericalDesignation) {
  */
 function replaceUrl(url, date) {
 	return url.replace('${date}', getStringToUTCDateString(date));
+}
+
+/**
+ * Метод для нахождения общего счета в массиве.
+ *
+ * @param {Array} arr массив строка для поиска счета матча
+ * @returns {string}
+ */
+function searchScoreToArray(arr) {
+	let res = '';
+	arr.forEach((item) => {
+		if (typeof item === 'string' && item.length > 3) {
+			const score = item.match(/^\d+\:\d+\s*\(((\d+\:\d+)+\,?){2,}\)$/ig);
+			if (score != null) {
+				res = score[0];
+			}
+		}
+	});
+	return res;
 }
 
 module.exports = {
