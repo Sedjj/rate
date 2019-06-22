@@ -1,5 +1,6 @@
 const {log} = require('../../utils/logger');
 const config = require('config');
+const {rateStatus} = require('../../store/rateStatus');
 const {
 	switchTab,
 	driverChrome,
@@ -21,7 +22,7 @@ const urlStartPage = config.parser[`${active[0]}`]['startPage'];
 /**
  * Массив интервалов в миллисекундах после которых делается попытка поиска элемента
  */
-const searchTimeouts = [2000, 5000, 8000, 1];
+const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
 
 /**
  * Эмулмирует работу на PC.
@@ -32,6 +33,9 @@ const searchTimeouts = [2000, 5000, 8000, 1];
  * @returns {Promise<void>}
  */
 async function performEmulation(ids, numberColumn, totalName) {
+	if (!rateStatus.status) {
+		return;
+	}
 	let driver;
 	try {
 		log.info(`Rate match ${ids} with "${totalName}"`);

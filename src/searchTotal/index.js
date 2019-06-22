@@ -56,7 +56,7 @@ function waiting(param, strategy) {
 		} catch (error) {
 			reboot = false;
 			counterWaiting.decrement();
-			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}`);
+			log.error(`waiting id:${JSON.stringify(param)}, strategy:${strategy}, oldScore:${JSON.stringify(param.score)}, error -> ${error}`);
 			waitingIntervalJob.stop();
 		}
 	}, () => {
@@ -99,13 +99,13 @@ async function searchIndex(matchId, strategy, oldScore) {
 		}
 		return index;
 	} catch (error) {
-		log.error(`searchIndex id: ${matchId}`);
+		log.error(`searchIndex id: ${matchId}, error -> ${error}`);
 		deleteStatistic({
 			matchId: matchId,
 			strategy: strategy
 		}).then(() => {
 			// FIXME тут где то сбивается коэфициент counterWaiting
-			log.debug(`Матч ${matchId} удален`);
+			log.debug(`Матч ${matchId} - статегия ${strategy} -> удален`);
 		}).catch((errors) => {
 			log.error(`deleteStatistic: ${errors.message}`);
 		});
