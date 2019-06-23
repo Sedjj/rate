@@ -34,24 +34,34 @@ const rendomWaitingInterval = process.env.NODE_ENV === 'development'
  */
 function waiting(param, strategy) {
 	let reboot = false;
+	/**
+	 * Проверка что запрос на сервер выпонился, для избежания дублирование действий.
+	 *
+	 * @type {boolean}
+	 */
+	let waiting = true;
 	counterWaiting.increment();
 	let waitingIntervalJob = new CronJob(rendomWaitingInterval, async () => {
 		try {
-			// TODO сюда 2 раза заходит поэтому счетчик матчей бывает отрицательный
-			const indexMatch = await searchIndex(param.matchId, strategy, param.score);
-			if (indexMatch !== null) {
-				reboot = false;
-				log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
-				counterWaiting.decrement();
-				waitingIntervalJob.stop();
-			} else {
-				reboot = true;
-				waitingIntervalJob.setTime(new CronTime(
-					rc.some('seconds').between(
-						waitingInterval.before,
-						waitingInterval.after
-					).generate()
-				));
+			if (waiting) {
+				waiting = false;
+				const indexMatch = await searchIndex(param.matchId, strategy, param.score);
+				waiting = true;
+				if (indexMatch !== null) {
+					reboot = false;
+					log.debug(`Матч ${param.matchId}: total= ${indexMatch}`);
+					counterWaiting.decrement();
+					waitingIntervalJob.stop();
+				} else {
+					log.debug('waiting else');
+					reboot = true;
+					waitingIntervalJob.setTime(new CronTime(
+						rc.some('seconds').between(
+							waitingInterval.before,
+							waitingInterval.after
+						).generate()
+					));
+				}
 			}
 		} catch (error) {
 			reboot = false;
@@ -99,15 +109,12 @@ async function searchIndex(matchId, strategy, oldScore) {
 		}
 		return index;
 	} catch (error) {
-		log.error(`searchIndex id: ${matchId}, error -> ${error}`);
+		log.error(`Search index id: ${matchId}, error -> ${error}`);
 		deleteStatistic({
 			matchId: matchId,
 			strategy: strategy
 		}).then(() => {
-			// FIXME тут где то сбивается коэфициент counterWaiting
 			log.debug(`Матч ${matchId} - статегия ${strategy} -> удален`);
-		}).catch((errors) => {
-			log.error(`deleteStatistic: ${errors.message}`);
 		});
 		throw new Error(error);
 	}
@@ -134,7 +141,7 @@ function setIndexRate(index = 1, param, strategy) {
 			await matchRate(statistic, 'футбол');
 		}
 	}).catch((error) => {
-		log.error(`setTotalRate: ${error.message}`);
+		log.error(`Set total rate: ${error.message}`);
 		throw new Error(error);
 	});
 }

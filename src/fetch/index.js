@@ -1,64 +1,89 @@
 const config = require('config');
+const got = require('got');
+const {CookieJar} = require('tough-cookie');
 const request = require('request');
 const {log} = require('./../utils/logger');
 
+/**
+ * Массив интервалов в миллисекундах после которых делается попытка снова
+ */
+const searchTimeouts = [2000, 5000, 8000, 12000, 1];
 const proxy = config.proxy;
+const cookieJar = new CookieJar();
+const client = got.extend({
+	baseUrl: 'https://1xstavka.ru',
+	cookieJar
+});
 
 /**
- * Метод для получения ставок.
+ * Метод для получения всех ставок по виду спорта.
  *
  * @param {String} url адрес запроса
  * @returns {Promise<JSON | void>}
  */
 function getAllMatches(url) {
-	return new Promise((resolve, reject) => {
-		request.get(url, (error, res, body) => {
-			if (error || (res && res.statusCode !== 200)) {
-				log.error(`getAllMatches: ${res ? res.statusMessage : (error && error.message)}`);
-				return reject(error);
-			}
-			let value = [];
+	return new Promise(async (resolve, reject) => {
+		for (const timeout of searchTimeouts) {
 			try {
-				value = JSON.parse(body)['Value'];
+				let value = [];
+				const {body} = await client.get(url);
+				try {
+					value = JSON.parse(body)['Value'];
+					if (value != null) {
+						resolve(value);
+						break;
+					}
+				} catch (error) {
+					log.error(`Get all matches JSON.parse: ${error}`);
+					reject('JSON parse error');
+					break;
+				}
+				log.error(`Get all matches error: ${body}`);
+				reject('request came empty');
+				break;
 			} catch (error) {
-				log.error(`getAllMatches JSON.parse: ${error}`);
-				return reject(error);
+				log.error(`path: ${error.path}, name: ${error.name}, message: ${error.message})}`);
+				log.debug(`Get all matches sleep on ${timeout}ms`);
+				await sleep(timeout);
 			}
-			if (value === null) {
-				return reject(body);
-			}
-			// log.debug('Отработал: Метод для получения ставок');
-			resolve(value);
-		});
+		}
+		reject('Server is not responding');
 	});
 }
 
 /**
- * Метод для получения расширеных ставок.
+ * Метод для получения расширеных ставок для текущего матча.
  *
  * @param {String} url адрес запроса
  * @returns {Promise<JSON | void>}
  */
 function getExpandedMatch(url) {
-	return new Promise((resolve, reject) => {
-		request.get(url, (error, res, body) => {
-			if (error || (res && res.statusCode !== 200)) {
-				log.error(`getExpandedMatch: ${res ? res.statusMessage : (error && error.message)}`);
-				return reject(error);
-			}
-			let value = [];
+	return new Promise(async (resolve, reject) => {
+		for (const timeout of searchTimeouts) {
 			try {
-				value = JSON.parse(body)['Value'];
+				let value = [];
+				const {body} = await client.get(url);
+				try {
+					value = JSON.parse(body)['Value'];
+					if (value != null) {
+						resolve(value);
+						break;
+					}
+				} catch (error) {
+					log.error(`Get expanded matches JSON.parse: ${error}`);
+					reject('JSON parse error');
+					break;
+				}
+				log.error(`Get expanded matches error: ${body}`);
+				reject('request came empty');
+				break;
 			} catch (error) {
-				log.error(`getExpandedMatch JSON.parse: ${error}`);
-				return reject(error);
+				log.error(`path: ${error.path}, name: ${error.name}, message: ${error.message})}`);
+				log.debug(`Get expanded matches sleep on ${timeout}ms`);
+				await sleep(timeout);
 			}
-			if (value === null) {
-				return reject(body);
-			}
-			// log.debug('Отработал: Метод для получения расширеных ставок');
-			resolve(value);
-		});
+		}
+		reject('Server is not responding');
 	});
 }
 
@@ -69,26 +94,33 @@ function getExpandedMatch(url) {
  * @returns {Promise<any>}
  */
 function getResultList(url) {
-	return new Promise((resolve, reject) => {
-		log.info(`getResultList: ${url}`);
-		request.get(url, (error, res, body) => {
-			if (error || (res && res.statusCode !== 200)) {
-				log.error(`getResultList: ${res ? res.statusMessage : (error && error.message)}`);
-				return reject(error);
-			}
-			let value = [];
+	return new Promise(async (resolve, reject) => {
+		for (const timeout of searchTimeouts) {
 			try {
-				value = JSON.parse(body)['Data'];
+				let value = [];
+				log.debug(`url: ${url}`);
+				const {body} = await client.get(url);
+				try {
+					value = JSON.parse(body)['Data'];
+					if (value != null) {
+						resolve(value);
+						break;
+					}
+				} catch (error) {
+					log.error(`Get result matches JSON.parse: ${error}`);
+					reject('JSON parse error');
+					break;
+				}
+				log.error(`Get result matches error: ${body}`);
+				reject('request came empty');
+				break;
 			} catch (error) {
-				log.error(`getResultList: ${error}`);
-				return reject(error);
+				log.error(`path: ${error.path}, name: ${error.name}, message: ${error.message})}`);
+				log.debug(`Get result matches sleep on ${timeout}ms`);
+				await sleep(timeout);
 			}
-			if (value === null) {
-				return reject(body);
-			}
-			log.debug('Отработал: Метод для получения расширеных ставок');
-			resolve(value);
-		});
+		}
+		reject('Server is not responding');
 	});
 }
 
@@ -118,7 +150,7 @@ function setFileApiTelegram(token, chatId, document) {
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`setFileApiTelegram: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`setFileApiTelegram: code: ${res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			log.debug(`Отработал: Метод для отправки файла ${body}`);
@@ -153,7 +185,7 @@ function setTextApiTelegram(token, chatId, text) {
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`setFileApiTelegram: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`setFileApiTelegram: code: ${res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			log.debug(`Отработал: Метод для отправки соощения ${JSON.stringify(body.result)}`);
@@ -196,6 +228,15 @@ function setSupportMsgApiTelegram(token, chatId, text) {
 	});
 }
 
+/**
+ * Функция ожидания реализованая через промис + таймаут, прелполагается использовать с async/await.
+ *
+ * @param {number} ms - количество миллисекунд которое требуется выждать
+ * @return {Promise<number>} - промис, резолв которого будет означать что время вышло
+ */
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 module.exports = {
 	getAllMatches,

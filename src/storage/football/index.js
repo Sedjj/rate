@@ -46,7 +46,6 @@ function deleteStatistic(param) {
 		.exec()
 		.catch(error => {
 			log.error(`deleteStatistic param=${JSON.stringify(param)}: ${error.message}`);
-			throw new Error(error);
 		});
 }
 
