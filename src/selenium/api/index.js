@@ -19,10 +19,16 @@ const uploadDirectory = config.path.directory.upload || 'upload';
  * @constructor
  */
 async function driverChrome() {
-	return await new webdriver.Builder()
-		.withCapabilities(webdriver.Capabilities.chrome())
-		.setChromeOptions(await emulatorOfUniqueness())
-		.build();
+	if (process.env.NODE_ENV === 'development') {
+		return await new webdriver.Builder()
+			.withCapabilities(webdriver.Capabilities.chrome())
+			.setChromeOptions(await emulatorOfUniqueness())
+			.build();
+	} else {
+		return await new webdriver.Builder()
+			.forBrowser('chrome')
+			.usingServer('http://localhost:4444/wd/hub').build();
+	}
 }
 
 /**
@@ -278,7 +284,7 @@ async function screenShot(driver, nameFile) {
 		const base64Image = await driver.takeScreenshot(true);
 		const decodedImage = new Buffer.from(base64Image, 'base64');
 		const filePath = await saveBufferToFile(path.join(storagePath, uploadDirectory, nameFile), decodedImage);
-		if(process.env.NODE_ENV !== 'development'){
+		if (process.env.NODE_ENV !== 'development') {
 			const stream = await readFileToStream(filePath);
 			await sendFile(stream);
 		}

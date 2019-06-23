@@ -1,13 +1,13 @@
 version: "2"
 services:
-#  rate:
-#    container_name: rate
-#    restart: always
-#    build:
-#      context: .
-#      dockerfile: docker/node/Dockerfile
-#    links:
-#      - mongo-rate
+  rate:
+    container_name: rate
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    links:
+      - mongo-rate
 
   mongo-rate:
     container_name: mongo-rate
@@ -24,3 +24,17 @@ services:
       dockerfile: docker/mongo-seed/Dockerfile
     links:
       - mongo-rate
+
+  chrome:
+    image: selenium/node-chrome:3.14.0-gallium
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+
+  hub:
+    image: selenium/hub:3.14.0-gallium
+    ports:
+      - "4444:4444"
