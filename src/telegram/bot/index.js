@@ -95,17 +95,18 @@ bot.on('callback_query', async (msg) => {
 	switch (msg.data) {
 		case 'up':
 			slide.count++;
-			await editMessage(msg, slide.count.toString());
+			await editMessageReplyMarkup(msg, slide.count.toString());
 			break;
 		case 'down':
 			if (slide.count > 2) {
 				slide.count--;
-				await editMessage(msg, slide.count.toString());
+				await editMessageReplyMarkup(msg, slide.count.toString());
 			}
 			break;
 		case 'export':
 			await sendAnsweText(msg, 'Ожидайте файл');
-			exportStatisticDebounce();
+			await exportStatisticDebounce();
+			await menu(msg);
 			break;
 		case 'exportFootball':
 			slide.name = 'football';
@@ -121,15 +122,18 @@ bot.on('callback_query', async (msg) => {
 			break;
 		case 'backupFootballs':
 			await sendAnsweText(msg, 'Ожидайте файл');
-			exportBackup('footballs');
+			await exportBackup('footballs');
+			await menu(msg);
 			break;
 		case 'backupTableTennis':
 			await sendAnsweText(msg, 'Ожидайте файл');
-			exportBackup('tabletennis');
+			await exportBackup('tabletennis');
+			await menu(msg);
 			break;
 		case 'backupTennis':
 			await sendAnsweText(msg, 'Ожидайте файл');
-			exportBackup('tennis');
+			await exportBackup('tennis');
+			await menu(msg);
 			break;
 		case 'enableBets':
 			rateStatus.turnOn();
@@ -142,9 +146,9 @@ bot.on('callback_query', async (msg) => {
 		case 'debugLogs':
 			await sendAnsweText(msg, 'Ожидайте файл');
 			await getLogs();
+			await menu(msg);
 			break;
 	}
-	await menu(msg);
 });
 
 bot.on('message', response(async (msg) => {
@@ -246,11 +250,30 @@ async function deleteMessage(msg) {
  * @param {String} text текст для замены
  */
 async function editMessage(msg, text) {
+	const chatId = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
 	const opts = {
-		chat_id: msg.chat.id,
-		message_id: msg.message_id,
+		chat_id: chatId,
+		message_id: msg.message.message_id
 	};
 	await bot.editMessageText(text, opts);
+}
+
+/**
+ * Обертка для редактирования inline_keyboard в боте.
+ *
+ * @param {Object} msg объект что пришел из telegram
+ * @param {String} text текст для замены
+ * @returns {Promise<void>}
+ */
+async function editMessageReplyMarkup(msg, text) {
+	const chatId = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
+	const opts = {
+		chat_id: chatId,
+		message_id: msg.message.message_id
+	};
+	await bot.editMessageReplyMarkup({
+		inline_keyboard: menuList('days', text).buttons
+	}, opts);
 }
 
 /**
@@ -313,6 +336,7 @@ async function getLogs() {
 }
 
 module.exports = {
+	editMessage,
 	sendError,
 	deleteMessage
 };

@@ -19,7 +19,7 @@ class RateStatus {
 	}
 
 	turnOff() {
-		log.debug('Betting mechanism will be stopped');
+		log.info('Betting mechanism will be stopped');
 		return this.jobStatus = false;
 	}
 }

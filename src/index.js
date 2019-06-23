@@ -97,7 +97,7 @@ if (rendomSchedulerSearchTableTennis) {
 					schedulerSearchTableTennis.after
 				).generate()
 			));
-			searchTableTennis();
+			//searchTableTennis();
 		} catch (error) {
 			schedulerSearchJob.stop();
 			log.error(`cron pattern not valid: ${error}`);
@@ -120,7 +120,7 @@ if (rendomSchedulerSearchTennis) {
 					schedulerSearchTableTennis.after
 				).generate()
 			));
-			searchTennis();
+			// searchTennis();
 		} catch (error) {
 			schedulerSearchJob.stop();
 			log.error(`cron pattern not valid: ${error}`);
@@ -138,8 +138,8 @@ if (rendomSchedulerCheckingResults) {
 	let schedulerCheckingResultsJob = new CronJob(rendomSchedulerCheckingResults, () => {
 		try {
 			checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
-			checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);
-			checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);
+			/*checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);
+			checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);*/
 		} catch (error) {
 			schedulerCheckingResultsJob.stop();
 			log.error(`cron pattern not valid: ${error}`);

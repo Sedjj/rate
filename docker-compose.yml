@@ -26,6 +26,7 @@ services:
       - mongo-rate
 
   chrome:
+    container_name: chrome
     image: selenium/node-chrome:3.14.0-gallium
     volumes:
       - /dev/shm:/dev/shm
@@ -35,6 +36,7 @@ services:
       HUB_HOST: hub
 
   hub:
+    container_name: hub
     image: selenium/hub:3.14.0-gallium
     ports:
       - "4444:4444"

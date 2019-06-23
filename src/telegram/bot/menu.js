@@ -1,11 +1,11 @@
-function menuList(item) {
+function menuList(item, days = 2) {
 	switch (item) {
 		case 'days':
 			return {
 				id: 1,
 				title: 'Выберите количество дней на экспорт',
 				buttons: [
-					[{text: '-', callback_data: 'down'}, {text: '2', callback_data: ''}, {text: '+', callback_data: 'up'}],
+					[{text: '-', callback_data: 'down'}, {text: days, callback_data: 'value'}, {text: '+', callback_data: 'up'}],
 					[{text: 'экспорт', callback_data: 'export'}]
 				]
 			};
