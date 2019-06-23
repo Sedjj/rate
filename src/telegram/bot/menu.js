@@ -5,7 +5,7 @@ function menuList(item) {
 				id: 1,
 				title: 'Выберите количество дней на экспорт',
 				buttons: [
-					[{text: '-', callback_data: 'down'}, {text: '2'}, {text: '+', callback_data: 'up'}],
+					[{text: '-', callback_data: 'down'}, {text: '2', callback_data: ''}, {text: '+', callback_data: 'up'}],
 					[{text: 'экспорт', callback_data: 'export'}]
 				]
 			};
@@ -30,7 +30,7 @@ function menuList(item) {
 			};
 		case 'backup':
 			return {
-				id: 3,
+				id: 4,
 				title: 'Выберите тип бэкапа',
 				buttons: [
 					[{text: 'Бэкап футбол', callback_data: 'backupFootballs'}],
@@ -40,7 +40,7 @@ function menuList(item) {
 			};
 		case 'getFile':
 			return {
-				id: 3,
+				id: 5,
 				title: 'Выберите файл для скачивания',
 				buttons: [
 					[{text: 'debug logs', callback_data: 'debugLogs'}],

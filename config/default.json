@@ -244,15 +244,15 @@
 		"storage": {
 			"football": {
 				"inputName": "Reports-football-default.xlsx",
-				"outputName": "Reports-football.xlsx"
+				"outputName": "reports-football.xlsx"
 			},
 			"tableTennis": {
 				"inputName": "Reports-tableTennis-default.xlsx",
-				"outputName": "Reports-tableTennis.xlsx"
+				"outputName": "reports-tableTennis.xlsx"
 			},
 			"tennis": {
 				"inputName": "Reports-tennis-default.xlsx",
-				"outputName": "Reports-tennis.xlsx"
+				"outputName": "reports-tennis.xlsx"
 			}
 		},
 		"directory": {
