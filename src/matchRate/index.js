@@ -1,9 +1,7 @@
 const config = require('config');
 const {performEmulation} = require('../selenium/bot');
-/*
 const {sendMessageChat} = require('../telegram/api');
 const {decorateMessageTennis} = require('../utils/formateMessage');
-*/
 
 const typeRate = config.choice.live.football.typeRate;
 
@@ -22,7 +20,7 @@ async function matchRate(statistic, type = '') {
 			if (score.sc1 === 0 && score.sc2 === 1 && snapshot.end.time < 3060) {
 				if ((cards.after.two.red === 0) && (30 <= cards.before.one.danAttacks)) {
 					if (0.8 <= (snapshot.end.x - snapshot.end.p2)) {
-						// await sendMessageChat(decorateMessageTennis(statistic));
+						await sendMessageChat(decorateMessageTennis(statistic));
 						await performEmulation(matchId, 9, `Total Over ${total}`);
 					}
 				}

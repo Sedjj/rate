@@ -27,7 +27,7 @@ async function driverChrome() {
 	} else {
 		return await new webdriver.Builder()
 			.forBrowser('chrome')
-			.usingServer('http://localhost:4444/wd/hub').build();
+			.usingServer('http://chrome:4444/wd/hub').build();
 	}
 }
 
