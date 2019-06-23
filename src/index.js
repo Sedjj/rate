@@ -10,6 +10,7 @@ const {log} = require('./utils/logger');
 const football = require('./storage/football');
 const tableTennis = require('./storage/tableTennis');
 const tennis = require('./storage/tennis');
+/*const {performEmulation} = require('./selenium/bot');*/
 const {searchFootball, searchTableTennis, searchTennis} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
 
@@ -34,7 +35,7 @@ const schedulerSearchTennis = {
 };
 
 const rendomSchedulerSearchFootball = process.env.NODE_ENV === 'development'
-	? rc.some('seconds').between(150, 250).generate()
+	? rc.some('seconds').between(20, 60).generate()
 	: rc.some('seconds').between(
 		schedulerSearchFootball.before,
 		schedulerSearchFootball.after
@@ -58,6 +59,7 @@ const rendomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
 	: '00 05 10 * * 0-7';
 
+/*performEmulation('197246812', 9, `Total Over ${1.5}`);*/
 
 /**
  * Планировшик поиска матчей по футболу.

@@ -55,7 +55,7 @@ function getParams(item, extended = false) {
 			};
 		}
 	} catch (error) {
-		console.log(error);
+		throw new Error(error);
 	}
 	return param;
 }

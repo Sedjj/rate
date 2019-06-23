@@ -1,5 +1,5 @@
 const {log} = require('../../utils/logger');
-const {newStatistic, setStatistic} = require('../../storage/football');
+const {newStatistic, setStatistic, deleteStatistic} = require('../../storage/football');
 const {getExpandedMatch} = require('../../fetch');
 const config = require('config');
 const {matchRate} = require('../../matchRate');
@@ -17,7 +17,7 @@ const rateStrategyTwo = config.choice.live.football.strategyTwo.rate;
 const rateStrategyThree = config.choice.live.football.strategyThree.rate;
 const rateStrategyFour = config.choice.live.football.strategyFour.rate;
 const rateStrategyFive = config.choice.live.football.strategyFive.rate;
-const rateStrategySix = config.choice.live.football.strategySix.rate;
+/*const rateStrategySix = config.choice.live.football.strategySix.rate;*/
 const typeRate = config.choice.live.football.typeRate;
 
 /**
@@ -67,13 +67,13 @@ function footballLiveStrategyOne(param) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, strategy, -2, 1);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
+					await setSnapshot(param.matchId, strategy, -2, 1);
 					waiting(param, strategy);
 				}
 			})
 			.catch((error) => {
-				log.error(`footballLiveStrategyOne: ${error.message}`);
+				log.error(`footballLiveStrategyOne: ${error}`);
 			});
 	}
 }
@@ -89,13 +89,13 @@ function footballLiveStrategyTwo(param) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, strategy, -2, 1);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
+					await setSnapshot(param.matchId, strategy, -2, 1);
 					waiting(param, strategy);
 				}
 			})
 			.catch((error) => {
-				log.error(`footballLiveStrategyTwo: ${error.message}`);
+				log.error(`footballLiveStrategyTwo: ${error}`);
 			});
 	}
 }
@@ -111,13 +111,13 @@ function footballLiveStrategyThree(param) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
-					await setSnapshot(param.matchId, strategy, -2, 1);
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
+					await setSnapshot(param.matchId, strategy, -2, 1);
 					waiting(param, strategy);
 				}
 			})
 			.catch((error) => {
-				log.error(`footballLiveStrategyThree: ${error.message}`);
+				log.error(`footballLiveStrategyThree: ${error}`);
 			});
 	}
 }
@@ -134,13 +134,13 @@ function footballLiveStrategyFour(param) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					log.debug(`Найден ${football.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate(football, 'футбол');
 				}
 			})
 			.catch((error) => {
-				log.error(`footballLiveStrategyFour: ${error.message}`);
+				log.error(`footballLiveStrategyFour: ${error}`);
 			});
 	}
 }
@@ -156,13 +156,13 @@ function footballLiveStrategyFive(param) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					log.debug(`Найден ${football.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate(football, 'футбол');
 				}
 			})
 			.catch((error) => {
-				log.error(`footballLiveStrategyFive: ${error.message}`);
+				log.error(`footballLiveStrategyFive: ${error}`);
 			});
 	}
 }
@@ -172,14 +172,14 @@ function footballLiveStrategyFive(param) {
  *
  * @param {Object} param объект с параметрами матча
  */
-function footballLiveStrategySix(param) {
+/*function footballLiveStrategySix(param) {
 	const strategy = 6;
 	if (Math.abs(param.p1 - param.p2) < rateStrategySix) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					log.debug(`Найден ${football.matchId}: Футбол - стратегия ${strategy}`);
 					matchRate(football, 'футбол');
 				}
 			})
@@ -187,7 +187,7 @@ function footballLiveStrategySix(param) {
 				log.error(`footballLiveStrategySix: ${error.message}`);
 			});
 	}
-}
+}*/
 
 /**
  * Метод для изменения начальных параметров карточек.
@@ -199,31 +199,42 @@ function footballLiveStrategySix(param) {
  * @returns {Promise<Promise<any>|*>}
  */
 async function setSnapshot(matchId, strategy, total = undefined, index = undefined) {
-	const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
-	const param = searchHelper['getParams'](item, true);
-	const key = param.score.sc1 + param.score.sc2 + typeRate[strategy];
-	const desiredTotal = total || param.total.under.reduce((acc, current) => {
-		if (current.key === key) {
-			acc = current.value;
-		}
-		return acc;
-	}, undefined);
-	const desiredIndex = index || param.total.under.reduce((acc, current) => {
-		if (current.key === key) {
-			acc = current.value;
-		}
-		return acc;
-	}, undefined);
-	return setStatistic({
-		matchId: param.matchId,
-		strategy: strategy,
-		total: desiredTotal,
-		index: desiredIndex, // результат ставки.
-		cards: {
-			before: param.cards
-		},
-		modifiedBy: new Date().toISOString()
-	});
+	try {
+		let item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
+		const param = searchHelper['getParams'](item, true);
+		const key = param.score.sc1 + param.score.sc2 + typeRate[strategy];
+		const desiredTotal = total || param.total.under.reduce((acc, current) => {
+			if (current.key === key) {
+				acc = current.value;
+			}
+			return acc;
+		}, undefined);
+		const desiredIndex = index || param.total.under.reduce((acc, current) => {
+			if (current.key === key) {
+				acc = current.value;
+			}
+			return acc;
+		}, undefined);
+		return setStatistic({
+			matchId: param.matchId,
+			strategy: strategy,
+			total: desiredTotal,
+			index: desiredIndex, // результат ставки.
+			cards: {
+				before: param.cards
+			},
+			modifiedBy: new Date().toISOString()
+		});
+	} catch (error) {
+		log.error(`Set snapshot: ${error}`);
+		deleteStatistic({
+			matchId: matchId,
+			strategy: strategy
+		}).then(() => {
+			log.debug(`Матч ${matchId} - статегия ${strategy} -> удален`);
+		});
+		throw new Error(error);
+	}
 }
 
 /**
@@ -252,7 +263,7 @@ function saveRate(param, strategy) {
 		createdBy: new Date().toISOString(),
 		modifiedBy: new Date().toISOString()
 	}).catch((error) => {
-		log.error(`saveRate: ${error.message}`);
+		log.error(`Save rate: ${error}`);
 		throw new Error(error);
 	});
 }

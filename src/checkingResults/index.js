@@ -48,12 +48,14 @@ async function result(statistics, beforeDate, currentDate, setStatistic, numeric
 	try {
 		const currentData = await postResultDebounce(searchHelper.replaceUrl(urlAll, currentDate));
 		const beforeData = await postResultDebounce(searchHelper.replaceUrl(urlAll, beforeDate));
-		statistics.forEach(async (statistic) => {
-			const endScore = await serchResultEndMatch(beforeData, currentData, statistic, numericalDesignation);
-			await baseRecordCorrection(setStatistic, statistic, endScore);
-		});
+		await statistics.reduce(async (acc, statistic) => {
+			const endScore = await searchResultEndMatch(beforeData, currentData, statistic, numericalDesignation);
+			return await baseRecordCorrection(setStatistic, statistic, endScore);
+		}, Promise.resolve());
+		log.debug(`Конец проверки результатов с ${beforeDate} по ${currentDate}`);
 	} catch (error) {
-		log.error(`searchResult: ${error}`);
+		log.error(`Result: ${error}, statistics: ${statistics}`);
+		throw new Error(error);
 	}
 }
 
@@ -66,7 +68,7 @@ async function result(statistics, beforeDate, currentDate, setStatistic, numeric
  * @param {number} numericalDesignation числовое обозначение типа матча
  * @returns {Promise<String>}
  */
-function serchResultEndMatch(beforeData, currentData, statistic, numericalDesignation) {
+function searchResultEndMatch(beforeData, currentData, statistic, numericalDesignation) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let endScore = await searchHelper.searchResult(currentData, statistic.matchId, numericalDesignation);
@@ -75,6 +77,7 @@ function serchResultEndMatch(beforeData, currentData, statistic, numericalDesign
 			}
 			resolve(endScore);
 		} catch (error) {
+			log.error(`Search result end match: ${error}, beforeData: ${beforeData}, currentData: ${currentData}, statistic: ${statistic}, numericalDesignation: ${numericalDesignation}`);
 			reject(error);
 		}
 	});
@@ -89,15 +92,20 @@ function serchResultEndMatch(beforeData, currentData, statistic, numericalDesign
  * @returns {Promise<void>}
  */
 async function baseRecordCorrection(setStatistic, statistic, score) {
-	log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
-	await setStatistic({
-		matchId: statistic.matchId,
-		strategy: statistic.strategy,
-		score: {
-			resulting: score !== '' ? score : '-1'
-		}
-	});
-	return Promise.resolve([]);
+	try {
+		log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
+		await setStatistic({
+			matchId: statistic.matchId,
+			strategy: statistic.strategy,
+			score: {
+				resulting: score !== '' ? score : '-1'
+			}
+		});
+	} catch (error) {
+		log.error(`Base record correction: ${error}, statistic: ${statistic}, statistic: ${score}`);
+		throw new Error(error);
+	}
+	return Promise.resolve();
 }
 
 module.exports = {
