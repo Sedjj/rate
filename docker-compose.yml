@@ -8,6 +8,8 @@ services:
       dockerfile: docker/node/Dockerfile
     links:
       - mongo-rate
+      - chrome
+      - hub
 
   mongo-rate:
     container_name: mongo-rate
@@ -40,3 +42,5 @@ services:
     image: selenium/hub:3.14.0-gallium
     ports:
       - "4444:4444"
+    links:
+      - chrome

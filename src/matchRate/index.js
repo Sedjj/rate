@@ -32,6 +32,7 @@ async function matchRate(statistic, type = '') {
 					if (1.7 <= snapshot.start.p1 && 5 > snapshot.start.mod) {
 						if (0 > (snapshot.start.x - snapshot.start.p2)) {
 							if (0.3 < snapshot.end.mod && 0.25 < (snapshot.end.x - snapshot.end.p1)) {
+								await sendMessageChat(decorateMessageTennis(statistic));
 								await performEmulation(matchId, 9, `Total Over ${total}`);
 							}
 						}
@@ -41,6 +42,7 @@ async function matchRate(statistic, type = '') {
 					if (2.95 < snapshot.start.x && 1.8 < snapshot.start.p2) {
 						if (2.75 <= snapshot.end.x) {
 							if (-0.5 >= (snapshot.end.x - snapshot.end.p1)) {
+								await sendMessageChat(decorateMessageTennis(statistic));
 								await performEmulation(matchId, 9, `Total Over ${total}`);
 							}
 						}
@@ -53,6 +55,7 @@ async function matchRate(statistic, type = '') {
 				if (snapshot.end.p1 <= snapshot.end.p2) {
 					if (1.8 > snapshot.start.mod && 3 < snapshot.start.x) {
 						if ((cards.before.two.danAttacks > 0) && (cards.before.one.attacks < 51)) {
+							await sendMessageChat(decorateMessageTennis(statistic));
 							await performEmulation(matchId, 10, `Total Under ${total}`);
 						}
 					}
@@ -63,6 +66,7 @@ async function matchRate(statistic, type = '') {
 					if (1.6 > (snapshot.start.x - snapshot.start.p2)) {
 						if (3.2 <= snapshot.start.x) {
 							if ((cards.before.one.attacks > 45) && (cards.before.two.attacks > 45)) {
+								await sendMessageChat(decorateMessageTennis(statistic));
 								await performEmulation(matchId, 10, `Total Under ${total}`);
 							}
 						}
