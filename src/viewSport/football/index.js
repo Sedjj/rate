@@ -12,13 +12,13 @@ const urlFootballExpandedRate = config.parser[`${active[0]}`].live['football']['
 const before = config.choice.live.football.time.before;
 const after = config.choice.live.football.time.after;
 
-const rateStrategyOne = config.choice.live.football.strategyOne.rate;
-const rateStrategyTwo = config.choice.live.football.strategyTwo.rate;
-const rateStrategyThree = config.choice.live.football.strategyThree.rate;
-const rateStrategyFour = config.choice.live.football.strategyFour.rate;
-const rateStrategyFive = config.choice.live.football.strategyFive.rate;
-/*const rateStrategySix = config.choice.live.football.strategySix.rate;*/
-const typeRate = config.choice.live.football.typeRate;
+const rateStrategyOne = config['choice'].live.football.strategyOne.rate;
+const rateStrategyTwo = config['choice'].live.football.strategyTwo.rate;
+const rateStrategyThree = config['choice'].live.football.strategyThree.rate;
+const rateStrategyFour = config['choice'].live.football.strategyFour.rate;
+const rateStrategyFive = config['choice'].live.football.strategyFive.rate;
+/*const rateStrategySix = config['choice'].live.football.strategySix.rate;*/
+const typeRate = config['choice'].live.football.typeRate;
 
 /**
  * Общая стратегия для Live футбола

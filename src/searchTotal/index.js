@@ -53,7 +53,6 @@ function waiting(param, strategy) {
 					counterWaiting.decrement();
 					waitingIntervalJob.stop();
 				} else {
-					log.debug('waiting else');
 					reboot = true;
 					waitingIntervalJob.setTime(new CronTime(
 						rc.some('seconds').between(
