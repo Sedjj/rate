@@ -2,8 +2,7 @@ const chrome = require('selenium-webdriver/chrome');
 const config = require('config');
 const path = require('path');
 const {log} = require('../../utils/logger');
-const {By} = require('selenium-webdriver');
-const webdriver = require('selenium-webdriver');
+const {By, until, Builder, Capabilities} = require('selenium-webdriver');
 const {sendFile} = require('../../telegram/api');
 const {readFileToStream, saveBufferToFile} = require('../../utils/fsHelpers');
 const {path: pathChrome} = require('chromedriver');
@@ -11,6 +10,14 @@ const {path: pathChrome} = require('chromedriver');
 chrome.setDefaultService(new chrome.ServiceBuilder(pathChrome).build());
 const storagePath = config.path.storagePath || process.cwd();
 const uploadDirectory = config.path.directory.upload || 'upload';
+
+const speed = {
+	veryFast: 500,
+	fast: 1000,
+	normal: 10000,
+	slow: 20 * 1000,
+	verySlow: 40 * 1000,
+};
 
 /**
  * Создаем инстанс для хрома.
@@ -20,14 +27,14 @@ const uploadDirectory = config.path.directory.upload || 'upload';
  */
 async function driverChrome() {
 	if (process.env.NODE_ENV === 'development') {
-		return await new webdriver.Builder()
-			.withCapabilities(webdriver.Capabilities.chrome())
+		return await new Builder()
+			.withCapabilities(Capabilities.chrome())
 			.setChromeOptions(await emulatorOfUniqueness())
 			.build();
 	} else {
-		return await new webdriver.Builder()
+		return await new Builder()
 			.forBrowser('chrome')
-			.usingServer('http://chrome:4444/wd/hub').build();
+			.usingServer('http://hub:4444/wd/hub').build();
 	}
 }
 
@@ -60,13 +67,58 @@ async function emulatorOfUniqueness() {
 }
 
 /**
- * Функция для поиска элемента по селектору css и вызова click.
+ * Функция для поиска элемента по селектору.
  *
  * @param {object} driver инстанс драйвера
- * @param {String} selector
+ * @param {!By} selector
+ * @returns {Promise<HTMLInputElement | boolean>}
+ */
+async function findSelector(driver, selector) {
+	try {
+		let element = await driver.wait(
+			until.elementLocated(selector),
+			speed.verySlow
+		);
+		element = await driver.wait(
+			until.elementIsVisible(element),
+			speed.slow
+		);
+
+		if (element) {
+			return element;
+		} else {
+			log.debug(`Item not found in ${speed.verySlow}ms`);
+			return false;
+		}
+	} catch (e) {
+		return false;
+	}
+}
+
+/**
+ * Функция для поиска элемента по селектору css.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector css селектор
  * @returns {Promise<boolean>}
  */
 async function findSelectorCss(driver, selector) {
+	try {
+		const el = await findSelector(driver, By.css(selector));
+		return !!el;
+	} catch (e) {
+		return false;
+	}
+}
+
+/**
+ * Функция для проверки, еслить ли элемент на странице.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector css селектор
+ * @returns {Promise<boolean>}
+ */
+async function isElement(driver, selector) {
 	try {
 		const el = await driver.findElement(By.css(selector));
 		return !!el;
@@ -75,20 +127,18 @@ async function findSelectorCss(driver, selector) {
 	}
 }
 
-
 /**
  * Функция для поиска элемента по селектору css и вызова click.
  *
  * @param {object} driver инстанс драйвера
- * @param {String} selector
+ * @param {String} selector css селектор
  * @returns {Promise<boolean>}
  */
 async function findSelectorCssAndCall(driver, selector) {
 	try {
-		const el = await driver.findElement(By.css(selector));
+		const el = await findSelector(driver, By.css(selector));
 		if (el) {
 			await el.click();
-			await driver.sleep(500);
 			return true;
 		} else {
 			return false;
@@ -104,15 +154,14 @@ async function findSelectorCssAndCall(driver, selector) {
  * Функция для поиска элемента по id и вызова click.
  *
  * @param {object} driver инстанс драйвера
- * @param {String} selector
+ * @param {String} selector css селектор
  * @returns {Promise<boolean>}
  */
 async function findIdAndCall(driver, selector) {
 	try {
-		const el = await driver.findElement(By.id(selector));
+		const el = await findSelector(driver, By.id(selector));
 		if (el) {
 			await el.click();
-			await driver.sleep(500);
 			return true;
 		} else {
 			return false;
@@ -133,10 +182,9 @@ async function findIdAndCall(driver, selector) {
  */
 async function findIdAndFill(driver, selector, text) {
 	try {
-		const el = await driver.findElement(By.id(selector));
+		const el = await findSelector(driver, By.id(selector));
 		if (el) {
 			await write(el, text);
-			await driver.sleep(500);
 			return true;
 		} else {
 			return false;
@@ -157,10 +205,9 @@ async function findIdAndFill(driver, selector, text) {
  */
 async function findSelectorCssAndFill(driver, selector, text) {
 	try {
-		const el = await driver.findElement(By.css(selector));
+		const el = await findSelector(driver, By.css(selector));
 		if (el) {
 			await write(el, text);
-			await driver.sleep(500);
 			return true;
 		} else {
 			return false;
@@ -187,7 +234,6 @@ async function findTextBySelectorCssAndCall(driver, selector, value) {
 				const text = await item.getText();
 				if (text.indexOf(value) !== -1) {
 					item.click();
-					await driver.sleep(500);
 					acc = true;
 				}
 				return acc;
@@ -262,7 +308,7 @@ async function switchTab(driver, closed = true) {
 		if (handles.length > 1) {
 			closed && driver.close();
 			await driver.switchTo().window(handles[1]);
-			await driver.sleep(500);
+			await driver.sleep(speed.veryFast);
 			return true;
 		} else {
 			return false;
@@ -274,6 +320,7 @@ async function switchTab(driver, closed = true) {
 }
 
 /**
+ * Создание скриншота выполнения.
  *
  * @param {object} driver инстанс драйвера
  * @param {String} nameFile имя выходного файла
@@ -288,7 +335,7 @@ async function screenShot(driver, nameFile) {
 			const stream = await readFileToStream(filePath);
 			await sendFile(stream);
 		}
-		await driver.sleep(500);
+		await driver.sleep(speed.veryFast);
 		return true;
 	} catch (e) {
 		log.error('Error screenShot -> ' + e);
@@ -300,6 +347,7 @@ module.exports = {
 	driverChrome,
 	init,
 	findSelectorCss,
+	isElement,
 	findSelectorCssAndCall,
 	findIdAndCall,
 	findIdAndFill,
