@@ -6,14 +6,14 @@ const {
 } = require('../../fetch');
 
 const token = process.env.NODE_ENV === 'development'
-	? config.bots.dev.token
-	: config.bots.test.token;
+	? config['bots'].dev.token
+	: config['bots'].test.token;
 const chatId = process.env.NODE_ENV === 'development'
-	? config.bots.dev.chatId
-	: config.bots.test.chatId;
+	? config['bots'].dev.chatId
+	: config['bots'].test.chatId;
 const channelId = process.env.NODE_ENV === 'development'
-	? config.bots.dev.channelId
-	: config.bots.test.channelId;
+	? config['bots'].dev['channelId']
+	: config['bots'].test['channelId'];
 
 const supportChatId = process.env.NODE_ENV === 'development'
 	? config.bots.supportDev.chatId
