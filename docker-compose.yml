@@ -3,12 +3,15 @@ services:
   rate:
     container_name: rate
     restart: always
+    depends_on:
+      - mongo-rate
+      - hub
     build:
       context: .
       dockerfile: docker/node/Dockerfile
     links:
       - mongo-rate
-      - chrome
+      - hub
 
   mongo-rate:
     container_name: mongo-rate
@@ -20,6 +23,8 @@ services:
 
   mongo-rate-seed:
     container_name: mongo-rate-seed
+    depends_on:
+      - mongo-rate
     build:
       context: .
       dockerfile: docker/mongo-seed/Dockerfile

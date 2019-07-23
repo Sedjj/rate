@@ -59,7 +59,7 @@ const rendomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
 	: '00 05 10 * * 0-7';
 
-/*performEmulation('197246812', 9, `Total Over ${1.5}`);*/
+/*performEmulation('200826182', 9, `Total Over ${2.5}`);*/
 
 /**
  * Планировшик поиска матчей по футболу.

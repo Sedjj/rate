@@ -26,7 +26,7 @@ COPY package-lock.json /home/app
 
 WORKDIR /home/app
 
-# Running npm install for production purpose will not run dev dependencies.
+# Running npm install for production development purpose will not run dev dependencies.
 RUN npm install --only=production
 RUN npm audit fix
 
