@@ -46,6 +46,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.quit();
 	} catch (e) {
 		log.error('Error performEmulation -> ' + e);
+		//FIXME падает ошибка и рушит все
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
 		await driver.quit();
 	}
