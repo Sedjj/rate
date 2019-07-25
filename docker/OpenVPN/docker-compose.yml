@@ -1,52 +1,5 @@
 version: "2"
 services:
-  rate:
-    container_name: rate
-    restart: always
-    depends_on:
-      - mongo-rate
-      - hub
-    build:
-      context: .
-      dockerfile: docker/node/Dockerfile
-    links:
-      - mongo-rate
-      - hub
-
-  mongo-rate:
-    container_name: mongo-rate
-    image: mongo
-    volumes:
-      - ./docker/mongo-seed/db:/data/db
-    ports:
-      - "27017:27017"
-
-  mongo-rate-seed:
-    container_name: mongo-rate-seed
-    depends_on:
-      - mongo-rate
-    build:
-      context: .
-      dockerfile: docker/mongo-seed/Dockerfile
-    links:
-      - mongo-rate
-
-  chrome:
-    container_name: chrome
-    image: selenium/node-chrome:3.14.0-gallium
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - hub
-    environment:
-      HUB_HOST: hub
-
-  hub:
-    container_name: hub
-    image: selenium/hub:3.14.0-gallium
-    ports:
-      - "4444:4444"
-
   openvpn:
     cap_add:
       - NET_ADMIN
@@ -56,4 +9,4 @@ services:
       - "1194:1194/udp"
     restart: always
     volumes:
-      - /home/docker/openvpn/:/etc/openvpn
+      - ./openvpn-data/conf:/etc/openvpn
