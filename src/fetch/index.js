@@ -9,9 +9,10 @@ const {log} = require('./../utils/logger');
  */
 const searchTimeouts = [2000, 5000, 8000, 12000, 1];
 const proxy = config.proxy;
+const active = config.parser.active;
 const cookieJar = new CookieJar();
 const client = got.extend({
-	baseUrl: 'https://1xstavka.ru',
+	baseUrl: config.parser[`${active[0]}`].baseUrl,
 	cookieJar
 });
 

@@ -9,10 +9,11 @@ const active = config.parser.active;
 const urlPutbetsCommon = config.parser[`${active[0]}`].rate['putbetscommon'];
 const urlUpdateCoupon = config.parser[`${active[0]}`].rate['updateCoupon'];
 const urlBalance = config.parser[`${active[0]}`].rate['balance'];
+const baseUrl = config.parser[`${active[0]}`].baseUrl;
 
 const cookieJar = new CookieJar();
 const client = got.extend({
-	baseUrl: 'https://1xstavka.ru',
+	baseUrl,
 	cookieJar
 });
 
@@ -66,7 +67,7 @@ async function getGGRU() {
 	if (value.length) {
 		const GGRU = value[0].split('=')[1];
 
-		cookieJar.setCookie(`ggru=${GGRU}`, 'https://1xstavka.ru', {}, () => {
+		cookieJar.setCookie(`ggru=${GGRU}`, baseUrl, {}, () => {
 		});
 	}
 }
