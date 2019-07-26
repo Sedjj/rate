@@ -38,7 +38,7 @@ function footballLiveStrategy(param) {
 			}
 		}
 		// тотал больше
-		if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+		if ((param.score.sc1 + param.score.sc2) === 1) {
 			if ((param.time >= time[3].before) && (param.time <= time[3].after)) {
 				footballLiveStrategyThree(param);
 			}
