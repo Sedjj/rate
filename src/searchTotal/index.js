@@ -16,7 +16,7 @@ const waitingInterval = {
 	after: 60
 };
 const urlFootballExpandedRate = config.parser[`${active[0]}`].live['football']['expandedRate'];
-const after = config.choice.live.football.time.after;
+const time = config.choice.live.football.time;
 const totalStrategy = config.choice.live.football.total;
 const typeRate = config.choice.live.football.typeRate;
 const rendomWaitingInterval = process.env.NODE_ENV === 'development'
@@ -95,7 +95,7 @@ async function searchIndex(matchId, strategy, oldScore) {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
 		const param = searchHelper['getParams'](item, true);
-		if (equalsScore(oldScore, param.score) && (param.time <= after)) { //не изменился ли счет и не вышло ли за ределы время
+		if (equalsScore(oldScore, param.score) && (param.time <= time[strategy].after)) { //не изменился ли счет и не вышло ли за ределы время
 			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
 			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
 			if (index !== null) {

@@ -21,7 +21,7 @@ async function matchRate(statistic, type = '') {
 				if (score.sc1 === 0 && score.sc2 === 1) {
 					if ((55 < cards.before.one.attacks) && (31 < cards.before.one.danAttacks)) {
 						await sendMessageChat(decorateMessageTennis(statistic));
-						await performEmulation(matchId, 9, `Total Over ${total}`);
+						/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
 					}
 				}
 				if (score.sc1 === 1 && score.sc2 === 0 && snapshot.start.time < 3000) {
@@ -30,7 +30,7 @@ async function matchRate(statistic, type = '') {
 						if ((0.1 < (snapshot.start.x - snapshot.start.p2)) || ((snapshot.start.x - snapshot.start.p2) < -0.1)) {
 							if ((1.15 < (snapshot.start.x - snapshot.start.p1)) || ((snapshot.start.x - snapshot.start.p1) < 0.8)) {
 								await sendMessageChat(decorateMessageTennis(statistic));
-								await performEmulation(matchId, 9, `Total Over ${total}`);
+							/*	await performEmulation(matchId, 9, `Total Over ${total}`);*/
 							}
 						}
 					}
@@ -44,7 +44,7 @@ async function matchRate(statistic, type = '') {
 						if (0 > (snapshot.start.x - snapshot.start.p2)) {
 							if (0.3 < snapshot.end.mod && 0.25 < (snapshot.end.x - snapshot.end.p1)) {
 							/*	await sendMessageChat(decorateMessageTennis(statistic));*/
-								await performEmulation(matchId, 9, `Total Over ${total}`);
+								/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
 							}
 						}
 					}
@@ -54,12 +54,15 @@ async function matchRate(statistic, type = '') {
 						if (2.75 <= snapshot.end.x) {
 							if (-0.5 >= (snapshot.end.x - snapshot.end.p1)) {
 								/*await sendMessageChat(decorateMessageTennis(statistic));*/
-								await performEmulation(matchId, 9, `Total Over ${total}`);
+								/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
 							}
 						}
 					}
 				}
 			}
+			break;
+		case 3 :
+			await sendMessageChat(decorateMessageTennis(statistic));
 			break;
 		case 4 :
 			if (command.women === 0) {
@@ -67,7 +70,7 @@ async function matchRate(statistic, type = '') {
 					if (1.8 > snapshot.start.mod && 3 < snapshot.start.x) {
 						if ((cards.before.two.danAttacks > 0) && (cards.before.one.attacks < 51)) {
 							/*await sendMessageChat(decorateMessageTennis(statistic));*/
-							await performEmulation(matchId, 10, `Total Under ${total}`);
+						/*	await performEmulation(matchId, 10, `Total Under ${total}`);*/
 						}
 					}
 				}
@@ -78,7 +81,7 @@ async function matchRate(statistic, type = '') {
 						if (3.2 <= snapshot.start.x) {
 							if ((cards.before.one.attacks > 45) && (cards.before.two.attacks > 45)) {
 								/*await sendMessageChat(decorateMessageTennis(statistic));*/
-								await performEmulation(matchId, 10, `Total Under ${total}`);
+								/*await performEmulation(matchId, 10, `Total Under ${total}`);*/
 							}
 						}
 					}

@@ -55,10 +55,10 @@ async function init(driver) {
  */
 async function emulatorOfUniqueness() {
 	const options = new chrome.Options();
-	options.addArguments('headless');
-	options.addArguments('no-sandbox');
+	/*options.addArguments('headless');*/
+	/*options.addArguments('no-sandbox');
 	options.addArguments('incognito');
-	options.addArguments('test-type');
+	options.addArguments('test-type');*/
 	options.addArguments('disable-webgl');
 	options.addArguments('window-size=1600,1200');
 	options.addArguments('disable-gpu');
@@ -134,7 +134,7 @@ async function isElement(driver, selector) {
  * @param {String} selector css селектор
  * @returns {Promise<boolean>}
  */
-async function findSelectorCssAndCall(driver, selector) {
+async function findCssAndCall(driver, selector) {
 	try {
 		const el = await findSelector(driver, By.css(selector));
 		if (el) {
@@ -144,7 +144,7 @@ async function findSelectorCssAndCall(driver, selector) {
 			return false;
 		}
 	} catch (e) {
-		log.error('Error findSelectorCssAndCall -> ' + e);
+		log.error('Error findCssAndCall -> ' + e);
 		return false;
 	}
 
@@ -348,7 +348,7 @@ module.exports = {
 	init,
 	findSelectorCss,
 	isElement,
-	findSelectorCssAndCall,
+	findCssAndCall,
 	findIdAndCall,
 	findIdAndFill,
 	findSelectorCssAndFill,

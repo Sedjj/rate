@@ -10,7 +10,7 @@ const {log} = require('./utils/logger');
 const football = require('./storage/football');
 const tableTennis = require('./storage/tableTennis');
 const tennis = require('./storage/tennis');
-/*const {performEmulation} = require('./selenium/bot');*/
+const {performEmulation} = require('./selenium/bot');
 const {searchFootball, searchTableTennis, searchTennis} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
 
@@ -59,7 +59,7 @@ const rendomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
 	: '00 05 10 * * 0-7';
 
-/*performEmulation('200826182', 9, `Total Over ${2.5}`);*/
+/*performEmulation('201136064', 9, `Total Over ${4.5}`);*/
 
 /**
  * Планировшик поиска матчей по футболу.

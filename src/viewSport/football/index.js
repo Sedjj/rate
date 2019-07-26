@@ -9,15 +9,13 @@ const {searchHelper} = require('../../modifiableFile');
 const active = config.parser.active;
 const urlFootballExpandedRate = config.parser[`${active[0]}`].live['football']['expandedRate'];
 
-const before = config.choice.live.football.time.before;
-const after = config.choice.live.football.time.after;
+const time = config.choice.live.football.time;
 
 const rateStrategyOne = config['choice'].live.football.strategyOne.rate;
 const rateStrategyTwo = config['choice'].live.football.strategyTwo.rate;
 const rateStrategyThree = config['choice'].live.football.strategyThree.rate;
 const rateStrategyFour = config['choice'].live.football.strategyFour.rate;
 const rateStrategyFive = config['choice'].live.football.strategyFive.rate;
-/*const rateStrategySix = config['choice'].live.football.strategySix.rate;*/
 const typeRate = config['choice'].live.football.typeRate;
 
 /**
@@ -27,32 +25,40 @@ const typeRate = config['choice'].live.football.typeRate;
  */
 function footballLiveStrategy(param) {
 	if ((param.p1 !== '') && (param.p2 !== '') && (param.p1 !== 0) && (param.p2 !== 0) && (param.x !== '')) {
-		if ((param.time >= before) && (param.time <= after)) {
-			// тотал больше
-			if ((param.score.sc1 + param.score.sc2) === 1) {
+		// тотал больше
+		if ((param.score.sc1 + param.score.sc2) === 1) {
+			if ((param.time >= time[1].before) && (param.time <= time[1].after)) {
 				footballLiveStrategyOne(param);
 			}
-			// тотал больше
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
+		}
+		// тотал больше
+		if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
+			if ((param.time >= time[2].before) && (param.time <= time[2].after)) {
 				footballLiveStrategyTwo(param);
 			}
-			// тотал больше
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+		}
+		// тотал больше
+		if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+			if ((param.time >= time[3].before) && (param.time <= time[3].after)) {
 				footballLiveStrategyThree(param);
 			}
-			// тотал меньше
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
+		}
+		// тотал меньше
+		if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
+			if ((param.time >= time[4].before) && (param.time <= time[4].after)) {
 				footballLiveStrategyFour(param);
 			}
-			// тотал меньше
-			if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+		}
+		// тотал меньше
+		if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 1)) {
+			if ((param.time >= time[5].before) && (param.time <= time[5].after)) {
 				footballLiveStrategyFive(param);
 			}
-			// тотал больше
-			if ((param.score.sc1 > param.score.sc2)) {
-				// footballLiveStrategySix(param);
-			}
 		}
+	}
+	// тотал больше
+	if ((param.score.sc1 > param.score.sc2)) {
+		// footballLiveStrategySix(param);
 	}
 }
 
@@ -107,7 +113,7 @@ function footballLiveStrategyTwo(param) {
  */
 function footballLiveStrategyThree(param) {
 	const strategy = 3;
-	if (Math.abs(param.p1 - param.p2) > rateStrategyThree) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyThree) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
@@ -166,28 +172,6 @@ function footballLiveStrategyFive(param) {
 			});
 	}
 }
-
-/**
- * Стратегия ничья с явным фаворитом p1 > p2
- *
- * @param {Object} param объект с параметрами матча
- */
-/*function footballLiveStrategySix(param) {
-	const strategy = 6;
-	if (Math.abs(param.p1 - param.p2) < rateStrategySix) {
-		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
-			.then(async (statistic) => {
-				if (statistic !== null) {
-					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'футбол');
-				}
-			})
-			.catch((error) => {
-				log.error(`footballLiveStrategySix: ${error.message}`);
-			});
-	}
-}*/
 
 /**
  * Метод для изменения начальных параметров карточек.

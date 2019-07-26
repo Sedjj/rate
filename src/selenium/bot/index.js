@@ -7,12 +7,21 @@ const {
 	findSelectorCss,
 	findTextBySelectorCssAndCall,
 	init,
-	findSelectorCssAndCall,
+	findCssAndCall,
 	screenShot,
 	isElement,
 	findIdAndFill,
+	findIdAndCall,
 	findSelectorCssAndFill
 } = require('../api');
+
+const speed = {
+	veryFast: 500,
+	fast: 1000,
+	normal: 10000,
+	slow: 20 * 1000,
+	verySlow: 40 * 1000,
+};
 
 const auth = config.auth;
 const betAmount = config.emulator.betAmount;
@@ -59,10 +68,11 @@ async function performEmulation(ids, numberColumn, totalName) {
  * @returns {Promise<boolean>}
  */
 async function authorization(driver) {
-	if (await findSelectorCssAndCall(driver, '.loginDropTop .loginDropTop_con > .curloginDropTop.base_auth_form')) {
+	if (await findIdAndCall(driver, 'curLoginForm')) {
 		await findIdAndFill(driver, 'auth_id_email', auth.login);
 		await findIdAndFill(driver, 'auth-form-password', auth.password);
-		if (await findSelectorCssAndCall(driver, '.auth-button.auth-button--block')) {
+		if (await findCssAndCall(driver, '.auth-button.auth-button--block')) {
+			driver.sleep(speed.fast);
 			return true;
 		}
 	} else if (await findSelectorCss(driver, '.wrap_lk')) {
@@ -80,15 +90,16 @@ async function authorization(driver) {
  * @returns {Promise<boolean>}
  */
 async function search(driver, ids) {
+	driver.sleep(speed.fast);
 	if (await findSelectorCss(driver, '.ls-panel__head.ls-panel__head--search')
 		&& await findSelectorCss(driver, '.wrap_lk')
 		&& await findSelectorCss(driver, '.ls-filter__search .ls-search__button')
 	) {
 		if (!await isElement(driver, '.ls-search__button.active')) {
-			await findSelectorCssAndCall(driver, '.ls-search__button');
+			await findCssAndCall(driver, '.ls-search__button');
 		}
 		await findSelectorCssAndFill(driver, '.ls-search__input.searchInput.keyboardInput', ids.toString());
-		await findSelectorCssAndCall(driver, '.ls-search__button');
+		await findCssAndCall(driver, '.ls-search__button');
 		return await popup(driver);
 	}
 	log.debug('Search match failed');
@@ -106,7 +117,7 @@ async function popup(driver) {
 		await findSelectorCss(driver, '.search-popup-events > .search-popup-events__item')
 	) {
 		try {
-			await findSelectorCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
+			await findCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
 		} catch (e) {
 			log.debug('Can`t search current match: ', e);
 			return false;
@@ -130,7 +141,7 @@ async function rate(driver, numberColumn, totalName) {
 		try {
 			if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
 				if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
-					await findSelectorCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
+					await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
 					if (await findSelectorCss(driver, '.swal2-error')) {
 						log.info('Rate error');
 						return false;

@@ -2,8 +2,8 @@
 	"ip": "localhost",
 	"port": 8081,
 	"auth": {
-		"login": "55311279",
-		"password": "088706"
+		"login": "58697181",
+		"password": "29c3sb6p"
 	},
 	"dbDev": {
 		"name": "rateBot",
@@ -67,7 +67,7 @@
 	},
 	"parser": {
 		"active": [
-			"1xstavka"
+			"1xbet"
 		],
 		"1xstavka": {
 			"startPage": "https://1xstavka.ru/en",
@@ -131,18 +131,34 @@
 			}
 		},
 		"1xbet": {
+			"startPage": "https://1xbet.com/en",
+			"baseUrl": "https://1xbet.com",
 			"live": {
 				"football": {
-					"rate": "",
-					"expandedRate": "",
-					"card": ""
+					"rate": "LiveFeed/Get1x2_VZip?sports=1&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
 				},
-				"tennis": ""
+				"tableTennis": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=10&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				},
+				"tennis": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=4&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				}
 			},
 			"result": {
-				"live": "",
-				"allZone": "",
-				"all": ""
+				"all": "getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=en&adult=false&showAll=true"
+			},
+			"authentication": {
+				"auth": "en/user/auth/",
+				"twofactor": "user/twofactor"
+			},
+			"rate": {
+				"getuserdata": "getuserdata",
+				"putbetscommon": "datalinelive/putbetscommon",
+				"updateCoupon": "LiveUtil/UpdateCoupon",
+				"balance": "user/balance"
 			}
 		},
 		"marathonbet": {
@@ -164,10 +180,6 @@
 	"choice": {
 		"live": {
 			"football": {
-				"time": {
-					"before": 2700,
-					"after": 4500
-				},
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) <= rate",
 					"rate": 2
@@ -177,7 +189,7 @@
 					"rate": 10
 				},
 				"strategyThree": {
-					"titleRate": "Math.abs(p1 - p2) > rate",
+					"titleRate": "Math.abs(p1 - p2) < rate",
 					"rate": 2
 				},
 				"strategyFour": {
@@ -211,6 +223,33 @@
 					1.5,
 					1.5,
 					1.5
+				],
+				"titleTime": "Временные интервалы для парсинга",
+				"time": [
+					{
+						"before": 0,
+						"after": 0
+					},
+					{
+						"before": 2700,
+						"after": 4500
+					},
+					{
+						"before": 2700,
+						"after": 4500
+					},
+					{
+						"before": 0,
+						"after": 2700
+					},
+					{
+						"before": 2700,
+						"after": 4500
+					},
+					{
+						"before": 2700,
+						"after": 4500
+					}
 				],
 				"titleNumericalDesignation": "Числовое обозначение футбола",
 				"numericalDesignation": 1
@@ -266,6 +305,6 @@
 	},
 	"emulator": {
 		"titleBetAmount": "Размер ставки",
-		"betAmount": 20
+		"betAmount": 10
 	}
 }
