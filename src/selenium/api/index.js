@@ -55,10 +55,10 @@ async function init(driver) {
  */
 async function emulatorOfUniqueness() {
 	const options = new chrome.Options();
-	/*options.addArguments('headless');*/
-	/*options.addArguments('no-sandbox');
+	options.addArguments('headless');
+	options.addArguments('no-sandbox');
 	options.addArguments('incognito');
-	options.addArguments('test-type');*/
+	options.addArguments('test-type');
 	options.addArguments('disable-webgl');
 	options.addArguments('window-size=1600,1200');
 	options.addArguments('disable-gpu');
