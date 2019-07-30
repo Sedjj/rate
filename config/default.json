@@ -131,8 +131,8 @@
 			}
 		},
 		"1xbet": {
-			"startPage": "https://1xbet.com/en",
-			"baseUrl": "https://1xbet.com",
+			"startPage": "https://1xyuh.world/",
+			"baseUrl": "https://1xyuh.world/",
 			"live": {
 				"football": {
 					"rate": "LiveFeed/Get1x2_VZip?sports=1&count=2000&mode=4&country=1&partner=51&getEmpty=true",
