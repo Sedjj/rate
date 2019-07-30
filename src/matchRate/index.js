@@ -30,7 +30,7 @@ async function matchRate(statistic, type = '') {
 							if (Math.abs(start.x - start.p1) > 0.5) {
 								if ((two.attack > 37) && (two.danAttacks > 20)) {
 									await sendMessageChat(decorateMessageTennis(statistic));
-									/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
+									await performEmulation(matchId, 9, `Total Over ${total}`);
 								}
 							}
 						}
@@ -39,14 +39,14 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 1 && sc2 === 0 && youth === 1) {
 					if ((start.x - start.p2) <= 0.1) {
 						await sendMessageChat(decorateMessageTennis(statistic));
-						/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
+						await performEmulation(matchId, 9, `Total Over ${total}`);
 					}
 				} else if (sc1 === 1 && sc2 === 0 && youth === 0) {
 					if (two.red === 0) {
 						if ((start.x - start.p2) >= 0.75) {
 							if ((two.attack < 30) && (two.danAttacks < 50)) {
 								await sendMessageChat(decorateMessageTennis(statistic));
-								/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
+								await performEmulation(matchId, 9, `Total Over ${total}`);
 							}
 						}
 					}
@@ -58,6 +58,7 @@ async function matchRate(statistic, type = '') {
 				if ((start.x - start.p2) > 1) {
 					if ((start.p2 - start.p1) >= -1.3) {
 						await sendMessageChat(decorateMessageTennis(statistic));
+						await performEmulation(matchId, 9, `Total Over ${total}`);
 					}
 				}
 			}
@@ -65,6 +66,7 @@ async function matchRate(statistic, type = '') {
 				if ((start.x - start.p1) >= 1.6) {
 					if ((start.x - start.p2) > 0) {
 						await sendMessageChat(decorateMessageTennis(statistic));
+						await performEmulation(matchId, 9, `Total Over ${total}`);
 					}
 				}
 			}
