@@ -181,7 +181,7 @@
 		"live": {
 			"football": {
 				"strategyOne": {
-					"titleRate": "Math.abs(p1 - p2) <= rate",
+					"titleRate": "Math.abs(p1 - p2) < rate",
 					"rate": 2
 				},
 				"strategyTwo": {
@@ -198,26 +198,22 @@
 				},
 				"strategyFive": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 8
-				},
-				"strategySix": {
-					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 5.5
+					"rate": 10
 				},
 				"titleTotal": "Ожидаемый коэффициент: '0'- заглушка, '1'- первая стратегия, '2'- вторая стратегия, '3'- третья стратегия, '4'- четвертая стратегия, '5'- пятая стратегия, '6'- шестая стратегия",
 				"total": [
 					0,
-					1.3,
 					1.8,
 					1.8,
 					1.4,
 					1.4,
-					1.4
+					1.5,
+					1.5
 				],
 				"titleTypeRate": "Прибавляем к сумме результата матчей",
 				"typeRate": [
 					0,
-					0.5,
+					1.5,
 					1.5,
 					1.5,
 					1.5,
@@ -240,7 +236,7 @@
 					},
 					{
 						"before": 0,
-						"after": 2700
+						"after": 1800
 					},
 					{
 						"before": 2700,

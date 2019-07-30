@@ -44,13 +44,7 @@ function getStatisticsFootball(days = 2) {
 							statistics: props.statistics.filter((item) => item.strategy === 1)
 						});
 						template.substitute(2, {
-							statistics: props.statistics.filter((item) => {
-								if (item.strategy === 2) {
-									if (item.total < 2.1) {
-										return true;
-									}
-								}
-							})
+							statistics: props.statistics.filter((item) => item.strategy === 2)
 						});
 						template.substitute(3, {
 							statistics: props.statistics.filter((item) => item.strategy === 3)
@@ -73,17 +67,6 @@ function getStatisticsFootball(days = 2) {
 								}
 							})
 						});
-						/*template.substitute(6, {
-							statistics: props.statistics.filter((item) => {
-								if(item.strategy === 6){
-									if (item.cards.before.one.attacks < 60 && item.cards.before.one.danAttacks  < 40) {
-										if(1.7 <= item.total && item.total <= 2){
-											return true;
-										}
-									}
-								}
-							})
-						});*/
 						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});
 					});

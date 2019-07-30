@@ -69,7 +69,7 @@ function footballLiveStrategy(param) {
  */
 function footballLiveStrategyOne(param) {
 	const strategy = 1;
-	if (Math.abs(param.p1 - param.p2) <= rateStrategyOne) {
+	if (Math.abs(param.p1 - param.p2) < rateStrategyOne) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {

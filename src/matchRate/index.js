@@ -8,52 +8,44 @@ const typeRate = config['choice'].live['football']['typeRate'];
 /**
  * Метод для вывода в телеграмм матча и запуск процедуры "Ставка".
  *
- * @param {Object} statistic объект матча
+ * @param {FootballModel} statistic объект матча
  * @param {String} type вид спорта
  * @returns {Promise<void>}
  */
 async function matchRate(statistic, type = '') {
 	const total = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
-	const {snapshot, cards, matchId, score, command} = statistic;
+	const {
+		snapshot: {start},
+		cards: {before: {two, one}},
+		matchId,
+		score: {sc1, sc2},
+		command: {women, youth}
+	} = statistic;
 	switch (statistic.strategy) {
 		case 1 :
-			if (command.women === 0) {
-				if (score.sc1 === 0 && score.sc2 === 1) {
-					if ((55 < cards.before.one.attacks) && (31 < cards.before.one.danAttacks)) {
+			if (women === 0) {
+				if (sc1 === 0 && sc2 === 1 && youth === 0) {
+					if ((two.red === 0) && (start.p1 > 2.65)) {
+						if ((one.shotsOff < 8) && (one.shotsOn < 5)) {
+							if (Math.abs(start.x - start.p1) > 0.5) {
+								if ((two.attack > 37) && (two.danAttacks > 20)) {
+									await sendMessageChat(decorateMessageTennis(statistic));
+									/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
+								}
+							}
+						}
+					}
+				}
+				if (sc1 === 1 && sc2 === 0 && youth === 1) {
+					if ((start.x - start.p2) <= 0.1) {
 						await sendMessageChat(decorateMessageTennis(statistic));
 						/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
 					}
-				}
-				if (score.sc1 === 1 && score.sc2 === 0 && snapshot.start.time < 3000) {
-					if ((2700 < cards.end.time) && (cards.end.time < 3720)) {
-
-						if ((0.1 < (snapshot.start.x - snapshot.start.p2)) || ((snapshot.start.x - snapshot.start.p2) < -0.1)) {
-							if ((1.15 < (snapshot.start.x - snapshot.start.p1)) || ((snapshot.start.x - snapshot.start.p1) < 0.8)) {
+				} else if (sc1 === 1 && sc2 === 0 && youth === 0) {
+					if (two.red === 0) {
+						if ((start.x - start.p2) >= 0.75) {
+							if ((two.attack < 30) && (two.danAttacks < 50)) {
 								await sendMessageChat(decorateMessageTennis(statistic));
-							/*	await performEmulation(matchId, 9, `Total Over ${total}`);*/
-							}
-						}
-					}
-				}
-			}
-			break;
-		case 2 :
-			if (command.women === 0 && command.youth === 0) {
-				if (snapshot.end.p1 <= snapshot.end.p2) {
-					if (1.7 <= snapshot.start.p1 && 5 > snapshot.start.mod) {
-						if (0 > (snapshot.start.x - snapshot.start.p2)) {
-							if (0.3 < snapshot.end.mod && 0.25 < (snapshot.end.x - snapshot.end.p1)) {
-							/*	await sendMessageChat(decorateMessageTennis(statistic));*/
-								/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
-							}
-						}
-					}
-				}
-				if (snapshot.end.p1 > snapshot.end.p2) {
-					if (2.95 < snapshot.start.x && 1.8 < snapshot.start.p2) {
-						if (2.75 <= snapshot.end.x) {
-							if (-0.5 >= (snapshot.end.x - snapshot.end.p1)) {
-								/*await sendMessageChat(decorateMessageTennis(statistic));*/
 								/*await performEmulation(matchId, 9, `Total Over ${total}`);*/
 							}
 						}
@@ -62,28 +54,17 @@ async function matchRate(statistic, type = '') {
 			}
 			break;
 		case 3 :
-			await sendMessageChat(decorateMessageTennis(statistic));
-			break;
-		case 4 :
-			if (command.women === 0) {
-				if (snapshot.end.p1 <= snapshot.end.p2) {
-					if (1.8 > snapshot.start.mod && 3 < snapshot.start.x) {
-						if ((cards.before.two.danAttacks > 0) && (cards.before.one.attacks < 51)) {
-							/*await sendMessageChat(decorateMessageTennis(statistic));*/
-						/*	await performEmulation(matchId, 10, `Total Under ${total}`);*/
-						}
+			if (sc1 === 0 && sc2 === 1 && women === 0) {
+				if ((start.x - start.p2) > 1) {
+					if ((start.p2 - start.p1) >= -1.3) {
+						await sendMessageChat(decorateMessageTennis(statistic));
 					}
 				}
 			}
-			if (command.youth === 0) {
-				if (snapshot.end.p1 > snapshot.end.p2) {
-					if (1.6 > (snapshot.start.x - snapshot.start.p2)) {
-						if (3.2 <= snapshot.start.x) {
-							if ((cards.before.one.attacks > 45) && (cards.before.two.attacks > 45)) {
-								/*await sendMessageChat(decorateMessageTennis(statistic));*/
-								/*await performEmulation(matchId, 10, `Total Under ${total}`);*/
-							}
-						}
+			if (sc1 === 1 && sc2 === 0) {
+				if ((start.x - start.p1) >= 1.6) {
+					if ((start.x - start.p2) > 0) {
+						await sendMessageChat(decorateMessageTennis(statistic));
 					}
 				}
 			}
