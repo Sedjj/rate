@@ -67,7 +67,7 @@
 	},
 	"parser": {
 		"active": [
-			"1xbet"
+			"mirror1xbet"
 		],
 		"1xstavka": {
 			"startPage": "https://1xstavka.ru/en",
@@ -110,8 +110,6 @@
 				"tennis": ""
 			},
 			"result": {
-				"live": "",
-				"allZone": "",
 				"all": ""
 			}
 		},
@@ -125,12 +123,31 @@
 				"tennis": ""
 			},
 			"result": {
-				"live": "",
-				"allZone": "",
 				"all": ""
 			}
 		},
 		"1xbet": {
+			"startPage": "https://1xbet.com/en/",
+			"baseUrl": "https://1xbet.com/",
+			"live": {
+				"football": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=1&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				},
+				"tableTennis": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=10&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				},
+				"tennis": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=4&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				}
+			},
+			"result": {
+				"all": "getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=en&adult=false&showAll=true"
+			}
+		},
+		"mirror1xbet": {
 			"startPage": "https://1xyuh.world/",
 			"baseUrl": "https://1xyuh.world/",
 			"live": {
@@ -149,16 +166,6 @@
 			},
 			"result": {
 				"all": "getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=en&adult=false&showAll=true"
-			},
-			"authentication": {
-				"auth": "en/user/auth/",
-				"twofactor": "user/twofactor"
-			},
-			"rate": {
-				"getuserdata": "getuserdata",
-				"putbetscommon": "datalinelive/putbetscommon",
-				"updateCoupon": "LiveUtil/UpdateCoupon",
-				"balance": "user/balance"
 			}
 		},
 		"marathonbet": {
@@ -171,8 +178,6 @@
 				"tennis": ""
 			},
 			"result": {
-				"live": "",
-				"allZone": "",
 				"all": ""
 			}
 		}
@@ -205,7 +210,7 @@
 					0,
 					1.8,
 					1.8,
-					1.4,
+					1.3,
 					1.4,
 					1.5,
 					1.5

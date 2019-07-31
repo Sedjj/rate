@@ -1,5 +1,5 @@
 const config = require('config');
-const active = config.parser.active;
+const active = config['parser'].active;
 
 let searchHelper;
 
@@ -10,6 +10,9 @@ const importComponent = (name) => {
 		}
 		case '1xbet': {
 			return require('./xbetHelper');
+		}
+		case 'mirror1xbet': {
+			return require('./mirror1xbetHelper');
 		}
 		case 'fonbet': {
 			return require('./fonbetHelper');
