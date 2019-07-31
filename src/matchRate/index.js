@@ -57,7 +57,7 @@ async function matchRate(statistic, type = '') {
 			if (sc1 === 0 && sc2 === 1 && women === 0) {
 				if ((start.x - start.p2) > 1) {
 					if ((start.p2 - start.p1) >= -1.3) {
-						await sendMessageChat(decorateMessageTennis(statistic));
+						/*await sendMessageChat(decorateMessageTennis(statistic));*/
 						await performEmulation(matchId, 9, `Total Over ${total}`);
 					}
 				}
@@ -65,7 +65,7 @@ async function matchRate(statistic, type = '') {
 			if (sc1 === 1 && sc2 === 0) {
 				if ((start.x - start.p1) >= 1.6) {
 					if ((start.x - start.p2) > 0) {
-						await sendMessageChat(decorateMessageTennis(statistic));
+						/*await sendMessageChat(decorateMessageTennis(statistic));*/
 						await performEmulation(matchId, 9, `Total Over ${total}`);
 					}
 				}
