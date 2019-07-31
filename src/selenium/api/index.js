@@ -87,7 +87,7 @@ async function findSelector(driver, selector) {
 		if (element) {
 			return element;
 		} else {
-			log.debug(`Item not found in ${speed.verySlow}ms`);
+			log.debug(`Item not found in ${speed.verySlow}ms, selector - ${selector}`);
 			return false;
 		}
 	} catch (e) {
@@ -144,7 +144,7 @@ async function findCssAndCall(driver, selector) {
 			return false;
 		}
 	} catch (e) {
-		log.error('Error findCssAndCall -> ' + e);
+		log.error(`Error findCssAndCall selector - ${selector} -> ${e}`);
 		return false;
 	}
 
@@ -167,7 +167,7 @@ async function findIdAndCall(driver, selector) {
 			return false;
 		}
 	} catch (e) {
-		log.error('Error findIdAndCall -> ' + e);
+		log.error(`Error findIdAndCall selector - ${selector} -> ${e}`);
 		return false;
 	}
 }
@@ -190,7 +190,7 @@ async function findIdAndFill(driver, selector, text) {
 			return false;
 		}
 	} catch (e) {
-		log.error('Error findIdAndFill -> ' + e);
+		log.error(`Error findIdAndFill selector - ${selector} -> ${e}`);
 		return false;
 	}
 }
@@ -213,7 +213,7 @@ async function findSelectorCssAndFill(driver, selector, text) {
 			return false;
 		}
 	} catch (e) {
-		log.error('Error findSelectorCssAndFill -> ' + e);
+		log.error(`Error findSelectorCssAndFill selector - ${selector} -> ${e}`);
 		return false;
 	}
 }
@@ -242,7 +242,7 @@ async function findTextBySelectorCssAndCall(driver, selector, value) {
 			return false;
 		}
 	} catch (e) {
-		log.error('Error findTextBySelectorCssAndCall -> ' + e);
+		log.error(`Error findTextBySelectorCssAndCall selector - ${selector} -> ${e}`);
 		return false;
 	}
 }
@@ -259,7 +259,7 @@ async function callJS(driver, script) {
 		await driver.executeScript(script);
 		return true;
 	} catch (e) {
-		log.error('Error callJS -> ' + e);
+		log.error(`Error callJS script - ${script} -> ${e}`);
 		return false;
 	}
 }
@@ -278,7 +278,7 @@ async function write(el, text) {
 		}
 		return true;
 	} catch (e) {
-		log.error('Error callJS -> ' + e);
+		log.error(`Error write text - ${text} -> ${e}`);
 		return false;
 	}
 }
