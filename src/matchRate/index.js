@@ -1,5 +1,5 @@
 const config = require('config');
-const {performEmulation} = require('../selenium/bot');
+const {bot: {performEmulation}} = require('../selenium/bot');
 const {sendMessageChat} = require('../telegram/api');
 const {decorateMessageTennis} = require('../utils/formateMessage');
 

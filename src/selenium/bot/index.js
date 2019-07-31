@@ -1,7 +1,7 @@
 const config = require('config');
 const active = config['parser'].active;
 
-let searchHelper;
+let bot;
 
 const importComponent = (name) => {
 	switch (name) {
@@ -17,8 +17,8 @@ const importComponent = (name) => {
 	}
 };
 
-searchHelper = importComponent(active[0]);
+bot = importComponent(active[0]);
 
 module.exports = {
-	searchHelper
+	bot
 };

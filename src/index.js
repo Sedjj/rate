@@ -10,7 +10,7 @@ const {log} = require('./utils/logger');
 const football = require('./storage/football');
 const tableTennis = require('./storage/tableTennis');
 const tennis = require('./storage/tennis');
-const {performEmulation} = require('./selenium/bot');
+/*const {bot: {performEmulation}} = require('./selenium/bot');*/
 const {searchFootball, searchTableTennis, searchTennis} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
 
