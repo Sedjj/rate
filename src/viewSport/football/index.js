@@ -2,8 +2,6 @@ const {log} = require('../../utils/logger');
 const {newStatistic, setStatistic, deleteStatistic} = require('../../storage/football');
 const {getExpandedMatch} = require('../../fetch');
 const config = require('config');
-const {decorateMessageTennis} = require('../../utils/formateMessage');
-const {sendMessageChat} = require('../../telegram/api');
 const {matchRate} = require('../../matchRate');
 const {waiting} = require('../../searchTotal');
 const {searchHelper} = require('../../modifiableFile');
@@ -121,7 +119,7 @@ function footballLiveStrategyThree(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy, -2, 1);
-					await sendMessageChat(decorateMessageTennis(football));
+					matchRate({...football, strategy: 6}, 'футбол');
 					waiting(param, strategy);
 				}
 			})
