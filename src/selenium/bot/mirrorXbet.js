@@ -52,6 +52,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 			}
 		}
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
+		await driver.sleep(speed.fast);
 		await driver.quit();
 	} catch (e) {
 		log.error('Error performEmulation -> ' + e);
@@ -135,8 +136,8 @@ async function popup(driver) {
  * @param {String} totalName искомая ставка
  * @returns {Promise<boolean>}
  */
-async function rate(driver, numberColumn, totalName) {
-	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
+async function rate(driver, numberColumn, totalName) {// bets betCols2
+	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`) && !await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
 		try {
 			if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
 				if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {

@@ -6,7 +6,7 @@ const {rateStatus} = require('../../store/rateStatus');
 const {throttle} = require('../../utils/throttle');
 const {exportFootballStatistic, exportTableTennisStatistic, exportTennisStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
-const agent = require('socks5-https-client/lib/Agent');
+/*const agent = require('socks5-https-client/lib/Agent');*/
 const path = require('path');
 const {readFileToStream} = require('../../utils/fsHelpers');
 const {sendFile} = require('../api');
@@ -24,28 +24,28 @@ const supportToken = process.env.NODE_ENV === 'development'
 	: config.bots.supportTest.token;
 
 /*const proxy = config.proxy;*/
-const socket = config.socket;
+/*const socket = config.socket;*/
 const administrators = config.roles.admin;
 
 let props = {
 	polling: true
 };
 
-if (process.env.NODE_ENV === 'development') {
+/*if (process.env.NODE_ENV === 'development') {
 	props = {
 		...props,
 		request: {
-			/*proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`*/
+			/!*proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`*!/
 			agentClass: agent,
 			agentOptions: {
 				socksHost: socket.server,
 				socksPort: socket.port,
-				/*	socksUsername: socket.user,
-					socksPassword: socket.pass*/
+				/!*	socksUsername: socket.user,
+					socksPassword: socket.pass*!/
 			}
 		}
 	};
-}
+}*/
 
 const bot = new TelegramBot(supportToken, props);
 

@@ -1,22 +1,22 @@
 process.env.NTBA_FIX_319 = 1;
 const {CronJob, CronTime} = require('cron');
 require('./utils/dbProvider');
-if (process.env.NODE_ENV !== 'development') {
-	require('./telegram/bot');
-}
+require('./telegram/bot');
 const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');
 const football = require('./storage/football');
 const tableTennis = require('./storage/tableTennis');
 const tennis = require('./storage/tennis');
-/*const {bot: {performEmulation}} = require('./selenium/bot');*/
+const {bot: {performEmulation}} = require('./selenium/bot');
 const {searchFootball, searchTableTennis, searchTennis} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
 
 const numericalDesignationFootball = config.choice.live.football.numericalDesignation;
 const numericalDesignationTableTennis = config.choice.live.tableTennis.numericalDesignation;
 const numericalDesignationTennis = config.choice.live.tennis.numericalDesignation;
+
+/*performEmulation('201788563', 9, `Total Over ${1.5}`);*/
 
 const schedulerSearchFootball = {
 	title: 'в секундах',
@@ -58,8 +58,6 @@ const rendomSchedulerSearchTennis = process.env.NODE_ENV === 'development'
 const rendomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
 	? '*/45 * * * * *'
 	: '00 05 10 * * 0-7';
-
-/*performEmulation('201136064', 9, `Total Over ${4.5}`);*/
 
 /**
  * Планировшик поиска матчей по футболу.
@@ -137,9 +135,11 @@ if (rendomSchedulerCheckingResults) {
 	log.info('****start scheduler checking results****');
 	let schedulerCheckingResultsJob = new CronJob(rendomSchedulerCheckingResults, () => {
 		try {
-			checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
-			/*checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);
-			checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);*/
+			if (process.env.NODE_ENV !== 'development') {
+				checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
+				/*checkingResults(tableTennis.getStatistic, tableTennis.setStatistic, numericalDesignationTableTennis);
+				checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);*/
+			}
 		} catch (error) {
 			schedulerCheckingResultsJob.stop();
 			log.error(`cron pattern not valid: ${error}`);

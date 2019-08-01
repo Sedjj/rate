@@ -148,7 +148,7 @@
 			}
 		},
 		"mirror1xbet": {
-			"startPage": "https://1xmaubix.com/live/",
+			"startPage": "https://1xmaubix.com/en/live/",
 			"baseUrl": "https://1xmaubix.com",
 			"live": {
 				"football": {
