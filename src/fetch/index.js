@@ -8,7 +8,7 @@ const {log} = require('./../utils/logger');
  * Массив интервалов в миллисекундах после которых делается попытка снова
  */
 const searchTimeouts = [2000, 5000, 8000, 12000, 1];
-const proxy = config.proxy;
+/*const proxy = config.proxy;*/
 const active = config.parser.active;
 const cookieJar = new CookieJar();
 const client = got.extend({
@@ -145,9 +145,9 @@ function setFileApiTelegram(token, chatId, document) {
 			document: document
 		},
 	};
-	if (process.env.NODE_ENV === 'development') {
+	/*if (process.env.NODE_ENV === 'development') {
 		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
-	}
+	}*/
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
@@ -180,9 +180,9 @@ function setTextApiTelegram(token, chatId, text) {
 			parse_mode: 'HTML'
 		}
 	};
-	if (process.env.NODE_ENV === 'development') {
+	/*if (process.env.NODE_ENV === 'development') {
 		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
-	}
+	}*/
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
@@ -216,9 +216,9 @@ function setSupportMsgApiTelegram(token, chatId, text) {
 			parse_mode: 'HTML'
 		}
 	};
-	if (process.env.NODE_ENV === 'development') {
+	/*if (process.env.NODE_ENV === 'development') {
 		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
-	}
+	}*/
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
