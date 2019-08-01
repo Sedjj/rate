@@ -45,6 +45,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		log.info(`Rate match ${ids} with "${totalName}"`);
 		driver = await driverChrome();
 		await init(driver);
+		log.debug(`urlStartPage "${urlStartPage}"`);
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			if (await search(driver, ids)) {
@@ -55,7 +56,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.sleep(speed.fast);
 		await driver.quit();
 	} catch (e) {
-		log.error('Error performEmulation -> ' + e);
+		log.error(`Error performEmulation ->  ${e}`);
 		//FIXME падает ошибка и рушит все
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
 		await driver.quit();
@@ -69,15 +70,18 @@ async function performEmulation(ids, numberColumn, totalName) {
  * @returns {Promise<boolean>}
  */
 async function authorization(driver) {
-	if (await findIdAndCall(driver, 'curLoginForm')) {
+	log.debug('Authorization start');
+	if (!await findIdAndCall(driver, 'curLoginForm')) {
+		if (await findSelectorCss(driver, '.wrap_lk')) {
+			return true;
+		}
+	} else {
 		await findIdAndFill(driver, 'auth_id_email', auth.login);
 		await findIdAndFill(driver, 'auth-form-password', auth.password);
 		if (await findCssAndCall(driver, '.auth-button.auth-button--block')) {
 			await driver.sleep(speed.fast);
 			return true;
 		}
-	} else if (await findSelectorCss(driver, '.wrap_lk')) {
-		return true;
 	}
 	log.debug('Authorization failed');
 	return false;
@@ -119,7 +123,7 @@ async function popup(driver) {
 		try {
 			await findCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
 		} catch (e) {
-			log.debug('Can`t search current match: ', e);
+			log.debug(`Can't search current match: ${e}`);
 			return false;
 		}
 		return await switchTab(driver);
@@ -136,7 +140,7 @@ async function popup(driver) {
  * @param {String} totalName искомая ставка
  * @returns {Promise<boolean>}
  */
-async function rate(driver, numberColumn, totalName) {// bets betCols2
+async function rate(driver, numberColumn, totalName) {
 	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`) && !await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
 		try {
 			if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
@@ -158,7 +162,7 @@ async function rate(driver, numberColumn, totalName) {// bets betCols2
 				return false;
 			}
 		} catch (e) {
-			log.debug('Rate locked on current match: ', e);
+			log.debug(`Rate locked on current match: ${e}`);
 			return false;
 		}
 	}

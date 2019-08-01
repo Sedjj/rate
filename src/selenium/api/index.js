@@ -26,15 +26,22 @@ const speed = {
  * @constructor
  */
 async function driverChrome() {
-	if (process.env.NODE_ENV === 'development') {
-		return await new Builder()
-			.withCapabilities(Capabilities.chrome())
-			.setChromeOptions(await emulatorOfUniqueness())
-			.build();
-	} else {
-		return await new Builder()
-			.forBrowser('chrome')
-			.usingServer('http://hub:4444/wd/hub').build();
+	try {
+		if (process.env.NODE_ENV === 'development') {
+			log.info('driverChrome development');
+			await new Builder()
+				.withCapabilities(Capabilities.chrome())
+				.setChromeOptions(await emulatorOfUniqueness())
+				.build();
+		} else {
+			log.info('driverChrome production');
+			await new Builder()
+				.forBrowser('chrome')
+				.usingServer('http://hub:4444/wd/hub').build();
+		}
+	} catch (e) {
+		log.error(`Error driverChrome ->  ${e}`);
+		throw new Error('Can`t connect driver');
 	}
 }
 
@@ -45,7 +52,11 @@ async function driverChrome() {
  * @returns {Promise<void>}
  */
 async function init(driver) {
-	return await driver.manage().window().setRect({width: 1600, height: 1200});
+	try {
+		await driver.manage().window().setRect({width: 1600, height: 1200});
+	} catch (e) {
+		throw new Error('Can`t init driver');
+	}
 }
 
 /**

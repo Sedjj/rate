@@ -136,7 +136,7 @@ async function popup(driver) {
  * @returns {Promise<boolean>}
  */
 async function rate(driver, numberColumn, totalName) {
-	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
+	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`) && !await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
 		try {
 			if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
 				if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
