@@ -29,13 +29,13 @@ async function driverChrome() {
 	try {
 		if (process.env.NODE_ENV === 'development') {
 			log.info('driverChrome development');
-			await new Builder()
+			return await new Builder()
 				.withCapabilities(Capabilities.chrome())
 				.setChromeOptions(await emulatorOfUniqueness())
 				.build();
 		} else {
 			log.info('driverChrome production');
-			await new Builder()
+			return await new Builder()
 				.forBrowser('chrome')
 				.usingServer('http://hub:4444/wd/hub').build();
 		}
