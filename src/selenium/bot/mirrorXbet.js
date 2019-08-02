@@ -70,6 +70,7 @@ async function performEmulation(ids, numberColumn, totalName) {
  */
 async function authorization(driver) {
 	log.debug('Authorization start');
+	await driver.sleep(speed.normal);
 	await screenShot(driver, `Authorization_start${(new Date()).getTime()}.png`);
 	if (!await findIdAndCall(driver, 'curLoginForm')) {
 		if (await findSelectorCss(driver, '.wrap_lk')) {
