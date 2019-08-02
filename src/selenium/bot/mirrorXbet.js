@@ -70,8 +70,7 @@ async function performEmulation(ids, numberColumn, totalName) {
  */
 async function authorization(driver) {
 	log.debug('Authorization start');
-	await driver.sleep(speed.normal);
-	await screenShot(driver, `Authorization_start${(new Date()).getTime()}.png`);
+	await driver.sleep(speed.fast);
 	if (!await findIdAndCall(driver, 'curLoginForm')) {
 		if (await findSelectorCss(driver, '.wrap_lk')) {
 			return true;
@@ -84,7 +83,6 @@ async function authorization(driver) {
 			return true;
 		}
 	}
-	await screenShot(driver, `Authorization_end${(new Date()).getTime()}.png`);
 	log.debug('Authorization failed');
 	return false;
 }
