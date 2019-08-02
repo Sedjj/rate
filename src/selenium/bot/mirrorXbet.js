@@ -69,7 +69,6 @@ async function performEmulation(ids, numberColumn, totalName) {
  * @returns {Promise<boolean>}
  */
 async function authorization(driver) {
-	log.debug('Authorization start');
 	await driver.sleep(speed.fast);
 	if (!await findIdAndCall(driver, 'curLoginForm')) {
 		if (await findSelectorCss(driver, '.wrap_lk')) {
