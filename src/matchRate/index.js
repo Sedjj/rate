@@ -72,6 +72,7 @@ async function matchRate(statistic, type = '') {
 			}
 			break;
 		case 6 :
+			await performEmulation(matchId, 9, `Total Over ${total}`);
 			if (sc1 === 0 && sc2 === 1 && women === 0) {
 				if ((start.x - start.p2) > 1) {
 					if ((start.p2 - start.p1) >= -1.3) {
