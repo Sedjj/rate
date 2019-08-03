@@ -19,7 +19,7 @@ async function matchRate(statistic, type = '') {
 		cards: {before: {two, one}},
 		matchId,
 		score: {sc1, sc2},
-		command: {women, youth}
+		command: {women, youth, en}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 1 :
@@ -30,7 +30,7 @@ async function matchRate(statistic, type = '') {
 							if (Math.abs(start.x - start.p1) > 0.5) {
 								if ((two.attack > 37) && (two.danAttacks > 20)) {
 									await sendMessageChat(decorateMessageTennis(statistic));
-									await performEmulation(matchId, 9, `Total Over ${total}`);
+									await performEmulation(matchId, 3, `${en.two}`);
 								}
 							}
 						}
@@ -39,14 +39,14 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 1 && sc2 === 0 && youth === 1) {
 					if ((start.x - start.p2) <= 0.1) {
 						await sendMessageChat(decorateMessageTennis(statistic));
-						await performEmulation(matchId, 9, `Total Over ${total}`);
+						await performEmulation(matchId, 1, `${en.one}`);
 					}
 				} else if (sc1 === 1 && sc2 === 0 && youth === 0) {
 					if (two.red === 0) {
 						if ((start.x - start.p2) >= 0.75) {
 							if ((two.attack < 30) && (two.danAttacks < 50)) {
 								await sendMessageChat(decorateMessageTennis(statistic));
-								await performEmulation(matchId, 9, `Total Over ${total}`);
+								await performEmulation(matchId, 1, `${en.one}`);
 							}
 						}
 					}
