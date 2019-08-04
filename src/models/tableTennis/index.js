@@ -241,6 +241,20 @@ const TableTennisSchema = new Schema({
 			}
 		}
 	},
+	rate: {
+		doubleChance: {
+			sc1: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+			sc2: {
+				type: Number,
+				required: true,
+				default: 0
+			},
+		}
+	},
 	createdBy: {
 		type: Date,
 		default: new Date()

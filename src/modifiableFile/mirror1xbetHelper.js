@@ -12,6 +12,7 @@ function getParams(item, extended = false) {
 	try {
 		const rate = extended ? indexGameExtended(item) : indexGame(item);
 		const cards = parserCards(item['SC']);
+		const doubleChance = parserDoubleChance(item['SC']);
 		param = {
 			successfully: true,
 			matchId: item['I'],
@@ -38,7 +39,8 @@ function getParams(item, extended = false) {
 			score: scoreGame(item),
 			set: setGame(item),
 			time: timeGame(item),
-			cards: cards
+			cards: cards,
+			rate: doubleChance
 		};
 
 		if (extended) {
@@ -169,6 +171,40 @@ function indexGameExtended(items) {
 								break;
 							case 3: // победа второй
 								rateGame.p2 = item[0]['C'];
+								break;
+						}
+					});
+				}
+			}
+		});
+	}
+	return rateGame;
+}
+
+/**
+ * Метод для определения двойного шанса.
+ *
+ * @param {Object} items объект матча
+ * @returns {{p1: number, x: number, p2: number}}
+ */
+function parserDoubleChance(items) {
+	const rateGame = {
+		doubleChance: {
+			sc1: 0,
+			sc2: 0
+		}
+	};
+	if (items['GE'] && Array.isArray(items['GE'])) {
+		items['GE'].forEach((rate) => {
+			if (rate['G'] === 8) { // 8 - Double Chance
+				if (rate.E && Array.isArray(rate.E)) {
+					rate['E'].forEach((item) => {
+						switch (item[0]['T']) {
+							case 4: // победа первой или ничья
+								rateGame.doubleChance.sc1 = item[0]['C'];
+								break;
+							case 6: // победа второй или ничья
+								rateGame.doubleChance.sc2 = item[0]['C'];
 								break;
 						}
 					});

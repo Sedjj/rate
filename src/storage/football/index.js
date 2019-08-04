@@ -108,6 +108,9 @@ function setStatistic(param) {
 			if (param.cards && (param.cards.after !== undefined)) {
 				statistic.cards.after = param.cards.after;
 			}
+			if (param.rate !== undefined) {
+				statistic.rate = param.rate;
+			}
 			if (param.modifiedBy !== undefined) {
 				statistic.modifiedBy = param.modifiedBy;
 			}

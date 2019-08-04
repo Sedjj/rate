@@ -88,6 +88,12 @@ function mapProps(statistic, index) {
 				}
 			}
 		},
+		rate:{
+			doubleChance: {
+				sc1: statistic.rate.doubleChance.sc1,
+				sc2: statistic.rate.doubleChance.sc2
+			}
+		},
 		createdBy: getFormattedDate(statistic.createdBy),
 		modifiedBy: getFormattedDate(statistic.modifiedBy)
 	};

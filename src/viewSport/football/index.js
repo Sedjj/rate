@@ -209,6 +209,7 @@ async function setSnapshot(matchId, strategy, total = undefined, index = undefin
 			cards: {
 				before: param.cards
 			},
+			rate: param.rate,
 			modifiedBy: new Date().toISOString()
 		});
 	} catch (error) {
