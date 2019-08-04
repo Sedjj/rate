@@ -12,7 +12,7 @@ function getParams(item, extended = false) {
 	try {
 		const rate = extended ? indexGameExtended(item) : indexGame(item);
 		const cards = parserCards(item['SC']);
-		const doubleChance = parserDoubleChance(item['SC']);
+		const doubleChance = parserDoubleChance(item);
 		param = {
 			successfully: true,
 			matchId: item['I'],
