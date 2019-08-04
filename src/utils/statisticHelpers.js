@@ -26,7 +26,8 @@ function mapProps(statistic, index) {
 				two: statistic.command.en.two  // название команды 2 на en
 			},
 			women: statistic.command.women,
-			youth: statistic.command.youth
+			youth: statistic.command.youth,
+			limited: statistic.command.limited
 		},
 		group: {
 			ru: statistic.group.ru,

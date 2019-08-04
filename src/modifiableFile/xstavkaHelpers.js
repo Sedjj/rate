@@ -25,7 +25,8 @@ function getParams(item, extended = false) {
 					two: item['O2E']  // название команды 2 на en
 				},
 				women: parserScoreWomen(item['O1E']),
-				youth: parserScoreYouth(item['O1E'])
+				youth: parserScoreYouth(item['O1E']),
+				limited: parserScoreLimited(item['LE'])
 			},
 			group: {
 				ru: item['L'],
@@ -238,6 +239,22 @@ function parserScoreYouth(value) {
 	let parserReturn = 0;
 	if (value && value.length > 5) {
 		parserReturn = value.match(/(?!=\s)U\d{2}/ig);
+		return parserReturn ? 1 : 0;
+	} else {
+		return parserReturn;
+	}
+}
+
+/**
+ * Метод для нахождения ограниченных команд.
+ *
+ * @param {String} value строка для парсинга
+ * @returns {number}
+ */
+function parserScoreLimited(value) {
+	let parserReturn = 0;
+	if (value && value.length > 5) {
+		parserReturn = value.match(/^[5|6|7|8]х[5|6|7|8]./ig);
 		return parserReturn ? 1 : 0;
 	} else {
 		return parserReturn;

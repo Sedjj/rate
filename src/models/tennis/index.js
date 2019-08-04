@@ -57,6 +57,11 @@ const TennisSchema = new Schema({
 			type: Number,
 			required: true,
 			default: 0
+		},
+		limited: {
+			type: Number,
+			required: true,
+			default: 0
 		}
 	},
 	group: {
