@@ -13,16 +13,17 @@ const typeRate = config['choice'].live['football']['typeRate'];
  * @returns {Promise<void>}
  */
 async function matchRate(statistic, type = '') {
-	const total = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
+	const totalRate = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	const {
 		snapshot: {start},
 		cards: {before: {two, one}},
 		matchId,
 		score: {sc1, sc2},
-		command: {women, youth, en}
+		command: {women, youth, limited},
+		total
 	} = statistic;
 	switch (statistic.strategy) {
-		case 1 :
+		/*case 1 :
 			if (women === 0) {
 				if (sc1 === 0 && sc2 === 1 && youth === 0) {
 					if ((two.red === 0) && (start.p1 > 2.65)) {
@@ -52,37 +53,57 @@ async function matchRate(statistic, type = '') {
 					}
 				}
 			}
-			break;
+			break;*/
 		case 3 :
-			if (sc1 === 0 && sc2 === 1 && women === 0) {
-				if ((start.x - start.p2) > 1) {
-					if ((start.p2 - start.p1) >= -1.3) {
-						/*await sendMessageChat(decorateMessageTennis(statistic));*/
-						await performEmulation(matchId, 9, `Total Over ${total}`);
+			if (limited === 0) {
+				if (sc1 === 1 && sc2 === 0 && women === 0) {
+					if (210 <= start.time && start.time <= 1680) {
+						if (4.4 <= start.x && start.x <= 5.1) {
+							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+						}
+					}
+				}
+				if (sc1 === 0 && sc2 === 1) {
+					if (210 <= start.time && start.time <= 1500) {
+						if (4.2 <= start.x && start.x <= 4.8) {
+							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+						}
 					}
 				}
 			}
-			if (sc1 === 1 && sc2 === 0) {
-				if ((start.x - start.p1) >= 1.6) {
-					if ((start.x - start.p2) > 0) {
-						/*await sendMessageChat(decorateMessageTennis(statistic));*/
-						await performEmulation(matchId, 9, `Total Over ${total}`);
+			break;
+		case 4 :
+			if (two.shotsOff < 5 && two.red === 0 && one.red === 0 && total > 1.82) {
+				if (start.p1 < start.p2 && women === 0) {
+					if (one.shotsOff < 6 && two.shotsOn < 4) {
+						if ((35 < one.attack && one.attack < 66) && one.danAttacks < 40) {
+							await performEmulation(matchId, 9, `Total Under ${totalRate}`);
+						}
+					}
+				}
+				if (start.p1 > start.p2 && women === 0 && youth === 0) {
+					if (start.x > 3.19) {
+						if (one.shotsOn < 2 && two.shotsOn < 3) {
+							await performEmulation(matchId, 9, `Total Under ${totalRate}`);
+						}
 					}
 				}
 			}
 			break;
 		case 6 :
-			if (sc1 === 0 && sc2 === 1 && women === 0) {
-				if ((start.x - start.p2) > 1) {
-					if ((start.p2 - start.p1) >= -1.3) {
-						await sendMessageChat(decorateMessageTennis(statistic));
+			if (limited === 0) {
+				if (sc1 === 1 && sc2 === 0 && women === 0) {
+					if (210 <= start.time && start.time <= 1680) {
+						if (4.4 <= start.x && start.x <= 5.1) {
+							await sendMessageChat(decorateMessageTennis(statistic));
+						}
 					}
 				}
-			}
-			if (sc1 === 1 && sc2 === 0) {
-				if ((start.x - start.p1) >= 1.6) {
-					if ((start.x - start.p2) > 0) {
-						await sendMessageChat(decorateMessageTennis(statistic));
+				if (sc1 === 0 && sc2 === 1) {
+					if (210 <= start.time && start.time <= 1500) {
+						if (4.2 <= start.x && start.x <= 4.8) {
+							await sendMessageChat(decorateMessageTennis(statistic));
+						}
 					}
 				}
 			}
