@@ -77,20 +77,20 @@ async function matchRate(statistic, type = '') {
 				if (start.p1 < start.p2 && women === 0) {
 					if (one.shotsOff < 6 && two.shotsOn < 4) {
 						if ((35 < one.attack && one.attack < 66) && one.danAttacks < 40) {
-							await performEmulation(matchId, 9, `Total Under ${totalRate}`);
+							await performEmulation(matchId, 10, `Total Under ${totalRate}`);
 						}
 					}
 				}
 				if (start.p1 > start.p2 && women === 0 && youth === 0) {
 					if (start.x > 3.19) {
 						if (one.shotsOn < 2 && two.shotsOn < 3) {
-							await performEmulation(matchId, 9, `Total Under ${totalRate}`);
+							await performEmulation(matchId, 10, `Total Under ${totalRate}`);
 						}
 					}
 				}
 			}
 			break;
-		case 6 :
+		case 7 :
 			if (limited === 0) {
 				if (sc1 === 1 && sc2 === 0 && women === 0) {
 					if (210 <= start.time && start.time <= 1680) {
