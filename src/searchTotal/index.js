@@ -95,13 +95,13 @@ async function searchIndex(matchId, strategy, oldScore) {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
 		const param = searchHelper['getParams'](item, true);
-		log.debug(`${matchId} param.time -> ${param.time}; time[strategy].after -> ${time[strategy].after}`);
-		log.debug(`${matchId} oldScore -> ${JSON.stringify(oldScore)}; param.score -> ${JSON.stringify(param.score)}`);
+		// log.debug(`${matchId} param.time -> ${param.time}; time[strategy].after -> ${time[strategy].after}`);
+		// log.debug(`${matchId} oldScore -> ${JSON.stringify(oldScore)}; param.score -> ${JSON.stringify(param.score)}`);
 		if (equalsScore(oldScore, param.score) && (param.time <= time[strategy].after)) { //не изменился ли счет и не вышло ли за ределы время
 			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
-			log.debug(`${matchId} total -> ${total}; totalStrategy -> ${totalStrategy[strategy]} sc1:sc2 -> ${param.score.sc1}:${param.score.sc2}`);
+			// log.debug(`${matchId} total -> ${total}; totalStrategy -> ${totalStrategy[strategy]} sc1:sc2 -> ${param.score.sc1}:${param.score.sc2}`);
 			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
-			log.debug(`${matchId} index -> ${index}`);
+			// log.debug(`${matchId} index -> ${index}`);
 			if (index !== null) {
 				await setTotalRate(index, param, strategy);
 				setIndexRate(index, param, strategy);
@@ -131,7 +131,7 @@ async function searchIndex(matchId, strategy, oldScore) {
  * @param {Number} strategy стратегия ставок
  */
 function setIndexRate(index = 1, param, strategy) {
-	log.debug(`${param.matchId} index -> ${index}; param -> ${JSON.stringify(param)}`);
+	// log.debug(`${param.matchId} index -> ${index}; param -> ${JSON.stringify(param)}`);
 	return setStatistic({
 		matchId: param.matchId,
 		strategy: strategy,
