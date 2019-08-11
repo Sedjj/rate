@@ -52,9 +52,10 @@ function decorateMessageMatch(param, type) {
  * Форматирование строки вывода для тениса.
  *
  * @param {Object} param объект матча
+ * @param {String} type вид спорта
  * @returns {*}
  */
-function decorateMessageTennis(param) {
+function decorateMessageTennis(param, type = '') {
 	return `<b>${param.group.en}</b>\n\n${param.command.en.one}\n${param.command.en.two}\n\n<pre>стр ${param.strategy} / ${param.snapshot.start.p1} / ${param.snapshot.start.p2}</pre>`;
 }
 

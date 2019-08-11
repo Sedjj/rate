@@ -126,9 +126,8 @@ function footballLiveStrategyThree(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy, -2, 1);
-					football.strategy = 7;
 					matchRate(football, 'футбол');
-					waiting(param, strategy);
+					// waiting(param, strategy);
 				}
 			})
 			.catch((error) => {
