@@ -16,7 +16,7 @@ const numericalDesignationFootball = config.choice.live.football.numericalDesign
 const numericalDesignationTableTennis = config.choice.live.tableTennis.numericalDesignation;
 const numericalDesignationTennis = config.choice.live.tennis.numericalDesignation;
 
-/*performEmulation('201788563', 9, `Total Over ${1.5}`);*/
+/*performEmulation('202903657', 10, `Total Under ${2.5}`);*/
 
 const schedulerSearchFootball = {
 	title: 'в секундах',

@@ -94,7 +94,6 @@ async function findSelector(driver, selector) {
 			until.elementIsVisible(element),
 			speed.slow
 		);
-
 		if (element) {
 			return element;
 		} else {
@@ -158,7 +157,6 @@ async function findCssAndCall(driver, selector) {
 		log.error(`Error findCssAndCall selector - ${selector} -> ${e}`);
 		return false;
 	}
-
 }
 
 /**
