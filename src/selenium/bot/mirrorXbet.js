@@ -142,8 +142,11 @@ async function popup(driver) {
 async function rate(driver, numberColumn, totalName) {
 	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`) && !await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
 		try {
+			log.info(`${totalName} not block`);
 			if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
+				log.info(`${totalName} data-type`);
 				if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
+					log.info(`${totalName} bet_sum_input`);
 					await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
 					if (await findSelectorCss(driver, '.swal2-error')) {
 						log.info('Rate error');
