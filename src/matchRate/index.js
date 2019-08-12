@@ -29,7 +29,7 @@ async function matchRate(statistic, type = '') {
 					if (210 <= time && time <= 1680) {
 						if (4.4 <= x && x <= 5.1) {
 							await sendMessageChat(decorateMessageTennis(statistic, type));
-							await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 						}
 					}
 				}
@@ -37,7 +37,7 @@ async function matchRate(statistic, type = '') {
 					if (210 <= time && time <= 1500) {
 						if (4.2 <= x && x <= 4.8) {
 							await sendMessageChat(decorateMessageTennis(statistic, type));
-							await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 						}
 					}
 				}
