@@ -15,27 +15,27 @@ const typeRate = config['choice'].live['football']['typeRate'];
 async function matchRate(statistic, type = '') {
 	const totalRate = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	const {
-		snapshot: {start: {time, x}},
-		cards: {before: {one: {attacks}}},
+		snapshot: {start: {time, x, p1, p2}},
+		cards: {before: {one, two}},
 		score: {sc1, sc2},
 		matchId,
 		total,
-		command: {women, limited}
+		command: {women, limited, youth}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 3 :
-			if (limited === 0) {
-				if (sc1 === 1 && sc2 === 0 && women === 0) {
-					if (210 <= time && time <= 1680) {
-						if (4.4 <= x && x <= 5.1) {
+			if (limited === 0 && women === 0 && youth === 0 && 210 < time) {
+				if (sc1 === 1 && sc2 === 0) {
+					if (4.4 <= x && ((p2 - p1) < 2)) {
+						if (one.attacks < 10 && two.danAttacks < 16) {
 							await sendMessageChat(decorateMessageTennis(statistic, type));
 							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 						}
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
-					if (210 <= time && time <= 1500) {
-						if (4.2 <= x && x <= 4.8) {
+					if (4.2 <= x && (Math.abs(p2 - p1) <= 1.9)) {
+						if (one.danAttacks < 20) {
 							await sendMessageChat(decorateMessageTennis(statistic, type));
 							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 						}
