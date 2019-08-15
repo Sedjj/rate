@@ -140,7 +140,7 @@ async function popup(driver) {
  * @returns {Promise<boolean>}
  */
 async function rate(driver, numberColumn, totalName) {
-	await driver.sleep(speed.normal);
+	await driver.sleep(speed.slow);
 	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
 		if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
 			try {

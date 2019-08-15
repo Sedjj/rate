@@ -314,6 +314,6 @@
 	},
 	"emulator": {
 		"titleBetAmount": "Размер ставки",
-		"betAmount": 20
+		"betAmount": 10
 	}
 }
