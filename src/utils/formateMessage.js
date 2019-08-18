@@ -56,7 +56,7 @@ function decorateMessageMatch(param, type) {
  * @returns {*}
  */
 function decorateMessageTennis(param, type = '') {
-	return `<b>${param.group.en}</b>\n\n${param.command.en.one}\n${param.command.en.two}\n\n<pre>стр ${param.strategy} / ${param.snapshot.start.p1} / ${param.snapshot.start.p2}</pre>`;
+	return `<b>${param.group.en}</b>\n\n${param.command.en.one}\n${param.command.en.two}\n\n<pre>стр ${param.strategy} / ${param.snapshot.start.p1} / ${param.snapshot.start.x} / ${param.snapshot.start.p2}</pre>`;
 }
 
 /**

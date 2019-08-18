@@ -17,6 +17,7 @@ const rateStrategyThree = config['choice'].live.football.strategyThree.rate;
 const rateStrategyFour = config['choice'].live.football.strategyFour.rate;
 const rateStrategyFive = config['choice'].live.football.strategyFive.rate;
 const rateStrategySix = config['choice'].live.football.strategySix.rate;
+const rateStrategySeven = config['choice'].live.football.strategySeven.rate;
 const typeRate = config['choice'].live.football.typeRate;
 
 /**
@@ -60,6 +61,12 @@ function footballLiveStrategy(param) {
 		if ((param.score.sc1 + param.score.sc2) === 1) {
 			if ((param.time >= time[6].before) && (param.time <= time[6].after)) {
 				footballLiveStrategySix(param);
+			}
+		}
+		// тотал больше
+		if ((param.score.sc1 + param.score.sc2) === 1) {
+			if ((param.time >= time[7].before) && (param.time <= time[7].after)) {
+				footballLiveStrategySeven(param);
 			}
 		}
 	}
@@ -198,6 +205,28 @@ function footballLiveStrategySix(param) {
 			})
 			.catch((error) => {
 				log.error(`footballLiveStrategySix: ${error}`);
+			});
+	}
+}
+
+/**
+ * Стратегия ничья с явным фаворитом 0:1
+ *
+ * @param {Object} param объект с параметрами матча
+ */
+function footballLiveStrategySeven(param) {
+	const strategy = 7;
+	if (Math.abs(param.p1 - param.p2) < rateStrategySeven) {
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+			.then(async (statistic) => {
+				if (statistic !== null) {
+					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
+					const football = await setSnapshot(param.matchId, strategy);
+					matchRate(football, 'футбол');
+				}
+			})
+			.catch((error) => {
+				log.error(`footballLiveStrategySeven: ${error}`);
 			});
 	}
 }
