@@ -32,15 +32,13 @@ async function matchRate(statistic, type = '') {
 		case 7 :
 			if (limited === 0 && women === 0 && youth === 0) {
 				if (sc1 === 1 && sc2 === 0) {
-					if ((p2 - p1) < 1 && two.danAttacks < 16) {
+					if (0.5 < (x - p1) && 1.2 < (x - p2)) {
 						await sendMessageChat(decorateMessageTennis(statistic, type));
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
-					if (-1.2 < (p2 - p1) && (p2 - p1) < 2) {
-						if (p1 <= 2.8 && time < 1620) {
-							await sendMessageChat(decorateMessageTennis(statistic, type));
-						}
+					if (0.8 < (x - p1) && (p2 - p1) < -0.9) {
+						await sendMessageChat(decorateMessageTennis(statistic, type));
 					}
 				}
 			}
