@@ -4,7 +4,6 @@ const config = require('config');
 const rc = require('../utils/random-cron');
 const {setStatistic, deleteStatistic} = require('../storage/football');
 const {getExpandedMatch} = require('../fetch');
-const {equalsScore} = require('../utils/searchHelper');
 const {matchRate} = require('../matchRate');
 const {searchHelper} = require('../modifiableFile');
 const {counterWaiting} = require('../store/counterWaiting');
@@ -45,7 +44,7 @@ function waiting(param, strategy) {
 		try {
 			if (waiting) {
 				waiting = false;
-				const indexMatch = await searchIndex(param.matchId, strategy, param.score);
+				const indexMatch = await searchIndex(param.matchId, strategy);
 				waiting = true;
 				if (indexMatch !== null) {
 					reboot = false;
@@ -87,17 +86,16 @@ function waiting(param, strategy) {
  *
  * @param {Number} matchId матча
  * @param {Number} strategy стратегия
- * @param {Object} oldScore старый счет матча
  * @returns {Promise<Number | null>}
  */
-async function searchIndex(matchId, strategy, oldScore) {
+async function searchIndex(matchId, strategy) {
 	try {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
 		const param = searchHelper['getParams'](item, true);
 		// log.debug(`${matchId} param.time -> ${param.time}; time[strategy].after -> ${time[strategy].after}`);
 		// log.debug(`${matchId} oldScore -> ${JSON.stringify(oldScore)}; param.score -> ${JSON.stringify(param.score)}`);
-		if (equalsScore(oldScore, param.score) && (param.time <= time[strategy].after)) { //не изменился ли счет и не вышло ли за ределы время
+		if (param.time <= time[strategy].after) { //не вышло ли за ределы время
 			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
 			// log.debug(`${matchId} total -> ${total}; totalStrategy -> ${totalStrategy[strategy]} sc1:sc2 -> ${param.score.sc1}:${param.score.sc2}`);
 			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
