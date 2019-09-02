@@ -23,6 +23,11 @@ const speed = {
 	verySlow: 40 * 1000,
 };
 
+/**
+ * Массив интервалов в миллисекундах после которых делается попытка поиска элемента
+ */
+const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
+
 const auth = config.auth;
 const betAmount = config.emulator.betAmount;
 const active = config.parser.active;
@@ -42,13 +47,13 @@ async function performEmulation(ids, numberColumn, totalName) {
 	}
 	let driver;
 	try {
-		log.info(`Rate match ${ids} with "${totalName}"`);
+		log.info(`Rate match ${ids} with '${totalName}'`);
 		driver = await driverChrome();
 		await init(driver);
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			if (await search(driver, ids)) {
-				await rate(driver, numberColumn, totalName);
+				await searchRate(driver, numberColumn, totalName);
 			}
 		}
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
@@ -132,51 +137,70 @@ async function popup(driver) {
 }
 
 /**
- * Метод для выбора ставки и сама ставка.
+ * Метод для поиска нужного коэфициента для ставки.
  *
  * @param {object} driver инстанс драйвера
  * @param {Number} numberColumn номер столбца тотала
  * @param {String} totalName искомая ставка
  * @returns {Promise<boolean>}
  */
-async function rate(driver, numberColumn, totalName) {
-	await driver.sleep(speed.slow);
-	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
-		if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
-			try {
-				log.info(`${totalName} not block`);
-				if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
-					log.info(`${totalName} data-type`);
-					if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
-						log.info(`${totalName} bet_sum_input`);
-						/*if (!await isElement(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled')) {
-							await findCssAndCall(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled');
-							await findTextBySelectorCssAndCall(driver, '.coupon-grid__row--filled > .multiselect__option', 'Accept any change');
-							log.debug('Chose when odds change');
-						}*/
-						await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
-						if (await findSelectorCss(driver, '.swal2-error')) {
-							log.info('Rate error');
-							return false;
-						} else if (await findSelectorCss(driver, '.swal2-warning')) {
-							log.info('Rate warning');
-							return false;
-						}
-						log.info('Rate successfully');
-						return true;
+async function searchRate(driver, numberColumn, totalName) {
+	for (const timeout of searchTimeouts) {
+		if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
+			if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
+				try {
+					log.info(`${totalName} not block`);
+					if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
+						log.info(`${totalName} data-type`);
+						return await rate(driver);
+					} else {
+						log.debug('Current match not found');
+						return false;
 					}
-				} else {
-					log.debug('Current match not found');
+				} catch (e) {
+					log.debug(`Rate locked on current match: ${e}`);
 					return false;
 				}
-			} catch (e) {
-				log.debug(`Rate locked on current match: ${e}`);
-				return false;
+			} else {
+				log.debug(`Rate sleep on ${timeout}ms`);
+				await driver.sleep(timeout);
 			}
+			log.debug(`Rate ${totalName} locked on current match`);
+		} else {
+			log.debug(`Rate sleep on ${timeout}ms`);
+			await driver.sleep(timeout);
 		}
-		log.debug(`Rate ${totalName} locked on current match`);
 	}
-	log.debug('Rate on match failed');
+	log.debug('Search rate on match failed');
+	return false;
+}
+
+/**
+ * Ставка выбраного коэфициента.
+ *
+ * @param {object} driver инстанс драйвера
+ * @returns {Promise<boolean>}
+ */
+async function rate(driver) {
+	if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
+		log.info('bet_sum_input');
+		/*if (!await isElement(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled')) {
+			await findCssAndCall(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled');
+			await findTextBySelectorCssAndCall(driver, '.coupon-grid__row--filled > .multiselect__option', 'Accept any change');
+			log.debug('Chose when odds change');
+		}*/
+		await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
+		if (await findSelectorCss(driver, '.swal2-error')) {
+			log.info('Rate error');
+			return false;
+		} else if (await findSelectorCss(driver, '.swal2-warning')) {
+			log.info('Rate warning');
+			return false;
+		}
+		log.info('Rate successfully');
+		return true;
+	}
+	log.debug('Rate failed');
 	return false;
 }
 
