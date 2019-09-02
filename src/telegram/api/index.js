@@ -13,11 +13,11 @@ const chatId = process.env.NODE_ENV === 'development'
 	: config['bots'].test.chatId;
 const channelId = process.env.NODE_ENV === 'development'
 	? config['bots'].dev['channelId']
-	: config['bots'].test['channelId'];
+	: config['bots'].prod['channelId'];
 
 const supportChatId = process.env.NODE_ENV === 'development'
-	? config.bots.supportDev.chatId
-	: config.bots.supportTest.chatId;
+	? config['bots'].supportDev.chatId
+	: config['bots'].supportTest.chatId;
 
 /**
  * Метод отправки сообщений в телеграмм бот.

@@ -1,7 +1,7 @@
 const config = require('config');
 const {bot: {performEmulation}} = require('../selenium/bot');
-const {sendMessageChannel} = require('../telegram/api');
-const {decorateMessageChannel} = require('../utils/formateMessage');
+const {sendMessageChannel, sendMessageChat} = require('../telegram/api');
+const {decorateMessageChannel, decorateMessageTennis} = require('../utils/formateMessage');
 
 const typeRate = config['choice'].live['football']['typeRate'];
 
@@ -44,6 +44,7 @@ async function matchRate(statistic, type = '') {
 			if (limited === 0 && women === 0 && youth === 0) {
 				if (sc1 === 1 && sc2 === 0) {
 					if (0.15 <= (x - p1) && (p2 - p1) < 0.25) {
+						await sendMessageChat(decorateMessageTennis(statistic, type));
 						await sendMessageChannel(decorateMessageChannel(statistic, type));
 						await sendMessageChannel(matchId);
 					}
@@ -51,6 +52,7 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 0 && sc2 === 1) {
 					if (one.attacks < 21 && time < 1200) {
 						if (0.8 < (x - p1) && 1.1 < (x - p2)) {
+							await sendMessageChat(decorateMessageTennis(statistic, type));
 							await sendMessageChannel(decorateMessageChannel(statistic, type));
 							await sendMessageChannel(matchId);
 						}
