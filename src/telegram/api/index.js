@@ -7,17 +7,17 @@ const {
 
 const token = process.env.NODE_ENV === 'development'
 	? config['bots'].dev.token
-	: config['bots'].test.token;
+	: config['bots'].prod.token;
 const chatId = process.env.NODE_ENV === 'development'
 	? config['bots'].dev.chatId
-	: config['bots'].test.chatId;
+	: config['bots'].prod.chatId;
 const channelId = process.env.NODE_ENV === 'development'
 	? config['bots'].dev['channelId']
 	: config['bots'].prod['channelId'];
 
 const supportChatId = process.env.NODE_ENV === 'development'
 	? config['bots'].supportDev.chatId
-	: config['bots'].supportTest.chatId;
+	: config['bots'].supportProd.chatId;
 
 /**
  * Метод отправки сообщений в телеграмм бот.
