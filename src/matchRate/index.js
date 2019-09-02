@@ -1,7 +1,7 @@
 const config = require('config');
 const {bot: {performEmulation}} = require('../selenium/bot');
-const {sendMessageChat} = require('../telegram/api');
-const {decorateMessageTennis} = require('../utils/formateMessage');
+const {sendMessageChannel} = require('../telegram/api');
+const {decorateMessageChannel} = require('../utils/formateMessage');
 
 const typeRate = config['choice'].live['football']['typeRate'];
 
@@ -15,62 +15,49 @@ const typeRate = config['choice'].live['football']['typeRate'];
 async function matchRate(statistic, type = '') {
 	const totalRate = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	const {
-		snapshot: {start: {time, x, p1, p2}},
-		cards: {before: {one, two}},
+		snapshot: {start: {time, x, p1, p2, mod}},
+		cards: {before: {one}},
 		score: {sc1, sc2},
 		matchId,
-		total,
 		command: {women, limited, youth}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 3 :
-			if (3.6 <= x && (Math.abs(p2 - p1) <= 2.2)) {
-				// await sendMessageChat(decorateMessageTennis(statistic, type));
-				await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+			if (limited === 0 && women === 0 && youth === 0) {
+				if (sc1 === 1 && sc2 === 0) {
+					if (4.1 < x && time < 600) {
+						await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+					}
+				}
+				if (sc1 === 0 && sc2 === 1) {
+					if (one.attacks < 12 && time < 1200) {
+						if (1.5 < mod && mod <= 2.3) {
+							if (1.7 <= (x - p2)) {
+								await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+							}
+						}
+					}
+				}
 			}
 			break;
 		case 7 :
 			if (limited === 0 && women === 0 && youth === 0) {
 				if (sc1 === 1 && sc2 === 0) {
-					if (0.5 < (x - p1) && 1.2 < (x - p2)) {
-						await sendMessageChat(decorateMessageTennis(statistic, type));
+					if (0.15 <= (x - p1) && (p2 - p1) < 0.25) {
+						await sendMessageChannel(decorateMessageChannel(statistic, type));
+						await sendMessageChannel(matchId);
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
-					if (0.8 < (x - p1) && (p2 - p1) < -0.9) {
-						await sendMessageChat(decorateMessageTennis(statistic, type));
+					if (one.attacks < 21 && time < 1200) {
+						if (0.8 < (x - p1) && 1.1 < (x - p2)) {
+							await sendMessageChannel(decorateMessageChannel(statistic, type));
+							await sendMessageChannel(matchId);
+						}
 					}
 				}
 			}
 			break;
-		/*case 3 :
-			if (limited === 0 && women === 0 && youth === 0 && 210 < time) {
-				if (sc1 === 1 && sc2 === 0) {
-					if (4.4 <= x && ((p2 - p1) < 2)) {
-						if (one.attacks < 10 && two.danAttacks < 16) {
-							await sendMessageChat(decorateMessageTennis(statistic, type));
-							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
-						}
-					}
-				}
-				if (sc1 === 0 && sc2 === 1) {
-					if (4.2 <= x && (Math.abs(p2 - p1) <= 1.9)) {
-						if (one.danAttacks < 20) {
-							await sendMessageChat(decorateMessageTennis(statistic, type));
-							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
-						}
-					}
-				}
-			}
-			break;*/
-		/*case 6 :
-			if (attacks > 0) {
-				if (total > 2) {
-					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
-					await sendMessageChat(decorateMessageTennis(statistic, type));
-				}
-			}
-			break;*/
 		default:
 			break;
 	}

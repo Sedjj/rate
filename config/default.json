@@ -203,7 +203,7 @@
 				},
 				"strategyFive": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 10
+					"rate": 8
 				},
 				"strategySix": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
@@ -218,8 +218,8 @@
 					0,
 					1.8,
 					1.8,
-					1.7,
-					1.4,
+					2,
+					1.5,
 					1.5,
 					1.5,
 					1.2
@@ -251,7 +251,7 @@
 					},
 					{
 						"before": 0,
-						"after": 2700
+						"after": 4500
 					},
 					{
 						"before": 2700,
@@ -324,6 +324,6 @@
 	},
 	"emulator": {
 		"titleBetAmount": "Размер ставки",
-		"betAmount": 10
+		"betAmount": 5
 	}
 }
