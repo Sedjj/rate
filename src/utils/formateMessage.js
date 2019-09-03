@@ -1,5 +1,3 @@
-const config = require('config');
-
 /**
  * Сбрасывает все зарезервированные символы для регулярных выражений.
  *
@@ -30,6 +28,20 @@ function replaceAll(str, find, replace) {
  */
 function secondsToMinutes(time) {
 	return Math.floor(time / 60);
+}
+
+/**
+ * Метод для округления дробного число
+ * @param {Number} value число для округления
+ * @param {Number} rlength число до которого округляем
+ * @returns {number}
+ */
+function round(value, rlength = 2) {
+	let temp = value;
+	if (typeof value === 'number') {
+		temp = Number((value).toFixed(rlength));
+	}
+	return temp;
 }
 
 /**
@@ -90,8 +102,8 @@ function decorateMessageChannel(param, type = '') {
 	const time = secondsToMinutes(end.time);
 	const scope = `${sc1}:${sc2}`;
 	const index = `${p1} / ${x} / ${p2}`;
-	const difference = `${x - p1} / ${x - p2} / ${p2 - p1}`;
-	return `${matchId}\n<b>${en}</b>\n\n${one}\n${two}\n\n<pre>${scope} / ${time}'\n${index}\n${difference}</pre>`;
+	const difference = `${round(x - p1)} / ${round(x - p2)} / ${round(p2 - p1)}`;
+	return `<a href="">${matchId}\n${en}</a>\n\n<b>${one}\n${two}</b>\n\n<pre>${scope} / ${time}'\n${index}\n${difference}</pre>`;
 }
 
 module.exports = {

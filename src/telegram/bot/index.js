@@ -21,7 +21,7 @@ const logsDirectory = config.path.directory.logs || 'logs';
 
 const supportToken = process.env.NODE_ENV === 'development'
 	? config.bots.supportDev.token
-	: config.bots.supportTest.token;
+	: config.bots.supportProd.token;
 
 /*const proxy = config.proxy;*/
 /*const socket = config.socket;*/

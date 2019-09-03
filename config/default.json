@@ -40,28 +40,34 @@
 		"dev": {
 			"channelId": "",
 			"chatId": "-299200164",
+			"name": "@dev_sedjj_bot",
 			"token": "704208442:AAG6oMYGXwuU-APfHsy5YjIzfrijey7xEic"
 		},
 		"supportDev": {
 			"chatId": "-376344669",
+			"name": "@error_dev_sedjj_bot",
 			"token": "633510677:AAGoFQGr8f_cDP3LVHYvRiN7kr5bo13HDew"
 		},
 		"test": {
 			"channelId": "",
 			"chatId": "-299200164",
+			"name": "@test_sedjj_bot",
 			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
 		},
 		"supportTest": {
 			"chatId": "-376344669",
+			"name": "@error_test_sedjj_bot",
 			"token": "633227407:AAFReZaI0D6UPZPKt5TT8PR1e_PDPAGA9IQ"
 		},
 		"prod": {
 			"channelId": "-1001295299807",
 			"chatId": "-276223662",
+			"name": "@rate_sedjj_bot",
 			"token": "741538630:AAH3OtLgnLUeXDKZ6cXYe7GBI2uSBSHeOQk"
 		},
 		"supportProd": {
 			"chatId": "-327795203",
+			"name": "@error_rate_sedjj_bot",
 			"token": "749722999:AAHdN926BxFWiO4Z7v4-b4yppz0pZen5j90"
 		}
 	},
