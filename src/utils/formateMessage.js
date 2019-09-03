@@ -99,10 +99,11 @@ function decorateMessageChannel(param, type = '') {
 		snapshot: {start: {p1, x, p2, time}},
 		score: {sc1, sc2}
 	} = param;
+	const minut = secondsToMinutes(time);
 	const scope = `${sc1}:${sc2}`;
 	const index = `${p1} / ${x} / ${p2}`;
 	const difference = `${round(x - p1)} / ${round(x - p2)} / ${round(p2 - p1)}`;
-	return `<u>${matchId}\n${en}</u>\n\n<b>${one}\n${two}</b>\n\n<pre>${scope} / ${secondsToMinutes(time)}'\n${index}\n${difference}</pre>`;
+	return `<u>${matchId}\n${en}</u>\n\n<b>${one}\n${two}</b>\n\n<pre>${scope} / ${minut}'\n${index}\n${difference}</pre>`;
 }
 
 module.exports = {
