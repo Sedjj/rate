@@ -21,8 +21,6 @@ async function matchRate(statistic, type = '') {
 		matchId,
 		command: {women, limited, youth}
 	} = statistic;
-	await sendMessageChat(matchId);
-	await sendMessageChat(decorateMessageChannel(statistic, type));
 	switch (statistic.strategy) {
 		case 3 :
 			if (limited === 0 && women === 0 && youth === 0) {
@@ -47,18 +45,16 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 1 && sc2 === 0) {
 					if (0.15 <= (x - p1) && (p2 - p1) < 0.25) {
 						await sendMessageChat(decorateMessageTennis(statistic, type));
-						await sendMessageChannel(matchId);
 						await sendMessageChannel(decorateMessageChannel(statistic, type));
-
+						await sendMessageChannel(matchId);
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
 					if (one.attacks < 21 && time < 1200) {
 						if (0.8 < (x - p1) && 1.1 < (x - p2)) {
 							await sendMessageChat(decorateMessageTennis(statistic, type));
-							await sendMessageChannel(matchId);
 							await sendMessageChannel(decorateMessageChannel(statistic, type));
-
+							await sendMessageChannel(matchId);
 						}
 					}
 				}
