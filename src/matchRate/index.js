@@ -45,16 +45,18 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 1 && sc2 === 0) {
 					if (0.15 <= (x - p1) && (p2 - p1) < 0.25) {
 						await sendMessageChat(decorateMessageTennis(statistic, type));
-						await sendMessageChannel(decorateMessageChannel(statistic, type));
 						await sendMessageChannel(matchId);
+						await sendMessageChannel(decorateMessageChannel(statistic, type));
+
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
 					if (one.attacks < 21 && time < 1200) {
 						if (0.8 < (x - p1) && 1.1 < (x - p2)) {
 							await sendMessageChat(decorateMessageTennis(statistic, type));
-							await sendMessageChannel(decorateMessageChannel(statistic, type));
 							await sendMessageChannel(matchId);
+							await sendMessageChannel(decorateMessageChannel(statistic, type));
+
 						}
 					}
 				}
