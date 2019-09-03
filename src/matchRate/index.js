@@ -21,7 +21,6 @@ async function matchRate(statistic, type = '') {
 		matchId,
 		command: {women, limited, youth}
 	} = statistic;
-
 	await sendMessageChat(matchId);
 	await sendMessageChat(decorateMessageChannel(statistic, type));
 	switch (statistic.strategy) {
