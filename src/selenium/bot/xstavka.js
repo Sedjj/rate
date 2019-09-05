@@ -23,6 +23,11 @@ const speed = {
 	verySlow: 40 * 1000,
 };
 
+/**
+ * Массив интервалов в миллисекундах после которых делается попытка поиска элемента
+ */
+const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
+
 const auth = config.auth;
 const betAmount = config.emulator.betAmount;
 const active = config.parser.active;
@@ -48,7 +53,12 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			if (await search(driver, ids)) {
-				await rate(driver, numberColumn, totalName);
+				for (const timeout of searchTimeouts) {
+					if (!(await searchRate(driver, numberColumn, totalName))) {
+						log.debug(`Rate sleep on ${timeout}ms`);
+						await driver.sleep(timeout);
+					}
+				}
 			}
 		}
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
@@ -135,33 +145,53 @@ async function popup(driver) {
  * @param {String} totalName искомая ставка
  * @returns {Promise<boolean>}
  */
-async function rate(driver, numberColumn, totalName) {
-	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`) && !await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
-		try {
-			if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
-				if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
-					await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
-					if (await findSelectorCss(driver, '.swal2-error')) {
-						log.info('Rate error');
-						return false;
-					} else if (await findSelectorCss(driver, '.swal2-warning')) {
-						log.info('Rate warning');
-						return false;
-					}
-					log.info('Rate successfully');
-					// FIXME подумать как обойти если изменился коэффициент
-					return true;
+async function searchRate(driver, numberColumn, totalName) {
+	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
+		if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
+			try {
+				if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
+					return await rate(driver);
+				} else {
+					log.debug('Current match not found');
+					return false;
 				}
-			} else {
-				log.debug('Current match not found');
+			} catch (e) {
+				log.debug('Rate locked on current match: ', e);
 				return false;
 			}
-		} catch (e) {
-			log.debug('Rate locked on current match: ', e);
+		}
+		log.debug(`Rate ${totalName} locked on current match`);
+	}
+	log.debug('Search rate on match failed');
+	return false;
+}
+
+/**
+ * Ставка выбраного коэфициента.
+ *
+ * @param {object} driver инстанс драйвера
+ * @returns {Promise<boolean>}
+ */
+async function rate(driver) {
+	if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
+		log.info('bet_sum_input');
+		/*if (!await isElement(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled')) {
+			await findCssAndCall(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled');
+			await findTextBySelectorCssAndCall(driver, '.coupon-grid__row--filled > .multiselect__option', 'Accept any change');
+			log.debug('Chose when odds change');
+		}*/
+		await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
+		if (await findSelectorCss(driver, '.swal2-error')) {
+			log.info('Rate error');
+			return false;
+		} else if (await findSelectorCss(driver, '.swal2-warning')) {
+			log.info('Rate warning');
 			return false;
 		}
+		log.info('Rate successfully');
+		return true;
 	}
-	log.debug('Rate on match failed');
+	log.debug('Rate failed');
 	return false;
 }
 

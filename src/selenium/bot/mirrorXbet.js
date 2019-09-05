@@ -53,7 +53,12 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			if (await search(driver, ids)) {
-				await searchRate(driver, numberColumn, totalName);
+				for (const timeout of searchTimeouts) {
+					if (!(await searchRate(driver, numberColumn, totalName))) {
+						log.debug(`Search rate sleep on ${timeout}ms`);
+						await driver.sleep(timeout);
+					}
+				}
 			}
 		}
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
@@ -145,31 +150,21 @@ async function popup(driver) {
  * @returns {Promise<boolean>}
  */
 async function searchRate(driver, numberColumn, totalName) {
-	for (const timeout of searchTimeouts) {
-		if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
-			if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
-				try {
-					log.info(`${totalName} not block`);
-					if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
-						log.info(`${totalName} data-type`);
-						return await rate(driver);
-					} else {
-						log.debug('Current match not found');
-						return false;
-					}
-				} catch (e) {
-					log.debug(`Rate locked on current match: ${e}`);
+	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
+		if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
+			try {
+				if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
+					return await rate(driver);
+				} else {
+					log.debug('Current match not found');
 					return false;
 				}
-			} else {
-				log.debug(`Rate sleep on ${timeout}ms`);
-				await driver.sleep(timeout);
+			} catch (e) {
+				log.debug(`Rate locked on current match: ${e}`);
+				return false;
 			}
-			log.debug(`Rate ${totalName} locked on current match`);
-		} else {
-			log.debug(`Rate sleep on ${timeout}ms`);
-			await driver.sleep(timeout);
 		}
+		log.debug(`Rate ${totalName} locked on current match`);
 	}
 	log.debug('Search rate on match failed');
 	return false;
@@ -192,10 +187,12 @@ async function rate(driver) {
 		await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
 		if (await findSelectorCss(driver, '.swal2-error')) {
 			log.info('Rate error');
-			return false;
+			// FIXME придумать как нажимать ок на модалках
+			return true;
 		} else if (await findSelectorCss(driver, '.swal2-warning')) {
 			log.info('Rate warning');
-			return false;
+			// FIXME придумать как нажимать ок на модалках
+			return true;
 		}
 		log.info('Rate successfully');
 		return true;
