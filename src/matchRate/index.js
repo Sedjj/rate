@@ -21,6 +21,7 @@ async function matchRate(statistic, type = '') {
 		matchId,
 		command: {women, limited, youth}
 	} = statistic;
+	await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 	switch (statistic.strategy) {
 		case 3 :
 			if (youth === 0) {

@@ -40,8 +40,8 @@ const keyboardInit = [
 	[waiting],
 	[rate],
 	[selectSport],
-	[backup],
-	[getFile]
+	[getFile],
+	[backup]
 ];
 
 const response = use(accessCheck);
