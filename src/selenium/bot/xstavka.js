@@ -57,6 +57,8 @@ async function performEmulation(ids, numberColumn, totalName) {
 					if (!(await searchRate(driver, numberColumn, totalName))) {
 						log.debug(`Rate sleep on ${timeout}ms`);
 						await driver.sleep(timeout);
+					} else {
+						break;
 					}
 				}
 			}

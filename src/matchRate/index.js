@@ -23,22 +23,10 @@ async function matchRate(statistic, type = '') {
 	} = statistic;
 	switch (statistic.strategy) {
 		case 3 :
-			if (limited === 0 && women === 0 && youth === 0) {
-				if (sc1 === 1 && sc2 === 0) {
-					if (4.1 < x && time < 600) {
-						await sendMessageChat(decorateMessageTennis(statistic, type));
-						await performEmulation(matchId, 9, `Total Over ${totalRate}`);
-					}
-				}
-				if (sc1 === 0 && sc2 === 1) {
-					if (one.attacks < 12 && time < 1200) {
-						if (1.5 < mod && mod <= 2.3) {
-							if (1.7 <= (x - p2)) {
-								await sendMessageChat(decorateMessageTennis(statistic, type));
-								await performEmulation(matchId, 9, `Total Over ${totalRate}`);
-							}
-						}
-					}
+			if (youth === 0) {
+				if (3.8 < x && time < 650) {
+					await sendMessageChat(decorateMessageTennis(statistic, type));
+					await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 				}
 			}
 			break;
