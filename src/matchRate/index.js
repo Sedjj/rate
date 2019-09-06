@@ -15,7 +15,7 @@ const typeRate = config['choice'].live['football']['typeRate'];
 async function matchRate(statistic, type = '') {
 	const totalRate = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	const {
-		snapshot: {start: {time, x, p1, p2, mod}},
+		snapshot: {start: {time, x, p1, p2}},
 		cards: {before: {one}},
 		score: {sc1, sc2},
 		matchId,
@@ -25,7 +25,7 @@ async function matchRate(statistic, type = '') {
 		case 3 :
 			if (youth === 0) {
 				if (3.8 < x && time < 650) {
-					await sendMessageChat(decorateMessageTennis(statistic, type));
+					await sendMessageChat(decorateMessageChannel(statistic, type));
 					await performEmulation(matchId, 9, `Total Over ${totalRate}`);
 				}
 			}
@@ -35,14 +35,14 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 1 && sc2 === 0) {
 					if (0.15 <= (x - p1) && (p2 - p1) < 0.25) {
 						await sendMessageChannel(decorateMessageChannel(statistic, type));
-						await sendMessageChannel(matchId);
+						await sendMessageChannel('Result');
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
 					if (one.attacks < 21 && time < 1200) {
 						if (0.8 < (x - p1) && 1.1 < (x - p2)) {
 							await sendMessageChannel(decorateMessageChannel(statistic, type));
-							await sendMessageChannel(matchId);
+							await sendMessageChannel('Result');
 						}
 					}
 				}
