@@ -44,7 +44,7 @@ function waiting(param, strategy) {
 		try {
 			if (waiting) {
 				waiting = false;
-				const indexMatch = await searchIndex(param.matchId, strategy);
+				const indexMatch = await searchIndex(param.matchId, strategy, param.score);
 				waiting = true;
 				if (indexMatch !== null) {
 					reboot = false;
@@ -86,19 +86,21 @@ function waiting(param, strategy) {
  *
  * @param {Number} matchId матча
  * @param {Number} strategy стратегия
+ * @param {Object} oldScore старый счет матча
  * @returns {Promise<Number | null>}
  */
-async function searchIndex(matchId, strategy) {
+async function searchIndex(matchId, strategy, oldScore) {
 	try {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
 		const param = searchHelper['getParams'](item, true);
 		// log.debug(`${matchId} param.time -> ${param.time}; time[strategy].after -> ${time[strategy].after}`);
 		// log.debug(`${matchId} oldScore -> ${JSON.stringify(oldScore)}; param.score -> ${JSON.stringify(param.score)}`);
-		if (param.time <= time[strategy].after) { //не вышло ли за ределы время
-			const total = param.score.sc1 + param.score.sc2 + typeRate[strategy];
+		const oldTotal = oldScore.sc1 + oldScore.sc2 + typeRate[strategy];
+		const total = param.score.sc1 + param.score.sc2;
+		if (oldTotal > total && (param.time <= time[strategy].after)) { //не вышло ли за ределы время
 			// log.debug(`${matchId} total -> ${total}; totalStrategy -> ${totalStrategy[strategy]} sc1:sc2 -> ${param.score.sc1}:${param.score.sc2}`);
-			index = await searchHelper['searchTotal'](item, total, totalStrategy[strategy]);
+			index = await searchHelper['searchTotal'](item, oldTotal, totalStrategy[strategy]);
 			// log.debug(`${matchId} index -> ${index}`);
 			if (index !== null) {
 				await setTotalRate(index, param, strategy);

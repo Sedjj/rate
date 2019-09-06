@@ -69,6 +69,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		log.error('Error performEmulation -> ' + e);
 		//FIXME падает ошибка и рушит все
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
+		await driver.sleep(speed.fast);
 		await driver.quit();
 	}
 }
@@ -129,11 +130,11 @@ async function popup(driver) {
 	) {
 		try {
 			await findCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
+			return await switchTab(driver);
 		} catch (e) {
 			log.debug('Can`t search current match: ', e);
 			return false;
 		}
-		return await switchTab(driver);
 	}
 	log.debug('Search match in popup failed');
 	return false;

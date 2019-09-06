@@ -315,17 +315,20 @@ async function switchTab(driver, closed = true) {
 	try {
 		const handles = await driver.getAllWindowHandles();
 		if (handles.length > 1) {
-			closed && driver.close();
+			closed && await driver.close();
 			await driver.switchTo().window(handles[1]);
-			await driver.sleep(speed.veryFast);
-			await driver.wait(() => driver.executeScript('return document.readyState')
-				.then((readyState) => {
-					return readyState === 'complete';
-				}).catch((e) => {
-					log.error('Error executeScript -> ' + e);
-				}),
-				speed.verySlow
-			);
+			await driver.sleep(speed.normal);
+			try {
+				await driver.wait(
+					() => driver.executeScript('return document.readyState')
+						.then((readyState) => {
+							return readyState === 'complete';
+						}),
+					speed.verySlow
+				);
+			} catch (e) {
+				log.error('Error document.readyState -> ' + e);
+			}
 			return true;
 		} else {
 			return false;
