@@ -1,7 +1,7 @@
 const config = require('config');
 const {bot: {performEmulation}} = require('../selenium/bot');
 const {sendMessageChannel, sendMessageChat} = require('../telegram/api');
-const {decorateMessageChannel, decorateMessageTennis} = require('../utils/formateMessage');
+const {decorateMessageChannel} = require('../utils/formateMessage');
 
 const typeRate = config['choice'].live['football']['typeRate'];
 

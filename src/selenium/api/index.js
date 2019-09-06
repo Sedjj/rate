@@ -321,7 +321,11 @@ async function switchTab(driver, closed = true) {
 			await driver.wait(() => driver.executeScript('return document.readyState')
 				.then((readyState) => {
 					return readyState === 'complete';
-				}));
+				}).catch((e) => {
+					log.error('Error executeScript -> ' + e);
+				}),
+				speed.verySlow
+			);
 			return true;
 		} else {
 			return false;
