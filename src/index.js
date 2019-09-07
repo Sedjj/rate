@@ -12,7 +12,7 @@ const {checkingResults} = require('./checkingResults');
 
 const numericalDesignationFootball = config.choice.live.football.numericalDesignation;
 
-/*performEmulation('205296081', 9, `Total Over ${2.5}`);*/
+/*performEmulation('205711926', 9, `Total Over ${2.5}`);*/
 
 const schedulerSearchFootball = {
 	title: 'в секундах',

@@ -16,17 +16,30 @@ async function matchRate(statistic, type = '') {
 	const totalRate = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	const {
 		snapshot: {start: {time, x, p1, p2}},
-		cards: {before: {one}},
+		group:{en},
+		cards: {before: {one, two}},
 		score: {sc1, sc2},
 		matchId,
 		command: {women, limited, youth}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 3 :
-			if (youth === 0) {
-				if (3.8 < x && time < 650) {
-					await sendMessageChat(decorateMessageChannel(statistic, type));
-					await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+			if (limited === 0 && women === 0 && youth === 0) {
+				if(3.85 < x && time < 1200){
+					if (sc1 === 1 && sc2 === 0) {
+						if (0.6 < (x - p1) && 1.45 < (x - p2)) {
+							if(en.toString().trim() !== 'Club Friendlies'.trim()){
+								await sendMessageChat(decorateMessageChannel(statistic, type));
+								await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+							}
+						}
+					}
+					if (sc1 === 0 && sc2 === 1) {
+						if (two.attacks < 10 && two.danAttacks < 5 && 252 < time) {
+							await sendMessageChat(decorateMessageChannel(statistic, type));
+							await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+						}
+					}
 				}
 			}
 			break;
