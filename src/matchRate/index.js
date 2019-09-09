@@ -64,7 +64,7 @@ async function matchRate(statistic, type = '') {
 				if (sc1 === 0 && sc2 === 1) {
 					if ((time < 540) && (3.8 < x)) {
 						if (-1.25 < (p2 - p1) && 1 < (x - p1)) {
-							if (0 < one.danAttacks && one.attacks < 10) {
+							if (0 < one.danAttacks && two.attacks < 10) {
 								await sendMessageChat(decorateMessageChannel(statistic, type));
 							}
 						}
