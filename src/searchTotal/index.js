@@ -94,14 +94,14 @@ async function searchIndex(matchId, strategy, oldScore) {
 		const item = await getExpandedMatch(urlFootballExpandedRate.replace('${id}', matchId));
 		let index = null;
 		const param = searchHelper['getParams'](item, true);
-		// log.debug(`${matchId} param.time -> ${param.time}; time[strategy].after -> ${time[strategy].after}`);
-		// log.debug(`${matchId} oldScore -> ${JSON.stringify(oldScore)}; param.score -> ${JSON.stringify(param.score)}`);
+
 		const oldTotal = oldScore.sc1 + oldScore.sc2 + typeRate[strategy];
 		const total = param.score.sc1 + param.score.sc2;
-		if ((oldTotal > total) && (param.time <= time[strategy].after)) { //не вышло ли за ределы время
-			// log.debug(`${matchId} total -> ${total}; totalStrategy -> ${totalStrategy[strategy]} sc1:sc2 -> ${param.score.sc1}:${param.score.sc2}`);
+
+		if ((oldTotal > total) && (param.time <= time[strategy].after)) {
+
 			index = await searchHelper['searchTotal'](item, oldTotal, totalStrategy[strategy]);
-			// log.debug(`${matchId} index -> ${index}`);
+
 			if (index !== null) {
 				await setTotalRate(index, param, strategy);
 				setIndexRate(index, param, strategy);
