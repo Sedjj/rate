@@ -98,7 +98,7 @@ async function searchIndex(matchId, strategy, oldScore) {
 		const oldTotal = oldScore.sc1 + oldScore.sc2 + typeRate[strategy];
 		const total = param.score.sc1 + param.score.sc2;
 
-		if ((oldTotal > total) && (param.time <= time[strategy].after)) {
+		if ((oldTotal > total) || (param.time <= time[strategy].after)) {
 
 			index = await searchHelper['searchTotal'](item, oldTotal, totalStrategy[strategy]);
 
