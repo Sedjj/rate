@@ -48,39 +48,45 @@ async function matchRate(statistic, type = '') {
 			}
 			break;
 		case 7 :
-			if (limited === 0 && women === 0 && youth === 0) {
-				// copy 3 strategy
+			if (limited === 0) {
+				// ТБ2
 				if (sc1 === 1 && sc2 === 0) {
-					if (0.15 < (x - p1) && 0.99 < (x - p2) && (p2 - p1) < 0.25) {
-						await sendMessageChannel(decorateMessageChannel(statistic, type));
-						await sendMessageChannel('Result');
-					}
-				}
-				if (sc1 === 0 && sc2 === 1) {
-					if (1.14 < (x - p1) && 1.4 < (x - p2) && two.attacks < 10) {
-						await sendMessageChannel(decorateMessageChannel(statistic, type));
-						await sendMessageChannel('Result');
-					}
-				}
-				// strategy 7
-			/*	if (sc1 === 1 && sc2 === 0) {
-					if ((time < 1800) && (4 < x)) {
-						if (-1.4 <= (p2 - p1) && (p2 - p1) <= 0.8) {
-							if (1.85 < (x - p2)) {
-								await sendMessageChat(decorateMessageChannel(statistic, type));
+					if ((1.85 <= (x - p1)) && (0.4 < (x - p2)) && ( ((p2 - p1) < 0.9) || (1.36 < (p2 - p1)) ) ) {
+						if (4.05 < x && two.shotsOn < 2 && one.shotsOn < 2 && one.danAttacks < 11) {
+							if (one.attacks < 15 && two.attacks < 15 && 0 < two.danAttacks) {
+								await sendMessageChannel(decorateMessageChannel(statistic, type));
+								await sendMessageChannel('ТБ2(ТБ1,5) в 1-м тайме');
 							}
 						}
 					}
 				}
+				if (sc1 === 0 && sc2 === 1 && women === 0) {
+					if ((1 < (x - p1)) && ((x - p2) < 3.38) && ( ((p2 - p1) < -0.43) || (0.12 < (p2 - p1)) ) ) {
+						if (0 < one.attacks && one.attacks < 10 && two.attacks < 9) {
+							await sendMessageChannel(decorateMessageChannel(statistic, type));
+							await sendMessageChannel('ТБ2(ТБ1,5) в 1-м тайме');
+						}
+					}
+				}
+				// ТМ2
+				if (sc1 === 1 && sc2 === 0) {
+					if ((x - p2) < 0.4 && 600 < time && time < 1500) {
+						if (x < 4.05 && one.attacks < 24 && 4 < one.danAttacks) {
+							await sendMessageChannel(decorateMessageChannel(statistic, type));
+							await sendMessageChannel('ТМ2(ТМ2,5) в 1-м тайме');
+						}
+					}
+				}
 				if (sc1 === 0 && sc2 === 1) {
-					if ((time < 540) && (3.8 < x)) {
-						if (-1.25 < (p2 - p1) && 1 < (x - p1)) {
-							if (0 < one.danAttacks && two.attacks < 10) {
-								await sendMessageChat(decorateMessageChannel(statistic, type));
+					if (time < 2100 && x < 3.7 && two.shotsOn < 3) {
+						if ((x - p1) < 1.1 && 0.9 < (x - p2)) {
+							if (9 < one.danAttacks && 4 < two.danAttacks) {
+								await sendMessageChannel(decorateMessageChannel(statistic, type));
+								await sendMessageChannel('ТМ2(ТМ2,5) в 1-м тайме');
 							}
 						}
 					}
-				}*/
+				}
 			}
 			break;
 		default:
