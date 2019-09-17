@@ -145,9 +145,6 @@ function setFileApiTelegram(token, chatId, document) {
 			document: document
 		},
 	};
-	/*if (process.env.NODE_ENV === 'development') {
-		props = {...props, proxy: `http://${proxy.user}:${proxy.password}@${proxy.host}:${proxy.port}`};
-	}*/
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
