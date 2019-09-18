@@ -6,6 +6,7 @@ const rc = require('./utils/random-cron');
 const config = require('config');
 const {log} = require('./utils/logger');
 const football = require('./storage/football');
+const {sendMessageSupport} = require('./telegram/api');
 const {bot: {performEmulation}} = require('./selenium/bot');
 const {searchFootball} = require('./searchMatch');
 const {checkingResults} = require('./checkingResults');
@@ -72,3 +73,4 @@ if (rendomSchedulerCheckingResults) {
 }
 
 console.log('NODE_ENV', process.env.NODE_ENV);
+sendMessageSupport('Start the rate bet');

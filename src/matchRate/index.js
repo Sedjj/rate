@@ -60,7 +60,7 @@ async function matchRate(statistic, type = '') {
 						}
 					}
 				}
-				if (sc1 === 0 && sc2 === 1 && women === 0) {
+				if (sc1 === 0 && sc2 === 1 && women === 0 && 0 < one.danAttacks) {
 					if ((1 < (x - p1)) && ((x - p2) < 3.38) && ( ((p2 - p1) < -0.43) || (0.12 < (p2 - p1)) ) ) {
 						if (0 < one.attacks && one.attacks < 10 && two.attacks < 9) {
 							await sendMessageChannel(decorateMessageChannel(statistic, type));
