@@ -128,9 +128,25 @@ async function findSelectorCss(driver, selector) {
  * @param {String} selector css селектор
  * @returns {Promise<boolean>}
  */
-async function isElement(driver, selector) {
+async function isElementByCss(driver, selector) {
 	try {
 		const el = await driver.findElement(By.css(selector));
+		return !!el;
+	} catch (e) {
+		return false;
+	}
+}
+
+/**
+ * Функция для проверки, еслить ли элемент на странице.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector css селектор
+ * @returns {Promise<boolean>}
+ */
+async function isElementById(driver, selector) {
+	try {
+		const el = await driver.findElement(By.id(selector));
 		return !!el;
 	} catch (e) {
 		return false;
@@ -367,7 +383,8 @@ module.exports = {
 	driverChrome,
 	init,
 	findSelectorCss,
-	isElement,
+	isElementByCss,
+	isElementById,
 	findCssAndCall,
 	findIdAndCall,
 	findIdAndFill,

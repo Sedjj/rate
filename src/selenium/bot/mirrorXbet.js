@@ -9,9 +9,10 @@ const {
 	init,
 	findCssAndCall,
 	screenShot,
-	isElement,
+	isElementByCss,
 	findIdAndFill,
 	findIdAndCall,
+	isElementById,
 	findSelectorCssAndFill
 } = require('../api');
 
@@ -52,6 +53,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await init(driver);
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
+			await closePromo(driver);
 			if (await search(driver, ids)) {
 				for (const timeout of searchTimeouts) {
 					if (!(await searchRate(driver, numberColumn, totalName))) {
@@ -107,11 +109,12 @@ async function authorization(driver) {
  * @returns {Promise<boolean>}
  */
 async function search(driver, ids) {
+	await closePromo(driver);
 	if (await findSelectorCss(driver, '.ls-panel__head.ls-panel__head--search')
 		&& await findSelectorCss(driver, '.wrap_lk')
 		&& await findSelectorCss(driver, '.ls-filter__search .ls-search__button')
 	) {
-		if (!await isElement(driver, '.ls-search__button.active')) {
+		if (!await isElementByCss(driver, '.ls-search__button.active')) {
 			await findCssAndCall(driver, '.ls-search__button');
 		}
 		await findSelectorCssAndFill(driver, '.ls-search__input.searchInput.keyboardInput', ids.toString());
@@ -154,7 +157,7 @@ async function popup(driver) {
  */
 async function searchRate(driver, numberColumn, totalName) {
 	if (await findSelectorCss(driver, `[data-type="${numberColumn}"]`)) {
-		if (!await isElement(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
+		if (!await isElementByCss(driver, `.bets.betCols2 > .blockSob > [data-type="${numberColumn}"]`)) {
 			try {
 				if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
 					return await rate(driver);
@@ -182,7 +185,7 @@ async function searchRate(driver, numberColumn, totalName) {
 async function rate(driver) {
 	if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
 		log.info('bet_sum_input');
-		/*if (!await isElement(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled')) {
+		/*if (!await isElementByCss(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled')) {
 			await findCssAndCall(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled');
 			await findTextBySelectorCssAndCall(driver, '.coupon-grid__row--filled > .multiselect__option', 'Accept any change');
 			log.debug('Chose when odds change');
@@ -201,6 +204,19 @@ async function rate(driver) {
 		return true;
 	}
 	log.debug('Rate failed');
+	return false;
+}
+
+/**
+ * Метод для поиска надоедливого всплывающего окна и закрытие его.
+ *
+ * @param {object} driver инстанс драйвера
+ * @returns {Promise<boolean>}
+ */
+async function closePromo(driver) {
+	if (await isElementById(driver, 'promoPoints')) {
+		return await findCssAndCall(driver, '.box-modal_close.arcticmodal-close');
+	}
 	return false;
 }
 
