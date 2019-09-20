@@ -38,7 +38,7 @@ async function matchRate(statistic, type = '') {
 			}
 			break;*/
 		/*case 4 :
-			if (youth === 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
+			if (youth ==== 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
 				if (20 < two.danAttacks && 20 < one.danAttacks) {
 					if (-3.6 < (x - p1) && two.shotsOn < 3 && two.shotsOff < 5 && one.shotsOff < 5) {
 						await sendMessageChat(decorateMessageChannel(statistic, type));
