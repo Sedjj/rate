@@ -37,7 +37,7 @@ async function matchRate(statistic, type = '') {
 				}
 			}
 			break;*/
-		case 4 :
+		/*case 4 :
 			if (youth === 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
 				if (20 < two.danAttacks && 20 < one.danAttacks) {
 					if (-3.6 < (x - p1) && two.shotsOn < 3 && two.shotsOff < 5 && one.shotsOff < 5) {
@@ -46,12 +46,18 @@ async function matchRate(statistic, type = '') {
 					}
 				}
 			}
+			break;*/
+		case 4 :
+			if (2.94 < x) {
+				await sendMessageChat(decorateMessageChannel(statistic, type));
+				await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+			}
 			break;
 		case 7 :
 			if (limited === 0) {
 				// ТБ2
 				if (sc1 === 1 && sc2 === 0) {
-					if ((1.85 <= (x - p1)) && (0.4 < (x - p2)) && ( ((p2 - p1) < 0.9) || (1.36 < (p2 - p1)) ) ) {
+					if ((1.85 <= (x - p1)) && (0.4 < (x - p2)) && (((p2 - p1) < 0.9) || (1.36 < (p2 - p1)))) {
 						if (4.05 < x && two.shotsOn < 2 && one.shotsOn < 2 && one.danAttacks < 11) {
 							if (one.attacks < 15 && two.attacks < 15 && 0 < two.danAttacks) {
 								await sendMessageChannel(decorateMessageChannel(statistic, type));
@@ -61,7 +67,7 @@ async function matchRate(statistic, type = '') {
 					}
 				}
 				if (sc1 === 0 && sc2 === 1 && women === 0 && 0 < one.danAttacks) {
-					if ((1 < (x - p1)) && ((x - p2) < 3.38) && ( ((p2 - p1) < -0.43) || (0.12 < (p2 - p1)) ) ) {
+					if ((1 < (x - p1)) && ((x - p2) < 3.38) && (((p2 - p1) < -0.43) || (0.12 < (p2 - p1)))) {
 						if (0 < one.attacks && one.attacks < 10 && two.attacks < 9) {
 							await sendMessageChannel(decorateMessageChannel(statistic, type));
 							await sendMessageChannel('ТБ2(ТБ1,5) в 1-м тайме');
