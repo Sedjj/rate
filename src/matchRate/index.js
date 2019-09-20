@@ -48,12 +48,14 @@ async function matchRate(statistic, type = '') {
 			}
 			break;*/
 		case 4 :
-			if (2.94 < x) {
-				await sendMessageChat(decorateMessageChannel(statistic, type));
-				await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+			if (youth === 0) {
+				if (3.2 < x && 2 <= total && total <= 4) {
+					await sendMessageChat(decorateMessageChannel(statistic, type));
+					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+				}
 			}
 			break;
-		case 7 :
+		/*case 7 :
 			if (limited === 0) {
 				// ТБ2
 				if (sc1 === 1 && sc2 === 0) {
@@ -94,7 +96,7 @@ async function matchRate(statistic, type = '') {
 					}
 				}
 			}
-			break;
+			break;*/
 		default:
 			break;
 	}
