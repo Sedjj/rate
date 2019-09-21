@@ -122,7 +122,7 @@ async function findSelectorCss(driver, selector) {
 }
 
 /**
- * Функция для проверки, еслить ли элемент на странице.
+ * Функция для проверки по css selector, еслить ли элемент на странице.
  *
  * @param {object} driver инстанс драйвера
  * @param {String} selector css селектор
@@ -138,7 +138,7 @@ async function isElementByCss(driver, selector) {
 }
 
 /**
- * Функция для проверки, еслить ли элемент на странице.
+ * Функция для проверки по id, еслить ли элемент на странице.
  *
  * @param {object} driver инстанс драйвера
  * @param {String} selector css селектор
@@ -147,6 +147,22 @@ async function isElementByCss(driver, selector) {
 async function isElementById(driver, selector) {
 	try {
 		const el = await driver.findElement(By.id(selector));
+		return !!el;
+	} catch (e) {
+		return false;
+	}
+}
+
+/**
+ * Функция для поиска элемента на странице по id.
+ *
+ * @param {object} driver инстанс драйвера
+ * @param {String} selector css селектор
+ * @returns {Promise<boolean>}
+ */
+async function findById(driver, selector) {
+	try {
+		const el = await findSelector(driver, By.id(selector));
 		return !!el;
 	} catch (e) {
 		return false;
@@ -385,6 +401,7 @@ module.exports = {
 	findSelectorCss,
 	isElementByCss,
 	isElementById,
+	findById,
 	findCssAndCall,
 	findIdAndCall,
 	findIdAndFill,

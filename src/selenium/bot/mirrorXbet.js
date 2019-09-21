@@ -12,7 +12,7 @@ const {
 	isElementByCss,
 	findIdAndFill,
 	findIdAndCall,
-	isElementById,
+	findById,
 	findSelectorCssAndFill
 } = require('../api');
 
@@ -213,7 +213,7 @@ async function rate(driver) {
  * @returns {Promise<boolean>}
  */
 async function closePromo(driver) {
-	if (await isElementById(driver, 'promoPoints')) {
+	if (await findById(driver, 'promoPoints')) {
 		try {
 			await findCssAndCall(driver, '.box-modal_close');
 			return true;
