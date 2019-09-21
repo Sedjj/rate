@@ -109,7 +109,6 @@ async function authorization(driver) {
  * @returns {Promise<boolean>}
  */
 async function search(driver, ids) {
-	await closePromo(driver);
 	if (await findSelectorCss(driver, '.ls-panel__head.ls-panel__head--search')
 		&& await findSelectorCss(driver, '.wrap_lk')
 		&& await findSelectorCss(driver, '.ls-filter__search .ls-search__button')
@@ -215,7 +214,13 @@ async function rate(driver) {
  */
 async function closePromo(driver) {
 	if (await isElementById(driver, 'promoPoints')) {
-		return await findCssAndCall(driver, '.box-modal_close.arcticmodal-close');
+		try {
+			await findCssAndCall(driver, '.box-modal_close');
+			return true;
+		} catch (e) {
+			log.debug(`Can't close promo banner: ${e}`);
+			return false;
+		}
 	}
 	return false;
 }
