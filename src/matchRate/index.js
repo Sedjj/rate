@@ -15,7 +15,7 @@ const typeRate = config['choice'].live['football']['typeRate'];
 async function matchRate(statistic, type = '') {
 	const totalRate = statistic.score.sc1 + statistic.score.sc2 + typeRate[statistic.strategy];
 	const {
-		snapshot: {start: {time, x, p1, p2}},
+		snapshot: {start: {time, mod, x, p1, p2}, end},
 		cards: {before: {one, two}},
 		score: {sc1, sc2},
 		matchId,
@@ -23,22 +23,26 @@ async function matchRate(statistic, type = '') {
 		total
 	} = statistic;
 	switch (statistic.strategy) {
-		/*case 3 :
-			if (limited === 0 && women === 0 && youth === 0) {
+		case 3 :
+			if (limited === 0 && women === 0 && mod < 2.5) {
 				if (sc1 === 1 && sc2 === 0) {
-					if (0.15 < (x - p1) && 0.99 < (x - p2) && (p2 - p1) < 0.25) {
-						await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+					if (2.4 < (x - p2) && youth === 0) {
+						await sendMessageChannel(decorateMessageChannel(statistic, type));
+						await sendMessageChannel('ТБ3');
 					}
 				}
 				if (sc1 === 0 && sc2 === 1) {
-					if (1.14 < (x - p1) && 1.4 < (x - p2) && two.attacks < 10) {
-						await performEmulation(matchId, 9, `Total Over ${totalRate}`);
+					if (end.x <= 3.75 && 3.5 <= x) {
+						if (1.3 < (end.x - end.p2) && two.danAttacks < 11) {
+							await sendMessageChannel(decorateMessageChannel(statistic, type));
+							await sendMessageChannel('ТБ3');
+						}
 					}
 				}
 			}
-			break;*/
+			break;
 		/*case 4 :
-			if (youth ==== 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
+			if (youth === 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
 				if (20 < two.danAttacks && 20 < one.danAttacks) {
 					if (-3.6 < (x - p1) && two.shotsOn < 3 && two.shotsOff < 5 && one.shotsOff < 5) {
 						await sendMessageChat(decorateMessageChannel(statistic, type));

@@ -142,7 +142,6 @@ function footballLiveStrategyThree(param) {
 	}
 }
 
-
 /**
  * Стратегия ничья с явным фаворитом 0:0
  *
