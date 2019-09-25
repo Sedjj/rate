@@ -1,5 +1,6 @@
 const {log} = require('../../utils/logger');
 const config = require('config');
+const {sendMessageSupport} = require('../../telegram/api');
 const {rateStatus} = require('../../store/rateStatus');
 const {
 	switchTab,
@@ -60,6 +61,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 						log.debug(`Search rate sleep on ${timeout}ms`);
 						await driver.sleep(timeout);
 					} else {
+						sendNotification('Rate failed');
 						break;
 					}
 				}
@@ -69,7 +71,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.sleep(speed.fast);
 		await driver.quit();
 	} catch (e) {
-		log.error(`Error performEmulation ->  ${e}`);
+		log.error(`Error performEmulation ->  ${JSON.stringify(e)}`);
 		//FIXME падает ошибка и рушит все
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
 		await driver.sleep(speed.fast);
@@ -97,7 +99,7 @@ async function authorization(driver) {
 			return true;
 		}
 	}
-	log.debug('Authorization failed');
+	sendNotification('Authorization failed');
 	return false;
 }
 
@@ -120,7 +122,7 @@ async function search(driver, ids) {
 		await findCssAndCall(driver, '.ls-search__button');
 		return await popup(driver);
 	}
-	log.debug('Search match failed');
+	sendNotification('Search match failed');
 	return false;
 }
 
@@ -138,11 +140,11 @@ async function popup(driver) {
 			await findCssAndCall(driver, '.search-popup-events > .search-popup-events__item:first-child');
 			return await switchTab(driver);
 		} catch (e) {
-			log.debug(`Can't search current match: ${e}`);
+			sendNotification(`Can't search current match: ${JSON.stringify(e)}`);
 			return false;
 		}
 	}
-	log.debug('Search match in popup failed');
+	sendNotification('Search match in popup failed');
 	return false;
 }
 
@@ -161,17 +163,18 @@ async function searchRate(driver, numberColumn, totalName) {
 				if (await findTextBySelectorCssAndCall(driver, `[data-type="${numberColumn}"]`, totalName)) {
 					return await rate(driver);
 				} else {
-					log.debug('Current match not found');
+					sendNotification('Current match not found');
 					return false;
 				}
 			} catch (e) {
-				log.debug(`Rate locked on current match: ${e}`);
+				sendNotification(`Rate locked on current match: ${JSON.stringify(e)}`);
 				return false;
 			}
 		}
 		log.debug(`Rate ${totalName} locked on current match`);
+	} else {
+		sendNotification('Search rate on match failed');
 	}
-	log.debug('Search rate on match failed');
 	return false;
 }
 
@@ -191,18 +194,18 @@ async function rate(driver) {
 		}*/
 		await findCssAndCall(driver, '.coupon-btn-group .coupon-btn-group__item');
 		if (await findSelectorCss(driver, '.swal2-error')) {
-			log.info('Rate error');
+			sendNotification('Bet error');
 			// FIXME придумать как нажимать ок на модалках
 			return true;
 		} else if (await findSelectorCss(driver, '.swal2-warning')) {
-			log.info('Rate warning');
+			sendNotification('Bet warning');
 			// FIXME придумать как нажимать ок на модалках
 			return true;
 		}
 		log.info('Rate successfully');
 		return true;
 	}
-	log.debug('Rate failed');
+	sendNotification('Rate failed');
 	return false;
 }
 
@@ -218,11 +221,21 @@ async function closePromo(driver) {
 			await findCssAndCall(driver, '.box-modal_close');
 			return true;
 		} catch (e) {
-			log.debug(`Can't close promo banner: ${e}`);
+			sendNotification(`Can't close promo banner: ${JSON.stringify(e)}`);
 			return false;
 		}
 	}
 	return false;
+}
+
+/**
+ * Метод для логирования обработанных ошибок в чат и лог файл.
+ *
+ * @param {String} text текст ошибки
+ */
+function sendNotification(text) {
+	log.debug(text);
+	sendMessageSupport(`<pre>${text}</pre>`);
 }
 
 module.exports = {
