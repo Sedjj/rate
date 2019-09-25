@@ -57,13 +57,11 @@ async function performEmulation(ids, numberColumn, totalName) {
 			await closePromo(driver);
 			if (await search(driver, ids)) {
 				for (const timeout of searchTimeouts) {
-					if (!(await searchRate(driver, numberColumn, totalName))) {
-						log.debug(`Search rate sleep on ${timeout}ms`);
-						await driver.sleep(timeout);
-					} else {
-						sendNotification('Rate failed');
+					if (await searchRate(driver, numberColumn, totalName)) {
 						break;
 					}
+					log.debug(`Search rate sleep on ${timeout}ms`);
+					await driver.sleep(timeout);
 				}
 			}
 		}
@@ -171,7 +169,7 @@ async function searchRate(driver, numberColumn, totalName) {
 				return false;
 			}
 		}
-		log.debug(`Rate ${totalName} locked on current match`);
+		sendNotification(`Rate ${totalName} locked on current match`);
 	} else {
 		sendNotification('Search rate on match failed');
 	}
