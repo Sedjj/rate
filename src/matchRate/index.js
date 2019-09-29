@@ -52,10 +52,14 @@ async function matchRate(statistic, type = '') {
 			}
 			break;*/
 		case 4 :
-			if (youth === 0) {
-				if (3.2 < x && 2 <= total && total <= 4) {
-					await sendMessageChat(decorateMessageChannel(statistic, type));
-					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+			if (women === 0) {
+				if (2.7 < x && 1.92 < total) {
+					if (-3 <= (x - p1) && 15 < one.danAttacks) {
+						if (one.shotsOn < 5 && one.shotsOff < 5 && two.shotsOff < 5) {
+							await sendMessageChat(decorateMessageChannel(statistic, type));
+							await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+						}
+					}
 				}
 			}
 			break;
