@@ -1,7 +1,7 @@
 const {log} = require('../../utils/logger');
 const config = require('config');
 const {sendMessageSupport} = require('../../telegram/api');
-const {rateStatus} = require('../../store/rateStatus');
+const {rateStatus, rateAmount} = require('../../store');
 const {
 	switchTab,
 	driverChrome,
@@ -31,7 +31,6 @@ const speed = {
 const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
 
 const auth = config.auth;
-const betAmount = config.emulator.betAmount;
 const active = config.parser.active;
 const urlStartPage = config.parser[`${active[0]}`]['startPage'];
 
@@ -54,8 +53,10 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await init(driver);
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
+			log.info('Authorization successfully');
 			await closePromo(driver);
 			if (await search(driver, ids)) {
+				log.info('Search match successfully');
 				for (const timeout of searchTimeouts) {
 					if (await searchRate(driver, numberColumn, totalName)) {
 						break;
@@ -183,8 +184,8 @@ async function searchRate(driver, numberColumn, totalName) {
  * @returns {Promise<boolean>}
  */
 async function rate(driver) {
-	if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', betAmount)) {
-		log.info('bet_sum_input');
+	if (await findSelectorCssAndFill(driver, '.coupon__bet-settings .bet_sum_input', rateAmount.bets)) {
+		log.info(`bet_sum_input ${rateAmount.bets}`);
 		/*if (!await isElementByCss(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled')) {
 			await findCssAndCall(driver, '.coupon__bet-settings > .coupon-grid__row.coupon-grid__row--hide-borders.coupon-grid__row--filled');
 			await findTextBySelectorCssAndCall(driver, '.coupon-grid__row--filled > .multiselect__option', 'Accept any change');

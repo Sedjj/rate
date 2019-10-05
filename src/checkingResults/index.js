@@ -93,7 +93,7 @@ function searchResultEndMatch(beforeData, currentData, statistic, numericalDesig
  */
 async function baseRecordCorrection(setStatistic, statistic, score) {
 	try {
-		log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
+		// log.debug(`Матч ${statistic.matchId}: 'Стратегия ${statistic.strategy}' - Результат матча ${(score !== '') ? score : 'не определен'}`);
 		await setStatistic({
 			matchId: statistic.matchId,
 			strategy: statistic.strategy,

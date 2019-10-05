@@ -154,7 +154,7 @@ function setFileApiTelegram(token, chatId, document) {
 				log.error(`setFileApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
-			log.debug(`Отработал: Метод для отправки файла ${body}`);
+			// log.debug(`Отработал: Метод для отправки файла ${body}`);
 			resolve(body);
 		});
 	});

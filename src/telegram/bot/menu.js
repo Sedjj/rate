@@ -1,11 +1,11 @@
-function menuList(item, days = 2) {
+function menuList(item, text= 0) {
 	switch (item) {
 		case 'days':
 			return {
 				id: 1,
 				title: 'Выберите количество дней на экспорт',
 				buttons: [
-					[{text: '-', callback_data: 'down'}, {text: days, callback_data: 'value'}, {text: '+', callback_data: 'up'}],
+					[{text: '-', callback_data: 'down'}, {text: text, callback_data: 'value'}, {text: '+', callback_data: 'up'}],
 					[{text: 'экспорт', callback_data: 'export'}]
 				]
 			};
@@ -44,6 +44,14 @@ function menuList(item, days = 2) {
 				title: 'Выберите файл для скачивания',
 				buttons: [
 					[{text: 'debug logs', callback_data: 'debugLogs'}],
+				]
+			};
+		case 'betAmount':
+			return {
+				id: 6,
+				title: 'Выберите сумму ставки',
+				buttons: [
+					[{text: '-10', callback_data: 'downBets'}, {text: text, callback_data: 'value'}, {text: '+10', callback_data: 'upBets'}],
 				]
 			};
 	}

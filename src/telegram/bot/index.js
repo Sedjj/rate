@@ -1,8 +1,7 @@
 const config = require('config');
 const TelegramBot = require('node-telegram-bot-api');
 const {exportBackup} = require('../../backupBD');
-const {counterWaiting} = require('../../store/counterWaiting');
-const {rateStatus} = require('../../store/rateStatus');
+const {rateStatus, rateAmount, counterWaiting} = require('../../store');
 const {throttle} = require('../../utils/throttle');
 const {exportFootballStatistic, exportTableTennisStatistic, exportTennisStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
@@ -33,15 +32,17 @@ const bot = new TelegramBot(supportToken, props);
 const waiting = 'Сколько матчей в ожидании';
 const selectSport = 'Вид спорта';
 const rate = 'Ставки';
-const backup = 'Бэкап';
 const getFile = 'Получить файл';
+const backup = 'Бэкап';
+const betAmount = 'Сумма ставки';
 
 const keyboardInit = [
 	[waiting],
 	[rate],
 	[selectSport],
 	[getFile],
-	[backup]
+	[backup],
+	[betAmount],
 ];
 
 const response = use(accessCheck);
@@ -76,12 +77,22 @@ bot.on('callback_query', async (msg) => {
 	switch (msg.data) {
 		case 'up':
 			slide.count++;
-			await editMessageReplyMarkup(msg, slide.count.toString());
+			await editMessageReplyMarkup(msg, 'days', slide.count.toString());
 			break;
 		case 'down':
 			if (slide.count > 2) {
 				slide.count--;
-				await editMessageReplyMarkup(msg, slide.count.toString());
+				await editMessageReplyMarkup(msg, 'days', slide.count.toString());
+			}
+			break;
+		case 'upBets':
+			rateAmount.increase(10);
+			await editMessageReplyMarkup(msg, 'betAmount', rateAmount.bets.toString());
+			break;
+		case 'downBets':
+			if (rateAmount.bets > 10) {
+				rateAmount.decrease(10);
+				await editMessageReplyMarkup(msg, 'betAmount', rateAmount.bets.toString());
 			}
 			break;
 		case 'export':
@@ -91,15 +102,15 @@ bot.on('callback_query', async (msg) => {
 			break;
 		case 'exportFootball':
 			slide.name = 'football';
-			await inlineKeyboard(chat, menuList('days'));
+			await inlineKeyboard(chat, menuList('days', slide.count.toString()));
 			break;
 		case 'exportTableTennis':
 			slide.name = 'tableTennis';
-			await inlineKeyboard(chat, menuList('days'));
+			await inlineKeyboard(chat, menuList('days', slide.count.toString()));
 			break;
 		case 'exportTennis':
 			slide.name = 'tennis';
-			await inlineKeyboard(chat, menuList('days'));
+			await inlineKeyboard(chat, menuList('days', slide.count.toString()));
 			break;
 		case 'backupFootballs':
 			await sendAnsweText(msg, 'Ожидайте файл');
@@ -145,6 +156,9 @@ bot.on('message', response(async (msg) => {
 			break;
 		case selectSport:
 			await inlineKeyboard(chat, menuList('selectSport'));
+			break;
+		case betAmount:
+			await inlineKeyboard(chat, menuList('betAmount', rateAmount.bets.toString()));
 			break;
 		case rate:
 			await inlineKeyboard(chat, menuList('rate'));
@@ -243,17 +257,18 @@ async function editMessage(msg, text) {
  * Обертка для редактирования inline_keyboard в боте.
  *
  * @param {Object} msg объект что пришел из telegram
- * @param {String} text текст для замены
+ * @param {String} text названиеы
+ * @param {String} count текст для замены
  * @returns {Promise<void>}
  */
-async function editMessageReplyMarkup(msg, text) {
+async function editMessageReplyMarkup(msg, text, count) {
 	const chatId = msg.hasOwnProperty('chat') ? msg.chat.id : msg.from.id;
 	const opts = {
 		chat_id: chatId,
 		message_id: msg.message.message_id
 	};
 	await bot.editMessageReplyMarkup({
-		inline_keyboard: menuList('days', text).buttons
+		inline_keyboard: menuList(text, count).buttons
 	}, opts);
 }
 

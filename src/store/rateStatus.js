@@ -24,8 +24,6 @@ class RateStatus {
 	}
 }
 
-const rateStatus = new RateStatus();
-
 module.exports = {
-	rateStatus
+	RateStatus
 };

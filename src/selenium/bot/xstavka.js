@@ -1,6 +1,6 @@
 const {log} = require('../../utils/logger');
 const config = require('config');
-const {rateStatus} = require('../../store/rateStatus');
+const {rateStatus} = require('../../store');
 const {
 	switchTab,
 	driverChrome,

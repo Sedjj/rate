@@ -24,8 +24,6 @@ class CounterWaiting {
 	}
 }
 
-const counterWaiting = new CounterWaiting();
-
 module.exports = {
-	counterWaiting
+	CounterWaiting
 };

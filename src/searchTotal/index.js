@@ -6,7 +6,7 @@ const {setStatistic, deleteStatistic} = require('../storage/football');
 const {getExpandedMatch} = require('../fetch');
 const {matchRate} = require('../matchRate');
 const {searchHelper} = require('../modifiableFile');
-const {counterWaiting} = require('../store/counterWaiting');
+const {counterWaiting} = require('../store');
 
 const active = config.parser.active;
 const waitingInterval = {
