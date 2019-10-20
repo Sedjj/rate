@@ -60,7 +60,7 @@ docker-compose run --rm openvpn ovpn_getclient $CLIENTNAME > $CLIENTNAME.ovpn
 docker-compose run --rm openvpn ovpn_revokeclient $CLIENTNAME
 ```
 
-Полное удаление
+###Полное удаление
 ```bash
 docker-compose run --rm openvpn ovpn_revokeclient $CLIENTNAME remove
 ```

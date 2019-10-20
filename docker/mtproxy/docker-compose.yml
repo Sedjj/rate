@@ -1,0 +1,14 @@
+version: "2"
+services:
+  mtproxy:
+    image: telegrammessenger/proxy:latest
+    container_name: mtproxy
+    ports:
+      - "443:443"
+    volumes:
+      - ./proxy-config:/data
+    restart: always
+    logging:
+      driver: syslog
+      options:
+        tag: mtproxy
