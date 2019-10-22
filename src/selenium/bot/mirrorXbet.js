@@ -54,16 +54,23 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			log.info('Authorization successfully');
-			await closePromo(driver);
-			if (await search(driver, ids)) {
-				log.info('Search match successfully');
-				for (const timeout of searchTimeouts) {
-					if (await searchRate(driver, numberColumn, totalName)) {
-						break;
+
+			for (const timeoutOne of searchTimeouts) {
+				if (await search(driver, ids)) {
+					log.info('Search match successfully');
+
+					for (const timeoutTwo of searchTimeouts) {
+						if (await searchRate(driver, numberColumn, totalName)) {
+							break;
+						}
+						log.debug(`Search rate sleep on ${timeoutTwo}ms`);
+						await driver.sleep(timeoutTwo);
 					}
-					log.debug(`Search rate sleep on ${timeout}ms`);
-					await driver.sleep(timeout);
+					break;
 				}
+				log.debug(`Search did not find match or close promo modal - sleep on ${timeoutOne}ms`);
+				await closePromo(driver);
+				await driver.sleep(timeoutOne);
 			}
 		}
 		await screenShot(driver, `${(new Date()).getTime()}.png`);
