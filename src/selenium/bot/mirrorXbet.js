@@ -130,7 +130,7 @@ async function search(driver, ids) {
 			return await popup(driver);
 		}
 	} catch (e) {
-		sendNotification(`Search match failed - ${JSON.stringify(e)}`);
+		console.log(`Search match failed - ${JSON.stringify(e)}`);
 	}
 	sendNotification('Search match failed');
 	return false;
