@@ -54,7 +54,7 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
 			log.info('Authorization successfully');
-
+			await closePromo(driver);
 			for (const timeoutOne of searchTimeouts) {
 				if (await search(driver, ids)) {
 					log.info('Search match successfully');
@@ -117,16 +117,20 @@ async function authorization(driver) {
  * @returns {Promise<boolean>}
  */
 async function search(driver, ids) {
-	if (await findSelectorCss(driver, '.ls-panel__head.ls-panel__head--search')
-		&& await findSelectorCss(driver, '.wrap_lk')
-		&& await findSelectorCss(driver, '.ls-filter__search .ls-search__button')
-	) {
-		if (!await isElementByCss(driver, '.ls-search__button.active')) {
+	try {
+		if (await findSelectorCss(driver, '.ls-panel__head.ls-panel__head--search')
+			&& await findSelectorCss(driver, '.wrap_lk')
+			&& await findSelectorCss(driver, '.ls-filter__search .ls-search__button')
+		) {
+			if (!await isElementByCss(driver, '.ls-search__button.active')) {
+				await findCssAndCall(driver, '.ls-search__button');
+			}
+			await findSelectorCssAndFill(driver, '.ls-search__input.searchInput.keyboardInput', ids.toString());
 			await findCssAndCall(driver, '.ls-search__button');
+			return await popup(driver);
 		}
-		await findSelectorCssAndFill(driver, '.ls-search__input.searchInput.keyboardInput', ids.toString());
-		await findCssAndCall(driver, '.ls-search__button');
-		return await popup(driver);
+	} catch (e) {
+		sendNotification(`Search match failed - ${JSON.stringify(e)}`);
 	}
 	sendNotification('Search match failed');
 	return false;
