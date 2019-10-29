@@ -53,7 +53,7 @@ const rendomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
  * Планировшик поиска матчей по футболу.
  */
 if (rendomSchedulerSearchFootball) {
-	log.info('****start scheduler search****');
+	log.info('****start scheduler search football****');
 	let schedulerSearchJob = new CronJob(rendomSchedulerSearchFootball, () => {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
@@ -76,7 +76,7 @@ if (rendomSchedulerSearchFootball) {
  * Планировшик поиска матчей по тенису.
  */
 if (rendomSchedulerSearchTennis) {
-	log.info('****start scheduler search****');
+	log.info('****start scheduler search tennis****');
 	let schedulerSearchJob = new CronJob(rendomSchedulerSearchTennis, () => {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
