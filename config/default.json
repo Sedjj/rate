@@ -293,13 +293,18 @@
 				"numericalDesignation": 10
 			},
 			"tennis": {
-				"set": 1,
+				"set": 2,
 				"strategyOne": {
 					"titleRate": "Math.abs(p1 - p2) > rate",
 					"rate": 1
 				},
+				"titleTypeRate": "Искомый тотал",
+				"typeRate": [
+					0,
+					12.5
+				],
 				"titleNumericalDesignation": "Числовое обозначение настольного тениса",
-				"numericalDesignation": 10
+				"numericalDesignation": 4
 			}
 		}
 	},

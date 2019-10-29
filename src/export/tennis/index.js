@@ -4,6 +4,7 @@ const {log} = require('../../utils/logger');
 const {readFile} = require('../../utils/fsHelpers');
 const {getStatistic} = require('../../storage/tennis');
 const XlsxTemplate = require('xlsx-template');
+const {countScore} = require('../../utils/statisticHelpers');
 
 const storagePath = config.path.storagePath || process.cwd();
 const exportTemplatesDirectory = config.path.directory.exportTemplates || 'exportTemplates';

@@ -93,21 +93,23 @@ function scoreGame(item) {
  * @returns {object}
  */
 function setGame(item) {
-	const set = new Map(1, {
-		sc1: 0,
-		sc2: 0
-	});
+	const setMatch = new Map([
+		[1, {
+			sc1: 0,
+			sc2: 0
+		}]
+	]);
 	if (item['SC'] && item['SC']['PS']) {
 		item['SC']['PS'].forEach((item) => {
 			if (item['Value'] != null) {
-				set.get(item.Key, {
+				setMatch.set(item.Key, {
 					sc1: item['Value']['S1'] ? item['Value']['S1'] : 0,
 					sc2: item['Value']['S2'] ? item['Value']['S2'] : 0
 				});
 			}
 		});
 	}
-	return set;
+	return setMatch;
 }
 
 /**
@@ -515,7 +517,7 @@ function searchScoreToArray(arr) {
 	let res = '';
 	arr.forEach((item) => {
 		if (typeof item === 'string' && item.length > 3) {
-			const score = item.match(/^\d+\:\d+\s*\(((\d+\:\d+)+\,?){2,}\)$/ig);
+			const score = item.match(/^\d+\:\d+\s*\(((\d+\:\d+)+\,?){2,}\)/ig); // FIXME для тениса не нужно $ (/^\d+\:\d+\s*\(((\d+\:\d+)+\,?){2,}\)$/ig)
 			if (score != null) {
 				res = score[0];
 			}

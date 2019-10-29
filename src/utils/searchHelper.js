@@ -70,9 +70,31 @@ function equalsScore(oldScore, endScore) {
 	return (oldScore.sc1 === endScore.sc1) && (oldScore.sc2 === endScore.sc2);
 }
 
+/**
+ * Метод для получения счета в тенисе.
+ *
+ * @param {Map} sets результаты в каждом сете
+ * @returns {{sc1: number, sc2: number}}
+ */
+function countScore(sets = []) {
+	const score = {
+		sc1: 0,
+		sc2: 0,
+	};
+	sets.forEach((value) => {
+		if (value.sc1 > value.sc2) {
+			score.sc1++;
+		} else {
+			score.sc2++;
+		}
+	});
+	return score;
+}
+
 module.exports = {
 	equalsScore,
 	areEqualTotal,
 	equalsTotalOver,
-	equalsTotalUnder
+	equalsTotalUnder,
+	countScore
 };
