@@ -36,13 +36,13 @@ function tennisLiveStrategy(param) {
  */
 function tennisLiveStrategyOne(param) {
 	const strategy = 1;
-	if(!param.command.en.one.includes('/')){
+	if (!param.command.en.one.includes('/')) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
-			.then(async (statistic) => {
+			.then(statistic => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Тенис - стратегия ${strategy}`);
 					// await setSnapshot(param.matchId, strategy);
-					matchRate({...param, strategy}, 'tennis');
+					matchRate(statistic, 'tennis');
 				}
 			})
 			.catch((error) => {
