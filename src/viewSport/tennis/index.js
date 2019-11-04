@@ -2,6 +2,7 @@ const {log} = require('../../utils/logger');
 const {newStatistic, deleteStatistic, setStatistic} = require('../../storage/tennis');
 const {getExpandedMatch} = require('../../fetch');
 const config = require('config');
+const {matchRate} = require('../../matchRate');
 const {countScore} = require('../../utils/searchHelper');
 const {searchHelper} = require('../../modifiableFile');
 
@@ -38,7 +39,7 @@ function tennisLiveStrategyOne(param) {
 			if (statistic !== null) {
 				log.debug(`Найден ${param.matchId}: Тенис - стратегия ${strategy}`);
 				// await setSnapshot(param.matchId, strategy);
-				// matchRate({...param, strategy}, 'тенис');
+				matchRate({...param, strategy}, 'tennis');
 			}
 		})
 		.catch((error) => {
@@ -114,7 +115,7 @@ function saveRate(param, strategy) {
 			start: {
 				p1: param.p1,
 				p2: param.p2,
-				mod: param.p2 - param.p1
+				mod:  Math.abs(param.p2 - param.p1),
 			}
 		},
 		createdBy: new Date().toISOString(),

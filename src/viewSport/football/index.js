@@ -155,7 +155,7 @@ function footballLiveStrategyFour(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'футбол');
+					matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {
@@ -177,7 +177,7 @@ function footballLiveStrategyFive(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'футбол');
+					matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {
@@ -199,7 +199,7 @@ function footballLiveStrategySix(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'футбол');
+					matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {
@@ -221,7 +221,7 @@ function footballLiveStrategySeven(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'футбол');
+					matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {

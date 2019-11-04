@@ -31,7 +31,7 @@ function tableTennisLiveStrategyOne(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Настольный тенис - стратегия ${strategy}`);
-					// matchRate({...param, strategy}, 'тенис');
+					// matchRate({...param, strategy}, 'tennis');
 				}
 			})
 			.catch((error) => {

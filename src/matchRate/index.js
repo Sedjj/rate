@@ -1,7 +1,7 @@
 const config = require('config');
+const {decorateMessageTennis, decorateMessageChannel} = require('../utils/formateMessage');
 const {bot: {performEmulation}} = require('../selenium/bot');
 const {sendMessageChannel, sendMessageChat} = require('../telegram/api');
-const {decorateMessageChannel} = require('../utils/formateMessage');
 
 const typeRate = config['choice'].live['football']['typeRate'];
 
@@ -19,11 +19,24 @@ async function matchRate(statistic, type = '') {
 		cards: {before: {one, two}},
 		score: {sc1, sc2},
 		matchId,
-		command: {women, limited, youth},
-		total
+		command,/*: {women, limited, youth},*/
+		total,
+		group: {en}
 	} = statistic;
 	switch (statistic.strategy) {
-		case 3 :
+		case 1 :
+			if (type === 'tennis' && en.includes('ITF') && !command.en.one.includes('/')) {
+				if (1.5 < Math.abs(p2 - p1) && Math.abs(p2 - p1) <= 2.5) {
+					await sendMessageChannel(decorateMessageTennis(statistic, type));
+					await sendMessageChannel('2 сет ТМ 12,5');
+				}
+				if (2.5 < Math.abs(p2 - p1)) {
+					await sendMessageChannel(decorateMessageTennis(statistic, type));
+					await sendMessageChannel('2 сет ТМ 10,5');
+				}
+			}
+			break;
+	/*	case 3 :
 			if (limited === 0 && women === 0 && mod < 2.5) {
 				if (sc1 === 1 && sc2 === 0) {
 					if (2.4 < (x - p2) && youth === 0) {
@@ -40,7 +53,7 @@ async function matchRate(statistic, type = '') {
 					}
 				}
 			}
-			break;
+			break;*/
 		/*case 4 :
 			if (youth === 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
 				if (20 < two.danAttacks && 20 < one.danAttacks) {

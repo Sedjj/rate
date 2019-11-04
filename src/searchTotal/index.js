@@ -142,7 +142,7 @@ function setIndexRate(index = 1, param, strategy) {
 		modifiedBy: new Date().toISOString()
 	}).then(async (statistic) => {
 		if (statistic !== null) {
-			await matchRate(statistic, 'футбол');
+			await matchRate(statistic, 'football');
 		}
 	}).catch((error) => {
 		log.error(`Set total rate: ${error.message}`);

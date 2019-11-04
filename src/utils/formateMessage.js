@@ -75,13 +75,11 @@ function decorateMessageMatch(param, type) {
  */
 function decorateMessageTennis(param, type = '') {
 	const {
+		matchId,
 		command: {en: {one, two}},
-		strategy,
 		group: {en},
-		snapshot: {start},
 	} = param;
-	const index = `${start.p1} / ${start.x} / ${start.p2}`;
-	return `<b>${en}</b>\n\n${one}\n${two}\n\n<pre>стр ${strategy} / ${index}</pre>`;
+	return `<code>${matchId}</code>\n${en}\n\n<b>${one}\n${two}</b>`;
 }
 
 /**
