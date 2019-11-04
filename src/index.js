@@ -27,8 +27,8 @@ const schedulerSearchFootball = {
 
 const schedulerSearchTennis = {
 	title: 'в секундах',
-	before: 100,
-	after: 150
+	before: 25,
+	after: 45
 };
 
 const rendomSchedulerSearchFootball = process.env.NODE_ENV === 'development'

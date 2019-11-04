@@ -91,10 +91,29 @@ function countScore(sets = []) {
 	return score;
 }
 
+/**
+ * Метод для получения счета в конкретном сете в тенисе.
+ *
+ * @param {Map} sets результаты в каждом сете
+ * @param {Number} count номер сета
+ * @returns {{sc1: number, sc2: number}}
+ */
+function getScoreToSet(sets = [], count) {
+	let score = {
+		sc1: 0,
+		sc2: 0,
+	};
+	if (sets.has(count)) {
+		score = sets.get(count);
+	}
+	return score;
+}
+
 module.exports = {
 	equalsScore,
 	areEqualTotal,
 	equalsTotalOver,
 	equalsTotalUnder,
-	countScore
+	countScore,
+	getScoreToSet,
 };

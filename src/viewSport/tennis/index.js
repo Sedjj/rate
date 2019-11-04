@@ -3,7 +3,7 @@ const {newStatistic, deleteStatistic, setStatistic} = require('../../storage/ten
 const {getExpandedMatch} = require('../../fetch');
 const config = require('config');
 const {matchRate} = require('../../matchRate');
-const {countScore} = require('../../utils/searchHelper');
+const {getScoreToSet} = require('../../utils/searchHelper');
 const {searchHelper} = require('../../modifiableFile');
 
 const active = config['parser'].active;
@@ -11,7 +11,7 @@ const urlFootballExpandedRate = config.parser[`${active[0]}`].live['tennis']['ex
 const typeRate = config['choice'].live.tennis.typeRate;
 
 /**
- * Общая стратегия для Live футбола
+ * Общая стратегия для Live большого тениса
  *
  * @param {Object} param объект с параметрами матча
  */
@@ -20,8 +20,10 @@ function tennisLiveStrategy(param) {
 		const setOne = param.set.get(1);
 		const setTwo = param.set.get(2);
 		if ((setOne.sc1 + setOne.sc2) === 13) {
-			if ((setTwo.sc1 === setTwo.sc2) && (setTwo.sc1 > 1)) {
-				tennisLiveStrategyOne(param);
+			if ((setTwo.sc1 + setTwo.sc2) > 3) {
+				if (Math.abs(setTwo.sc1 - setTwo.sc2) < 2) {
+					tennisLiveStrategyOne(param);
+				}
 			}
 		}
 	}
@@ -34,17 +36,19 @@ function tennisLiveStrategy(param) {
  */
 function tennisLiveStrategyOne(param) {
 	const strategy = 1;
-	saveRate(param, strategy)// пропускает дальше если запись ушла в БД
-		.then(async (statistic) => {
-			if (statistic !== null) {
-				log.debug(`Найден ${param.matchId}: Тенис - стратегия ${strategy}`);
-				// await setSnapshot(param.matchId, strategy);
-				matchRate({...param, strategy}, 'tennis');
-			}
-		})
-		.catch((error) => {
-			log.error(`tennisLiveStrategyOne: ${error.message}`);
-		});
+	if(!param.command.en.one.includes('/')){
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+			.then(async (statistic) => {
+				if (statistic !== null) {
+					log.debug(`Найден ${param.matchId}: Тенис - стратегия ${strategy}`);
+					// await setSnapshot(param.matchId, strategy);
+					matchRate({...param, strategy}, 'tennis');
+				}
+			})
+			.catch((error) => {
+				log.error(`tennisLiveStrategyOne: ${error.message}`);
+			});
+	}
 }
 
 
@@ -107,7 +111,7 @@ async function setSnapshot(matchId, strategy, total = undefined, index = undefin
 function saveRate(param, strategy) {
 	return newStatistic({
 		matchId: param.matchId, // id матча
-		score: countScore(param.set), // счет матча
+		score: getScoreToSet(param.set, 2), // счет матча во 2 сете
 		command: param.command,
 		group: param.group,
 		strategy: strategy, // стратегия
@@ -115,7 +119,7 @@ function saveRate(param, strategy) {
 			start: {
 				p1: param.p1,
 				p2: param.p2,
-				mod:  Math.abs(param.p2 - param.p1),
+				mod: Math.abs(param.p2 - param.p1),
 			}
 		},
 		createdBy: new Date().toISOString(),

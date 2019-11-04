@@ -1,4 +1,5 @@
 const config = require('config');
+const {log} = require('../utils/logger');
 const {decorateMessageTennis, decorateMessageChannel} = require('../utils/formateMessage');
 const {bot: {performEmulation}} = require('../selenium/bot');
 const {sendMessageChannel, sendMessageChat} = require('../telegram/api');
@@ -19,41 +20,44 @@ async function matchRate(statistic, type = '') {
 		cards: {before: {one, two}},
 		score: {sc1, sc2},
 		matchId,
-		command,/*: {women, limited, youth},*/
+		command: {women, limited, youth},
 		total,
 		group: {en}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 1 :
-			if (type === 'tennis' && en.includes('ITF') && !command.en.one.includes('/')) {
-				if (1.5 < Math.abs(p2 - p1) && Math.abs(p2 - p1) <= 2.5) {
-					await sendMessageChannel(decorateMessageTennis(statistic, type));
-					await sendMessageChannel('2 сет ТМ 12,5');
-				}
-				if (2.5 < Math.abs(p2 - p1)) {
-					await sendMessageChannel(decorateMessageTennis(statistic, type));
-					await sendMessageChannel('2 сет ТМ 10,5');
+			if (type === 'tennis') {
+				log.debug(`en : ${en} = ${en.includes('ITF')} p2= ${p2} p1= ${p1}`);
+				if (en.includes('ITF')) {
+					if (1.5 < Math.abs(p2 - p1) && Math.abs(p2 - p1) <= 2.5) {
+						await sendMessageChannel(decorateMessageTennis(statistic, type));
+						await sendMessageChannel('2 сет ТМ 12,5');
+					}
+					if (2.5 < Math.abs(p2 - p1)) {
+						await sendMessageChannel(decorateMessageTennis(statistic, type));
+						await sendMessageChannel('2 сет ТМ 10,5');
+					}
 				}
 			}
 			break;
-	/*	case 3 :
-			if (limited === 0 && women === 0 && mod < 2.5) {
-				if (sc1 === 1 && sc2 === 0) {
-					if (2.4 < (x - p2) && youth === 0) {
-						await sendMessageChannel(decorateMessageChannel(statistic, type));
-						await sendMessageChannel('ТБ3');
-					}
-				}
-				if (sc1 === 0 && sc2 === 1) {
-					if (end.x <= 3.75 && 3.5 <= x) {
-						if (1.3 < (end.x - end.p2) && two.danAttacks < 11) {
+		/*	case 3 :
+				if (limited === 0 && women === 0 && mod < 2.5) {
+					if (sc1 === 1 && sc2 === 0) {
+						if (2.4 < (x - p2) && youth === 0) {
 							await sendMessageChannel(decorateMessageChannel(statistic, type));
 							await sendMessageChannel('ТБ3');
 						}
 					}
+					if (sc1 === 0 && sc2 === 1) {
+						if (end.x <= 3.75 && 3.5 <= x) {
+							if (1.3 < (end.x - end.p2) && two.danAttacks < 11) {
+								await sendMessageChannel(decorateMessageChannel(statistic, type));
+								await sendMessageChannel('ТБ3');
+							}
+						}
+					}
 				}
-			}
-			break;*/
+				break;*/
 		/*case 4 :
 			if (youth === 0 && total >= 1.8 && 2.7 <= x && x <= 4.4) {
 				if (20 < two.danAttacks && 20 < one.danAttacks) {
