@@ -70,7 +70,7 @@ async function matchRate(statistic, type = '') {
 			break;*/
 		case 4 :
 			if (2.7 < x && 1.9 < total) {
-				if (one.shotsOff < 8 && two.shotsOff < 4) {
+				if (one.shotsOff < 8 && two.shotsOff < 8) {
 					await sendMessageChat(decorateMessageChannel(statistic, type));
 					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
 				}
