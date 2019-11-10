@@ -2,13 +2,13 @@ const path = require('path');
 const config = require('config');
 const {log} = require('../../utils/logger');
 const {readFile} = require('../../utils/fsHelpers');
-const {getStatistic} = require('../../storage/tennis');
+const {getStatistic} = require('../../storage/basketball');
 const XlsxTemplate = require('xlsx-template');
 
 const storagePath = config.path.storagePath || process.cwd();
 const exportTemplatesDirectory = config.path.directory.exportTemplates || 'exportTemplates';
-const inputTennis = config.path.storage.tennis.inputName || 'Reports-tennis-default.xlsx';
-const pathInputTennis = path.join(storagePath, exportTemplatesDirectory, inputTennis);
+const inputBasketball = config.path.storage.basketball.inputName || 'Reports-basketball-default.xlsx';
+const pathInputBasketball = path.join(storagePath, exportTemplatesDirectory, inputBasketball);
 
 /**
  * Возвращает заполненый шаблон списка статистики.
@@ -16,7 +16,7 @@ const pathInputTennis = path.join(storagePath, exportTemplatesDirectory, inputTe
  * @param {Number} days количество дней для экспорта
  * @returns {Promise<{statistics: Array} | never>}
  */
-function getStatisticsTennis(days = 2) {
+function getStatisticsBasketball(days = 2) {
 	const beforeDate = new Date(new Date().setUTCHours(0, 0, 0, 1));
 	const currentDate = new Date(new Date().setUTCHours(23, 59, 59, 59));
 	beforeDate.setUTCDate(beforeDate.getUTCDate() - days);
@@ -36,7 +36,7 @@ function getStatisticsTennis(days = 2) {
 		})
 		.then((props) => {
 			try {
-				return readFile(pathInputTennis)
+				return readFile(pathInputBasketball)
 					.then(file => {
 						const template = new XlsxTemplate(file);
 						// Replacements take place on first sheet
@@ -53,5 +53,5 @@ function getStatisticsTennis(days = 2) {
 }
 
 module.exports = {
-	getStatisticsTennis
+	getStatisticsBasketball
 };

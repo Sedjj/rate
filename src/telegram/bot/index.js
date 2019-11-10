@@ -3,7 +3,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const {exportBackup} = require('../../backupBD');
 const {rateStatus, rateAmount, counterWaiting} = require('../../store');
 const {throttle} = require('../../utils/throttle');
-const {exportFootballStatistic, exportTableTennisStatistic, exportTennisStatistic} = require('../../export');
+const {exportFootballStatistic, exportTableTennisStatistic, exportTennisStatistic, exportBasketballStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
 const path = require('path');
 const {readFileToStream} = require('../../utils/fsHelpers');
@@ -13,6 +13,7 @@ const {menuList} = require('./menu');
 const exportFootballStatisticDebounce = throttle(exportFootballStatistic, 20000);
 const exportTableTennisStatisticDebounce = throttle(exportTableTennisStatistic, 20000);
 const exportTennisStatisticDebounce = throttle(exportTennisStatistic, 20000);
+const exportBasketballStatisticDebounce = throttle(exportBasketballStatistic, 20000);
 
 const storagePath = config.path.storagePath || process.cwd();
 const logsDirectory = config.path.directory.logs || 'logs';
@@ -96,7 +97,7 @@ bot.on('callback_query', async (msg) => {
 			}
 			break;
 		case 'export':
-			await sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnswerText(msg, 'Ожидайте файл');
 			await exportStatisticDebounce();
 			await menu(msg);
 			break;
@@ -112,31 +113,40 @@ bot.on('callback_query', async (msg) => {
 			slide.name = 'tennis';
 			await inlineKeyboard(chat, menuList('days', slide.count.toString()));
 			break;
+		case 'exportBasketball':
+			slide.name = 'basketball';
+			await inlineKeyboard(chat, menuList('days', slide.count.toString()));
+			break;
 		case 'backupFootballs':
-			await sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnswerText(msg, 'Ожидайте файл');
 			await exportBackup('footballs');
 			await menu(msg);
 			break;
 		case 'backupTableTennis':
-			await sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnswerText(msg, 'Ожидайте файл');
 			await exportBackup('tabletennis');
 			await menu(msg);
 			break;
 		case 'backupTennis':
-			await sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnswerText(msg, 'Ожидайте файл');
 			await exportBackup('tennis');
+			await menu(msg);
+			break;
+		case 'backupBasketball':
+			await sendAnswerText(msg, 'Ожидайте файл');
+			await exportBackup('basketball');
 			await menu(msg);
 			break;
 		case 'enableBets':
 			rateStatus.turnOn();
-			await sendAnsweText(msg, 'Betting mechanism will be enabled');
+			await sendAnswerText(msg, 'Betting mechanism will be enabled');
 			break;
 		case 'turnOffBets':
 			rateStatus.turnOff();
-			await sendAnsweText(msg, 'Betting mechanism will be stopped');
+			await sendAnswerText(msg, 'Betting mechanism will be stopped');
 			break;
 		case 'debugLogs':
-			await sendAnsweText(msg, 'Ожидайте файл');
+			await sendAnswerText(msg, 'Ожидайте файл');
 			await getLogs();
 			await menu(msg);
 			break;
@@ -278,7 +288,7 @@ async function editMessageReplyMarkup(msg, text, count) {
  * @param {Object} msg объект что пришел из telegram
  * @param {String} text текст для отправки
  */
-async function sendAnsweText(msg, text) {
+async function sendAnswerText(msg, text) {
 	await bot.answerCallbackQuery(
 		msg.id,
 		text,
@@ -311,6 +321,9 @@ function exportStatisticDebounce() {
 			break;
 		case 'tennis':
 			exportTennisStatisticDebounce(slide.count);
+			break;
+		case 'basketball':
+			exportBasketballStatisticDebounce(slide.count);
 			break;
 	}
 	slide.count = 2;

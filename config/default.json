@@ -90,20 +90,14 @@
 				"tennis": {
 					"rate": "LiveFeed/Get1x2_VZip?sports=4&count=2000&mode=4&country=1&partner=51&getEmpty=true",
 					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				},
+				"basketball": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=3&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
 				}
 			},
 			"result": {
 				"all": "getTranslate/ViewGameResultsExtGet?date=${date}&tzo=300&partner=51&lng=en&adult=false&showAll=true"
-			},
-			"authentication": {
-				"auth": "en/user/auth/",
-				"twofactor": "user/twofactor"
-			},
-			"rate": {
-				"getuserdata": "getuserdata",
-				"putbetscommon": "datalinelive/putbetscommon",
-				"updateCoupon": "LiveUtil/UpdateCoupon",
-				"balance": "user/balance"
 			}
 		},
 		"lds": {
@@ -113,7 +107,8 @@
 					"expandedRate": "https://lds-api.ligastavok.ru/rest/events/v1/actionLines",
 					"card": ""
 				},
-				"tennis": ""
+				"tennis": "",
+				"basketball": ""
 			},
 			"result": {
 				"all": ""
@@ -126,7 +121,8 @@
 					"expandedRate": "",
 					"card": ""
 				},
-				"tennis": ""
+				"tennis": "",
+				"basketball": ""
 			},
 			"result": {
 				"all": ""
@@ -146,6 +142,10 @@
 				},
 				"tennis": {
 					"rate": "LiveFeed/Get1x2_VZip?sports=4&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				},
+				"basketball": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=3&count=2000&mode=4&country=1&partner=51&getEmpty=true",
 					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
 				}
 			},
@@ -168,6 +168,10 @@
 				"tennis": {
 					"rate": "LiveFeed/Get1x2_VZip?sports=4&count=2000&mode=4&country=1&partner=51&getEmpty=true",
 					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
+				},
+				"basketball": {
+					"rate": "LiveFeed/Get1x2_VZip?sports=3&count=2000&mode=4&country=1&partner=51&getEmpty=true",
+					"expandedRate": "LiveFeed/GetGameZip?id=${id}&lng=en&cfview=0&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=51"
 				}
 			},
 			"result": {
@@ -181,7 +185,8 @@
 					"expandedRate": "",
 					"card": ""
 				},
-				"tennis": ""
+				"tennis": "",
+				"basketball": ""
 			},
 			"result": {
 				"all": ""
@@ -305,6 +310,20 @@
 				],
 				"titleNumericalDesignation": "Числовое обозначение настольного тениса",
 				"numericalDesignation": 4
+			},
+			"basketball": {
+				"set": 2,
+				"strategyOne": {
+					"titleRate": "Math.abs(p1 - p2) > rate",
+					"rate": 1
+				},
+				"titleTypeRate": "Искомый тотал",
+				"typeRate": [
+					0,
+					12.5
+				],
+				"titleNumericalDesignation": "Числовое обозначение настольного тениса",
+				"numericalDesignation": 3
 			}
 		}
 	},
@@ -322,6 +341,10 @@
 			"tennis": {
 				"inputName": "Reports-tennis-default.xlsx",
 				"outputName": "reports-tennis.xlsx"
+			},
+			"basketball": {
+				"inputName": "Reports-basketball-default.xlsx",
+				"outputName": "reports-basketball.xlsx"
 			}
 		},
 		"directory": {
@@ -335,6 +358,6 @@
 	},
 	"emulator": {
 		"titleBetAmount": "Размер ставки",
-		"betAmount": 150
+		"betAmount": 250
 	}
 }

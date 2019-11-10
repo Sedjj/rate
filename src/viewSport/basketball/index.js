@@ -1,5 +1,5 @@
 const {log} = require('../../utils/logger');
-const {newStatistic, deleteStatistic, setStatistic} = require('../../storage/tennis');
+const {newStatistic, deleteStatistic, setStatistic} = require('../../storage/basketball');
 const {getExpandedMatch} = require('../../fetch');
 const config = require('config');
 const {matchRate} = require('../../matchRate');
@@ -7,26 +7,27 @@ const {getScoreToSet} = require('../../utils/searchHelper');
 const {searchHelper} = require('../../modifiableFile');
 
 const active = config['parser'].active;
-const urlTennisExpandedRate = config.parser[`${active[0]}`].live['tennis']['expandedRate'];
-const typeRate = config['choice'].live.tennis.typeRate;
+const urlBasketballExpandedRate = config.parser[`${active[0]}`].live['basketball']['expandedRate'];
+const typeRate = config['choice'].live.basketball.typeRate;
 
 /**
  * Общая стратегия для Live большого тениса
  *
  * @param {Object} param объект с параметрами матча
  */
-function tennisLiveStrategy(param) {
-	if (param.currentSet === 2) {
+function basketballLiveStrategy(param) {
+	basketballLiveStrategyOne(param);
+	/*if (param.currentSet === 2) {
 		const setOne = param.set.get(1);
 		const setTwo = param.set.get(2);
 		if ((setOne.sc1 + setOne.sc2) === 13) {
 			if ((setTwo.sc1 + setTwo.sc2) > 3) {
 				if (Math.abs(setTwo.sc1 - setTwo.sc2) < 2) {
-					tennisLiveStrategyOne(param);
+					basketballLiveStrategyOne(param);
 				}
 			}
 		}
-	}
+	}*/
 }
 
 /**
@@ -34,19 +35,19 @@ function tennisLiveStrategy(param) {
  *
  * @param {Object} param объект с параметрами матча
  */
-function tennisLiveStrategyOne(param) {
+function basketballLiveStrategyOne(param) {
 	const strategy = 1;
 	if (!param.command.en.one.includes('/')) {
 		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(statistic => {
 				if (statistic !== null) {
-					log.debug(`Найден ${param.matchId}: Тенис - стратегия ${strategy}`);
+					log.debug(`Найден ${param.matchId}: баскетбол - стратегия ${strategy}`);
 					// await setSnapshot(param.matchId, strategy);
-					matchRate(statistic, 'tennis');
+					matchRate(statistic, 'basketball');
 				}
 			})
 			.catch((error) => {
-				log.error(`tennisLiveStrategyOne: ${error.message}`);
+				log.error(`basketballLiveStrategyOne: ${error.message}`);
 			});
 	}
 }
@@ -63,7 +64,7 @@ function tennisLiveStrategyOne(param) {
  */
 async function setSnapshot(matchId, strategy, total = undefined, index = undefined) {
 	try {
-		let item = await getExpandedMatch(urlTennisExpandedRate.replace('${id}', matchId));
+		let item = await getExpandedMatch(urlBasketballExpandedRate.replace('${id}', matchId));
 		const param = searchHelper['getParams'](item, true);
 		const key = typeRate[strategy];
 		const desiredTotal = total || param.total.under.reduce((acc, current) => {
@@ -131,5 +132,5 @@ function saveRate(param, strategy) {
 }
 
 module.exports = {
-	tennisLiveStrategy
+	basketballLiveStrategy
 };

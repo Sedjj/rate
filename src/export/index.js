@@ -6,6 +6,7 @@ const {sendFile} = require('../telegram/api');
 const {getStatisticsFootball} = require('./football');
 const {getStatisticsTableTennis} = require('./tableTennis');
 const {getStatisticsTennis} = require('./tennis');
+const {getStatisticsBasketball} = require('./basketball');
 
 const storagePath = config.path.storagePath || process.cwd();
 const uploadDirectory = config.path.directory.upload || 'upload';
@@ -13,6 +14,7 @@ const uploadDirectory = config.path.directory.upload || 'upload';
 const outputFootball = config.path.storage.football.outputName || 'Reports.xlsx';
 const outputTableTennis = config.path.storage.tableTennis.outputName || 'Reports.xlsx';
 const outputTennis = config.path.storage.tennis.outputName || 'Reports.xlsx';
+const outputBasketball = config.path.storage.basketball.outputName || 'Reports.xlsx';
 
 /**
  * Метод для отправки экспорта статистики футбола
@@ -68,8 +70,27 @@ async function exportTennisStatistic(days) {
 	}
 }
 
+/**
+ * Метод для отправки экспорта статистики баскетбола
+ *
+ * @param {Number} days количество дней для экспорта
+ * @returns {Promise<void>}
+ */
+async function exportBasketballStatistic(days) {
+	try {
+		const file = await getStatisticsBasketball(days);
+		const filePath = await saveBufferToFile(path.join(storagePath, uploadDirectory, `${days}days-${outputBasketball}`), file);
+		const stream = await readFileToStream(filePath);
+		await sendFile(stream);
+		log.debug('Файл statistic отправлен');
+	} catch (error) {
+		log.error(`Send statistic: ${error.message}`);
+	}
+}
+
 module.exports = {
 	exportFootballStatistic,
 	exportTableTennisStatistic,
 	exportTennisStatistic,
+	exportBasketballStatistic,
 };
