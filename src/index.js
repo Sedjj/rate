@@ -29,8 +29,8 @@ const schedulerSearchFootball = {
 
 const schedulerSearchTennis = {
 	title: 'в секундах',
-	before: 25,
-	after: 45
+	before: 15,
+	after: 30
 };
 
 const schedulerSearchBasketball = {

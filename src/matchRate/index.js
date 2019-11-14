@@ -29,11 +29,11 @@ async function matchRate(statistic, type = '') {
 			if (type === 'tennis') {
 				log.debug(`en : ${en} = ${en.includes('ITF')} p2= ${p2} p1= ${p1}`);
 				if (en.includes('ITF')) {
-					if (1.5 < Math.abs(p2 - p1) && Math.abs(p2 - p1) <= 2.5) {
+					/*if (1.5 < Math.abs(p2 - p1) && Math.abs(p2 - p1) <= 2.5) {
 						await sendMessageChannel(decorateMessageTennis(statistic, type));
 						await sendMessageChannel('2 сет ТМ 12,5');
-					}
-					if (2.5 < Math.abs(p2 - p1)) {
+					}*/
+					if (3 < Math.abs(p2 - p1)) {
 						await sendMessageChannel(decorateMessageTennis(statistic, type));
 						await sendMessageChannel('2 сет ТМ 10,5');
 					}
