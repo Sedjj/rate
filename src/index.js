@@ -143,7 +143,7 @@ if (randomSchedulerCheckingResults) {
 			if (process.env.NODE_ENV !== 'development') {
 				checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
 				checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);
-				checkingResults(basketball.getStatistic, tennis.setStatistic, numericalDesignationBasketball);
+				// checkingResults(basketball.getStatistic, basketball.setStatistic, numericalDesignationBasketball);
 			}
 		} catch (error) {
 			schedulerCheckingResultsJob.stop();
