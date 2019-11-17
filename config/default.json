@@ -214,7 +214,7 @@
 				},
 				"strategyFive": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 3.5
+					"rate": 8
 				},
 				"strategySix": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
@@ -242,7 +242,7 @@
 					1.5,
 					2,
 					1.5,
-					2.5,
+					0.5,
 					2.5,
 					1.5
 				],
@@ -269,7 +269,7 @@
 						"after": 4500
 					},
 					{
-						"before": 0,
+						"before": 2700,
 						"after": 4500
 					},
 					{

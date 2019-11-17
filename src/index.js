@@ -114,7 +114,7 @@ if (randomSchedulerSearchTennis) {
  * Планировшик поиска матчей по баскетболу.
  */
 if (randomSchedulerSearchBasketball) {
-	log.info('****start scheduler search tennis****');
+	log.info('****start scheduler search basketball****');
 	let schedulerSearchJob = new CronJob(randomSchedulerSearchBasketball, () => {
 		try {
 			schedulerSearchJob.setTime(new CronTime(
