@@ -65,7 +65,7 @@ const randomSchedulerCheckingResults = process.env.NODE_ENV === 'development'
 	: '00 05 10 * * 0-7';
 
 /**
- * Планировшик поиска матчей по футболу.
+ * Планировшик поиска матчей по футболу. 
  */
 if (randomSchedulerSearchFootball) {
 	log.info('****start scheduler search football****');
