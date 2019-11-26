@@ -13,11 +13,11 @@ const typeRate = config['choice'].live.basketball.typeRate;
 /**
  * Общая стратегия для Live большого тениса
  *
- * @param {Object} param объект с параметрами матча
+ * @param {FootballModel} param объект с параметрами матча
  */
 function basketballLiveStrategy(param) {
 	basketballLiveStrategyOne(param);
-	/*if (param.currentSet === 2) {
+	if (param.currentSet === 2) {
 		const setOne = param.set.get(1);
 		const setTwo = param.set.get(2);
 		if ((setOne.sc1 + setOne.sc2) === 13) {
@@ -27,7 +27,7 @@ function basketballLiveStrategy(param) {
 				}
 			}
 		}
-	}*/
+	}
 }
 
 /**
