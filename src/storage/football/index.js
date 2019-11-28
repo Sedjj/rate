@@ -111,6 +111,9 @@ function setStatistic(param) {
 			if (param.rate !== undefined) {
 				statistic.rate = param.rate;
 			}
+			if (param.rate !== undefined) {
+				statistic.bothTeamsToScore = param.bothTeamsToScore;
+			}
 			if (param.modifiedBy !== undefined) {
 				statistic.modifiedBy = param.modifiedBy;
 			}

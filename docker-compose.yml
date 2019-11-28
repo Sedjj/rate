@@ -15,6 +15,7 @@ services:
 
   mongo-rate:
     container_name: mongo-rate
+    restart: always
     image: mongo
     volumes:
       - ./docker/mongo-seed/db:/data/db
@@ -33,6 +34,7 @@ services:
 
   chrome:
     container_name: chrome
+    restart: always
     image: selenium/node-chrome:3.14.0-gallium
     volumes:
       - /dev/shm:/dev/shm
@@ -43,6 +45,7 @@ services:
 
   hub:
     container_name: hub
+    restart: always
     image: selenium/hub:3.14.0-gallium
     environment:
       - GRID_BROWSER_TIMEOUT=3400

@@ -94,6 +94,10 @@ function mapProps(statistic, index) {
 				sc2: statistic.rate.doubleChance.sc2
 			}
 		},
+		bothTeamsToScore: {
+			yes: statistic.bothTeamsToScore.yes,
+			no: statistic.bothTeamsToScore.no
+		},
 		createdBy: getFormattedDate(statistic.createdBy),
 		modifiedBy: getFormattedDate(statistic.modifiedBy)
 	};

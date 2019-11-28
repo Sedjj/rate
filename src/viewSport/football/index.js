@@ -126,9 +126,9 @@ function footballLiveStrategyTwo(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyThree(param) {
-	const strategy = 3;
+	// const strategy = 3;
 	if (Math.abs(param.p1 - param.p2) < rateStrategyThree) {
-		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+		/*saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
@@ -138,7 +138,7 @@ function footballLiveStrategyThree(param) {
 			})
 			.catch((error) => {
 				log.error(`footballLiveStrategyThree: ${error}`);
-			});
+			});*/
 	}
 }
 
@@ -155,7 +155,7 @@ function footballLiveStrategyFour(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'football');
+					await matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {
@@ -177,7 +177,7 @@ function footballLiveStrategyFive(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'football');
+					await matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {
@@ -221,7 +221,7 @@ function footballLiveStrategySeven(param) {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
 					const football = await setSnapshot(param.matchId, strategy);
-					matchRate(football, 'football');
+					await matchRate(football, 'football');
 				}
 			})
 			.catch((error) => {
@@ -265,6 +265,7 @@ async function setSnapshot(matchId, strategy, total = undefined, index = undefin
 				before: param.cards
 			},
 			rate: param.rate,
+			bothTeamsToScore: param.bothTeamsToScore,
 			modifiedBy: new Date().toISOString()
 		});
 	} catch (error) {

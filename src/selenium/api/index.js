@@ -3,7 +3,7 @@ const config = require('config');
 const path = require('path');
 const {log} = require('../../utils/logger');
 const {By, until, Builder, Capabilities} = require('selenium-webdriver');
-const {sendFile} = require('../../telegram/api');
+const {sendPhoto} = require('../../telegram/api');
 const {readFileToStream, saveBufferToFile} = require('../../utils/fsHelpers');
 const {path: pathChrome} = require('chromedriver');
 
@@ -37,6 +37,7 @@ async function driverChrome() {
 			log.info('driverChrome production');
 			return await new Builder()
 				.forBrowser('chrome')
+				.setChromeOptions(await emulatorOfUniqueness())
 				.usingServer('http://hub:4444/wd/hub').build();
 		}
 	} catch (e) {
@@ -376,16 +377,17 @@ async function switchTab(driver, closed = true) {
  *
  * @param {object} driver инстанс драйвера
  * @param {String} nameFile имя выходного файла
+ * @param {String} title Заголовок для фотки
  * @returns {Promise<boolean>}
  */
-async function screenShot(driver, nameFile) {
+async function screenShot(driver, nameFile, title) {
 	try {
 		const base64Image = await driver.takeScreenshot(true);
 		const decodedImage = new Buffer.from(base64Image, 'base64');
 		const filePath = await saveBufferToFile(path.join(storagePath, uploadDirectory, nameFile), decodedImage);
 		if (process.env.NODE_ENV !== 'development') {
 			const stream = await readFileToStream(filePath);
-			await sendFile(stream);
+			await sendPhoto(stream, title);
 		}
 		await driver.sleep(speed.veryFast);
 		return true;

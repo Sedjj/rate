@@ -63,12 +63,12 @@ async function performEmulation(ids, numberColumn, totalName) {
 				}
 			}
 		}
-		await screenShot(driver, `${(new Date()).getTime()}.png`);
+		await screenShot(driver, `${(new Date()).getTime()}.png`, 'Rate');
 		await driver.quit();
 	} catch (e) {
 		log.error('Error performEmulation -> ' + e);
 		//FIXME падает ошибка и рушит все
-		await screenShot(driver, `${(new Date()).getTime()}.png`);
+		await screenShot(driver, `${(new Date()).getTime()}.png`, 'Rate');
 		await driver.sleep(speed.fast);
 		await driver.quit();
 	}

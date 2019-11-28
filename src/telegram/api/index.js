@@ -2,7 +2,8 @@ const config = require('config');
 const {
 	setFileApiTelegram,
 	setTextApiTelegram,
-	setSupportMsgApiTelegram
+	setSupportMsgApiTelegram,
+	setPhotoApiTelegram,
 } = require('../../fetch');
 
 const token = process.env.NODE_ENV === 'development'
@@ -79,9 +80,26 @@ function sendFile(file) {
 	});
 }
 
+/**
+ * Метод отправки фотки в телеграмм бот.
+ *
+ * @param {ReadStream} file для отправки в чат
+ * @param {String} title Заголовок для фотки
+ */
+function sendPhoto(file, title) {
+	return new Promise((resolve, reject) => {
+		try {
+			resolve(setPhotoApiTelegram(token, chatId, file, title));
+		} catch (error) {
+			reject(error);
+		}
+	});
+}
+
 module.exports = {
 	sendMessageChat,
 	sendMessageChannel,
 	sendMessageSupport,
-	sendFile
+	sendFile,
+	sendPhoto,
 };

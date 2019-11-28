@@ -255,6 +255,18 @@ const FootballSchema = new Schema({
 			},
 		}
 	},
+	bothTeamsToScore: {
+		yes: {
+			type: Number,
+			required: true,
+			default: 0
+		},
+		no: {
+			type: Number,
+			required: true,
+			default: 0
+		},
+	},
 	createdBy: {
 		type: Date,
 		default: new Date()

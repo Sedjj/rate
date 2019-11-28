@@ -161,6 +161,40 @@ function setFileApiTelegram(token, chatId, document) {
 }
 
 /**
+ * Отправляет фото на API Telegram
+ * https://api.telegram.org/bot741639693:AAHcc9e7pIYSWlAti95Idwejn0iZcwSUqmg/getupdates
+ *
+ * @param {String} token идентификатор бота
+ * @param {String} chatId id чата
+ * @param {Object} document данные для отправки
+ * @param {String} title заголовок фотки
+ * @returns {Promise}
+ */
+function setPhotoApiTelegram(token, chatId, document, title) {
+	let props = {
+		url: `https://api.telegram.org/bot${token}/sendPhoto`,
+		headers: {
+			'content-type': 'multipart/form-data'
+		},
+		formData: {
+			chat_id: chatId,
+			photo: document,
+			caption: title
+		},
+	};
+	return new Promise((resolve, reject) => {
+		request.post(props, (error, res, body) => {
+			if (error || (res && res.statusCode !== 200)) {
+				log.error(`setFileApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
+				return reject(error);
+			}
+			// log.debug(`Отработал: Метод для отправки файла ${body}`);
+			resolve(body);
+		});
+	});
+}
+
+/**
  * Отправляет сообщение в чат или канал на API Telegram.
  *
  * @param {String} token идентификатор бота
@@ -244,6 +278,7 @@ module.exports = {
 	getExpandedMatch,
 	getResultList,
 	setFileApiTelegram,
+	setPhotoApiTelegram,
 	setTextApiTelegram,
 	setSupportMsgApiTelegram
 };

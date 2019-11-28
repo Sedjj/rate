@@ -13,6 +13,7 @@ function getParams(item, extended = false) {
 		const rate = extended ? indexGameExtended(item) : indexGame(item);
 		const cards = parserCards(item['SC']);
 		const doubleChance = parserDoubleChance(item);
+		const bothTeamsToScore = parserBothTeamsToScore(item);
 		param = {
 			successfully: true,
 			matchId: item['I'],
@@ -41,7 +42,8 @@ function getParams(item, extended = false) {
 			currentSet: currentSet(item),
 			time: timeGame(item),
 			cards: cards,
-			rate: doubleChance
+			rate: doubleChance,
+			bothTeamsToScore: bothTeamsToScore,
 		};
 
 		if (extended) {
@@ -216,6 +218,38 @@ function parserDoubleChance(items) {
 								break;
 							case 6: // победа второй или ничья
 								rateGame.doubleChance.sc2 = item[0]['C'];
+								break;
+						}
+					});
+				}
+			}
+		});
+	}
+	return rateGame;
+}
+
+/**
+ * Метод для определения двойного шанса.
+ *
+ * @param {Object} items объект матча
+ * @returns {{yes: number, no: number}}
+ */
+function parserBothTeamsToScore(items) {
+	const rateGame = {
+		yes: 0,
+		no: 0
+	};
+	if (items['GE'] && Array.isArray(items['GE'])) {
+		items['GE'].forEach((rate) => {
+			if (rate['G'] === 19) { // 19 - Both Teams To Score
+				if (rate.E && Array.isArray(rate.E)) {
+					rate['E'].forEach((item) => {
+						switch (item[0]['T']) {
+							case 180: // да
+								rateGame.yes = item[0]['C'];
+								break;
+							case 181: // нет
+								rateGame.no = item[0]['C'];
 								break;
 						}
 					});
