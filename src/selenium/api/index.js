@@ -35,10 +35,12 @@ async function driverChrome() {
 				.build();
 		} else {
 			log.info('driverChrome production');
+			// FIXME может тут и не нужен docker chrome раз есть драйвер
 			return await new Builder()
 				.forBrowser('chrome')
 				.setChromeOptions(await emulatorOfUniqueness())
-				.usingServer('http://hub:4444/wd/hub').build();
+				.usingServer('http://hub:4444/wd/hub')
+				.build();
 		}
 	} catch (e) {
 		log.error(`Error driverChrome ->  ${e}`);

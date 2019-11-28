@@ -89,7 +89,7 @@ function sendFile(file) {
 function sendPhoto(file, title) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setPhotoApiTelegram(token, chatId, file, title));
+			resolve(setPhotoApiTelegram(token, supportChatId, file, title));
 		} catch (error) {
 			reject(error);
 		}
