@@ -100,7 +100,7 @@ if (randomSchedulerSearchTennis) {
 					schedulerSearchTennis.after
 				).generate()
 			));
-			searchTennis();
+			// searchTennis();
 		} catch (error) {
 			schedulerSearchJob.stop();
 			log.error(`cron pattern not valid: ${error}`);
@@ -142,7 +142,7 @@ if (randomSchedulerCheckingResults) {
 		try {
 			if (process.env.NODE_ENV !== 'development') {
 				checkingResults(football.getStatistic, football.setStatistic, numericalDesignationFootball);
-				checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);
+				// checkingResults(tennis.getStatistic, tennis.setStatistic, numericalDesignationTennis);
 				// checkingResults(basketball.getStatistic, basketball.setStatistic, numericalDesignationBasketball);
 			}
 		} catch (error) {
