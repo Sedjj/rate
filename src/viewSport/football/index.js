@@ -58,13 +58,13 @@ function footballLiveStrategy(param) {
 			}
 		}
 		// тотал меньше
-		if ((param.score.sc1 + param.score.sc2) === 1) {
+		if ((param.score.sc1 === param.score.sc2) && (param.score.sc1 === 0)) {
 			if ((param.time >= time[6].before) && (param.time <= time[6].after)) {
 				footballLiveStrategySix(param);
 			}
 		}
 		// тотал больше
-		if ((param.score.sc1 + param.score.sc2) === 1) {
+		if ((param.score.sc1 + param.score.sc2) === 2) {
 			if ((param.time >= time[7].before) && (param.time <= time[7].after)) {
 				footballLiveStrategySeven(param);
 			}
@@ -82,9 +82,9 @@ function footballLiveStrategy(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyOne(param) {
-	const strategy = 1;
+	/*const strategy = 1;*/
 	if (Math.abs(param.p1 - param.p2) < rateStrategyOne) {
-		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+		/*saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
@@ -94,7 +94,7 @@ function footballLiveStrategyOne(param) {
 			})
 			.catch((error) => {
 				log.error(`footballLiveStrategyOne: ${error}`);
-			});
+			});*/
 	}
 }
 
@@ -192,9 +192,9 @@ function footballLiveStrategyFive(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategySix(param) {
-	// const strategy = 6;
+	const strategy = 6;
 	if (Math.abs(param.p1 - param.p2) < rateStrategySix) {
-		/*saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
@@ -204,7 +204,7 @@ function footballLiveStrategySix(param) {
 			})
 			.catch((error) => {
 				log.error(`footballLiveStrategySix: ${error}`);
-			});*/
+			});
 	}
 }
 

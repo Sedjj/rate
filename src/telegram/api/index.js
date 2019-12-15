@@ -24,11 +24,13 @@ const supportChatId = process.env.NODE_ENV === 'development'
  * Метод отправки сообщений в телеграмм бот.
  *
  * @param {String} text строка для отправки в чат
+ * @param {String} newToken уникальный бот
+ * @param {String} newChatId кастомный канал для вывода
  */
-function sendMessageChat(text) {
+function sendMessageChat(text, newToken = null, newChatId = null) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setTextApiTelegram(token, chatId, text));
+			resolve(setTextApiTelegram(newToken || token, newChatId || chatId, text));
 		} catch (error) {
 			reject(error);
 		}
@@ -39,11 +41,13 @@ function sendMessageChat(text) {
  * Метод отправки сообщений в телеграмм бот.
  *
  * @param {String} text строка для отправки в чат
+ * @param {String} newToken уникальный бот
+ * @param {String} newChannelId кастомный канал для вывода
  */
-function sendMessageChannel(text) {
+function sendMessageChannel(text, newToken = null, newChannelId = null) {
 	return new Promise((resolve, reject) => {
 		try {
-			resolve(setTextApiTelegram(token, channelId, text));
+			resolve(setTextApiTelegram(newToken || token, newChannelId || channelId, text));
 		} catch (error) {
 			reject(error);
 		}

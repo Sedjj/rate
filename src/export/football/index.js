@@ -64,6 +64,15 @@ function getStatisticsFootball(days = 2) {
 						template.substitute(6, {
 							statistics: props.statistics.filter((item) => item.strategy === 6)
 						});
+						template.substitute(7, {
+							statistics: props.statistics.filter((item) => {
+								if (item.strategy === 7) {
+									if (item.total < 1.9) {
+										return true;
+									}
+								}
+							})
+						});
 						log.debug('Генерация файла');
 						return template.generate({type: 'nodebuffer'});
 					});

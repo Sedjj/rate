@@ -35,7 +35,7 @@ services:
   chrome:
     container_name: chrome
     restart: always
-    image: selenium/node-chrome:3.14.0-gallium
+    image: selenium/node-chrome:3.141.59-xenon
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
@@ -46,7 +46,7 @@ services:
   hub:
     container_name: hub
     restart: always
-    image: selenium/hub:3.14.0-gallium
+    image: selenium/hub:3.141.59-xenon
     environment:
       - GRID_BROWSER_TIMEOUT=3400
       - GRID_TIMEOUT=3600
