@@ -1,7 +1,7 @@
 const config = require('config');
 const TelegramBot = require('node-telegram-bot-api');
 const {exportBackup} = require('../../backupBD');
-const {rateStatus, rateAmount, counterWaiting} = require('../../store');
+const {rateStatus, rateAmount, counterWaiting, authPhone} = require('../../store');
 const {throttle} = require('../../utils/throttle');
 const {exportFootballStatistic, exportTableTennisStatistic, exportTennisStatistic, exportBasketballStatistic} = require('../../export');
 const {use} = require('node-telegram-bot-api-middleware');
@@ -36,6 +36,7 @@ const rate = 'Ставки';
 const getFile = 'Получить файл';
 const backup = 'Бэкап';
 const betAmount = 'Сумма ставки';
+const verification = 'включить проверку входа в систему';
 
 const keyboardInit = [
 	[waiting],
@@ -44,6 +45,7 @@ const keyboardInit = [
 	[getFile],
 	[backup],
 	[betAmount],
+	[verification],
 ];
 
 const response = use(accessCheck);
@@ -63,6 +65,20 @@ bot.onText(/\/start/, response(async (msg) => {
 		return;
 	}
 	await menu(msg);
+}));
+
+bot.onText(/code-(\d{4,6})$/, response(async (msg) => {
+	const code = msg.text.split('-')[1];
+	if (code) {
+		authPhone.setCode(code);
+	}
+}));
+
+bot.onText(/tel-(\d{8})$/, response(async (msg) => {
+	const phone = msg.text.split('-')[1];
+	if (phone) {
+		authPhone.setPhone(phone);
+	}
 }));
 
 const slide = {
@@ -150,6 +166,14 @@ bot.on('callback_query', async (msg) => {
 			await getLogs();
 			await menu(msg);
 			break;
+		case 'enableVerification':
+			authPhone.turnOn();
+			await sendAnswerText(msg, 'Enable login verification');
+			break;
+		case 'turnOffVerification':
+			authPhone.turnOff();
+			await sendAnswerText(msg, 'Stopped login verification');
+			break;
 	}
 });
 
@@ -178,6 +202,9 @@ bot.on('message', response(async (msg) => {
 			break;
 		case getFile:
 			await inlineKeyboard(chat, menuList('getFile'));
+			break;
+		case verification:
+			await inlineKeyboard(chat, menuList('verification'));
 			break;
 	}
 }));

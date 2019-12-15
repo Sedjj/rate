@@ -56,6 +56,14 @@ function menuList(item, text= 0) {
 					[{text: '-10', callback_data: 'downBets'}, {text: text, callback_data: 'value'}, {text: '+10', callback_data: 'upBets'}],
 				]
 			};
+		case 'verification':
+			return {
+				title: 'Выберите действие',
+				buttons: [
+					[{text: 'Вкл verification', callback_data: 'enableVerification'}],
+					[{text: 'Выкл verification', callback_data: 'turnOffVerification'}],
+				]
+			};
 	}
 }
 

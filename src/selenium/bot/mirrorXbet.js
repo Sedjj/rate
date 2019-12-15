@@ -1,7 +1,8 @@
 const {log} = require('../../utils/logger');
 const config = require('config');
 const {sendMessageSupport} = require('../../telegram/api');
-const {rateStatus, rateAmount} = require('../../store');
+const {decorateMessageWaitingPhone, decorateMessageWaitingCode, decorateMessageVerification} = require('../../utils/formateMessage');
+const {rateStatus, rateAmount, authPhone} = require('../../store');
 const {
 	switchTab,
 	driverChrome,
@@ -23,6 +24,7 @@ const speed = {
 	normal: 10000,
 	slow: 20 * 1000,
 	verySlow: 40 * 1000,
+	waitingForCode: 120 * 1000,
 };
 
 /**
@@ -31,6 +33,7 @@ const speed = {
 const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
 
 const auth = config.auth;
+const nameBot = config.bots.prod.name;
 const active = config.parser.active;
 const urlStartPage = config.parser[`${active[0]}`]['startPage'];
 
@@ -53,8 +56,8 @@ async function performEmulation(ids, numberColumn, totalName) {
 		await init(driver);
 		await driver.get(urlStartPage);
 		if (await authorization(driver)) {
+			await availability(driver);
 			log.info('Authorization successfully');
-			await closePromo(driver);
 			for (const timeoutOne of searchTimeouts) {
 				if (await search(driver, ids)) {
 					log.info('Search match successfully');
@@ -69,17 +72,17 @@ async function performEmulation(ids, numberColumn, totalName) {
 					break;
 				}
 				log.debug(`Search did not find match or close promo modal - sleep on ${timeoutOne}ms`);
-				await closePromo(driver);
+				await availability(driver);
 				await driver.sleep(timeoutOne);
 			}
 		}
-		await screenShot(driver, `${(new Date()).getTime()}.png`, 'Rate');
+		await screenShot(driver, `${(new Date()).getTime()}.png`, nameBot);
 		await driver.sleep(speed.fast);
 		await driver.quit();
 	} catch (e) {
 		log.error(`Error performEmulation ->  ${JSON.stringify(e)}`);
 		//FIXME падает ошибка и рушит все
-		await screenShot(driver, `${(new Date()).getTime()}.png`, 'Rate');
+		await screenShot(driver, `${(new Date()).getTime()}.png`, nameBot);
 		await driver.sleep(speed.fast);
 		await driver.quit();
 	}
@@ -220,6 +223,24 @@ async function rate(driver) {
 }
 
 /**
+ * Проверка доступности ставки.
+ *
+ * @param {object} driver инстанс драйвера
+ * @returns {Promise<boolean>}
+ */
+async function availability(driver) {
+	try {
+		if (authPhone.status) {
+			await checkPhone(driver);
+			await closePromo(driver);
+		}
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+
+/**
  * Метод для поиска надоедливого всплывающего окна и закрытие его.
  *
  * @param {object} driver инстанс драйвера
@@ -232,6 +253,61 @@ async function closePromo(driver) {
 			return true;
 		} catch (e) {
 			sendNotification(`Can't close promo banner: ${JSON.stringify(e)}`);
+			return false;
+		}
+	}
+	return false;
+}
+
+/**
+ * Метод для поиска надоедливого всплывающего окна и закрытие его.
+ *
+ * @param {object} driver инстанс драйвера
+ * @returns {Promise<boolean>}
+ */
+async function checkPhone(driver) {
+	if (await findById(driver, 'app')) {
+		try {
+			if (await findSelectorCss(driver, '.block-window')) {
+				rateStatus.turnOff();
+				await screenShot(driver, `${(new Date()).getTime()}.png`, nameBot);
+				sendMessageSupport(decorateMessageWaitingPhone(nameBot));
+				await driver.sleep(speed.waitingForCode);
+
+				if (authPhone.phone) {
+					await findIdAndFill(driver, 'phone_middle', authPhone.phone);
+					await findCssAndCall(driver, '.block-window__btn');
+					await driver.sleep(speed.normal);
+
+					if (await findSelectorCss(driver, '.swal2-error.swal2-animate-error-icon')) {
+						sendNotification('Неверный номер телефона');
+					} else if (await findSelectorCss(driver, '.swal2-info.swal2-animate-info-icon')) {
+						sendNotification('The phone is correct');
+						await findCssAndCall(driver, '.swal2-confirm');
+						await driver.sleep(speed.fast);
+						await screenShot(driver, `${(new Date()).getTime()}.png`, nameBot);
+						sendMessageSupport(decorateMessageWaitingCode(nameBot));
+						await driver.sleep(speed.waitingForCode);
+
+						if (authPhone.code) {
+							await findIdAndFill(driver, 'input_otp', authPhone.code);
+							await findCssAndCall(driver, '.block-window__btn');
+							await driver.sleep(speed.normal);
+							await screenShot(driver, `${(new Date()).getTime()}.png`, nameBot);
+
+							if (!(await findSelectorCss(driver, '.swal2-error.swal2-animate-error-icon'))) {
+								sendNotification('checkPhone successfully');
+								rateStatus.turnOn();
+								return true;
+							}
+						}
+					}
+				}
+				sendMessageSupport(decorateMessageVerification());
+			}
+			return false;
+		} catch (e) {
+			sendNotification(`Can't close check phone: ${JSON.stringify(e)}`);
 			return false;
 		}
 	}
