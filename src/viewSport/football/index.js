@@ -165,7 +165,7 @@ function footballLiveStrategyFour(param) {
 }
 
 /**
- * Стратегия ничья с явным фаворитом 1:1
+ * Стратегия ничья для левого чувака
  *
  * @param {Object} param объект с параметрами матча
  */
@@ -220,8 +220,8 @@ function footballLiveStrategySeven(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					const football = await setSnapshot(param.matchId, strategy, -2, 1);
-					await matchRate(football, 'football');
+					await setSnapshot(param.matchId, strategy, -2, 1);
+					waiting(param, strategy);
 				}
 			})
 			.catch((error) => {

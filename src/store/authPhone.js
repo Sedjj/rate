@@ -8,7 +8,7 @@ class AuthPhone {
 	constructor() {
 		this.currentPhone = '';
 		this.currentCode = '';
-		this.checkStatus = true;
+		this.checkStatus = false;
 	}
 
 	get phone() {
