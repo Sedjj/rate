@@ -33,7 +33,9 @@ const speed = {
 const searchTimeouts = [2000, 5000, 8000, 12000, 15000, 1];
 
 const auth = config.auth;
-const nameBot = config.bots.prod.name;
+const nameBot = process.env.NODE_ENV === 'development'
+	? config.bots.supportDev.name
+	: config.bots.supportProd.name;
 const active = config.parser.active;
 const urlStartPage = config.parser[`${active[0]}`]['startPage'];
 
