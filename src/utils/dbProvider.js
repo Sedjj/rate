@@ -10,7 +10,8 @@ const dbUri = process.env.NODE_ENV === 'development'
 console.log(`dbUri: ${dbUri}`);
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUri, {
-	useNewUrlParser: true
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
 });
 
 const db = mongoose.connection;
