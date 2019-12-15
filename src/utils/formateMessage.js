@@ -104,9 +104,50 @@ function decorateMessageChannel(param, type = '') {
 	return `<code>${matchId}</code>\n${en}\n\n<b>${one}\n${two}</b>\n\n<pre>${scope} / ${minut}'\n${index}\n${difference}</pre>`;
 }
 
+/**
+ * Форматирование строки вывода уведомления о вводе телефона.
+ *
+ * @param {String} nameBot имя бота
+ * @returns {*}
+ */
+function decorateMessageWaitingPhone(nameBot) {
+	return `Перейдите в бота: <code>${nameBot}</code>
+	- Введите номер телефона по шаблону 
+			+7(********)12 
+			<code>tel-********</code> 
+	- Нажмите отправить
+	- Время на ввод телефона 2 минуты`;
+}
+
+/**
+ * Форматирование строки вывода уведомления о вводе кода.
+ *
+ * @param {String} nameBot имя бота
+ * @returns {*}
+ */
+function decorateMessageWaitingCode(nameBot) {
+	return `Перейдите в бота: <code>${nameBot}</code>
+	- Введите код подтверждения
+			<code>code-*****</code> 
+	- Нажмите отправить
+	- Время на ввод кода 2 минуты`;
+}
+
+/**
+ * Форматирование строки вывода ошибки аутентификации по телефону.
+ *
+ * @returns {*}
+ */
+function decorateMessageVerification() {
+	return 'Аутентификация по телефону прошла с ошибкой, ставки остановлены. Для повтроной попытки включите ставки в боте';
+}
+
 module.exports = {
 	decorateMessageMatch,
 	decorateMessageTennis,
 	decorateMessageChannel,
+	decorateMessageWaitingPhone,
+	decorateMessageWaitingCode,
+	decorateMessageVerification,
 	replaceAll
 };

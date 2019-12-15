@@ -185,7 +185,7 @@ function setPhotoApiTelegram(token, chatId, document, title) {
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`setFileApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`setPhotoApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			// log.debug(`Отработал: Метод для отправки файла ${body}`);
@@ -220,7 +220,7 @@ function setTextApiTelegram(token, chatId, text) {
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
-				log.error(`setFileApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
+				log.error(`setTextApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			log.debug(`Отработал: Метод для отправки соощения ${JSON.stringify(body.result)}`);
@@ -256,6 +256,7 @@ function setSupportMsgApiTelegram(token, chatId, text) {
 	return new Promise((resolve, reject) => {
 		request.post(props, (error, res, body) => {
 			if (error || (res && res.statusCode !== 200)) {
+				log.error(`setSupportMsgApiTelegram: code: ${res && res.statusCode}, error: ${res ? res.statusMessage : (error && error.message)}`);
 				return reject(error);
 			}
 			resolve(body);

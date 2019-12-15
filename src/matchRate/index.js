@@ -48,10 +48,10 @@ async function matchRate(statistic, type = '') {
 			break;
 		case 7 :
 			if (total < 1.9) {
-				await sendMessageChannel(
+				await sendMessageChat(
 					decorateMessageChannel(statistic, type),
 					'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
-					'-390318855'
+					'-1001260584152'
 				);
 			}
 			break;
