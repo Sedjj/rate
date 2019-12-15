@@ -220,7 +220,7 @@ function footballLiveStrategySeven(param) {
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
-					const football = await setSnapshot(param.matchId, strategy);
+					const football = await setSnapshot(param.matchId, strategy, -2, 1);
 					await matchRate(football, 'football');
 				}
 			})
