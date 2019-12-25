@@ -218,7 +218,7 @@
 				},
 				"strategySix": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
-					"rate": 8
+					"rate": 10
 				},
 				"strategySeven": {
 					"titleRate": "Math.abs(p1 - p2) < rate",
@@ -243,7 +243,7 @@
 					2,
 					1.5,
 					0.5,
-					1.5,
+					1.2,
 					1.5
 				],
 				"titleTime": "Временные интервалы для парсинга",
