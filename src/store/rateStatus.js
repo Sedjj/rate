@@ -6,7 +6,7 @@ const {log} = require('../utils/logger');
 class RateStatus {
 
 	constructor() {
-		this.jobStatus = true;
+		this.jobStatus = false;
 	}
 
 	get status() {
