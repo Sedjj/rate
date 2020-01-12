@@ -17,18 +17,6 @@
 		"user": "",
 		"pass": ""
 	},
-	"proxy": {
-		"host": "139.59.61.229",
-		"port": "3128",
-		"user": "",
-		"password": ""
-	},
-	"socket": {
-		"server": "91.134.157.11",
-		"port": "64380",
-		"user": "",
-		"pass": ""
-	},
 	"myId": "43166705",
 	"roles": {
 		"admin": [
@@ -47,17 +35,6 @@
 			"chatId": "-376344669",
 			"name": "@error_dev_sedjj_bot",
 			"token": "633510677:AAGoFQGr8f_cDP3LVHYvRiN7kr5bo13HDew"
-		},
-		"test": {
-			"channelId": "",
-			"chatId": "-299200164",
-			"name": "@test_sedjj_bot",
-			"token": "773233193:AAFCkkQWbSIk2wVdSSfBiqmRkgoC_V2zRLs"
-		},
-		"supportTest": {
-			"chatId": "-376344669",
-			"name": "@error_test_sedjj_bot",
-			"token": "633227407:AAFReZaI0D6UPZPKt5TT8PR1e_PDPAGA9IQ"
 		},
 		"prod": {
 			"channelId": "-1001295299807",

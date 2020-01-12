@@ -8,7 +8,6 @@ const {log} = require('./../utils/logger');
  * Массив интервалов в миллисекундах после которых делается попытка снова
  */
 const searchTimeouts = [2000, 5000, 8000, 12000, 1];
-/*const proxy = config.proxy;*/
 const active = config.parser.active;
 const cookieJar = new CookieJar();
 const client = got.extend({

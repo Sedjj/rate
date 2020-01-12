@@ -48,7 +48,7 @@ sudo gitlab-runner register -n \
   --executor shell \
   --description "Prod Runner" \
   --docker-privileged \
-  --tag-list rate-shell
+  --tag-list docker
   
 sudo gitlab-runner restart
 ```

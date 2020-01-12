@@ -20,7 +20,9 @@ async function matchRate(statistic, type = '') {
 		cards: {before: {one, two}},
 		matchId,
 		total,
-		group: {en}
+		command: {youth},
+		group: {en},
+		bothTeamsToScore: {no}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 1 :
@@ -43,6 +45,14 @@ async function matchRate(statistic, type = '') {
 				if (one.shotsOff < 8 && two.shotsOff < 8) {
 					await sendMessageChat(decorateMessageChannel(statistic, type));
 					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
+				}
+			}
+			break;
+		case 6 :
+			if (youth === 0 && no >= 1.5) {
+				if (x < 3.5 && one.shotsOn < 4 && two.shotsOn === 0 && one.danAttacks < 22) {
+					await sendMessageChannel(decorateMessageChannel(statistic, type));
+					await sendMessageChannel('Обе забьют: Нет');
 				}
 			}
 			break;

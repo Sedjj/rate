@@ -18,7 +18,7 @@ services:
 ###Настройка и инициализация
 Далее нужно задать адрес сервер `docker-compose run --rm openvpn ovpn_genconfig -u udp://IP.ИЛИ.ДОМЕН.ВАШЕГО.СЕРЕРА`
 ```bash
-docker-compose run --rm openvpn ovpn_genconfig -u udp://45.77.142.224
+docker-compose run --rm openvpn ovpn_genconfig -u udp://45.32.238.220
 ```
 
 ###Инициализируем
