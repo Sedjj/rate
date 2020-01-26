@@ -20,7 +20,7 @@ async function matchRate(statistic, type = '') {
 		cards: {before: {one, two}},
 		matchId,
 		total,
-		command: {youth},
+		command: {youth, women},
 		group: {en},
 		bothTeamsToScore: {no}
 	} = statistic;
@@ -49,20 +49,26 @@ async function matchRate(statistic, type = '') {
 			}
 			break;
 		case 6 :
-			if (youth === 0 && no >= 1.5) {
-				if (x < 3.5 && one.shotsOn < 4 && two.shotsOn === 0 && one.danAttacks < 22) {
-					await sendMessageChannel(decorateMessageChannel(statistic, type));
-					await sendMessageChannel('Обе забьют: Нет');
+			if (youth === 0 && women === 0) {
+				if (1.5 < no && no < 1.8) {
+					if (0 < one.attacks && one.attacks < 33) {
+						if (2.7 <= p1 && p1 <= 3.3 && 2.2 <= p2 && p2 <= 2.6) {
+							await sendMessageChannel(decorateMessageChannel(statistic, type));
+							await sendMessageChannel('Обе забьют: Нет');
+						}
+					}
 				}
 			}
 			break;
 		case 7 :
 			if (total < 1.9) {
-				await sendMessageChat(
-					decorateMessageChannel(statistic, type),
-					'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
-					'-1001260584152'
-				);
+				if (!en.includes('Friend')) {
+					await sendMessageChat(
+						decorateMessageChannel(statistic, type),
+						'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
+						'-1001260584152'
+					);
+				}
 			}
 			break;
 		default:
