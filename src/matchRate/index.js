@@ -67,7 +67,7 @@ async function matchRate(statistic, type = '') {
 				}
 			}
 			break;
-		case 7 :
+		/*case 7 :
 			if (total < 1.9) {
 				if (!en.includes('Friend')) {
 					await sendMessageChat(
@@ -77,7 +77,7 @@ async function matchRate(statistic, type = '') {
 					);
 				}
 			}
-			break;
+			break;*/
 		default:
 			break;
 	}
