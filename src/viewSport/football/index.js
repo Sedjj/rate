@@ -126,9 +126,9 @@ function footballLiveStrategyTwo(param) {
  * @param {Object} param объект с параметрами матча
  */
 function footballLiveStrategyThree(param) {
-	// const strategy = 3;
+	const strategy = 3;
 	if (Math.abs(param.p1 - param.p2) < rateStrategyThree) {
-		/*saveRate(param, strategy)// пропускает дальше если запись ушла в БД
+		saveRate(param, strategy)// пропускает дальше если запись ушла в БД
 			.then(async (statistic) => {
 				if (statistic !== null) {
 					log.debug(`Найден ${param.matchId}: Футбол - стратегия ${strategy}`);
@@ -138,7 +138,7 @@ function footballLiveStrategyThree(param) {
 			})
 			.catch((error) => {
 				log.error(`footballLiveStrategyThree: ${error}`);
-			});*/
+			});
 	}
 }
 

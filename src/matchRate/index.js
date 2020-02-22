@@ -40,6 +40,9 @@ async function matchRate(statistic, type = '') {
 				}
 			}
 			break;
+		case 3 :
+			await sendMessageChat(decorateMessageChannel(statistic, type));
+			break;
 		case 4 :
 			if (2.7 < x && 1.9 < total) {
 				if (one.shotsOff < 8 && two.shotsOff < 8) {
