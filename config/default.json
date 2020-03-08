@@ -28,13 +28,13 @@
 		"dev": {
 			"channelId": "",
 			"chatId": "-299200164",
-			"name": "@dev_sedjj_bot",
-			"token": "704208442:AAG6oMYGXwuU-APfHsy5YjIzfrijey7xEic"
+			"name": "@dev_support_rate_sedjj_bot",
+			"token": "976021414:AAH5Kk3s9loSe_oYVxFx4gja3LXUNDfv0bQ"
 		},
 		"supportDev": {
 			"chatId": "-376344669",
-			"name": "@error_dev_sedjj_bot",
-			"token": "633510677:AAGoFQGr8f_cDP3LVHYvRiN7kr5bo13HDew"
+			"name": "@dev_support_rate_sedjj_bot",
+			"token": "976021414:AAH5Kk3s9loSe_oYVxFx4gja3LXUNDfv0bQ"
 		},
 		"prod": {
 			"channelId": "-1001295299807",

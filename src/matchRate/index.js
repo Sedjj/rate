@@ -22,7 +22,7 @@ async function matchRate(statistic, type = '') {
 		total,
 		command: {youth, women},
 		group: {en},
-		bothTeamsToScore: {no}
+		bothTeamsToScore: {no, yes}
 	} = statistic;
 	switch (statistic.strategy) {
 		case 1 :
@@ -41,7 +41,7 @@ async function matchRate(statistic, type = '') {
 			break;
 		case 3 :
 			if (sc1 === 1 && sc2 === 0) {
-				if (mod < 2.2 && time < 1980 && total < 2) {
+				if (x > 3.7 && (yes >= 1.4 || yes < 1.1)) {
 					await sendMessageChat(
 						decorateMessageChannel(statistic, type),
 						'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
@@ -50,14 +50,14 @@ async function matchRate(statistic, type = '') {
 				}
 			}
 			break;
-		case 4 :
+		/*case 4 :
 			if (2.7 < x && 1.9 < total) {
 				if (one.shotsOff < 8 && two.shotsOff < 8) {
 					await sendMessageChat(decorateMessageChannel(statistic, type));
 					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
 				}
 			}
-			break;
+			break;*/
 		case 6 :
 			if (youth === 0 && women === 0) {
 				if (1.5 < no && no < 1.8) {
