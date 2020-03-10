@@ -302,6 +302,7 @@ function parserScoreLimited(value) {
 	let parserReturn = 0;
 	if (value && value.length > 5) {
 		parserReturn = value.match(/\s?[\s?2\s?|\s?3\s?|\s?4\s?|\s?5\s?|\s?6\s?|\s?7\s?|\s?8\s?|\s?9\s?]\s?[х|x][\s?2\s?|\s?3\s?|\s?4\s?|\s?5\s?|\s?6\s?|\s?7\s?|\s?8\s?|\s?9\s?]\s?/ig);
+		return parserReturn ? 1 : 0;
 	} else {
 		return parserReturn;
 	}
