@@ -17,9 +17,7 @@ async function matchRate(statistic, type = '') {
 	const {
 		snapshot: {start: {x, p1, p2, mod, time}},
 		cards: {before: {one, two}},
-		matchId,
 		score: {sc1, sc2},
-		total,
 		command: {youth, women},
 		group: {en},
 		bothTeamsToScore: {no, yes}
@@ -28,10 +26,6 @@ async function matchRate(statistic, type = '') {
 		case 1 :
 			if (type === 'tennis') {
 				if (en.includes('ITF')) {
-					/*if (1.5 < Math.abs(p2 - p1) && Math.abs(p2 - p1) <= 2.5) {
-						await sendMessageChannel(decorateMessageTennis(statistic, type));
-						await sendMessageChannel('2 сет ТМ 12,5');
-					}*/
 					if (3 < Math.abs(p2 - p1)) {
 						await sendMessageChannel(decorateMessageTennis(statistic, type));
 						await sendMessageChannel('2 сет ТМ 10,5');
@@ -42,22 +36,23 @@ async function matchRate(statistic, type = '') {
 		case 3 :
 			if (sc1 === 1 && sc2 === 0) {
 				if (x > 3.7 && (yes >= 1.4 || yes < 1.1)) {
-					await sendMessageChat(
-						decorateMessageChannel(statistic, type),
-						'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
-						'-1001260584152'
-					);
+					if (
+						!en.includes('Dragon League') ||
+						!en.includes('LFL 5x5') ||
+						!en.includes('Short Football') ||
+						!en.includes('RPL 6x6') ||
+						!en.includes('Roja 7x7') ||
+						!en.includes('Division 4х4')
+					) {
+						await sendMessageChat(
+							decorateMessageChannel(statistic, type),
+							'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
+							'-1001260584152'
+						);
+					}
 				}
 			}
 			break;
-		/*case 4 :
-			if (2.7 < x && 1.9 < total) {
-				if (one.shotsOff < 8 && two.shotsOff < 8) {
-					await sendMessageChat(decorateMessageChannel(statistic, type));
-					await performEmulation(matchId, 10, `Total Under ${totalRate}`);
-				}
-			}
-			break;*/
 		case 6 :
 			if (youth === 0 && women === 0) {
 				if (1.5 < no && no < 1.8) {
@@ -70,17 +65,6 @@ async function matchRate(statistic, type = '') {
 				}
 			}
 			break;
-		/*case 7 :
-			if (total < 1.9) {
-				if (!en.includes('Friend')) {
-					await sendMessageChat(
-						decorateMessageChannel(statistic, type),
-						'957096927:AAH_tSbDm6a5-SQv-kLjBqrBYQpzOMcUxZA',
-						'-1001260584152'
-					);
-				}
-			}
-			break;*/
 		default:
 			break;
 	}
