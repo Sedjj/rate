@@ -37,11 +37,11 @@ async function matchRate(statistic, type = '') {
 			if (sc1 === 1 && sc2 === 0) {
 				if (x > 3.7 && (yes >= 1.4 || yes < 1.1)) {
 					if (
-						!en.includes('Dragon League') ||
-						!en.includes('LFL 5x5') ||
-						!en.includes('Short Football') ||
-						!en.includes('RPL 6x6') ||
-						!en.includes('Roja 7x7') ||
+						!en.includes('Dragon League') &&
+						!en.includes('LFL 5x5') &&
+						!en.includes('Short Football') &&
+						!en.includes('RPL 6x6') &&
+						!en.includes('Roja 7x7') &&
 						!en.includes('Division 4х4')
 					) {
 						await sendMessageChat(
