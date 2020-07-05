@@ -1,4 +1,4 @@
-####Сделать дам на сервере
+####Сделать дамп на сервере
 ```bash
 mongodump --gzip -d rateBot --archive="/home/rb-app/rate_bot/mongoDB/dump/rateBot-06.04.gz"
 ```
