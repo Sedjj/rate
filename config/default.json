@@ -2,8 +2,8 @@
 	"ip": "localhost",
 	"port": 8081,
 	"auth": {
-		"login": "58697181",
-		"password": "29c3sb6p"
+		"login": "",
+		"password": ""
 	},
 	"dbDev": {
 		"name": "rateBot",
@@ -19,33 +19,30 @@
 	},
 	"myId": "43166705",
 	"roles": {
-		"admin": [
-			43166705,
-			537523607
-		]
+		"admin": []
 	},
 	"bots": {
 		"dev": {
 			"channelId": "",
-			"chatId": "-299200164",
-			"name": "@dev_support_rate_sedjj_bot",
-			"token": "976021414:AAH5Kk3s9loSe_oYVxFx4gja3LXUNDfv0bQ"
+			"chatId": "",
+			"name": "",
+			"token": ""
 		},
 		"supportDev": {
-			"chatId": "-376344669",
-			"name": "@dev_support_rate_sedjj_bot",
-			"token": "976021414:AAH5Kk3s9loSe_oYVxFx4gja3LXUNDfv0bQ"
+			"chatId": "",
+			"name": "",
+			"token": ""
 		},
 		"prod": {
-			"channelId": "-1001295299807",
-			"chatId": "-276223662",
-			"name": "@rate_sedjj_bot",
-			"token": "741538630:AAH3OtLgnLUeXDKZ6cXYe7GBI2uSBSHeOQk"
+			"channelId": "",
+			"chatId": "",
+			"name": "",
+			"token": ""
 		},
 		"supportProd": {
-			"chatId": "-327795203",
-			"name": "@error_rate_sedjj_bot",
-			"token": "749722999:AAHdN926BxFWiO4Z7v4-b4yppz0pZen5j90"
+			"chatId": "",
+			"name": "",
+			"token": ""
 		}
 	},
 	"parser": {
